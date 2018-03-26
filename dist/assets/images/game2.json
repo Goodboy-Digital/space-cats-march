@@ -1,0 +1,92 @@
+{"frames": {
+
+"env/base-gradient.png":
+{
+	"frame": {"x":8,"y":8,"w":625,"h":440},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":625,"h":440},
+	"sourceSize": {"w":625,"h":440}
+},
+"env/chunk1.png":
+{
+	"frame": {"x":641,"y":8,"w":902,"h":471},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":902,"h":471},
+	"sourceSize": {"w":902,"h":471}
+},
+"env/chunk2.png":
+{
+	"frame": {"x":1551,"y":8,"w":352,"h":414},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":352,"h":414},
+	"sourceSize": {"w":352,"h":414}
+},
+"env/mountain2.png":
+{
+	"frame": {"x":8,"y":487,"w":617,"h":479},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":617,"h":479},
+	"sourceSize": {"w":617,"h":479}
+},
+"env/mountain4.png":
+{
+	"frame": {"x":633,"y":487,"w":621,"h":451},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":621,"h":451},
+	"sourceSize": {"w":621,"h":451}
+},
+"env/shape50001.png":
+{
+	"frame": {"x":1262,"y":487,"w":592,"h":404},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":592,"h":404},
+	"sourceSize": {"w":592,"h":404}
+},
+"env/shape50002.png":
+{
+	"frame": {"x":8,"y":974,"w":592,"h":404},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":592,"h":404},
+	"sourceSize": {"w":592,"h":404}
+},
+"env/shape50003.png":
+{
+	"frame": {"x":608,"y":974,"w":592,"h":404},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":592,"h":404},
+	"sourceSize": {"w":592,"h":404}
+},
+"env/tempStars.png":
+{
+	"frame": {"x":1208,"y":974,"w":543,"h":569},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":543,"h":569},
+	"sourceSize": {"w":543,"h":569}
+},
+"trail.png":
+{
+	"frame": {"x":1759,"y":974,"w":111,"h":565},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":111,"h":565},
+	"sourceSize": {"w":111,"h":565}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "game2.png",
+	"format": "RGBA8888",
+	"size": {"w":1911,"h":1551},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:7556fff1ebbb4f36d95f7f5caadf70ec:776ac4783fb211fbcd061e4aec497d10:4292a47406fb4f93fe14e928b9a5a77f$"
+}
+}
