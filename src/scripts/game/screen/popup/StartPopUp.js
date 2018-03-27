@@ -83,7 +83,7 @@ export default class StartPopUp extends StandardPop
         this.toCats.interactive = true;
         this.toCats.buttonMode = true;
         this.toCats.on('mouseup', this.addManyCats.bind(this)).on('touchend', this.addManyCats.bind(this));
-        this.container.addChild(this.toCats)
+        // this.container.addChild(this.toCats)
     }
 
     addManyCats(){

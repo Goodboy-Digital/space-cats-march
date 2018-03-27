@@ -31,61 +31,89 @@ export default
         let temp2 = ''
         tempPoints = Math.round(tempPoints * MAX_NUMBER);
 
-        if(tempPoints < 1){
-            console.log('LOW', tempPoints);
-            if(tempPoints.toString().length < 3){
+        if (tempPoints < 1)
+        {
+            if (tempPoints.toString().length < 3)
+            {
                 tempPoints = tempPoints.toFixed(2)
             }
         }
-        if(tempPoints < 1000){
-            
+        if (tempPoints < 1000)
+        {
+            tempPoints = this.cleanString(tempPoints)
             return tempPoints
         }
-        if(tempPoints >= 1000000000000000){
+        if (tempPoints >= 1000000000000000)
+        {
             tempPoints /= 1000000000000000;
             temp = 'A'
             temp2 = Math.floor(tempPoints)
-            // return Math.floor(tempPoints)
+                // return Math.floor(tempPoints)
         }
-        if(tempPoints >= 1000000000000){
+        if (tempPoints >= 1000000000000)
+        {
             tempPoints /= 1000000000000;
             temp = 'T'
             temp2 = Math.floor(tempPoints)
-            // return Math.floor(tempPoints)
+                // return Math.floor(tempPoints)
         }
-        if(tempPoints >= 1000000000){
+        if (tempPoints >= 1000000000)
+        {
             tempPoints /= 1000000000;
             temp = 'B'
             temp2 = Math.floor(tempPoints)
-            // return Math.floor(tempPoints)
+                // return Math.floor(tempPoints)
         }
-        if(tempPoints >= 1000000){
+        if (tempPoints >= 1000000)
+        {
             tempPoints /= 1000000;
             temp = 'M'
             temp2 = Math.floor(tempPoints)
-            // return Math.floor(tempPoints)
+                // return Math.floor(tempPoints)
         }
-        if(tempPoints >= 1000){
+        if (tempPoints >= 1000)
+        {
             tempPoints /= 1000;
             temp = 'K'
             temp2 = Math.floor(tempPoints)
-            // return Math.floor(tempPoints)
+                // return Math.floor(tempPoints)
         }
 
         // tempPoints = Math.floor(tempPoints)
-        console.log(tempPoints.toString());
-        if(tempPoints.toString().length < 4){
-            console.log(tempPoints.toString());
-            let fix = 2//4 - tempPoints.toString().length
-            console.log(tempPoints.toString().length);
-            tempPoints = tempPoints.toFixed(fix)
-            console.log(fix);
-            console.log(tempPoints, 'aaaa');
-        }else if(tempPoints.toString().length > 4){
+        if (tempPoints.toString().length < 4)
+        {
+            let fix = 2
+            tempPoints = tempPoints.toFixed(fix).toString()
+
+        }
+        else if (tempPoints.toString().length > 4)
+        {
             let tempRound = Math.floor(tempPoints)
             tempPoints = tempPoints.toFixed(4 - tempRound.toString().length - 1)
         }
+
+
+        tempPoints = this.cleanString(tempPoints)
         return tempPoints + temp
+    },
+    cleanString(str)
+    {
+        for (var i = str.length - 1; i >= 0; i--)
+        {
+            if (str[i] == 0)
+            {
+                str = str.slice(0, -1);
+            }
+            else
+            {
+                break
+            }
+        }
+        if (str[str.length - 1] == '.')
+        {
+            str = str.slice(0, -1);
+        }
+        return str
     },
     stringToObject(str, type)
     {
