@@ -2441,6 +2441,9 @@ exports.default = {
         return tempPoints + temp;
     },
     cleanString: function cleanString(str) {
+        if (str.indexOf('.') == -1) {
+            return str;
+        }
         for (var i = str.length - 1; i >= 0; i--) {
             if (str[i] == 0) {
                 str = str.slice(0, -1);

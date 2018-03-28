@@ -12,6 +12,7 @@ export default class CatItem extends PIXI.Container
     {
         super();
         this.onAutoCollect = new Signals();
+        this.onActiveCat = new Signals();
         this.catData = catData;
         this.container = new PIXI.Container();
         this.addChild(this.container);
@@ -52,7 +53,7 @@ export default class CatItem extends PIXI.Container
         this.plusIcon = new PIXI.Sprite.from('results_arrow');
         this.plusIcon.listScl = 0.065;
         this.plusIcon.fitWidth = 0.65;
-        this.plusIcon.scaleContent = true;        
+        this.plusIcon.scaleContent = true;
         this.plusIcon.align = 0.75;
         this.elementsList.push(this.plusIcon);
         this.container.addChild(this.plusIcon);
@@ -73,17 +74,24 @@ export default class CatItem extends PIXI.Container
         this.elementsList.push(this.bonusLabel);
         this.container.addChild(this.bonusLabel);
 
-        this.catNameLabel = new PIXI.Text(this.catData.catName,
+        this.activeButtonContainer = new PIXI.Container();
+        this.backButton = new PIXI.Sprite.from('back_button');
+        this.catNameLabel = new PIXI.Text('',
         {
             fontFamily: 'blogger_sansregular',
             fontSize: '14px',
-            fill: 0xFFFFFF,
+            // fill: 0,
+            fill: 0xe5519b,
             align: 'center',
             fontWeight: '800'
         });
-        this.catNameLabel.scaleContentMax = true;
-        this.elementsList.push(this.catNameLabel);
-        this.container.addChild(this.catNameLabel)
+        this.activeButtonContainer.scaleContentMax = true;
+        this.activeButtonContainer.addChild(this.backButton);
+        this.activeButtonContainer.addChild(this.catNameLabel);
+
+
+        this.elementsList.push(this.activeButtonContainer);
+        this.container.addChild(this.activeButtonContainer)
 
 
         this.autocollect = new AutoCollectButton(this.catData)
@@ -94,8 +102,12 @@ export default class CatItem extends PIXI.Container
         this.elementsList.push(this.autocollect);
         this.container.addChild(this.autocollect);
     }
-    onAutoCollectCallback(){
-    	this.onAutoCollect.dispatch(this.catData);
+    activeCat(){
+        this.onActiveCat.dispatch(this.catData);
+    }
+    onAutoCollectCallback()
+    {
+        this.onAutoCollect.dispatch(this.catData);
     }
     updateItem(catData)
     {
@@ -105,27 +117,39 @@ export default class CatItem extends PIXI.Container
         this.totalLabel.text = quant == 0 ? '' : quant
         this.bonusLabel.text = utils.cleanString(this.catData.collectedMultiplier.toFixed(2)) + '%';
 
-        if (!this.catData.active)
+        if (this.catData.canBeActive && !this.catData.active)
         {
             this.thumb.texture = PIXI.Texture.from('results_locked_cat');
             this.totalLabel.text = ''
-            this.catNameLabel.text = ('unlock at\n' + utils.formatPointsLabel(this.catData.require / MAX_NUMBER)).toUpperCase();
+            this.catNameLabel.text = ('active').toUpperCase();
             this.plusIcon.texture = PIXI.Texture.from('results_lock');
             this.autocollect.visible = false;
+            this.backButton.alpha = 1;
+            this.backButton.tint = 0x6250e5
+            this.catNameLabel.style.fill = 0xFFFFFF;
+            this.bonusLabel.visible = false;
+            this.plusIcon.visible = false;
+            this.backButton.interactive = true;
+            this.backButton.buttonMode = true;
+            this.backButton.on('mouseup', this.activeCat.bind(this)).on('touchend', this.activeCat.bind(this));
 
         }
-        else
+        else if (this.catData.active)
         {
+            this.backButton.off('mouseup', this.activeCat.bind(this)).off('touchend', this.activeCat.bind(this));
             this.thumb.tint = 0xFFFFFF;
             this.thumb.texture = PIXI.Texture.from(this.catData.catThumb);
-
             this.catNameLabel.text = this.catData.catName.toUpperCase();
             this.plusIcon.texture = PIXI.Texture.from('results_arrow');
-            
+            this.catNameLabel.style.fill = 0xFFFFFF;
+            this.bonusLabel.visible = true;
+            this.plusIcon.visible = true;
 
+            this.backButton.alpha = 0;
             this.autocollect.visible = true;
             if (this.catData.collected >= this.catData.amountToAutoCollect)
             {
+
             }
             else
             {
@@ -140,10 +164,33 @@ export default class CatItem extends PIXI.Container
             {
                 this.autocollect.reset(this.catData);
             }
-            this.autocollect.x = this.catNameLabel.x + this.catNameLabel.width + 25
+            // this.autocollect.x = this.catNameLabel.x + this.catNameLabel.width + 25
+        }else{
+            this.backButton.off('mouseup', this.activeCat.bind(this)).off('touchend', this.activeCat.bind(this));
+            this.thumb.texture = PIXI.Texture.from('results_locked_cat');
+            this.totalLabel.text = ''
+            this.catNameLabel.text = ('unlock at\n' + utils.formatPointsLabel(this.catData.require / MAX_NUMBER)).toUpperCase();
+            this.plusIcon.texture = PIXI.Texture.from('results_lock');
+            this.autocollect.visible = false;
+            this.bonusLabel.visible = false;
+            this.plusIcon.visible = false;
+            this.backButton.alpha = 1;
+            this.catNameLabel.style.fill = 0xe5519b;
         }
 
 
+        console.log(this.catNameLabel.width, this.backButton.width);
+        let realSize = {
+            w: this.catNameLabel.width / this.catNameLabel.scale.x,
+            h: this.catNameLabel.height / this.catNameLabel.scale.y
+        }
+        this.catNameLabel.scale.set(this.backButton.width / realSize.w * 0.7)
+
+        this.catNameLabel.pivot.x = realSize.w / 2;
+        this.catNameLabel.pivot.y = realSize.h / 2;
+
+        this.catNameLabel.x = this.backButton.width / 2;
+        this.catNameLabel.y = this.backButton.height / 2;
 
         this.autocollect.updateData(catData);
 
@@ -200,21 +247,22 @@ export default class CatItem extends PIXI.Container
             positions.push(nextX);
             if (this.elementsList[i].fitHeight)
             {
-            	stdH = (this.elementsList[i].height / this.elementsList[i].scale.y)
+                stdH = (this.elementsList[i].height / this.elementsList[i].scale.y)
                 this.elementsList[i].scale.set(this.h / stdH * this.elementsList[i].fitHeight)
             }
             else if (this.elementsList[i].fitWidth)
             {
-            	stdW = (this.elementsList[i].width / this.elementsList[i].scale.x)
+                stdW = (this.elementsList[i].width / this.elementsList[i].scale.x)
                 this.elementsList[i].scale.set(chunkSize / stdW * this.elementsList[i].fitWidth)
             }
             else if (this.elementsList[i].scaleContent)
             {
-            	stdW = (this.elementsList[i].width / this.elementsList[i].scale.x)
+                stdW = (this.elementsList[i].width / this.elementsList[i].scale.x)
                 this.elementsList[i].scale.set(chunkSize / stdW)
-            }else if (this.elementsList[i].scaleContentMax && (this.elementsList[i].width > chunkSize))
+            }
+            else if (this.elementsList[i].scaleContentMax && (this.elementsList[i].width > chunkSize))
             {
-            	stdW = (this.elementsList[i].width / this.elementsList[i].scale.x)
+                stdW = (this.elementsList[i].width / this.elementsList[i].scale.x)
                 this.elementsList[i].scale.set(chunkSize / stdW)
             }
             let align = 0.5

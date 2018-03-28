@@ -36,6 +36,7 @@ export default class GameData
             catID: 0,
             collected: 0,
             active: true,
+            canBeActive: true,
             isAuto: false,
             autoCollectPrice: 100,
             amountToAutoCollect: 100,
@@ -54,6 +55,7 @@ export default class GameData
             catID: 1,
             collected: 0,
             active: false,
+            canBeActive: false,
             isAuto: false,
             autoCollectPrice: 1000,
             amountToAutoCollect: 200,
@@ -72,6 +74,7 @@ export default class GameData
             catID: 2,
             collected: 0,
             active: false,
+            canBeActive: false,
             isAuto: false,
             autoCollectPrice: 10000,
             amountToAutoCollect: 300,
@@ -90,6 +93,7 @@ export default class GameData
             catID: 3,
             collected: 0,
             active: false,
+            canBeActive: false,
             isAuto: false,
             autoCollectPrice: 100000,
             amountToAutoCollect: 400,
@@ -107,6 +111,7 @@ export default class GameData
             catID: 4,
             collected: 0,
             active: false,
+            canBeActive: false,
             isAuto: false,
             autoCollectPrice: 100000,
             amountToAutoCollect: 400,
@@ -124,6 +129,7 @@ export default class GameData
             catID: 5,
             collected: 0,
             active: false,
+            canBeActive: false,
             isAuto: false,
             autoCollectPrice: 100000,
             amountToAutoCollect: 400,
@@ -235,7 +241,7 @@ export default class GameData
             // console.log('this car require ', require.quant, points);
             if (require <= points) //prevCat.collected)
             {
-                this.catsData[i].active = true;
+                this.catsData[i].canBeActive = true;
                 if (!this.catsAllowed[i])
                 {
                     hasNew = i;
@@ -251,6 +257,10 @@ export default class GameData
         this.catsAllowed = temp;
         STORAGE.storeObject('space-cats-game-data', this.getObjectData());
         return hasNew;
+    }
+    activeCat(data){
+        this.catsData[data.catID].active = true;
+        STORAGE.storeObject('space-cats-game-data', this.getObjectData());        
     }
     startNewRound()
     {

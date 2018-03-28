@@ -16,12 +16,12 @@ const assets = [
 	"url":"assets/image\\cat_head.png"
 	},
 	{
-	"id":"image",
-	"url":"assets/image\\image.png"
-	},
-	{
 	"id":"glass",
 	"url":"assets/image\\glass.png"
+	},
+	{
+	"id":"image",
+	"url":"assets/image\\image.png"
 	},
 	{
 	"id":"lane_texture - Copy",
@@ -36,12 +36,12 @@ const assets = [
 	"url":"assets/image\\lettering.png"
 	},
 	{
-	"id":"logo_mask",
-	"url":"assets/image\\logo_mask.png"
-	},
-	{
 	"id":"logo",
 	"url":"assets/image\\logo.png"
+	},
+	{
+	"id":"logo_mask",
+	"url":"assets/image\\logo_mask.png"
 	},
 	{
 	"id":"logo_mask_white",
@@ -102,6 +102,10 @@ const assets = [
 	{
 	"id":"pickup_octopus",
 	"url":"assets/image\\pickups\\pickup_octopus.png"
+	},
+	{
+	"id":"back_button",
+	"url":"assets/image\\ui\\back_button.png"
 	},
 	{
 	"id":"bubble",
@@ -264,16 +268,16 @@ const assets = [
 	"url":"assets/image\\frames\\cat_orange_00007.png"
 	},
 	{
+	"id":"cat_orange_00008",
+	"url":"assets/image\\frames\\cat_orange_00008.png"
+	},
+	{
 	"id":"cat_orange_00009",
 	"url":"assets/image\\frames\\cat_orange_00009.png"
 	},
 	{
 	"id":"cat_orange_00010",
 	"url":"assets/image\\frames\\cat_orange_00010.png"
-	},
-	{
-	"id":"cat_orange_00008",
-	"url":"assets/image\\frames\\cat_orange_00008.png"
 	},
 	{
 	"id":"cat_orange_00011",
@@ -288,12 +292,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_orange_00013.png"
 	},
 	{
-	"id":"cat_orange_00015",
-	"url":"assets/image\\frames\\cat_orange_00015.png"
-	},
-	{
 	"id":"cat_orange_00014",
 	"url":"assets/image\\frames\\cat_orange_00014.png"
+	},
+	{
+	"id":"cat_orange_00015",
+	"url":"assets/image\\frames\\cat_orange_00015.png"
 	},
 	{
 	"id":"cat_orange_00016",
@@ -324,12 +328,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_pink_00002.png"
 	},
 	{
-	"id":"cat_pink_00004",
-	"url":"assets/image\\frames\\cat_pink_00004.png"
-	},
-	{
 	"id":"cat_pink_00003",
 	"url":"assets/image\\frames\\cat_pink_00003.png"
+	},
+	{
+	"id":"cat_pink_00004",
+	"url":"assets/image\\frames\\cat_pink_00004.png"
 	},
 	{
 	"id":"cat_pink_00005",
@@ -344,12 +348,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_pink_00007.png"
 	},
 	{
-	"id":"cat_pink_00009",
-	"url":"assets/image\\frames\\cat_pink_00009.png"
-	},
-	{
 	"id":"cat_pink_00008",
 	"url":"assets/image\\frames\\cat_pink_00008.png"
+	},
+	{
+	"id":"cat_pink_00009",
+	"url":"assets/image\\frames\\cat_pink_00009.png"
 	},
 	{
 	"id":"cat_pink_00010",
@@ -508,12 +512,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_yellow_00008.png"
 	},
 	{
-	"id":"cat_yellow_00010",
-	"url":"assets/image\\frames\\cat_yellow_00010.png"
-	},
-	{
 	"id":"cat_yellow_00009",
 	"url":"assets/image\\frames\\cat_yellow_00009.png"
+	},
+	{
+	"id":"cat_yellow_00010",
+	"url":"assets/image\\frames\\cat_yellow_00010.png"
 	},
 	{
 	"id":"cat_yellow_00011",

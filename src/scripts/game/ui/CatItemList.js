@@ -12,6 +12,7 @@ export default class CatItemList extends PIXI.Container
     {
         super();
         this.onAutoCollect = new Signals();
+        this.onActiveCat = new Signals();
         this.container = new PIXI.Container();
         this.catListContainer = new PIXI.Container();
         this.containerBackground = new PIXI.Graphics().beginFill(0x000000).drawRect(0, 0, rect.w, rect.h);
@@ -31,6 +32,7 @@ export default class CatItemList extends PIXI.Container
                 h: this.itemHeight
             });
             catItem.onAutoCollect.add(this.onAutoCollectCallback.bind(this));
+            catItem.onActiveCat.add(this.onActiveCatCallback.bind(this));
             this.catListContainer.addChild(catItem)
             catItem.y = this.itemHeight * i;
             this.catsItemList.push(catItem);
@@ -56,9 +58,16 @@ export default class CatItemList extends PIXI.Container
         // this.addChild(this.container);
         this.updateAllItens();
     }
+    onActiveCatCallback(cat)
+    {
+        this.onActiveCat.dispatch(cat);
+    }
     onAutoCollectCallback(cat)
     {
         this.onAutoCollect.dispatch(cat);
+    }
+    updateItemActive(id){
+        this.catsItemList[id].updateItem(GAME_DATA.catsData[id])
     }
     updateAllItens()
     {

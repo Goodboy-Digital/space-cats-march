@@ -98,6 +98,9 @@ export default
     },
     cleanString(str)
     {
+        if(str.toString().indexOf('.') == -1){
+            return str
+        }
         for (var i = str.length - 1; i >= 0; i--)
         {
             if (str[i] == 0)

@@ -42,6 +42,7 @@ export default class GameOverPopUp extends StandardPop
         this.catListContainer.addChild(this.catItemList)
         this.catItemList.updateAllItens();
         this.catItemList.onAutoCollect.add(this.onAutoCollect.bind(this));
+        this.catItemList.onActiveCat.add(this.onActiveCat.bind(this));
         this.catListContainer.x = -this.catItemList.width / 2;
         this.catListContainer.y = -this.catItemList.height / 2
         this.container.addChild(this.catListContainer);
@@ -72,6 +73,21 @@ export default class GameOverPopUp extends StandardPop
         this.resetButton.on('mouseup', this.addMany.bind(this)).on('touchend', this.addMany.bind(this));
         // this.resetButton.on('mouseup', this.redirectToInit.bind(this)).on('touchend', this.redirectToInit.bind(this));
         this.container.addChild(this.resetButton)
+
+
+        this.resetButton2 = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
+        this.resetButton2.anchor.set(0.5)
+            // this.resetButton2.scale.set(-0.5, 0.5)
+        this.resetButton2Scale = this.logoMask.height / this.resetButton2.height * 0.15
+        this.resetButton2.scale.set(-this.resetButton2Scale, this.resetButton2Scale);
+        this.resetButton2.x = config.width / 2 - this.resetButton2.width;
+        this.resetButton2.y = -config.height / 2 + this.resetButton2.height + config.height * 0.2;
+        // this.resetButton2.y = -300
+        this.resetButton2.interactive = true;
+        this.resetButton2.buttonMode = true;
+        this.resetButton2.on('mouseup', this.resetAll.bind(this)).on('touchend', this.resetAll.bind(this));
+        // this.resetButton2.on('mouseup', this.redirectToInit.bind(this)).on('touchend', this.redirectToInit.bind(this));
+        this.container.addChild(this.resetButton2)
 
 
         this.pointsContainer = new PointsContainer();
@@ -129,6 +145,10 @@ export default class GameOverPopUp extends StandardPop
         this.updateTrophyQuant();
         this.screenManager.closeVideo();
     }
+    onActiveCat(data){
+        GAME_DATA.activeCat(data);
+        this.catItemList.updateItemActive(data.catID);
+    }
     onAutoCollect(data)
     {
         console.log('AUTO COLLECT');
@@ -143,7 +163,8 @@ export default class GameOverPopUp extends StandardPop
     {
         // this.addCats([100,100,100,100])
         GAME_DATA.addCats([100, 100, 100, 100]);
-        GAME_DATA.updateCatsAllowed(5555555555);
+        GAME_DATA.updateCatsAllowed(100);
+        // GAME_DATA.updateCatsAllowed(5555555555);
         this.updateCatsQuant()
     }
     hideScreenBlocker()
