@@ -85,7 +85,7 @@ export default class CatItem extends HorizontalList
         this.catNameLabel = new PIXI.Text('',
         {
             fontFamily: 'blogger_sansregular',
-            fontSize: '14px',
+            fontSize: '24px',
             // fill: 0,
             fill: 0xe5519b,
             align: 'center',
@@ -114,8 +114,10 @@ export default class CatItem extends HorizontalList
     {
         this.onActiveCat.dispatch(this.catData);
     }
-    updateThumb(delta){
-        if(this.catData.active){
+    updateThumb(delta)
+    {
+        if (this.catData.active)
+        {
             // this.thumb.update(delta * 0.1);
         }
     }
@@ -155,7 +157,7 @@ export default class CatItem extends HorizontalList
             this.backButton.off('mouseup', this.activeCat.bind(this)).off('touchend', this.activeCat.bind(this));
             this.thumb.tint = 0xFFFFFF;
             this.thumb.unlock();
-            this.thumb.updateCatTextures(this.catData.catSrc);//.texture = PIXI.Texture.from(this.catData.catThumb);
+            this.thumb.updateCatTextures(this.catData.catSrc); //.texture = PIXI.Texture.from(this.catData.catThumb);
             this.catNameLabel.text = this.catData.catName.toUpperCase();
             this.plusIcon.texture = PIXI.Texture.from('results_arrow');
             this.catNameLabel.style.fill = 0xFFFFFF;
@@ -213,8 +215,11 @@ export default class CatItem extends HorizontalList
             w: this.catNameLabel.width / this.catNameLabel.scale.x,
             h: this.catNameLabel.height / this.catNameLabel.scale.y
         }
-        this.catNameLabel.scale.set(this.backButton.width / realSize.w * 0.6)
+        if (realSize.w / this.backButton.width > 0.6)
+        {
+            this.catNameLabel.scale.set(this.backButton.width / realSize.w * 0.6)
 
+        }
         this.catNameLabel.pivot.x = realSize.w / 2;
         this.catNameLabel.pivot.y = realSize.h / 2;
 

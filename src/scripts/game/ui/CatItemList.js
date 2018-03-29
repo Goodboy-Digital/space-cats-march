@@ -8,7 +8,7 @@ export default class CatItemList extends PIXI.Container
     constructor(rect = {
         w: 500,
         h: 500
-    }, itensPerPage = 3)
+    }, itensPerPage = 4)
     {
         super();
         this.onAutoCollect = new Signals();
@@ -95,7 +95,7 @@ export default class CatItemList extends PIXI.Container
         this.spaceShipInfoLabel.x = fishIcon.x + fishIcon.width - 20
         this.spaceShipInfoLabel.y = fishIcon.y - this.spaceShipInfoLabel.height / 2
         shipInfoSprite.addChild(this.spaceShipInfoLabel);
-        
+
         this.confirmSpaceship = new PIXI.Sprite.from('auto_confirm');
         this.confirmSpaceship.anchor.set(0.5);
         this.confirmSpaceship.scale.set(shipInfoSprite.height / this.confirmSpaceship.height * 0.55);
@@ -104,8 +104,8 @@ export default class CatItemList extends PIXI.Container
         this.confirmSpaceship.y = shipInfoSprite.height / 2;
         shipInfoSprite.addChild(this.confirmSpaceship);
 
-        shipInfoSprite.scale.set(this.itemHeight  / shipInfoSprite.height)
-        // this.spaceShipInfoContainer.x = -this.spaceShipInfoContainer.width
+        shipInfoSprite.scale.set(this.itemHeight / shipInfoSprite.height)
+            // this.spaceShipInfoContainer.x = -this.spaceShipInfoContainer.width
         this.addChild(this.spaceShipInfoContainer);
 
         this.spaceShipInfoContainer.visible = false;
@@ -114,40 +114,54 @@ export default class CatItemList extends PIXI.Container
         shipInfoSprite.x = rect.w / 2 - shipInfoSprite.width / 2;
         this.confirmSpaceship.on('mouseup', this.onConfirmAuto.bind(this)).on('touchend', this.onConfirmAuto.bind(this));
     }
-    onConfirmAuto(){
+    onConfirmAuto()
+    {
         this.spaceShipInfoContainer.visible = false;
         this.container.alpha = 1;
         this.lastItemClicked.visible = true;
         this.onAutoCollect.dispatch(this.lastItemClicked.catData);
+        // this.updateAllItens()
     }
     onActiveCatCallback(cat)
     {
+        this.enableDrag = false;
+        this.dragging = false;
+        this.goingDown = 0;
         this.onActiveCat.dispatch(cat);
     }
     onAutoCollectCallback(cat)
     {
+        this.enableDrag = false;
+        this.dragging = false;
+        this.goingDown = 0;
         this.lastItemClicked = cat;
-        this.spaceShipInfoContainer.y = this.lastItemClicked.y;
-        this.spaceShipInfoContainer.visible = true;        
+        this.spaceShipInfoContainer.y = this.catListContainer.y + this.lastItemClicked.y;
+        this.spaceShipInfoContainer.visible = true;
         this.spaceShipInfoLabel.text = utils.formatPointsLabel(this.lastItemClicked.catData.autoCollectPrice / MAX_NUMBER);
         // this.container.alpha = 0.75;
         this.spaceShipInfoContainer.alpha = 0;
-        TweenLite.to(this.spaceShipInfoContainer, 0.5, {alpha:1});     
-        this.lastItemClicked.visible = false; 
+        TweenLite.to(this.spaceShipInfoContainer, 0.5,
+        {
+            alpha: 1
+        });
+        this.lastItemClicked.visible = false;
     }
     updateItemActive(id)
     {
         console.log(id);
         this.catsItemList[id].updateItem(GAME_DATA.catsData[id])
     }
-    update(delta){
-        if(this.spaceShipInfoContainer.visible && this.lastItemClicke){
+    update(delta)
+    {
+        if (this.spaceShipInfoContainer.visible && this.lastItemClicke)
+        {
             this.spaceShipInfoContainer.y = this.lastItemClicked.y;
         }
-        for (var i = 0; i < this.catsItemList.length; i++) {
+        for (var i = 0; i < this.catsItemList.length; i++)
+        {
             this.catsItemList[i].updateThumb(delta);
         }
-        
+
     }
     updateAllItens()
     {
@@ -158,6 +172,10 @@ export default class CatItemList extends PIXI.Container
     }
     endDrag()
     {
+        if (!this.enableDrag)
+        {
+            return;
+        }
         this.dragging = false;
         this.containerBackground.interactive = false;
 
@@ -176,13 +194,6 @@ export default class CatItemList extends PIXI.Container
             target = Math.ceil(targY / this.itemHeight) * this.itemHeight
         }
 
-        // target = targY
-        if (target > 0)
-        {
-            target = 0;
-        }
-
-
         if (target > 0)
         {
             TweenLite.to(this.catListContainer, 0.75,
@@ -200,7 +211,7 @@ export default class CatItemList extends PIXI.Container
                 ease: Back.easeOut
             })
         }
-        else
+        else if (target!= 0)
         {
             console.log('target', target);
             TweenLite.to(this.catListContainer, 0.75,
@@ -212,8 +223,14 @@ export default class CatItemList extends PIXI.Container
     }
     moveDrag(e)
     {
+        if (!this.enableDrag)
+        {
+            this.goingDown = 0;
+            return;
+        }
         if (this.dragging)
         {
+
             this.spaceShipInfoContainer.visible = false;
             this.lastItemClicked.visible = true;
             this.container.alpha = 1;
@@ -242,7 +259,7 @@ export default class CatItemList extends PIXI.Container
     }
     startDrag(e)
     {
-
+        this.enableDrag = true;
         this.goingDown = 0;
         TweenLite.killTweensOf(this.catListContainer);
         this.dragging = true;

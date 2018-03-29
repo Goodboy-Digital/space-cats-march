@@ -28,6 +28,7 @@ export default class GameScreen extends Screen
         this.gameContainer = new PIXI.Container();
         this.environmentContainer = new PIXI.Container();
         this.catsContainer = new PIXI.Container();
+        this.frontCats = new PIXI.Container();
         this.particlesContainer = new PIXI.Container();
         this.UIContainer = new PIXI.Container();
 
@@ -54,6 +55,7 @@ export default class GameScreen extends Screen
         this.addChild(this.gameContainer);
         this.gameContainer.addChild(this.environmentContainer);
         this.gameContainer.addChild(this.catsContainer);
+        this.gameContainer.addChild(this.frontCats);
         this.gameContainer.addChild(this.particlesContainer);
 
 
@@ -351,8 +353,10 @@ export default class GameScreen extends Screen
         this.updateSpecialBar(true);
 
         this.HUD.forceQuitButton.visible = false;
-        for (var i = 0; i < GAME_DATA.catsData.length; i++) {
-            if(GAME_DATA.catsData[i].isAuto){
+        for (var i = 0; i < GAME_DATA.catsData.length; i++)
+        {
+            if (GAME_DATA.catsData[i].isAuto)
+            {
                 this.HUD.forceQuitButton.visible = true;
                 break;
             }
@@ -367,7 +371,9 @@ export default class GameScreen extends Screen
                 let cat = this.addCat();
                 cat.forceToWaypoint(i)
             }
-        }else{
+        }
+        else
+        {
             for (var i = 0; i < 4; i++)
             {
                 let cat = this.addCat();
@@ -412,7 +418,8 @@ export default class GameScreen extends Screen
                 this.currentItem.parent.removeChild(this.currentItem);
             }
         }
-       this.environment.removeSpecialBackground();
+        this.removeAutoCollectMode();
+        this.removeSpecialMode();
         // this.removeSpecialBackground();
         this.gameStarted = false;
         this.killAll();
@@ -692,7 +699,10 @@ export default class GameScreen extends Screen
             }
         }
 
-
+        if(cat.parent){
+            cat.parent.removeChild(cat);
+            this.frontCats.addChild(cat);
+        }
         this.HUD.updateHUD(this.currentPoints, this.currentDeadCats)
     }
     collectThisCat(cat, dist, auto = false)
@@ -749,7 +759,8 @@ export default class GameScreen extends Screen
             labelData.scale = 0.75
         }
         console.log(auto, labelData.special);
-        if(!auto){
+        if (!auto)
+        {
 
             this.specialAcc += labelData.special;
         }
@@ -786,7 +797,10 @@ export default class GameScreen extends Screen
         {
             this.gameSpeed = 0.75;
         }
-
+        if(cat.parent){
+            cat.parent.removeChild(cat);
+            this.frontCats.addChild(cat);
+        }
         this.HUD.updateHUD(this.currentPoints, this.currentDeadCats)
             // console.log(this.gameSpeed);
     }

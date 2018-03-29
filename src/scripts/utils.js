@@ -43,10 +43,39 @@ export default
             tempPoints = this.cleanString(tempPoints)
             return tempPoints
         }
+        
+        if (tempPoints >= 1000000000000000000000000000)
+        {
+            tempPoints /= 1000000000000000000000000000;
+            temp = 'ee'
+            temp2 = Math.floor(tempPoints)
+                // return Math.floor(tempPoints)
+        }
+        if (tempPoints >= 1000000000000000000000000)
+        {
+            tempPoints /= 1000000000000000000000000;
+            temp = 'dd'
+            temp2 = Math.floor(tempPoints)
+                // return Math.floor(tempPoints)
+        }
+        if (tempPoints >= 1000000000000000000000)
+        {
+            tempPoints /= 1000000000000000000000;
+            temp = 'cc'
+            temp2 = Math.floor(tempPoints)
+                // return Math.floor(tempPoints)
+        }
+        if (tempPoints >= 1000000000000000000)
+        {
+            tempPoints /= 1000000000000000000;
+            temp = 'bb'
+            temp2 = Math.floor(tempPoints)
+                // return Math.floor(tempPoints)
+        }
         if (tempPoints >= 1000000000000000)
         {
             tempPoints /= 1000000000000000;
-            temp = 'A'
+            temp = 'aa'
             temp2 = Math.floor(tempPoints)
                 // return Math.floor(tempPoints)
         }

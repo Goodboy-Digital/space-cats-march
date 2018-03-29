@@ -16,7 +16,7 @@ export default class PrizeContainer extends HorizontalList
         this.prizeDark.alpha = 0.75;
         this.prizeDark.interactive = true;
         this.prizeDark.buttonMode = true;
-        this.prizeDark.on('mouseup', this.collect.bind(this)).on('touchend', this.collect.bind(this));
+        this.prizeDark.on('mousedown', this.collect.bind(this)).on('touchstart', this.collect.bind(this));
         this.addChild(this.prizeDark);
 
         this.starBackground = new PIXI.Sprite.from('results_newcat_rays_02');

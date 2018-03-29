@@ -98,7 +98,7 @@ export default class SpaceShipContainer extends PIXI.Container
         this.spaceShipInfoContainer.visible = false;
         this.confirmSpaceship.interactive = true;
         this.confirmSpaceship.buttonMode = true;
-        this.confirmSpaceship.on('mouseup', this.onSpaceshipClick.bind(this)).on('touchend', this.onSpaceshipClick.bind(this));
+        this.confirmSpaceship.on('mousedown', this.onSpaceshipClick.bind(this)).on('touchstart', this.onSpaceshipClick.bind(this));
 
     }
     onSpaceshipClick(){

@@ -63,6 +63,7 @@ export default class Cat extends PIXI.Container
         this.dying = false;
         this.killed = false;
         this._scale = 1;
+        this.animation.scale.set(this.animationScaleStandard);
         // this.sprite.tint = 0xFFFF00;
         this.container.rotation = 0;
         // this.sprite.scale.set(1);

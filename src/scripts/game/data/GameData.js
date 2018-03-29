@@ -120,7 +120,7 @@ export default class GameData
             collectedMultiplier: 0,
             maxCollectedMultiplier: 30,
             limitCatsToMultiply: 1500,
-            catSrc: 'cat_yellow_',
+            catSrc: 'cat_pink_',
             catThumb: 'results_yellow_cat',
             catName: 'joe',
             require: 5000000
@@ -138,10 +138,120 @@ export default class GameData
             collectedMultiplier: 0,
             maxCollectedMultiplier: 30,
             limitCatsToMultiply: 1500,
-            catSrc: 'cat_yellow_',
+            catSrc: 'cat_pink_',
             catThumb: 'results_yellow_cat',
             catName: 'clermont',
             require: 50000000
+        })
+        this.catsData.push(
+        {
+            catID: 6,
+            collected: 0,
+            active: false,
+            canBeActive: false,
+            isAuto: false,
+            autoCollectPrice: 100000,
+            amountToAutoCollect: 400,
+            pointsMultiplier: 10,
+            collectedMultiplier: 0,
+            maxCollectedMultiplier: 30,
+            limitCatsToMultiply: 1500,
+            catSrc: 'cat_pink_',
+            catThumb: 'results_yellow_cat',
+            catName: 'julien',
+            require: 500000000
+        })
+        this.catsData.push(
+        {
+            catID: 7,
+            collected: 0,
+            active: false,
+            canBeActive: false,
+            isAuto: false,
+            autoCollectPrice: 100000,
+            amountToAutoCollect: 400,
+            pointsMultiplier: 10,
+            collectedMultiplier: 0,
+            maxCollectedMultiplier: 30,
+            limitCatsToMultiply: 1500,
+            catSrc: 'cat_pink_',
+            catThumb: 'results_yellow_cat',
+            catName: 'mat',
+            require: 750000000
+        })
+        this.catsData.push(
+        {
+            catID: 8,
+            collected: 0,
+            active: false,
+            canBeActive: false,
+            isAuto: false,
+            autoCollectPrice: 100000,
+            amountToAutoCollect: 400,
+            pointsMultiplier: 10,
+            collectedMultiplier: 0,
+            maxCollectedMultiplier: 30,
+            limitCatsToMultiply: 1500,
+            catSrc: 'cat_pink_',
+            catThumb: 'results_yellow_cat',
+            catName: 'john',
+            require: 1000000000
+        })
+         this.catsData.push(
+        {
+            catID: 9,
+            collected: 0,
+            active: false,
+            canBeActive: false,
+            isAuto: false,
+            autoCollectPrice: 100000,
+            amountToAutoCollect: 400,
+            pointsMultiplier: 10,
+            collectedMultiplier: 0,
+            maxCollectedMultiplier: 30,
+            limitCatsToMultiply: 1500,
+            catSrc: 'cat_pink_',
+            catThumb: 'results_yellow_cat',
+            catName: 'james',
+            require: 300000000000
+        })
+
+          this.catsData.push(
+        {
+            catID: 10,
+            collected: 0,
+            active: false,
+            canBeActive: false,
+            isAuto: false,
+            autoCollectPrice: 100000,
+            amountToAutoCollect: 400,
+            pointsMultiplier: 10,
+            collectedMultiplier: 0,
+            maxCollectedMultiplier: 30,
+            limitCatsToMultiply: 1500,
+            catSrc: 'cat_pink_',
+            catThumb: 'results_yellow_cat',
+            catName: 'kim',
+            require: 800000000000
+        })
+
+           this.catsData.push(
+        {
+            catID: 11,
+            collected: 0,
+            active: false,
+            canBeActive: false,
+            isAuto: false,
+            autoCollectPrice: 100000,
+            amountToAutoCollect: 400,
+            pointsMultiplier: 10,
+            collectedMultiplier: 0,
+            maxCollectedMultiplier: 30,
+            limitCatsToMultiply: 1500,
+            catSrc: 'cat_pink_',
+            catThumb: 'results_yellow_cat',
+            catName: 'oswaldo',
+            require: 2500000000000
         })
     }
     applyPrizes(list)

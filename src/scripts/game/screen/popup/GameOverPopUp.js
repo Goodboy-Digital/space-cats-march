@@ -152,7 +152,7 @@ export default class GameOverPopUp extends StandardPop
         GAME_DATA.enableAutoCollect(data)
         this.updateTrophyQuant();
         this.screenManager.closeVideo();
-        this.catItemList.updateItemActive(data)
+        this.catItemList.updateAllItens()
     }
     onActiveCat(data)
     {
@@ -175,11 +175,23 @@ export default class GameOverPopUp extends StandardPop
     {
         // this.addCats([100,100,100,100])
         GAME_DATA.addCats([100, 100, 100, 100]);
-        GAME_DATA.updateCatsAllowed(10000);
         GAME_DATA.updateTrophy(10000);
+
+
+        let tempCurrent = GAME_DATA.maxPoints * 1.5 + 20;
+        let current = utils.formatPointsLabel(tempCurrent / MAX_NUMBER);
+        
+        console.log(current, GAME_DATA.maxPoints);
+        GAME_DATA.updateCatsAllowed(tempCurrent);
+
+        let high = utils.formatPointsLabel(GAME_DATA.maxPoints / MAX_NUMBER);
+
+        this.updatePoints(current, high);
+
+
         // GAME_DATA.updateCatsAllowed(5555555555);
         this.updateAllData()
-        // this.updateCatsQuant()
+            // this.updateCatsQuant()
     }
     hideScreenBlocker()
     {
@@ -451,6 +463,6 @@ export default class GameOverPopUp extends StandardPop
         this.chestContainer.update(delta)
         this.prizeContainer.update(delta)
         this.catItemList.update(delta)
-        // this.catAnimation.update(delta);
+            // this.catAnimation.update(delta);
     }
 }

@@ -24,12 +24,12 @@ const assets = [
 	"url":"assets/image\\image.png"
 	},
 	{
-	"id":"lane_texture",
-	"url":"assets/image\\lane_texture.png"
-	},
-	{
 	"id":"lane_texture - Copy",
 	"url":"assets/image\\lane_texture - Copy.png"
+	},
+	{
+	"id":"lane_texture",
+	"url":"assets/image\\lane_texture.png"
 	},
 	{
 	"id":"lettering",
@@ -60,12 +60,12 @@ const assets = [
 	"url":"assets/image\\planet1.png"
 	},
 	{
-	"id":"planet3",
-	"url":"assets/image\\planet3.png"
-	},
-	{
 	"id":"planet2",
 	"url":"assets/image\\planet2.png"
+	},
+	{
+	"id":"planet3",
+	"url":"assets/image\\planet3.png"
 	},
 	{
 	"id":"planet4",
@@ -76,20 +76,24 @@ const assets = [
 	"url":"assets/image\\vignette-tex.png"
 	},
 	{
-	"id":"vignette",
-	"url":"assets/image\\vignette.png"
-	},
-	{
 	"id":"vignette-tex2",
 	"url":"assets/image\\vignette-tex2.png"
 	},
 	{
-	"id":"pickup_fish",
-	"url":"assets/image\\pickups\\pickup_fish.png"
+	"id":"vignette",
+	"url":"assets/image\\vignette.png"
+	},
+	{
+	"id":"spark2",
+	"url":"assets/image\\particles\\spark2.png"
 	},
 	{
 	"id":"pickup_bubble",
 	"url":"assets/image\\pickups\\pickup_bubble.png"
+	},
+	{
+	"id":"pickup_fish",
+	"url":"assets/image\\pickups\\pickup_fish.png"
 	},
 	{
 	"id":"pickup_mouse",
@@ -100,16 +104,12 @@ const assets = [
 	"url":"assets/image\\pickups\\pickup_octopus.png"
 	},
 	{
-	"id":"spark2",
-	"url":"assets/image\\particles\\spark2.png"
+	"id":"auto_confirm",
+	"url":"assets/image\\ui\\auto_confirm.png"
 	},
 	{
 	"id":"active_engine",
 	"url":"assets/image\\ui\\active_engine.png"
-	},
-	{
-	"id":"auto_confirm",
-	"url":"assets/image\\ui\\auto_confirm.png"
 	},
 	{
 	"id":"back_button",
@@ -118,6 +118,10 @@ const assets = [
 	{
 	"id":"bubble",
 	"url":"assets/image\\ui\\bubble.png"
+	},
+	{
+	"id":"cat_coin",
+	"url":"assets/image\\ui\\cat_coin.png"
 	},
 	{
 	"id":"deactive_engine",
@@ -140,16 +144,12 @@ const assets = [
 	"url":"assets/image\\ui\\game_button_on.png"
 	},
 	{
-	"id":"cat_coin",
-	"url":"assets/image\\ui\\cat_coin.png"
+	"id":"goodboy",
+	"url":"assets/image\\ui\\goodboy.png"
 	},
 	{
 	"id":"goodboy_logo",
 	"url":"assets/image\\ui\\goodboy_logo.png"
-	},
-	{
-	"id":"goodboy",
-	"url":"assets/image\\ui\\goodboy.png"
 	},
 	{
 	"id":"icon_border",
@@ -204,16 +204,16 @@ const assets = [
 	"url":"assets/image\\ui\\results_newcat_rays_01.png"
 	},
 	{
+	"id":"results_newcat_rays_02",
+	"url":"assets/image\\ui\\results_newcat_rays_02.png"
+	},
+	{
 	"id":"results_newcat_star",
 	"url":"assets/image\\ui\\results_newcat_star.png"
 	},
 	{
 	"id":"results_orange_cat",
 	"url":"assets/image\\ui\\results_orange_cat.png"
-	},
-	{
-	"id":"results_newcat_rays_02",
-	"url":"assets/image\\ui\\results_newcat_rays_02.png"
 	},
 	{
 	"id":"results_pink_cat",
@@ -248,12 +248,12 @@ const assets = [
 	"url":"assets/image\\ui\\spaceship.png"
 	},
 	{
-	"id":"text_auto_rescue",
-	"url":"assets/image\\ui\\text_auto_rescue.png"
-	},
-	{
 	"id":"text_catnip_frenzy",
 	"url":"assets/image\\ui\\text_catnip_frenzy.png"
+	},
+	{
+	"id":"text_auto_rescue",
+	"url":"assets/image\\ui\\text_auto_rescue.png"
 	},
 	{
 	"id":"ui_bg",
@@ -264,32 +264,32 @@ const assets = [
 	"url":"assets/image\\frames\\cat_orange_00000.png"
 	},
 	{
-	"id":"cat_orange_00002",
-	"url":"assets/image\\frames\\cat_orange_00002.png"
-	},
-	{
 	"id":"cat_orange_00001",
 	"url":"assets/image\\frames\\cat_orange_00001.png"
+	},
+	{
+	"id":"cat_orange_00002",
+	"url":"assets/image\\frames\\cat_orange_00002.png"
 	},
 	{
 	"id":"cat_orange_00003",
 	"url":"assets/image\\frames\\cat_orange_00003.png"
 	},
 	{
-	"id":"cat_orange_00005",
-	"url":"assets/image\\frames\\cat_orange_00005.png"
-	},
-	{
 	"id":"cat_orange_00004",
 	"url":"assets/image\\frames\\cat_orange_00004.png"
 	},
 	{
-	"id":"cat_orange_00007",
-	"url":"assets/image\\frames\\cat_orange_00007.png"
+	"id":"cat_orange_00005",
+	"url":"assets/image\\frames\\cat_orange_00005.png"
 	},
 	{
 	"id":"cat_orange_00006",
 	"url":"assets/image\\frames\\cat_orange_00006.png"
+	},
+	{
+	"id":"cat_orange_00007",
+	"url":"assets/image\\frames\\cat_orange_00007.png"
 	},
 	{
 	"id":"cat_orange_00008",
@@ -304,12 +304,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_orange_00010.png"
 	},
 	{
-	"id":"cat_orange_00012",
-	"url":"assets/image\\frames\\cat_orange_00012.png"
-	},
-	{
 	"id":"cat_orange_00011",
 	"url":"assets/image\\frames\\cat_orange_00011.png"
+	},
+	{
+	"id":"cat_orange_00012",
+	"url":"assets/image\\frames\\cat_orange_00012.png"
 	},
 	{
 	"id":"cat_orange_00013",
@@ -424,6 +424,10 @@ const assets = [
 	"url":"assets/image\\frames\\cat_turquoise_00000.png"
 	},
 	{
+	"id":"cat_turquoise_00001",
+	"url":"assets/image\\frames\\cat_turquoise_00001.png"
+	},
+	{
 	"id":"cat_turquoise_00002",
 	"url":"assets/image\\frames\\cat_turquoise_00002.png"
 	},
@@ -432,12 +436,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_turquoise_00003.png"
 	},
 	{
-	"id":"cat_turquoise_00001",
-	"url":"assets/image\\frames\\cat_turquoise_00001.png"
-	},
-	{
 	"id":"cat_turquoise_00004",
 	"url":"assets/image\\frames\\cat_turquoise_00004.png"
+	},
+	{
+	"id":"cat_turquoise_00005",
+	"url":"assets/image\\frames\\cat_turquoise_00005.png"
 	},
 	{
 	"id":"cat_turquoise_00006",
@@ -454,10 +458,6 @@ const assets = [
 	{
 	"id":"cat_turquoise_00009",
 	"url":"assets/image\\frames\\cat_turquoise_00009.png"
-	},
-	{
-	"id":"cat_turquoise_00005",
-	"url":"assets/image\\frames\\cat_turquoise_00005.png"
 	},
 	{
 	"id":"cat_turquoise_00010",
@@ -596,22 +596,6 @@ const assets = [
 	"url":"assets/image\\cats\\orange_cat\\cat_orange_leg.png"
 	},
 	{
-	"id":"cat_pink_belly",
-	"url":"assets/image\\cats\\pink_cat\\cat_pink_belly.png"
-	},
-	{
-	"id":"cat_pink_arm",
-	"url":"assets/image\\cats\\pink_cat\\cat_pink_arm.png"
-	},
-	{
-	"id":"cat_pink_head",
-	"url":"assets/image\\cats\\pink_cat\\cat_pink_head.png"
-	},
-	{
-	"id":"cat_pink_leg",
-	"url":"assets/image\\cats\\pink_cat\\cat_pink_leg.png"
-	},
-	{
 	"id":"white_arm",
 	"url":"assets/image\\cats\\white_cat\\white_arm.png"
 	},
@@ -626,6 +610,22 @@ const assets = [
 	{
 	"id":"white_leg",
 	"url":"assets/image\\cats\\white_cat\\white_leg.png"
+	},
+	{
+	"id":"cat_pink_arm",
+	"url":"assets/image\\cats\\pink_cat\\cat_pink_arm.png"
+	},
+	{
+	"id":"cat_pink_belly",
+	"url":"assets/image\\cats\\pink_cat\\cat_pink_belly.png"
+	},
+	{
+	"id":"cat_pink_head",
+	"url":"assets/image\\cats\\pink_cat\\cat_pink_head.png"
+	},
+	{
+	"id":"cat_pink_leg",
+	"url":"assets/image\\cats\\pink_cat\\cat_pink_leg.png"
 	}
 ];
 
