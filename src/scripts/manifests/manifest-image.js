@@ -104,138 +104,6 @@ const assets = [
 	"url":"assets/image\\pickups\\pickup_octopus.png"
 	},
 	{
-	"id":"back_button",
-	"url":"assets/image\\ui\\back_button.png"
-	},
-	{
-	"id":"bubble",
-	"url":"assets/image\\ui\\bubble.png"
-	},
-	{
-	"id":"cat_coin",
-	"url":"assets/image\\ui\\cat_coin.png"
-	},
-	{
-	"id":"game_button_base",
-	"url":"assets/image\\ui\\game_button_base.png"
-	},
-	{
-	"id":"game_button_off",
-	"url":"assets/image\\ui\\game_button_off.png"
-	},
-	{
-	"id":"game_button_on",
-	"url":"assets/image\\ui\\game_button_on.png"
-	},
-	{
-	"id":"goodboy",
-	"url":"assets/image\\ui\\goodboy.png"
-	},
-	{
-	"id":"goodboy_logo",
-	"url":"assets/image\\ui\\goodboy_logo.png"
-	},
-	{
-	"id":"icon_border",
-	"url":"assets/image\\ui\\icon_border.png"
-	},
-	{
-	"id":"icon_lives",
-	"url":"assets/image\\ui\\icon_lives.png"
-	},
-	{
-	"id":"icon_paw",
-	"url":"assets/image\\ui\\icon_paw.png"
-	},
-	{
-	"id":"play button_large_over",
-	"url":"assets/image\\ui\\play button_large_over.png"
-	},
-	{
-	"id":"play button_large_up",
-	"url":"assets/image\\ui\\play button_large_up.png"
-	},
-	{
-	"id":"powerbar_bar",
-	"url":"assets/image\\ui\\powerbar_bar.png"
-	},
-	{
-	"id":"powerbar_border",
-	"url":"assets/image\\ui\\powerbar_border.png"
-	},
-	{
-	"id":"results_arrow",
-	"url":"assets/image\\ui\\results_arrow.png"
-	},
-	{
-	"id":"results_lock",
-	"url":"assets/image\\ui\\results_lock.png"
-	},
-	{
-	"id":"results_locked_cat",
-	"url":"assets/image\\ui\\results_locked_cat.png"
-	},
-	{
-	"id":"results_newcat_glow",
-	"url":"assets/image\\ui\\results_newcat_glow.png"
-	},
-	{
-	"id":"results_newcat_rays_01",
-	"url":"assets/image\\ui\\results_newcat_rays_01.png"
-	},
-	{
-	"id":"results_newcat_rays_02",
-	"url":"assets/image\\ui\\results_newcat_rays_02.png"
-	},
-	{
-	"id":"results_newcat_star",
-	"url":"assets/image\\ui\\results_newcat_star.png"
-	},
-	{
-	"id":"results_orange_cat",
-	"url":"assets/image\\ui\\results_orange_cat.png"
-	},
-	{
-	"id":"results_pink_cat",
-	"url":"assets/image\\ui\\results_pink_cat.png"
-	},
-	{
-	"id":"results_turquoise_cat",
-	"url":"assets/image\\ui\\results_turquoise_cat.png"
-	},
-	{
-	"id":"results_yellow_cat",
-	"url":"assets/image\\ui\\results_yellow_cat.png"
-	},
-	{
-	"id":"rocket_button_off",
-	"url":"assets/image\\ui\\rocket_button_off.png"
-	},
-	{
-	"id":"rocket_button_over",
-	"url":"assets/image\\ui\\rocket_button_over.png"
-	},
-	{
-	"id":"score_plinth",
-	"url":"assets/image\\ui\\score_plinth.png"
-	},
-	{
-	"id":"spaceship",
-	"url":"assets/image\\ui\\spaceship.png"
-	},
-	{
-	"id":"text_auto_rescue",
-	"url":"assets/image\\ui\\text_auto_rescue.png"
-	},
-	{
-	"id":"text_catnip_frenzy",
-	"url":"assets/image\\ui\\text_catnip_frenzy.png"
-	},
-	{
-	"id":"ui_bg",
-	"url":"assets/image\\ui\\ui_bg.png"
-	},
-	{
 	"id":"cat_orange_00000",
 	"url":"assets/image\\frames\\cat_orange_00000.png"
 	},
@@ -300,16 +168,16 @@ const assets = [
 	"url":"assets/image\\frames\\cat_orange_00015.png"
 	},
 	{
-	"id":"cat_orange_00016",
-	"url":"assets/image\\frames\\cat_orange_00016.png"
-	},
-	{
 	"id":"cat_orange_00017",
 	"url":"assets/image\\frames\\cat_orange_00017.png"
 	},
 	{
 	"id":"cat_orange_00018",
 	"url":"assets/image\\frames\\cat_orange_00018.png"
+	},
+	{
+	"id":"cat_orange_00016",
+	"url":"assets/image\\frames\\cat_orange_00016.png"
 	},
 	{
 	"id":"cat_orange_00019",
@@ -368,16 +236,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_pink_00012.png"
 	},
 	{
-	"id":"cat_pink_00013",
-	"url":"assets/image\\frames\\cat_pink_00013.png"
-	},
-	{
 	"id":"cat_pink_00014",
 	"url":"assets/image\\frames\\cat_pink_00014.png"
 	},
 	{
-	"id":"cat_pink_00015",
-	"url":"assets/image\\frames\\cat_pink_00015.png"
+	"id":"cat_pink_00013",
+	"url":"assets/image\\frames\\cat_pink_00013.png"
 	},
 	{
 	"id":"cat_pink_00016",
@@ -404,16 +268,16 @@ const assets = [
 	"url":"assets/image\\frames\\cat_turquoise_00001.png"
 	},
 	{
+	"id":"cat_pink_00015",
+	"url":"assets/image\\frames\\cat_pink_00015.png"
+	},
+	{
 	"id":"cat_turquoise_00002",
 	"url":"assets/image\\frames\\cat_turquoise_00002.png"
 	},
 	{
 	"id":"cat_turquoise_00003",
 	"url":"assets/image\\frames\\cat_turquoise_00003.png"
-	},
-	{
-	"id":"cat_turquoise_00004",
-	"url":"assets/image\\frames\\cat_turquoise_00004.png"
 	},
 	{
 	"id":"cat_turquoise_00005",
@@ -428,16 +292,20 @@ const assets = [
 	"url":"assets/image\\frames\\cat_turquoise_00007.png"
 	},
 	{
+	"id":"cat_turquoise_00004",
+	"url":"assets/image\\frames\\cat_turquoise_00004.png"
+	},
+	{
 	"id":"cat_turquoise_00008",
 	"url":"assets/image\\frames\\cat_turquoise_00008.png"
 	},
 	{
-	"id":"cat_turquoise_00009",
-	"url":"assets/image\\frames\\cat_turquoise_00009.png"
-	},
-	{
 	"id":"cat_turquoise_00010",
 	"url":"assets/image\\frames\\cat_turquoise_00010.png"
+	},
+	{
+	"id":"cat_turquoise_00009",
+	"url":"assets/image\\frames\\cat_turquoise_00009.png"
 	},
 	{
 	"id":"cat_turquoise_00011",
@@ -554,6 +422,154 @@ const assets = [
 	{
 	"id":"cat_yellow_00019",
 	"url":"assets/image\\frames\\cat_yellow_00019.png"
+	},
+	{
+	"id":"active_engine",
+	"url":"assets/image\\ui\\active_engine.png"
+	},
+	{
+	"id":"back_button",
+	"url":"assets/image\\ui\\back_button.png"
+	},
+	{
+	"id":"cat_coin",
+	"url":"assets/image\\ui\\cat_coin.png"
+	},
+	{
+	"id":"bubble",
+	"url":"assets/image\\ui\\bubble.png"
+	},
+	{
+	"id":"deactive_engine",
+	"url":"assets/image\\ui\\deactive_engine.png"
+	},
+	{
+	"id":"engine_icon",
+	"url":"assets/image\\ui\\engine_icon.png"
+	},
+	{
+	"id":"game_button_base",
+	"url":"assets/image\\ui\\game_button_base.png"
+	},
+	{
+	"id":"game_button_off",
+	"url":"assets/image\\ui\\game_button_off.png"
+	},
+	{
+	"id":"game_button_on",
+	"url":"assets/image\\ui\\game_button_on.png"
+	},
+	{
+	"id":"goodboy",
+	"url":"assets/image\\ui\\goodboy.png"
+	},
+	{
+	"id":"goodboy_logo",
+	"url":"assets/image\\ui\\goodboy_logo.png"
+	},
+	{
+	"id":"icon_border",
+	"url":"assets/image\\ui\\icon_border.png"
+	},
+	{
+	"id":"icon_lives",
+	"url":"assets/image\\ui\\icon_lives.png"
+	},
+	{
+	"id":"icon_paw",
+	"url":"assets/image\\ui\\icon_paw.png"
+	},
+	{
+	"id":"play button_large_over",
+	"url":"assets/image\\ui\\play button_large_over.png"
+	},
+	{
+	"id":"play button_large_up",
+	"url":"assets/image\\ui\\play button_large_up.png"
+	},
+	{
+	"id":"powerbar_bar",
+	"url":"assets/image\\ui\\powerbar_bar.png"
+	},
+	{
+	"id":"powerbar_border",
+	"url":"assets/image\\ui\\powerbar_border.png"
+	},
+	{
+	"id":"results_arrow",
+	"url":"assets/image\\ui\\results_arrow.png"
+	},
+	{
+	"id":"results_lock",
+	"url":"assets/image\\ui\\results_lock.png"
+	},
+	{
+	"id":"results_locked_cat",
+	"url":"assets/image\\ui\\results_locked_cat.png"
+	},
+	{
+	"id":"results_newcat_glow",
+	"url":"assets/image\\ui\\results_newcat_glow.png"
+	},
+	{
+	"id":"results_newcat_rays_01",
+	"url":"assets/image\\ui\\results_newcat_rays_01.png"
+	},
+	{
+	"id":"results_newcat_rays_02",
+	"url":"assets/image\\ui\\results_newcat_rays_02.png"
+	},
+	{
+	"id":"results_newcat_star",
+	"url":"assets/image\\ui\\results_newcat_star.png"
+	},
+	{
+	"id":"results_orange_cat",
+	"url":"assets/image\\ui\\results_orange_cat.png"
+	},
+	{
+	"id":"results_pink_cat",
+	"url":"assets/image\\ui\\results_pink_cat.png"
+	},
+	{
+	"id":"results_turquoise_cat",
+	"url":"assets/image\\ui\\results_turquoise_cat.png"
+	},
+	{
+	"id":"results_yellow_cat",
+	"url":"assets/image\\ui\\results_yellow_cat.png"
+	},
+	{
+	"id":"rocket_button_off",
+	"url":"assets/image\\ui\\rocket_button_off.png"
+	},
+	{
+	"id":"rocket_button_over",
+	"url":"assets/image\\ui\\rocket_button_over.png"
+	},
+	{
+	"id":"round_back",
+	"url":"assets/image\\ui\\round_back.png"
+	},
+	{
+	"id":"score_plinth",
+	"url":"assets/image\\ui\\score_plinth.png"
+	},
+	{
+	"id":"spaceship",
+	"url":"assets/image\\ui\\spaceship.png"
+	},
+	{
+	"id":"text_auto_rescue",
+	"url":"assets/image\\ui\\text_auto_rescue.png"
+	},
+	{
+	"id":"text_catnip_frenzy",
+	"url":"assets/image\\ui\\text_catnip_frenzy.png"
+	},
+	{
+	"id":"ui_bg",
+	"url":"assets/image\\ui\\ui_bg.png"
 	}
 ];
 

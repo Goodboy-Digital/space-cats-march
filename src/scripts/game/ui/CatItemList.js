@@ -66,7 +66,9 @@ export default class CatItemList extends PIXI.Container
     {
         this.onAutoCollect.dispatch(cat);
     }
-    updateItemActive(id){
+    updateItemActive(id)
+    {
+        console.log(id);
         this.catsItemList[id].updateItem(GAME_DATA.catsData[id])
     }
     updateAllItens()

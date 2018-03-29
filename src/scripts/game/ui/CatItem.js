@@ -3,7 +3,8 @@ import Signals from 'signals';
 import config from '../../config';
 import utils from '../../utils';
 import AutoCollectButton from './AutoCollectButton';
-export default class CatItem extends PIXI.Container
+import HorizontalList from './uiElements/HorizontalList';
+export default class CatItem extends HorizontalList
 {
     constructor(catData, rect = {
         w: 400,
@@ -34,7 +35,7 @@ export default class CatItem extends PIXI.Container
             align: 'right',
             fontWeight: '800'
         });
-        this.totalLabel.listScl = 0.15;
+        this.totalLabel.listScl = 0.1;
         this.totalLabel.scaleContent = false;
         this.totalLabel.align = 1;
 
@@ -98,11 +99,13 @@ export default class CatItem extends PIXI.Container
         this.autocollect.scaleContent = false;
         this.autocollect.fitWidth = 1;
         this.autocollect.align = 1;
+        this.autocollect.listScl = 0.25;
         this.autocollect.enableAutoCollect.add(this.onAutoCollectCallback.bind(this));
         this.elementsList.push(this.autocollect);
         this.container.addChild(this.autocollect);
     }
-    activeCat(){
+    activeCat()
+    {
         this.onActiveCat.dispatch(this.catData);
     }
     onAutoCollectCallback()
@@ -116,7 +119,7 @@ export default class CatItem extends PIXI.Container
 
         this.totalLabel.text = quant == 0 ? '' : quant
         this.bonusLabel.text = utils.cleanString(this.catData.collectedMultiplier.toFixed(2)) + '%';
-
+        this.backButton.tint = 0xFFFFFF;
         if (this.catData.canBeActive && !this.catData.active)
         {
             this.thumb.texture = PIXI.Texture.from('results_locked_cat');
@@ -162,10 +165,22 @@ export default class CatItem extends PIXI.Container
             }
             else
             {
-                this.autocollect.reset(this.catData);
+                if (GAME_DATA.isPossibleBuyAuto(this.catData.catID))
+                {
+
+                    this.autocollect.reset(this.catData);
+                }
+                else
+                {
+
+                    this.autocollect.deactive(this.catData);
+                }
+                // if()
             }
             // this.autocollect.x = this.catNameLabel.x + this.catNameLabel.width + 25
-        }else{
+        }
+        else
+        {
             this.backButton.off('mouseup', this.activeCat.bind(this)).off('touchend', this.activeCat.bind(this));
             this.thumb.texture = PIXI.Texture.from('results_locked_cat');
             this.totalLabel.text = ''
@@ -179,12 +194,11 @@ export default class CatItem extends PIXI.Container
         }
 
 
-        console.log(this.catNameLabel.width, this.backButton.width);
         let realSize = {
             w: this.catNameLabel.width / this.catNameLabel.scale.x,
             h: this.catNameLabel.height / this.catNameLabel.scale.y
         }
-        this.catNameLabel.scale.set(this.backButton.width / realSize.w * 0.7)
+        this.catNameLabel.scale.set(this.backButton.width / realSize.w * 0.6)
 
         this.catNameLabel.pivot.x = realSize.w / 2;
         this.catNameLabel.pivot.y = realSize.h / 2;
@@ -196,86 +210,5 @@ export default class CatItem extends PIXI.Container
 
         this.updateHorizontalList();
     }
-    updateHorizontalList()
-    {
-        let listSizes = [];
-        let sum = 0;
-        let quant = 0;
-        for (var i = 0; i < this.elementsList.length; i++)
-        {
 
-            if (this.elementsList[i].listScl)
-            {
-                listSizes.push(this.elementsList[i].listScl)
-                sum += this.elementsList[i].listScl;
-                quant++;
-            }
-            else
-            {
-                listSizes.push(0);
-            }
-        }
-        let adjust = 1 - sum;
-        let scales = adjust / ((this.elementsList.length) - quant);
-        let chunkSize = 0;
-        for (var i = 0; i < this.elementsList.length; i++)
-        {
-            if (listSizes[i] == 0)
-            {
-                listSizes[i] = scales
-            }
-        }
-        let plus = 0;
-        let positions = [];
-        let stdH = 1;
-        let stdW = 1;
-        for (var i = 0; i < listSizes.length; i++)
-        {
-            // let pixig = new PIXI.Graphics().beginFill(0xFF0000).drawCircle(0, 0, 5)
-            // this.container.addChild(pixig)
-            plus = 0;
-            let nextX = 0;
-            chunkSize = this.w * listSizes[i];
-            if (i == 0)
-            {
-                nextX = 0;
-            }
-            else
-            {
-                nextX = positions[i - 1] + this.w * listSizes[i - 1]
-            }
-            positions.push(nextX);
-            if (this.elementsList[i].fitHeight)
-            {
-                stdH = (this.elementsList[i].height / this.elementsList[i].scale.y)
-                this.elementsList[i].scale.set(this.h / stdH * this.elementsList[i].fitHeight)
-            }
-            else if (this.elementsList[i].fitWidth)
-            {
-                stdW = (this.elementsList[i].width / this.elementsList[i].scale.x)
-                this.elementsList[i].scale.set(chunkSize / stdW * this.elementsList[i].fitWidth)
-            }
-            else if (this.elementsList[i].scaleContent)
-            {
-                stdW = (this.elementsList[i].width / this.elementsList[i].scale.x)
-                this.elementsList[i].scale.set(chunkSize / stdW)
-            }
-            else if (this.elementsList[i].scaleContentMax && (this.elementsList[i].width > chunkSize))
-            {
-                stdW = (this.elementsList[i].width / this.elementsList[i].scale.x)
-                this.elementsList[i].scale.set(chunkSize / stdW)
-            }
-            let align = 0.5
-            if (this.elementsList[i].align != undefined)
-            {
-                align = this.elementsList[i].align;
-            }
-
-            this.elementsList[i].x = nextX + chunkSize * align - this.elementsList[i].width * align;
-            // pixig.x = nextX
-
-            this.elementsList[i].y = this.h / 2 - this.elementsList[i].height / 2
-        }
-
-    }
 }

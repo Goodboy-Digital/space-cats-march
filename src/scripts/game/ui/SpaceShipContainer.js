@@ -80,7 +80,8 @@ export default class SpaceShipContainer extends PIXI.Container
         this.confirmSpaceship = new PIXI.Sprite.from('rocket_button_off');
         this.confirmSpaceship.anchor.set(0.5);
         this.confirmSpaceship.scale.set(0.75);
-        this.confirmSpaceship.x = shipInfoSprite.width - this.confirmSpaceship.width / 2 - 20
+
+        this.confirmSpaceship.x = shipInfoSprite.width - this.confirmSpaceship.width / 2 - (shipInfoSprite.height - this.confirmSpaceship.height) / 2
         this.confirmSpaceship.y = shipInfoSprite.height / 2;
         shipInfoSprite.addChild(this.confirmSpaceship);
 

@@ -11,6 +11,7 @@ export default class GameData
             maxCollectedMultiplier: 100,
             multplierPerCollected: 0.0125,
             limitToMultiply: 1750,
+            icon: 'pickup_fish',
         }
 
         this.totalCatsAllowed = 1;
@@ -19,9 +20,9 @@ export default class GameData
         this.maxPoints = 0;
 
         this.chestData = {
-            lastChestTime:new Date(),
-            timeToNext:-1,
-            chestAvailable:false,
+            lastChestTime: new Date(),
+            timeToNext: -1,
+            chestAvailable: false,
             // chestTime: 90 * 1000
             chestTime: 15 * 1000 * 60
         }
@@ -65,7 +66,7 @@ export default class GameData
             limitCatsToMultiply: 1500,
             catSrc: 'cat_pink_',
             catThumb: 'results_pink_cat',
-            catName: 'mr. potatoes',
+            catName: 'mr.\npotatoes',
             require: 100
         })
 
@@ -143,9 +144,80 @@ export default class GameData
             require: 50000000
         })
     }
+    applyPrizes(list)
+    {
+        console.log('apply list', list);
+        let cats = []
+        for (var i = 0; i < this.catsData.length; i++) {
+            cats.push(0);
+        }
+        for (var i = 0; i < list.length; i++)
+        {
+            let item = list[i];
+            if (item.type == 'cat')
+            {
+                console.log('add cat', item.quant);
+                // this.catsData[item.id].quant += item.quant
+                cats[item.id] += item.quant;
+            }
+            if (item.type == 'trophy')
+            {
+                this.updateTrophy(item.quant)
+                // this.trophyData.collected += item.quant;
+            }
+        }
+        this.addCats(cats)
+        STORAGE.storeObject('space-cats-game-data', this.getObjectData());
+    }
+    isPossibleBuyAuto(id){
+        let cat = this.catsData[id];
+        if(cat.autoCollectPrice <= this.trophyData.collected){
+            return true
+        }
+        return false
+    }
+    getChestPrize()
+    {
+        let prizesList = [];
+        let availableIds = [];
+        for (var i = 0; i < this.catsData.length; i++)
+        {
+            if (this.catsData.active)
+            {
+                availableIds.push(this.catsData.catID);
+            }
+        }
+        for (var i = 0; i < 3; i++)
+        {
+            let rnd1 = Math.random();
+            let obj = {
+                type: 'cat',
+                id: 0,
+                quant: 0,
+                icon: 0,
+            }
+            if (rnd1 < 0.3)
+            {
+                obj.type = 'trophy';
+                obj.quant = this.getTrophyAmount();
+                obj.icon = this.trophyData.icon
+            }
+            else
+            {
+                let cat = this.catsData[Math.floor(availableIds * Math.random())]
+                obj.id = cat.catID
+                obj.icon = cat.catThumb
+                obj.quant = Math.ceil(cat.collected * Math.random() * 0.5 + 15 * Math.random() + 10)
+            }
+
+            prizesList.push(obj);
+        }
+        return prizesList
+    }
     loadData(data)
     {
-        if(!data.chestData){
+        if (!data.chestData)
+        {
             STORAGE.reset();
             location.reload();
         }
@@ -165,7 +237,7 @@ export default class GameData
         }
 
         this.chestData.lastChestTime = new Date(this.chestData.lastChestTime);
-        
+
     }
     getNumberTrophyToSend()
     {
@@ -179,12 +251,6 @@ export default class GameData
         }
 
         trophys = catsAcc * (this.trophyData.multplierPerCollected * this.trophyData.collected * 0.05) + Math.ceil(catsAcc * 0.2) // + Math.ceil(catsAcc * 0.1) * catsPercentageAcc//Math.ceil(catsAcc * 0.15) + 2
-            // trophys = this.trophyData.collected//Math.ceil(catsAcc * 0.15) + 2
-            // trophys += trophys * this.trophyData.multplierPerCollected
-        console.log(trophys);
-        console.log(this.trophyData.multplierPerCollected);
-        // trophys += trophys * catsPercentageAcc * 0.1
-
         return Math.ceil(trophys);
     }
     sendCatsToEarth()
@@ -258,9 +324,10 @@ export default class GameData
         STORAGE.storeObject('space-cats-game-data', this.getObjectData());
         return hasNew;
     }
-    activeCat(data){
+    activeCat(data)
+    {
         this.catsData[data.catID].active = true;
-        STORAGE.storeObject('space-cats-game-data', this.getObjectData());        
+        STORAGE.storeObject('space-cats-game-data', this.getObjectData());
     }
     startNewRound()
     {
@@ -278,11 +345,12 @@ export default class GameData
     {
         let data = this.catsData[id];
         // console.log(data);
-        // if (this.trophyData.collected < data.autoCollectPrice)
-        // {
-        //     console.log('something wrong');
-        //     return
-        // }
+        if (this.trophyData.collected < data.autoCollectPrice)
+        {
+            console.log('something wrong');
+            return
+        }
+        this.updateTrophy(-data.autoCollectPrice)
         // this.trophyData.collected -= data.autoCollectPrice
         this.catsData[id].isAuto = true;
         STORAGE.storeObject('space-cats-game-data', this.getObjectData());

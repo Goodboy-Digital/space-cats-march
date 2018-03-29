@@ -14,10 +14,12 @@ export default class ChestContainer extends PIXI.Container
         this.chestBubble = new PIXI.Sprite.from('pickup_bubble');
         this.chestBubble.anchor.set(0.5, 0.5);
 
-        let chestIcon = new PIXI.Sprite.from('pickup_fish');
+        let chestIcon = new PIXI.Sprite.from('results_newcat_rays_01');
         chestIcon.anchor.set(0.5, 0.5);
-        chestIcon.scale.set(0.7);
-        chestIcon.y = -this.chestBubble.height * 0.15;
+        chestIcon.scale.set(1.2);
+        chestIcon.blendMode = PIXI.BLEND_MODES.ADD
+        chestIcon.alpha= 0.25
+        // chestIcon.y = -this.chestBubble.height * 0.15;
 
         this.quantchest = new PIXI.Text('Open a free\nchest!\n35:05',
         {
@@ -30,6 +32,7 @@ export default class ChestContainer extends PIXI.Container
         // chestIcon.x = -this.chestBubble.width * 0.15;
 
         this.quantchest.pivot.x = this.quantchest.width / 2;
+        this.quantchest.pivot.y = this.quantchest.height / 2;
         // this.quantchest.y = -15;
         // this.currentPointsLabel.pivot.y = this.currentPointsLabel.height / 2;
 
@@ -55,6 +58,7 @@ export default class ChestContainer extends PIXI.Container
     activeContainer(){
     	this.quantchest.text = 'COLLECT YOUR\nPRIZE'
     	this.quantchest.pivot.x = this.quantchest.width / 2;
+        this.quantchest.pivot.y = this.quantchest.height / 2;
     	TweenLite.to(this.container.scale, 0.75, {x:this.containerScale, y:this.containerScale, ease:Elastic.easeOut})
     }
     updateTimer(){
@@ -78,8 +82,9 @@ export default class ChestContainer extends PIXI.Container
   		if(minutes < 10){
   			minutes = '0'+minutes;
   		}
-    	this.quantchest.text = minutes + ':' + seconds
+    	this.quantchest.text = 'NEW PRIZE IN\n'+minutes + ':' + seconds
     	this.quantchest.pivot.x = this.quantchest.width / 2;
+        this.quantchest.pivot.y = this.quantchest.height / 2;
     	// this.quantchest.text = dist.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
     	// this.quantchest.text = GAME_DATA.chestData.lastChestTime.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
     }

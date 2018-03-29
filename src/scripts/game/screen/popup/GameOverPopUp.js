@@ -10,6 +10,7 @@ import PointsContainer from '../../ui/PointsContainer';
 import SpaceShipContainer from '../../ui/SpaceShipContainer';
 import ChestContainer from '../../ui/ChestContainer';
 import PrizeContainer from '../../ui/PrizeContainer';
+import CatAnimation from '../../elements/CatAnimation';
 export default class GameOverPopUp extends StandardPop
 {
     constructor(label, screenManager)
@@ -36,7 +37,7 @@ export default class GameOverPopUp extends StandardPop
 
         this.catItemList = new CatItemList(
         {
-            w: this.logoMask.width * 0.75,
+            w: this.logoMask.width * 0.85,
             h: this.logoMask.height * 0.75
         });
         this.catListContainer.addChild(this.catItemList)
@@ -135,7 +136,11 @@ export default class GameOverPopUp extends StandardPop
         });
 
         this.prizeContainer = new PrizeContainer();
+        this.prizeContainer.onPrizeCollected.add(this.hidePrizeContainer.bind(this));
         this.addChild(this.prizeContainer)
+
+
+        this.catAnimation = new CatAnimation();
 
     }
 
@@ -144,13 +149,17 @@ export default class GameOverPopUp extends StandardPop
         GAME_DATA.enableAutoCollect(data)
         this.updateTrophyQuant();
         this.screenManager.closeVideo();
+        this.catItemList.updateItemActive(data)
     }
-    onActiveCat(data){
+    onActiveCat(data)
+    {
         GAME_DATA.activeCat(data);
         this.catItemList.updateItemActive(data.catID);
+        this.updateCatsQuant();
     }
     onAutoCollect(data)
     {
+        // this.showScreenBlocker();
         console.log('AUTO COLLECT');
         this.screenManager.loadVideo(this.enableAutoCollect.bind(this, data.catID), data.catID);
     }
@@ -179,7 +188,7 @@ export default class GameOverPopUp extends StandardPop
             }
         })
     }
-    showScreenBlocker(target)
+    showScreenBlocker()
     {
         this.screenBlocker.visible = true;
         this.screenBlocker.alpha = 0;
@@ -220,8 +229,7 @@ export default class GameOverPopUp extends StandardPop
 
     hidePrizeContainer()
     {
-        return
-        this.prizeContainer.visible = false;
+        this.updateAllData();
     }
     openChestVideoCallback()
     {
@@ -284,18 +292,32 @@ export default class GameOverPopUp extends StandardPop
             ease: Back.easeIn
         })
     }
-
+    updateAllData()
+    {
+        this.updateCatsQuant();
+        this.updateTrophyQuant();
+    }
     updateCatsQuant()
     {
         this.catItemList.updateAllItens();
 
-        return
+
+        // return
         if (!GAME_DATA.catsData[1].active)
         {
             this.spaceShipContainer.visible = false;
         }
         else
         {
+            if (!this.spaceShipContainer.visible)
+            {
+                this.spaceShipContainer.x = config.width + this.spaceShipContainer.width
+                TweenLite.to(this.spaceShipContainer, 0.5,
+                {
+                    x: config.width * 0.83,
+                    ease: Elastic.easeOut
+                })
+            }
             this.spaceShipContainer.visible = true;
         }
     }
@@ -303,14 +325,21 @@ export default class GameOverPopUp extends StandardPop
     updateTrophyQuant()
     {
         let percent = GAME_DATA.trophyData.collectedMultiplier
-        if (GAME_DATA.trophyData.collectedMultiplier >= 1)
+
+        if (percent >= 1)
         {
             percent = utils.formatPointsLabel(GAME_DATA.trophyData.collectedMultiplier / MAX_NUMBER)
+        }
+        else
+        {
+            percent = percent.toFixed(2);
         }
         let data = {
             bonus: percent + '%',
             quant: utils.formatPointsLabel(GAME_DATA.trophyData.collected / MAX_NUMBER)
         }
+
+
         this.trophyContainer.updateData(data);
     }
     show(param)
@@ -368,7 +397,7 @@ export default class GameOverPopUp extends StandardPop
 
         this.prizeContainer.hide();
 
-        this.chestContainer.visible = true;
+
 
         this.trophyContainer.alpha = 0;
         TweenLite.to(this.trophyContainer, 0.75,
@@ -379,6 +408,10 @@ export default class GameOverPopUp extends StandardPop
         this.chestContainer.alpha = 0;
         TweenLite.to(this.chestContainer, 0.75,
         {
+            onStart: () =>
+            {
+                this.chestContainer.visible = true;
+            },
             delay: 0.5,
             alpha: 1
         });
@@ -411,5 +444,6 @@ export default class GameOverPopUp extends StandardPop
         this.spaceShipContainer.update(delta);
         this.trophyContainer.update(delta)
         this.chestContainer.update(delta)
+        this.prizeContainer.update(delta)
     }
 }

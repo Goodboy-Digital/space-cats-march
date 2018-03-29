@@ -124,7 +124,16 @@ export default class Cat extends PIXI.Container
             this.finishTimer -= delta;
             if (this.finishTimer <= 0)
             {
-                this.finish();
+                if (!this.game.isAutoCollectMode && !this.catData.isAuto)
+                {
+
+                    this.finish();
+                }
+                else
+                {
+                    this.onDie.dispatch(this, false);
+                    this.onDie.removeAll();
+                }
             }
         }
         if (!this.isFinished)
@@ -168,8 +177,8 @@ export default class Cat extends PIXI.Container
             }
             else
             {
-                this.onDie.dispatch(this, false);
-                this.onDie.removeAll();
+                this.finishTimer = 0.15;
+
             }
             return;
         }

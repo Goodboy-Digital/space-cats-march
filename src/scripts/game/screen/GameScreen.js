@@ -350,10 +350,10 @@ export default class GameScreen extends Screen
         this.HUD.startGame();
         this.updateSpecialBar(true);
 
-        this.HUD.forceQuite.visible = false;
+        this.HUD.forceQuitButton.visible = false;
         for (var i = 0; i < GAME_DATA.catsData.length; i++) {
             if(GAME_DATA.catsData[i].isAuto){
-                this.HUD.forceQuite.visible = true;
+                this.HUD.forceQuitButton.visible = true;
                 break;
             }
         }
@@ -412,6 +412,8 @@ export default class GameScreen extends Screen
                 this.currentItem.parent.removeChild(this.currentItem);
             }
         }
+       this.environment.removeSpecialBackground();
+        // this.removeSpecialBackground();
         this.gameStarted = false;
         this.killAll();
         this.HUD.hide();
@@ -660,7 +662,7 @@ export default class GameScreen extends Screen
         {
             cat.finishTimer = -999
                 // cat.currentWaypointID = 0;
-            this.collectThisCat(cat, 0);
+            this.collectThisCat(cat, 0, true);
             return;
         }
         this.screenManager.shake();
@@ -693,7 +695,7 @@ export default class GameScreen extends Screen
 
         this.HUD.updateHUD(this.currentPoints, this.currentDeadCats)
     }
-    collectThisCat(cat, dist)
+    collectThisCat(cat, dist, auto = false)
     {
         cat.collectCat(dist);
         let labelPos = {
@@ -708,13 +710,14 @@ export default class GameScreen extends Screen
         let labelData = {
             text: '',
             scagmle: 1,
-            points: 0
+            points: 0,
+            special: 0
         }
         if (dist < PAWN.width * 0.2)
         {
             points = 10;
             this.gameSpeed -= 0.05
-            this.specialAcc += 0.065;
+            labelData.special += 0.065;
             labelData.text = 'PURRFECT\n+'
             labelData.scale = 1
             this.inGameEffects.addBean(cat,
@@ -728,7 +731,7 @@ export default class GameScreen extends Screen
         {
             points = 5;
             this.gameSpeed -= 0.025
-            this.specialAcc += 0.05;
+            labelData.special += 0.05;
             labelData.text = 'GREAT\n+'
             labelData.scale = 0.9
             this.inGameEffects.addBean(cat,
@@ -741,11 +744,15 @@ export default class GameScreen extends Screen
         {
             points = 1;
             this.gameSpeed -= 0.01
-            this.specialAcc += 0.025;
+            labelData.special += 0.025;
             labelData.text = 'GOOD\n+'
             labelData.scale = 0.75
         }
+        console.log(auto, labelData.special);
+        if(!auto){
 
+            this.specialAcc += labelData.special;
+        }
         if (this.isSpecialMode)
         {
             points *= 2;

@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import Signals from 'signals';
 import config from '../../config';
 import utils from '../../utils';
+import HudItensContainer from '../ui/HudItensContainer';
 export default class HUD extends PIXI.Container
 {
     constructor(game)
@@ -114,10 +115,10 @@ export default class HUD extends PIXI.Container
 
         this.lifesLabel.scale.set(this.powerBarContainer.height / this.lifesLabel.height * 0.75)
         this.lifesLabel.x = this.catHead.x - this.lifesLabel.width - this.catHead.width / 1.25
-        // this.lifesLabel.pivot.y = this.lifesLabel.height / 2;
-        // this.lifesLabel.y = this.catHead.y
+            // this.lifesLabel.pivot.y = this.lifesLabel.height / 2;
+            // this.lifesLabel.y = this.catHead.y
         this.lifesLabel.y = this.catHead.y - this.lifesLabel.height / 2
-        // this.catHead.scale.set(0,2)
+            // this.catHead.scale.set(0,2)
 
         this.pointsIcon = new PIXI.Sprite.from('icon_paw');
         this.addChild(this.pointsIcon);
@@ -131,38 +132,52 @@ export default class HUD extends PIXI.Container
         // this.pointsLabel.x = this.catHead.x - this.pointsLabel.width - this.catHead.width/2 - 20
         this.pointsLabel.scale.set(this.powerBarContainer.height / this.pointsLabel.height * 0.75)
         this.pointsLabel.x = this.pointsIcon.x + this.pointsIcon.width / 1.25
-        // this.pointsLabel.pivot.y = this.pointsLabel.height / 2;
+            // this.pointsLabel.pivot.y = this.pointsLabel.height / 2;
         this.pointsLabel.y = this.pointsIcon.y - this.pointsLabel.height / 2
         this.catHead.scale.set(0, 2)
 
 
-        this.forceQuite = new PIXI.Sprite.from('pickup_bubble');
-        this.addChild(this.forceQuite);
-        this.forceQuite.anchor.set(0.5);
-        this.forceQuiteScale = this.powerBarContainer.height / this.forceQuite.width * 2;
-        this.forceQuite.scale.set(this.forceQuiteScale)
-        this.forceQuite.x = config.width - this.forceQuite.width// + this.marginTop
-        this.forceQuite.y = this.forceQuite.height
-        
         this.onForceGameOver = new Signals();
-        this.forceQuite.interactive = true;
-        this.forceQuite.buttonMode = true;
+        this.forceQuitButton = new HudItensContainer();
+        this.addChild(this.forceQuitButton);
+        this.forceQuitButton.setTexture('spaceship');
+        this.forceQuitButton.onClickItem.add(this.gameOver.bind(this))
 
-        this.forceQuite.on('mouseup', this.gameOver.bind(this)).on('touchend', this.gameOver.bind(this));
-        // this.catRotationSin = 0;
-        // this.forceQuite.visible = false;
+        this.forceQuitButton.x = config.width - this.forceQuitButton.width // + this.marginTop
+        this.forceQuitButton.y = this.h
+
+        this.forceQuiteScale = this.powerBarContainer.height / this.forceQuitButton.width * 2;
+        this.forceQuitButton.scale.set(this.forceQuiteScale)
+
+
+      
 
         this.hide(true);
 
 
     }
-    gameOver(){
-        this.onForceGameOver.dispatch();
+    gameOver()
+    {
+        if(this.quiting){
+            return
+        }
+        this.quiting = true;
+        this.forceQuitButton.scale.set(this.forceQuiteScale * 0.75);
+        TweenLite.to(this.forceQuitButton.scale, 0.5,
+        {
+            x: this.forceQuiteScale,
+            y: this.forceQuiteScale,
+            ease: Elastic.easeOut,
+            onComplete: () =>
+            {
+                this.onForceGameOver.dispatch();
+            }
+        })
     }
     updatePowerBar(value, type = 0, force)
     {
         TweenLite.killTweensOf(this.powerBarMask.scale)
-        TweenLite.to(this.powerBarMask.scale, force?0:0.5,
+        TweenLite.to(this.powerBarMask.scale, force ? 0 : 0.5,
         {
             x: value
         })
@@ -189,7 +204,18 @@ export default class HUD extends PIXI.Container
     }
     startGame()
     {
+        this.quiting = false;
         this.catHead.rotation = 0;
+
+        this.forceQuitButton.x = config.width + this.forceQuitButton.width / 2
+
+        TweenLite.to(this.forceQuitButton, 0.35,
+        {
+            x: config.width - this.forceQuitButton.width,
+            delay:0.5,
+            ease: Back.easeOut
+        })
+
         TweenLite.to(this, 0.5,
         {
             y: 0,

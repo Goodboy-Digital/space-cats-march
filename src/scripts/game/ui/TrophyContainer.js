@@ -66,6 +66,7 @@ export default class TrophyContainer extends PIXI.Container
     }
     updateData(data)
     {
+        console.log(data.bonus);
         this.bonusTrophy.text = data.bonus;
         this.quantTrophy.text = data.quant;
         this.quantTrophy.pivot.x = this.quantTrophy.width / 2;
