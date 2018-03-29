@@ -40,6 +40,12 @@ export default class SpaceShipContainer extends PIXI.Container
         this.containerScale = config.width / this.container.width * 0.25
         this.container.scale.set(this.containerScale)
 
+        this.infoIcon = new PIXI.Sprite.from('info');
+        this.infoIcon.anchor.set(0.5, 0.5);
+        this.container.addChild(this.infoIcon);
+        this.infoIcon.x = this.spaceShipBubble.width / 3.5;
+        this.infoIcon.y = this.spaceShipBubble.height / 3.5;
+
 
         //INFO
         this.spaceShipInfoContainer = new PIXI.Container();
@@ -130,6 +136,7 @@ export default class SpaceShipContainer extends PIXI.Container
     {
         this.spaceShipSin += this.spaceInfoOpen ? 0.005 : 0.05
         this.spaceShipSin %= Math.PI * 2;
+        this.infoIcon.rotation = -this.container.rotation;
         this.container.rotation = Math.sin(this.spaceShipSin) * 0.1 + 0.2
         this.container.scale.set(this.containerScale + Math.cos(this.spaceShipSin) * 0.01, this.containerScale + Math.sin(this.spaceShipSin) * 0.01)
         this.spaceShipInfoContainer.rotation = -this.container.rotation;

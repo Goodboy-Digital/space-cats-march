@@ -4,6 +4,8 @@ import config from '../../config';
 import utils from '../../utils';
 import AutoCollectButton from './AutoCollectButton';
 import HorizontalList from './uiElements/HorizontalList';
+// import CatAnimation from '../elements/CatAnimation';
+import StaticCat from '../ui/StaticCat';
 export default class CatItem extends HorizontalList
 {
     constructor(catData, rect = {
@@ -42,10 +44,13 @@ export default class CatItem extends HorizontalList
         this.elementsList.push(this.totalLabel);
         this.container.addChild(this.totalLabel)
 
-        this.thumb = new PIXI.Sprite.from(this.catData.catThumb);
+        this.thumb = new StaticCat();
+        // new PIXI.Sprite.from(this.catData.catThumb);
         this.thumb.listScl = 0.2;
         this.thumb.scaleContent = false;
         this.thumb.fitHeight = 0.65;
+        this.thumb.animationContainer.x = this.thumb.width / 2;
+        this.thumb.animationContainer.y = this.thumb.height / 2;
         this.elementsList.push(this.thumb);
         this.container.addChild(this.thumb);
         this.thumbH = this.thumb.height;
@@ -103,14 +108,20 @@ export default class CatItem extends HorizontalList
         this.autocollect.enableAutoCollect.add(this.onAutoCollectCallback.bind(this));
         this.elementsList.push(this.autocollect);
         this.container.addChild(this.autocollect);
+
     }
     activeCat()
     {
         this.onActiveCat.dispatch(this.catData);
     }
+    updateThumb(delta){
+        if(this.catData.active){
+            // this.thumb.update(delta * 0.1);
+        }
+    }
     onAutoCollectCallback()
     {
-        this.onAutoCollect.dispatch(this.catData);
+        this.onAutoCollect.dispatch(this);
     }
     updateItem(catData)
     {
@@ -122,7 +133,9 @@ export default class CatItem extends HorizontalList
         this.backButton.tint = 0xFFFFFF;
         if (this.catData.canBeActive && !this.catData.active)
         {
-            this.thumb.texture = PIXI.Texture.from('results_locked_cat');
+            // this.thumb.texture = PIXI.Texture.from('results_locked_cat');
+            // this.thumb.tint = 0;
+            this.thumb.lock();
             this.totalLabel.text = ''
             this.catNameLabel.text = ('active').toUpperCase();
             this.plusIcon.texture = PIXI.Texture.from('results_lock');
@@ -141,7 +154,8 @@ export default class CatItem extends HorizontalList
         {
             this.backButton.off('mouseup', this.activeCat.bind(this)).off('touchend', this.activeCat.bind(this));
             this.thumb.tint = 0xFFFFFF;
-            this.thumb.texture = PIXI.Texture.from(this.catData.catThumb);
+            this.thumb.unlock();
+            this.thumb.updateCatTextures(this.catData.catSrc);//.texture = PIXI.Texture.from(this.catData.catThumb);
             this.catNameLabel.text = this.catData.catName.toUpperCase();
             this.plusIcon.texture = PIXI.Texture.from('results_arrow');
             this.catNameLabel.style.fill = 0xFFFFFF;
@@ -182,7 +196,8 @@ export default class CatItem extends HorizontalList
         else
         {
             this.backButton.off('mouseup', this.activeCat.bind(this)).off('touchend', this.activeCat.bind(this));
-            this.thumb.texture = PIXI.Texture.from('results_locked_cat');
+            // this.thumb.texture = PIXI.Texture.from('results_locked_cat');
+            this.thumb.lock();
             this.totalLabel.text = ''
             this.catNameLabel.text = ('unlock at\n' + utils.formatPointsLabel(this.catData.require / MAX_NUMBER)).toUpperCase();
             this.plusIcon.texture = PIXI.Texture.from('results_lock');

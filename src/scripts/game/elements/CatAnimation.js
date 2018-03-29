@@ -1,14 +1,33 @@
 import * as PIXI from 'pixi.js';
-export default class CatAnimation extends PIXI.Container
+import StaticCat from '../ui/StaticCat';
+export default class CatAnimation extends StaticCat
 {
     constructor()
     {
         super();
-        this.elementsList = [];
-        this.head = new PIXI.Graphics().beginFill(0xFF0000).drawCircle(0,0,50);
-        this.animationContainer = new PIXI.Container();
-        this.animationContainer.addChild(this.head);
+    }
+    
+    update(delta)
+    {
+        this.bodySin += delta * 15;
 
-        this.addChild(this.animationContainer)
+        this.rleg.scale.y = 1 + Math.sin(this.bodySin) * 0.1
+
+        this.lleg.scale.y = 1 + Math.cos(this.bodySin) * 0.1
+
+        this.rarm.rotation = this.armsRot + Math.cos(this.bodySin) * 0.1
+        this.rarm.scale.x = 1 + Math.sin(this.bodySin) * 0.05
+        this.rarm.scale.y = 1 + Math.cos(this.bodySin) * 0.05
+
+        this.larm.rotation = -this.armsRot - Math.sin(this.bodySin) * 0.1
+        this.larm.scale.x = 1 + Math.cos(this.bodySin) * 0.05
+        this.larm.scale.y = 1 + Math.sin(this.bodySin) * 0.05
+
+        this.body.scale.x = 1 + Math.sin(this.bodySin) * 0.025
+        this.body.scale.y = 1 + Math.cos(this.bodySin) * 0.025
+
+        this.head.scale.x = 1 + Math.cos(this.bodySin) * 0.05
+        this.head.scale.y = 1 + Math.sin(this.bodySin) * 0.05
+            // this.larm.rotation += delta
     }
 }

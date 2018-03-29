@@ -83,7 +83,7 @@ export default class GameData
             collectedMultiplier: 0,
             maxCollectedMultiplier: 20,
             limitCatsToMultiply: 1500,
-            catSrc: 'cat_turquoise_',
+            catSrc: 'cat_orange_',
             catThumb: 'results_turquoise_cat',
             catName: 'lucifurr',
             require: 5000
@@ -102,7 +102,7 @@ export default class GameData
             collectedMultiplier: 0,
             maxCollectedMultiplier: 30,
             limitCatsToMultiply: 1500,
-            catSrc: 'cat_yellow_',
+            catSrc: 'cat_pink_',
             catThumb: 'results_yellow_cat',
             catName: 'fluffy',
             require: 500000
@@ -182,11 +182,12 @@ export default class GameData
         let availableIds = [];
         for (var i = 0; i < this.catsData.length; i++)
         {
-            if (this.catsData.active)
+            if (this.catsData[i].active)
             {
-                availableIds.push(this.catsData.catID);
+                availableIds.push(this.catsData[i].catID);
             }
         }
+
         for (var i = 0; i < 3; i++)
         {
             let rnd1 = Math.random();
@@ -204,9 +205,10 @@ export default class GameData
             }
             else
             {
-                let cat = this.catsData[Math.floor(availableIds * Math.random())]
+                let id = Math.floor(availableIds.length * Math.random())
+                let cat = this.catsData[id]
                 obj.id = cat.catID
-                obj.icon = cat.catThumb
+                obj.icon = cat.catSrc
                 obj.quant = Math.ceil(cat.collected * Math.random() * 0.5 + 15 * Math.random() + 10)
             }
 

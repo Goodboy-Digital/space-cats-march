@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import Signals from 'signals';
 import config from '../../config';
 import utils from '../../utils';
+import StaticCat from '../ui/StaticCat';
 export default class PrizeItemContainer extends PIXI.Container
 {
     constructor(w, h)
@@ -13,6 +14,7 @@ export default class PrizeItemContainer extends PIXI.Container
 
         this.topBg = new PIXI.Graphics().beginFill(0x00073f).drawRect(0, 0, w, h);
         this.container.addChild(this.topBg)
+        this.topBg.alpha = 0;
 
         this.itemContainer = new PIXI.Container();
         this.addChild(this.itemContainer);
@@ -26,6 +28,12 @@ export default class PrizeItemContainer extends PIXI.Container
         this.itemContainer.addChild(this.itemSprite)
         this.itemSprite.anchor.set(0.5);
 
+        this.itemCat = new StaticCat;
+        this.itemContainer.addChild(this.itemCat)
+        
+        // this.itemSprite.anchor.set(0.5);
+
+        
 
         this.itemContainer.x = w / 2
         this.itemContainer.y = h / 2
@@ -44,8 +52,18 @@ export default class PrizeItemContainer extends PIXI.Container
         });
          this.labelContainer.addChild(this.quantLabel)
     }
+    setCat(src){
+    	this.itemSprite.visible = false;
+    	this.itemCat.visible = true;
+    	this.itemCat.updateCatTextures(src)
+    	this.itemCatScale = this.topBg.width / (this.itemCat.width / this.itemCat.scale.x) * 0.65
+    	this.itemCat.scale.set(this.itemCatScale)
+    	this.itemCat.animationContainer.y = -this.itemCat.height / 2;
+    }
     setTexture(texture)
     {
+    	this.itemSprite.visible = true;
+    	this.itemCat.visible = false;
         this.itemSprite.texture = new PIXI.Texture.from(texture);
         this.itemScale = this.topBg.width / (this.itemSprite.width / this.itemSprite.scale.x) * 0.75
         this.itemSprite.scale.set(this.itemScale)

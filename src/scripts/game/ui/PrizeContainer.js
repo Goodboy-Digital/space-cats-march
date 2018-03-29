@@ -103,11 +103,18 @@ export default class PrizeContainer extends HorizontalList
         this.updateHorizontalList();
 
         for (var i = 0; i < this.itensList.length; i++) {
-            let item = this.itensList[i];
+            let item = list[i]//this.itensList[i];
+            let itemC = this.itensList[i]//this.itensList[i];
             console.log(list[i]);
-            item.setTexture(list[i].icon);
-            item.show(0.15 * i + 0.1);
-            item.setValue(list[i].quant)
+            console.log(list[i], 'list');
+            if(item.type == 'trophy'){
+                console.log('TEXTURE');
+                itemC.setTexture(list[i].icon);
+            }else{                
+                itemC.setCat(list[i].icon);
+            }
+            itemC.show(0.15 * i + 0.1);
+            itemC.setValue(list[i].quant)
             // TweenLite.from(item.scale, 0.5, {x:0, y:0, delay:0.1 * i, ease:Back.easeOut});
             // TweenLite.to(item, 0.5, {alpha:1});
         }

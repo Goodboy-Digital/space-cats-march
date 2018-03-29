@@ -26,7 +26,8 @@ export default class AutoCollectButton extends PIXI.Container
         this.sprite = new PIXI.Sprite.from('engine_icon');
         this.container.addChild(this.sprite);
         this.sprite.anchor.set(0, 0.5)
-        this.sprite.scale.set(this.h / this.sprite.height * 0.5)
+        this.defaultSpriteScale = this.h / this.sprite.height * 0.5;
+        this.sprite.scale.set(this.defaultSpriteScale)
         this.sprite.x = 15;
         this.sprite.y = this.h / 2;
         this.interactive = true;
@@ -73,7 +74,7 @@ export default class AutoCollectButton extends PIXI.Container
         }
         else
         {
-            this.backButton.tint = 0xFFFFFF;
+            // this.backButton.tint = 0xFFFFFF;
             this.enableAutoCollect.dispatch(this);
         }
         // this.enable()
@@ -86,12 +87,15 @@ export default class AutoCollectButton extends PIXI.Container
         this.spriteTrophy.visible = true;
         this.sprite.x = 10;
         this.sprite.texture = new PIXI.Texture.from('deactive_engine');
+        this.sprite.scale.set(this.defaultSpriteScale)
+        this.sprite.y = this.h / 2;
         this.priceLabel.text = utils.formatPointsLabel(this.catData.autoCollectPrice / MAX_NUMBER);
         this.spriteTrophy.x = this.w - this.spriteTrophy.width / 2 + 5
         this.priceLabel.x = this.spriteTrophy.x - this.spriteTrophy.width - this.priceLabel.width - 5
         this.priceLabel.y = this.h / 2 - this.priceLabel.height / 2
         this.backButton.tint = 0xFFFFFF;
         this.priceLabel.style.fill = 0xe5519b;
+        this.backButton.alpha = 1;
     }
     reset()
     {
@@ -100,22 +104,28 @@ export default class AutoCollectButton extends PIXI.Container
         this.spriteTrophy.visible = true;
         this.sprite.x = 10;
         this.sprite.texture = new PIXI.Texture.from('engine_icon');
+        this.sprite.scale.set(this.defaultSpriteScale)
+        this.sprite.y = this.h / 2;
         this.priceLabel.text = utils.formatPointsLabel(this.catData.autoCollectPrice / MAX_NUMBER);
         this.spriteTrophy.x = this.w - this.spriteTrophy.width / 2 + 5
         this.priceLabel.x = this.spriteTrophy.x - this.spriteTrophy.width - this.priceLabel.width - 5
         this.priceLabel.y = this.h / 2 - this.priceLabel.height / 2
         this.priceLabel.style.fill = 0xFFFFFF;
         this.backButton.tint = 0x6250e5;
+        this.backButton.alpha = 1;
     }
     enable()
     {
         this.enabled = true;
         this.deactived = false;
         this.sprite.texture = new PIXI.Texture.from('active_engine');
+        this.sprite.scale.set(this.defaultSpriteScale * 1.5)
         this.spriteTrophy.visible = false;
         this.sprite.x = this.w / 2 - this.sprite.width / 2;
+        this.sprite.y = this.h / 2;
         this.priceLabel.text = '';
         this.backButton.tint = 0x6250e5;
+        this.backButton.alpha = 0;
         this.priceLabel.style.fill = 0xe5519b;
     }
 

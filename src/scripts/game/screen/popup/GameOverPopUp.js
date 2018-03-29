@@ -140,7 +140,10 @@ export default class GameOverPopUp extends StandardPop
         this.addChild(this.prizeContainer)
 
 
-        this.catAnimation = new CatAnimation();
+        // this.catAnimation = new CatAnimation();
+        // this.addChild(this.catAnimation);
+        // this.catAnimation.x = 200
+        // this.catAnimation.y = 400
 
     }
 
@@ -172,9 +175,11 @@ export default class GameOverPopUp extends StandardPop
     {
         // this.addCats([100,100,100,100])
         GAME_DATA.addCats([100, 100, 100, 100]);
-        GAME_DATA.updateCatsAllowed(100);
+        GAME_DATA.updateCatsAllowed(10000);
+        GAME_DATA.updateTrophy(10000);
         // GAME_DATA.updateCatsAllowed(5555555555);
-        this.updateCatsQuant()
+        this.updateAllData()
+        // this.updateCatsQuant()
     }
     hideScreenBlocker()
     {
@@ -312,10 +317,10 @@ export default class GameOverPopUp extends StandardPop
             if (!this.spaceShipContainer.visible)
             {
                 this.spaceShipContainer.x = config.width + this.spaceShipContainer.width
-                TweenLite.to(this.spaceShipContainer, 0.5,
+                TweenLite.to(this.spaceShipContainer, 0.65,
                 {
                     x: config.width * 0.83,
-                    ease: Elastic.easeOut
+                    ease: Back.easeOut
                 })
             }
             this.spaceShipContainer.visible = true;
@@ -445,5 +450,7 @@ export default class GameOverPopUp extends StandardPop
         this.trophyContainer.update(delta)
         this.chestContainer.update(delta)
         this.prizeContainer.update(delta)
+        this.catItemList.update(delta)
+        // this.catAnimation.update(delta);
     }
 }
