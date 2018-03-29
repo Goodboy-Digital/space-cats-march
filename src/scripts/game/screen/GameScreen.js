@@ -691,7 +691,7 @@ export default class GameScreen extends Screen
         {
             this.specialAcc *= 0.5;
             this.updateSpecialBar();
-            this.inGameEffects.popLabel(labelPos, 'MISS\n-1', 0, -1, 0.7);
+            this.inGameEffects.popLabel(labelPos, 'MISS', 0, -1, 0.7);
             this.currentDeadCats--;
             if (this.currentDeadCats <= 0)
             {

@@ -3,6 +3,7 @@ import ScreenManager from '../../screenManager/ScreenManager';
 import TopMenu from './topMenu/TopMenu'
 import StartPopUp from './popup/StartPopUp'
 import GameOverPopUp from './popup/GameOverPopUp'
+import OnboardingPopUp from './popup/OnboardingPopUp'
 import AskVideoPopUp from './popup/AskVideoPopUp'
 import config from '../../config';
 export default class SpaceCatsScreenManager extends ScreenManager
@@ -50,7 +51,8 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.startPopUp = new StartPopUp('init', this);
         this.startPopUp.onConfirm.add(() =>
         {
-            this.toGame()
+            this.showPopUp('onboarding')
+            // this.toGame()
         });
 
         this.startPopUp.onCatsRedirect.add(() =>
@@ -83,11 +85,20 @@ export default class SpaceCatsScreenManager extends ScreenManager
             this.showPopUp('init')
         });
 
+        this.onboardingPopUp = new OnboardingPopUp('onboarding', this);
+        this.onboardingPopUp.onConfirm.add(() =>
+        {
+            this.toGame()
+                // this.toGame()
+        });
+
+
         this.popUpContainer = new PIXI.Container();
         this.addChild(this.popUpContainer);
         this.popUpList = [];
         this.popUpList.push(this.startPopUp);
         this.popUpList.push(this.gameOverPopUp);
+        this.popUpList.push(this.onboardingPopUp);
         this.popUpList.push(this.askVideoPopUp);
 
 
