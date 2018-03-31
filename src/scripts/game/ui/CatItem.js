@@ -3,10 +3,10 @@ import Signals from 'signals';
 import config from '../../config';
 import utils from '../../utils';
 import AutoCollectButton from './AutoCollectButton';
-import HorizontalList from './uiElements/HorizontalList';
+import UIList from './uiElements/UIList';
 // import CatAnimation from '../elements/CatAnimation';
 import StaticCat from '../ui/StaticCat';
-export default class CatItem extends HorizontalList
+export default class CatItem extends UIList
 {
     constructor(catData, rect = {
         w: 400,
@@ -38,6 +38,7 @@ export default class CatItem extends HorizontalList
             fontWeight: '800'
         });
         this.totalLabel.listScl = 0.1;
+        this.totalLabel.scaleContentMax = true;
         this.totalLabel.scaleContent = false;
         this.totalLabel.align = 1;
 

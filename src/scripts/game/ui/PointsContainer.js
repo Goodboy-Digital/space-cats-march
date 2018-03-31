@@ -80,7 +80,7 @@ export default class PointsContainer extends PIXI.Container
     }
     updatePoints(current, high)
     {
-    	console.log(current, high);
+    	// console.log(current, high);
         this.currentPointsLabel.text = current
         this.higscoreLabel.text = high
 

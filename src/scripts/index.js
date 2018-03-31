@@ -70,7 +70,7 @@ function configGame(evt)
         }
         CAT_LIST.push(temp);
     }
-    console.log(CAT_LIST);
+    // console.log(CAT_LIST);
     window.GAME_DATA = new GameData();
     let sotrageData = STORAGE.getObject('space-cats-game-data')
     if(!sotrageData){

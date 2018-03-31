@@ -11,6 +11,7 @@ import SpaceShipContainer from '../../ui/SpaceShipContainer';
 import ChestContainer from '../../ui/ChestContainer';
 import PrizeContainer from '../../ui/PrizeContainer';
 import CatAnimation from '../../elements/CatAnimation';
+import HUD from '../../ui/HUD';
 export default class GameOverPopUp extends StandardPop
 {
     constructor(label, screenManager)
@@ -21,6 +22,7 @@ export default class GameOverPopUp extends StandardPop
         this.popUp.alpha = 0;
         this.popUp.tint = 0x999999
         this.onInitRedirect = new Signals();
+        this.onShopRedirect = new Signals();
 
         this.logoMask = new PIXI.Sprite.from('logo_mask_white');
         this.logoMask.anchor.set(0.5);
@@ -91,6 +93,30 @@ export default class GameOverPopUp extends StandardPop
         this.container.addChild(this.resetButton2)
 
 
+        this.shopButton = new PIXI.Sprite(PIXI.Texture.from('shop_button'));
+        this.shopButton.anchor.set(0.5)
+            // this.shopButton.scale.set(-0.5, 0.5)
+        this.shopButtonScale = this.logoMask.height / this.shopButton.height * 0.20
+        this.shopButton.scale.set(this.shopButtonScale, this.shopButtonScale);
+        this.shopButton.x = config.width * 0.17 - config.width / 2
+        this.shopButton.y = this.playButton.y //+ this.shopButton.height + config.height * 0.2;
+        // this.shopButton.y = -300
+        this.shopButton.interactive = true;
+        this.shopButton.buttonMode = true;
+
+        this.shopInfo = new PIXI.Sprite.from('info');
+        this.shopInfo.anchor.set(0.5);
+        this.shopButton.addChild(this.shopInfo)
+        this.shopInfo.scale.set(1.5);
+        // this.container.addChild(this.shopInfo);
+        this.shopInfo.x = this.shopButton.width/this.shopButtonScale * 0.5;
+        this.shopInfo.y = -this.shopButton.height/this.shopButtonScale * 0.5;
+        // this.shopInfo.y = this.shopButton.height / 3.5;
+        // this.shopButton.on('mouseup', this.resetAll.bind(this)).on('touchend', this.resetAll.bind(this));
+        this.shopButton.on('mouseup', this.redirectToShop.bind(this)).on('touchend', this.redirectToShop.bind(this));
+        this.container.addChild(this.shopButton)
+
+
         this.pointsContainer = new PointsContainer();
         this.addChild(this.pointsContainer)
         this.pointsContainer.x = config.width / 2
@@ -101,6 +127,14 @@ export default class GameOverPopUp extends StandardPop
         this.trophyContainer.x = config.width * 0.17
         this.trophyContainer.y = config.height * 0.6
 
+        this.chestContainer = new ChestContainer();
+        this.addChild(this.chestContainer)
+        this.chestContainer.x = config.width * 0.8;
+        this.chestContainer.y = config.height * 0.85;
+        this.chestContainer.onConfirm.add(() =>
+        {
+            this.onConfirmChest();
+        });
         this.screenBlocker = new PIXI.Graphics().beginFill().drawRect(0, 0, config.width, config.height);
         this.addChild(this.screenBlocker);
         this.screenBlocker.alpha = 0.5
@@ -126,20 +160,14 @@ export default class GameOverPopUp extends StandardPop
             this.onConfirmSpaceship();
         })
 
-        this.chestContainer = new ChestContainer();
-        this.addChild(this.chestContainer)
-        this.chestContainer.x = config.width * 0.8;
-        this.chestContainer.y = config.height * 0.85;
-        this.chestContainer.onConfirm.add(() =>
-        {
-            this.onConfirmChest();
-        });
 
         this.prizeContainer = new PrizeContainer();
         this.prizeContainer.onPrizeCollected.add(this.hidePrizeContainer.bind(this));
         this.addChild(this.prizeContainer)
 
-
+        // this.hud = new HUD();
+        // this.hud.x = -config.width/2
+        // this.container.addChild(this.hud)
         // this.catAnimation = new CatAnimation();
         // this.addChild(this.catAnimation);
         // this.catAnimation.x = 200
@@ -163,7 +191,7 @@ export default class GameOverPopUp extends StandardPop
     onAutoCollect(data)
     {
         // this.showScreenBlocker();
-        console.log('AUTO COLLECT');
+        //console.log('AUTO COLLECT');
         this.screenManager.loadVideo(this.enableAutoCollect.bind(this, data.catID), data.catID);
     }
     resetAll()
@@ -181,7 +209,7 @@ export default class GameOverPopUp extends StandardPop
         let tempCurrent = GAME_DATA.maxPoints * 1.5 + 20;
         let current = utils.formatPointsLabel(tempCurrent / MAX_NUMBER);
         
-        console.log(current, GAME_DATA.maxPoints);
+        //console.log(current, GAME_DATA.maxPoints);
         GAME_DATA.updateCatsAllowed(tempCurrent);
 
         let high = utils.formatPointsLabel(GAME_DATA.maxPoints / MAX_NUMBER);
@@ -221,6 +249,10 @@ export default class GameOverPopUp extends StandardPop
     redirectToInit()
     {
         this.hide(false, this.toInit.bind(this));
+    }
+    redirectToShop()
+    {
+        this.onShopRedirect.dispatch();
     }
 
     closeSpaceship()
@@ -266,7 +298,7 @@ export default class GameOverPopUp extends StandardPop
     }
     hide(dispatch, callback)
     {
-        console.log(dispatch);
+        //console.log(dispatch);
         TweenLite.to(this.logoMask.scale, 0.5,
         {
             x: 5,
@@ -463,6 +495,7 @@ export default class GameOverPopUp extends StandardPop
         this.chestContainer.update(delta)
         this.prizeContainer.update(delta)
         this.catItemList.update(delta)
+        // this.hud.update(delta)
             // this.catAnimation.update(delta);
     }
 }

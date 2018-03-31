@@ -16,9 +16,9 @@ export default class TrophyContainer extends PIXI.Container
         this.trophyBubble = new PIXI.Sprite.from('pickup_bubble');
         this.trophyBubble.anchor.set(0.5, 0.5);
 
-        let trophyIcon = new PIXI.Sprite.from('pickup_fish');
+        let trophyIcon = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
         trophyIcon.anchor.set(0.5, 0.5);
-        trophyIcon.scale.set(0.7);
+        trophyIcon.scale.set(1);
         trophyIcon.y = -this.trophyBubble.height * 0.15;
 
         this.quantTrophy = new PIXI.Text('0',
@@ -66,7 +66,7 @@ export default class TrophyContainer extends PIXI.Container
     }
     updateData(data)
     {
-        console.log(data.bonus);
+        // console.log(data.bonus);
         this.bonusTrophy.text = data.bonus;
         this.quantTrophy.text = data.quant;
         this.quantTrophy.pivot.x = this.quantTrophy.width / 2;

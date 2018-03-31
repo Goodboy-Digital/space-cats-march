@@ -13,6 +13,7 @@ export default class CircleCounter extends PIXI.Container {
         this.max = 1;
 
         this.frontShape = new PIXI.Graphics().beginFill(0xFFFFFF).drawCircle(0, 0, shapeRadius);
+        this.frontShape.alpha = 0.5
         this.maskedShape = new PIXI.Graphics().beginFill(0xFFFFFF).drawCircle(0, 0, maskRadius);
         this.addChild(this.maskedShape, this.frontShape);
 
@@ -24,10 +25,10 @@ export default class CircleCounter extends PIXI.Container {
         this.maskedShape.tint = maskColor;
         this.frontShape.tint = frontColor;
     }
-    update(value) {
+    update(value, force = false) {
         this.current = value;
         let ratio = this.current / this.max;
-        TweenLite.to(this.circleMask, 0.5, {ratio: 1 - ratio, ease:Back.easeOut});
+        TweenLite.to(this.circleMask, force?0:0.5, {ratio: 1 - ratio, ease:Back.easeOut});
         // this.circleMask.ratio = 1 - ratio;
     }
 }

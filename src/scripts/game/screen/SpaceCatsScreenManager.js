@@ -4,6 +4,7 @@ import TopMenu from './topMenu/TopMenu'
 import StartPopUp from './popup/StartPopUp'
 import GameOverPopUp from './popup/GameOverPopUp'
 import OnboardingPopUp from './popup/OnboardingPopUp'
+import ShopPopUp from './popup/ShopPopUp'
 import AskVideoPopUp from './popup/AskVideoPopUp'
 import config from '../../config';
 export default class SpaceCatsScreenManager extends ScreenManager
@@ -80,15 +81,23 @@ export default class SpaceCatsScreenManager extends ScreenManager
                 // this.toGame()
         });
 
-        this.gameOverPopUp.onInitRedirect.add(() =>
+        this.gameOverPopUp.onShopRedirect.add(() =>
         {
-            this.showPopUp('init')
+            this.showPopUp('shop')
         });
 
         this.onboardingPopUp = new OnboardingPopUp('onboarding', this);
         this.onboardingPopUp.onConfirm.add(() =>
         {
             this.toGame()
+                // this.toGame()
+        });
+
+        this.shopPopUp = new ShopPopUp('shop', this);
+        this.shopPopUp.onHide.add(() =>
+        {
+            //this.showPopUp('gameover')
+            // this.toGame()
                 // this.toGame()
         });
 
@@ -99,6 +108,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.popUpList.push(this.startPopUp);
         this.popUpList.push(this.gameOverPopUp);
         this.popUpList.push(this.onboardingPopUp);
+        this.popUpList.push(this.shopPopUp);
         this.popUpList.push(this.askVideoPopUp);
 
 
@@ -133,6 +143,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
 
         this.videoContainer.visible = false;
         // this.showPopUp('gameover')
+        // this.toGame();
         this.showPopUp('init')
 
     }
@@ -188,7 +199,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         }
 
         this.videoContainer.on('mouseup', this.afterVideoCallback, callbackParams).on('touchend', this.afterVideoCallback, callbackParams);
-        console.log(callback);
+        // console.log(callback);
         this.videoContainer.visible = true;
     }
     toVideo()

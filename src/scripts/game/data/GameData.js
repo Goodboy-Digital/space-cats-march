@@ -5,13 +5,51 @@ export default class GameData
 
         this.catsData = [];
 
+        this.actionsData = []
+        this.actionsData.push({
+            type:'double_points',
+            var:'actionMultiplier',
+            default:1,
+            value:2,
+            cost:1,
+            icon:'double_points_action',
+            time:15,
+            level:1,
+            active:true,
+            waitTime:10
+        });
+         this.actionsData.push({
+            type:'double_speed',
+            var:'actionSpeed',
+            default:1,
+            value:2,
+            cost:2,
+            icon:'double_speed_action',
+            time:15,
+            level:1,
+            active:true,
+            waitTime:10
+        });
+          this.actionsData.push({
+            type:'auto_collect',
+            var:'actionAutoCollect',
+            default:false,
+            value:true,
+            cost:3,
+            icon:'auto_collect_action',
+            time:15,
+            level:1,
+            active:true,
+            waitTime:10
+        });
+
         this.trophyData = {
             collected: 0,
             collectedMultiplier: 0,
             maxCollectedMultiplier: 100,
             multplierPerCollected: 0.0125,
             limitToMultiply: 1750,
-            icon: 'pickup_fish',
+            icon: 'cat_coin',
         }
 
         this.totalCatsAllowed = 1;
@@ -19,12 +57,20 @@ export default class GameData
         this.maxLife = 3;
         this.maxPoints = 0;
 
+        this.gameTokens = {
+            quant:1,
+            icon: 'pickup_fish',
+        }
         this.chestData = {
             lastChestTime: new Date(),
             timeToNext: -1,
             chestAvailable: false,
             // chestTime: 90 * 1000
             chestTime: 15 * 1000 * 60
+        }
+
+        this.sessionData = {
+            tokens:1,
         }
 
         this.resetCatData();
@@ -256,7 +302,7 @@ export default class GameData
     }
     applyPrizes(list)
     {
-        console.log('apply list', list);
+        // console.log('apply list', list);
         let cats = []
         for (var i = 0; i < this.catsData.length; i++) {
             cats.push(0);
@@ -266,7 +312,7 @@ export default class GameData
             let item = list[i];
             if (item.type == 'cat')
             {
-                console.log('add cat', item.quant);
+                // console.log('add cat', item.quant);
                 // this.catsData[item.id].quant += item.quant
                 cats[item.id] += item.quant;
             }
@@ -341,8 +387,8 @@ export default class GameData
             let n = name.indexOf("cat");
             if (n >= 0)
             {
-                console.log(parseInt(name.substring(3)));
-                console.log(data[name]);
+                // console.log(parseInt(name.substring(3)));
+                // console.log(data[name]);
                 let id = parseInt(name.substring(3))
                 this.catsData[id] = data[name];
             }
@@ -400,7 +446,7 @@ export default class GameData
         let mult = this.trophyData.collected * this.trophyData.multplierPerCollected // this.trophyData.maxCollectedMultiplier * this.trophyData.maxCollectedMultiplier;
         this.trophyData.collectedMultiplier = mult //* 0.01;
 
-        console.log(this.trophyData);
+        //console.log(this.trophyData);
         STORAGE.storeObject('space-cats-game-data', this.getObjectData());
     }
     updateCatsAllowed(points)
@@ -451,7 +497,8 @@ export default class GameData
                 this.totalCatsAllowed++
             }
         }
-        console.log('cats', this.totalCatsAllowed);
+        this.sessionData.tokens = this.gameTokens.quant;
+        // console.log('cats', this.totalCatsAllowed);
     }
     enableAutoCollect(id)
     {

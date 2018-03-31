@@ -53,8 +53,6 @@ export default class Cat extends PIXI.Container
         this.catID = catData.catID;
         // this.spriteList = CAT_LIST[catData.catID] //catData.animationList; //getPossibleCat();//CAT_LIST[this.lane]
         this.animation.updateCatTextures(catData.catSrc)
-        // this.sprite.alpha = 1;
-        // this.sprite.texture = this.spriteList[this.currentSpriteID];
         this.sin = 0;
         this.onDie.removeAll();
         this.finishTimer = -1;
@@ -64,18 +62,8 @@ export default class Cat extends PIXI.Container
         this.killed = false;
         this._scale = 1;
         this.animation.scale.set(this.animationScaleStandard);
-        // this.sprite.tint = 0xFFFF00;
-        this.container.rotation = 0;
-        // this.sprite.scale.set(1);
-        // this.sprite.y = -this.sprite.height * 0.5 * this.sprite.anchor.y
-
-        // this.sprite.scale.set(0, 2)
-        // TweenLite.to(this.sprite.scale, 1,
-        // {
-        //     x: 1,
-        //     y: 1,
-        //     ease: Elastic.easeOut
-        // });
+        this.auto = this.catData.isAuto;
+        this.animation.rotation = 0;
 
         this.acceleration = {
             x: 20,
@@ -101,19 +89,6 @@ export default class Cat extends PIXI.Container
         this.animation.update(delta);
         this.animation.rotation = Math.sin(this.sin) * 0.1 - 0.05;
         this.sin += 0.1;
-        return
-        // this.animationTimer += delta * this._scale;
-        // if (this.animationTimer > this.animationSpeed)
-        // {
-        //     this.animationTimer = 0;
-        //     this.currentSpriteID++;
-        //     this.currentSpriteID %= this.spriteList.length;
-        //     this.sprite.texture = this.spriteList[this.currentSpriteID];
-        //     this.sprite.rotation = Math.sin(this.sin) * 0.1 - 0.05;
-        //     this.sin += 0.1;
-
-        //     this.sprite.scale.set(Math.cos(this.sin * 3) * 0.05 + 0.95, Math.sin(this.sin * 3) * 0.05 + 0.95)
-        // }
     }
     update(delta)
     {
@@ -129,8 +104,8 @@ export default class Cat extends PIXI.Container
         this.x += this.velocity.x * this._scale * delta;
         this.y += this.velocity.y * this._scale * delta;
         this.velocity.y += this.gravity * delta;
-        this.container.rotation += this.angularSpeed * delta;
-        if (this.y > config.height + 100 || this.y < 0)
+        this.animation.rotation += this.angularSpeed * delta;
+        if (this.y > config.height + 100 || this.y < -100)
         {
             this.killed = true;
         }
@@ -139,15 +114,16 @@ export default class Cat extends PIXI.Container
             this.finishTimer -= delta;
             if (this.finishTimer <= 0)
             {
-                if (!this.game.isAutoCollectMode && !this.catData.isAuto)
+                if (this.auto || this.game.isAutoCollectMode || this.game.actionAutoCollect)
                 {
 
-                    this.finish();
+                    console.log(this.auto);
+                    this.onDie.dispatch(this, false);
+                    this.onDie.removeAll();
                 }
                 else
                 {
-                    this.onDie.dispatch(this, false);
-                    this.onDie.removeAll();
+                    this.finish();
                 }
             }
         }
@@ -186,7 +162,7 @@ export default class Cat extends PIXI.Container
         this.currentWaypointID++;
         if (this.currentWaypointID >= this.waypoints.length)
         {
-            if (!this.game.isAutoCollectMode && !this.catData.isAuto)
+            if (this.auto)
             {
                 this.finishTimer = 0.15;
             }
@@ -204,9 +180,6 @@ export default class Cat extends PIXI.Container
     }
     setWaypoints(waypoints)
     {
-        // if(this.lane == 0)   {
-        //     console.log(waypoints);
-        // }
         this.waypoints = waypoints;
         this.currentWaypointID = 0;
         this.totDist = 0
@@ -279,9 +252,10 @@ export default class Cat extends PIXI.Container
             y: this.animationScaleStandard * 1.2,
             onComplete: () =>
             {
-                this.gravity = -350;
+                this.angularSpeed = (Math.random() * 0.1 - 0.05) * 20;
+                this.gravity = -10;
                 this.velocity.x = 0;
-                this.velocity.y = -Math.random() * 100 - 500;
+                this.velocity.y = -Math.random() * 100 - 100;
                 this.virtualVelocity.y = this.velocity.y;
 
             }
@@ -289,6 +263,7 @@ export default class Cat extends PIXI.Container
     }
     finish()
     {
+        console.log('FINISH');
         // debugger
         // console.log(this.timer, this.lane);
         this.animationSpeed = 99999;

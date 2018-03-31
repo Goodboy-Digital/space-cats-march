@@ -64,7 +64,7 @@ export default class CatItemList extends PIXI.Container
         let shipInfoSprite = new PIXI.Sprite.from('score_plinth');
         this.spaceShipInfoContainer.addChild(shipInfoSprite);
 
-        let fishIcon = new PIXI.Sprite.from('pickup_fish');
+        let fishIcon = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
         fishIcon.anchor.set(0.5, 0.5);
         fishIcon.x = fishIcon.width + 20
         fishIcon.y = shipInfoSprite.height / 2
@@ -104,7 +104,7 @@ export default class CatItemList extends PIXI.Container
         this.confirmSpaceship.y = shipInfoSprite.height / 2;
         shipInfoSprite.addChild(this.confirmSpaceship);
 
-        shipInfoSprite.scale.set(this.itemHeight / shipInfoSprite.height)
+        shipInfoSprite.scale.set(rect.w / shipInfoSprite.width)
             // this.spaceShipInfoContainer.x = -this.spaceShipInfoContainer.width
         this.addChild(this.spaceShipInfoContainer);
 

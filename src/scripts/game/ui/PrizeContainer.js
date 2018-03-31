@@ -3,8 +3,8 @@ import Signals from 'signals';
 import config from '../../config';
 import utils from '../../utils';
 import PrizeItemContainer from './PrizeItemContainer';
-import HorizontalList from './uiElements/HorizontalList';
-export default class PrizeContainer extends HorizontalList
+import UIList from './uiElements/UIList';
+export default class PrizeContainer extends UIList
 {
     constructor()
     {
@@ -16,7 +16,7 @@ export default class PrizeContainer extends HorizontalList
         this.prizeDark.alpha = 0.75;
         this.prizeDark.interactive = true;
         this.prizeDark.buttonMode = true;
-        this.prizeDark.on('mousedown', this.collect.bind(this)).on('touchstart', this.collect.bind(this));
+        this.prizeDark.on('mouseup', this.collect.bind(this)).on('touchend', this.collect.bind(this));
         this.addChild(this.prizeDark);
 
         this.starBackground = new PIXI.Sprite.from('results_newcat_rays_02');

@@ -8,7 +8,7 @@ export default class Environment extends PIXI.Container
     constructor(game)
     {
         super();
-        console.log(game);
+        //console.log(game);
 
         this.backgroundGraphics = new PIXI.Graphics().beginFill(0xFFFFFF).drawRect(0, 0, config.width, config.height);
         this.addChild(this.backgroundGraphics);
@@ -239,7 +239,7 @@ export default class Environment extends PIXI.Container
         area.width *= 0.8;
         area.height *= 0.8;
         let waypointsTot = waypoints[0].length;
-        console.log(this.game);
+        //console.log(this.game);
 
         this.lanesWaypoints = [];
 
@@ -295,7 +295,7 @@ export default class Environment extends PIXI.Container
 
 
 
-        console.log(this.lanesWaypoints);
+        //console.log(this.lanesWaypoints);
 
     }
     addBall(pos)
@@ -390,7 +390,7 @@ export default class Environment extends PIXI.Container
 
             // this.trails[i].update({x:0, y:0}, 10)
             // this.trails[i].mesh.texture.position.y += delta;
-            // console.log(this);
+            // //console.log(this);
         }
     }
 

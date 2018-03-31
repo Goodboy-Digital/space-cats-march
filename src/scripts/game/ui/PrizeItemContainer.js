@@ -64,7 +64,7 @@ export default class PrizeItemContainer extends PIXI.Container
     {
     	this.itemSprite.visible = true;
     	this.itemCat.visible = false;
-        this.itemSprite.texture = new PIXI.Texture.from(texture);
+        this.itemSprite.texture = PIXI.Texture.from(texture);
         this.itemScale = this.topBg.width / (this.itemSprite.width / this.itemSprite.scale.x) * 0.75
         this.itemSprite.scale.set(this.itemScale)
 

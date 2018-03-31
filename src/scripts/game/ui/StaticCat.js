@@ -84,11 +84,11 @@ export default class StaticCat extends PIXI.Container
     updateCatTextures(src)
     {
         this.currentCatLabel = src;
-        this.lleg.texture = new PIXI.Texture.from(this.currentCatLabel + 'leg');
-        this.rleg.texture = new PIXI.Texture.from(this.currentCatLabel + 'leg');
-        this.larm.texture = new PIXI.Texture.from(this.currentCatLabel + 'arm');
-        this.rarm.texture = new PIXI.Texture.from(this.currentCatLabel + 'arm');
-        this.body.texture = new PIXI.Texture.from(this.currentCatLabel + 'belly');
-        this.head.texture = new PIXI.Texture.from(this.currentCatLabel + 'head');
+        this.lleg.texture = PIXI.Texture.from(this.currentCatLabel + 'leg');
+        this.rleg.texture = PIXI.Texture.from(this.currentCatLabel + 'leg');
+        this.larm.texture = PIXI.Texture.from(this.currentCatLabel + 'arm');
+        this.rarm.texture = PIXI.Texture.from(this.currentCatLabel + 'arm');
+        this.body.texture = PIXI.Texture.from(this.currentCatLabel + 'belly');
+        this.head.texture = PIXI.Texture.from(this.currentCatLabel + 'head');
     }
 }

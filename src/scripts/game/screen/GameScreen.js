@@ -12,12 +12,10 @@ import Environment from '../elements/Environment'
 import Cat from '../elements/Cat'
 import GameItem from '../elements/GameItem'
 import waypoints from './waypoints'
-import HUD from './HUD'
+import HUD from '../ui/HUD'
 
-export default class GameScreen extends Screen
-{
-    constructor(label)
-    {
+export default class GameScreen extends Screen {
+    constructor(label) {
         super(label);
 
         PAWN.width = PAWN.height = config.width * 0.075
@@ -45,6 +43,8 @@ export default class GameScreen extends Screen
         this.HUD = new HUD(this);
         this.UIContainer.addChild(this.HUD);
         this.HUD.onForceGameOver.add(this.gameOver.bind(this));
+        this.HUD.onStartAction.add(this.addAction.bind(this));
+        this.HUD.onFinishAction.add(this.killAction.bind(this));
 
 
         // this.vignette.width = config.width;
@@ -84,8 +84,7 @@ export default class GameScreen extends Screen
             width: config.height * 0.3,
             height: config.height * 0.3,
         }
-        for (var i = 0; i < tot; i++)
-        {
+        for (var i = 0; i < tot; i++) {
             let catPawn = new InGameCatPawn();
             let ang = this.angleDiff * i + this.angleAdjust / 2
             this.environmentContainer.addChild(catPawn)
@@ -128,36 +127,31 @@ export default class GameScreen extends Screen
 
         this.catLanesList = [];
 
-        for (var i = 0; i < GAME_DATA.catsData.length; i++)
-        {
+        for (var i = 0; i < GAME_DATA.catsData.length; i++) {
             this.catLanesList.push(0);
         }
 
         this.environment.hideLines(true);
 
-        console.log(GAME_DATA);
+        //console.log(GAME_DATA);
     }
 
 
 
-    build(param)
-    {
+    build(param) {
         super.build();
         // this.resetGame();
         this.addEvents();
     }
-    removeAutoCollectMode()
-    {
-        if (!this.isAutoCollectMode)
-        {
+    removeAutoCollectMode() {
+        if (!this.isAutoCollectMode) {
             return
         }
 
         this.killAfterSpecial();
         this.environment.removeSpecialBackground();
 
-        TweenLite.to(this, 1,
-        {
+        TweenLite.to(this, 1, {
             gameTimeScale: 1
         });
         this.isAutoCollectMode = false;
@@ -171,21 +165,54 @@ export default class GameScreen extends Screen
 
         this.updateSpecialBar();
     }
-    updateAutoCollectBar()
-    {
+    killAllActions() {
+        this.HUD.killAllActions();
+        for (var i = this.currentActions.length - 1; i >= 0; i--) {
+            this[this.currentActions[i].var] = this.currentActions[i].default;
+        }
+        this.currentActions = [];
+    }
+    killAction(actionData) {
+        for (var i = this.currentActions.length - 1; i >= 0; i--) {
+            if (this.currentActions[i].type == actionData.type) {
+                this.currentActions.splice(i, 1);
+                break;
+            }
+        }
+        this[actionData.var] = actionData.default;
+        this.HUD.updateActionList();
+    }
+    addAction(actionData) {
+        if(GAME_DATA.sessionData.tokens < actionData.cost){
+            return;
+        }
+        GAME_DATA.sessionData.tokens -= actionData.cost;
+        for (var i = this.currentActions.length - 1; i >= 0; i--) {
+            if (this.currentActions[i].type == actionData.type) {
+                return false;
+            }
+        }
+        this.currentActions.push(actionData);
+        this[actionData.var] = actionData.value;
+        this.HUD.updateActionList();
+    }
+    resetActionsVariables() {
+        this.actionAutoCollect = false;
+        this.actionMultiplier = 1;
+        this.actionSpeed = 1;
+        this.currentActions = [];
+    }
+    updateAutoCollectBar() {
 
-        if (this.isAutoCollectMode)
-        {
+        if (this.isAutoCollectMode) {
             this.HUD.updatePowerBar(this.autoCollectTimer / this.autoCollectTimerMax, 2);
         }
     }
-    addAutoCollectMode()
-    {
+    addAutoCollectMode() {
         // if (this.isSpecialMode)
         // {
         // }
-        if (this.isAutoCollectMode)
-        {
+        if (this.isAutoCollectMode) {
             this.autoCollectTimer = this.autoCollectTimerMax;
             return
         }
@@ -193,12 +220,10 @@ export default class GameScreen extends Screen
         this.specialTimer = 0;
         this.specialAcc = 0;
 
-        TweenLite.to(this, 0.5,
-        {
+        TweenLite.to(this, 0.5, {
             gameTimeScale: 0
         });
-        TweenLite.to(this, 1,
-        {
+        TweenLite.to(this, 1, {
             delay: 1.5,
             gameTimeScale: 1.5
         });
@@ -208,34 +233,25 @@ export default class GameScreen extends Screen
         this.isAutoCollectMode = true;
         this.autoCollectTimer = this.autoCollectTimerMax;
     }
-    updateSpecialBar(force)
-    {
-        if (this.specialAcc < 0)
-        {
+    updateSpecialBar(force) {
+        if (this.specialAcc < 0) {
             this.specialAcc = 0;
         }
-        if (this.isSpecialMode)
-        {
+        if (this.isSpecialMode) {
             this.HUD.updatePowerBar(this.specialTimer / this.specialTimerMax, 1, force);
-        }
-        else
-        {
+        } else {
             this.HUD.updatePowerBar(this.specialAcc, 0, force);
         }
     }
-    addSpecialMode()
-    {
-        if (this.isSpecialMode)
-        {
+    addSpecialMode() {
+        if (this.isSpecialMode) {
             return
         }
 
-        TweenLite.to(this, 0.5,
-        {
+        TweenLite.to(this, 0.5, {
             gameTimeScale: 0
         });
-        TweenLite.to(this, 1,
-        {
+        TweenLite.to(this, 1, {
             delay: 1.5,
             gameTimeScale: 1.5
         });
@@ -249,18 +265,15 @@ export default class GameScreen extends Screen
         this.specialTimer = this.specialTimerMax;
 
     }
-    removeSpecialMode()
-    {
-        if (!this.isSpecialMode)
-        {
+    removeSpecialMode() {
+        if (!this.isSpecialMode) {
             return
         }
 
         this.killAfterSpecial();
         this.environment.removeSpecialBackground();
 
-        TweenLite.to(this, 1,
-        {
+        TweenLite.to(this, 1, {
             gameTimeScale: 1
         });
         this.isSpecialMode = false;
@@ -271,17 +284,14 @@ export default class GameScreen extends Screen
 
 
     }
-    addCat(lane = -1)
-    {
+    addCat(lane = -1) {
         let cat;
-        lane = lane >= 0 ? lane : Math.floor(this.spawnPoints.length * Math.random())
-        if (CATS_POOL.length)
-        {
+        lane = lane >= 0 ? lane : Math.floor(this.spawnPoints.length * Math.random());
+        if (CATS_POOL.length) {
             cat = CATS_POOL[0];
             CATS_POOL.shift();
         }
-        if (!cat)
-        {
+        if (!cat) {
             cat = new Cat(this);
         }
 
@@ -292,17 +302,14 @@ export default class GameScreen extends Screen
         // cat.lane = lane;
         let wayps = []
         wayps.push(this.spawnPoints[lane])
-        for (var i = 0; i < this.spawnPointsMiddle.length; i++)
-        {
+        for (var i = 0; i < this.spawnPointsMiddle.length; i++) {
             wayps.push(this.spawnPointsMiddle[i][lane]);
         }
         wayps.push(this.catPawns[lane])
             // cat.setWaypoints(wayps);
         cat.setWaypoints(this.environment.lanesWaypoints[lane]);
-        cat.onDie.add((cat, forced) =>
-        {
-            if (!forced)
-            {
+        cat.onDie.add((cat, forced) => {
+            if (!forced) {
                 this.missCat(cat);
             }
         });
@@ -315,16 +322,17 @@ export default class GameScreen extends Screen
 
     }
 
-    resetGame(startWithBonus = false)
-    {
+    resetGame(startWithBonus = false) {
         GAME_DATA.startNewRound();
         this.start();
+        this.resetActionsVariables();
         this.gameSpeed = 1;
         this.timeToNext = 1;
         this.timerSin = 0;
         this.currentPoints = 0;
         this.currentDeadCats = GAME_DATA.maxLife;
         this.catLanesList = [];
+        this.HUD.updateActionList();
         this.HUD.updateHUD(this.currentPoints, this.currentDeadCats);
         this.specialAcc = 0;
         this.specialTimer = 0;
@@ -336,14 +344,11 @@ export default class GameScreen extends Screen
         this.itemTimerMax = 18;
         this.itemTimer = this.itemTimerMax;
 
-        for (var i = 0; i < GAME_DATA.catsData.length; i++)
-        {
+        for (var i = 0; i < GAME_DATA.catsData.length; i++) {
             this.catLanesList.push(0);
         }
-        for (var i = 0; i < this.catPawns.length; i++)
-        {
-            TweenLite.to(this.catPawns[i], 0.5,
-            {
+        for (var i = 0; i < this.catPawns.length; i++) {
+            TweenLite.to(this.catPawns[i], 0.5, {
                 alpha: 1
             });
         }
@@ -352,69 +357,54 @@ export default class GameScreen extends Screen
         this.HUD.startGame();
         this.updateSpecialBar(true);
 
-        this.HUD.forceQuitButton.visible = false;
-        for (var i = 0; i < GAME_DATA.catsData.length; i++)
-        {
-            if (GAME_DATA.catsData[i].isAuto)
-            {
-                this.HUD.forceQuitButton.visible = true;
-                break;
-            }
-        }
+        // this.HUD.forceQuitButton.visible = false;
+        // for (var i = 0; i < GAME_DATA.catsData.length; i++)
+        // {
+        //     if (GAME_DATA.catsData[i].isAuto)
+        //     {
+        //         this.HUD.forceQuitButton.visible = true;
+        //         break;
+        //     }
+        // }
 
-        if (startWithBonus)
-        {
+        if (startWithBonus) {
             this.addAutoCollectMode();
 
-            for (var i = 0; i < 12; i++)
-            {
+            for (var i = 0; i < 12; i++) {
                 let cat = this.addCat();
                 cat.forceToWaypoint(i)
             }
-        }
-        else
-        {
-            for (var i = 0; i < 4; i++)
-            {
+        } else {
+            for (var i = 0; i < 4; i++) {
                 let cat = this.addCat();
                 cat.forceToWaypoint(i + 5)
             }
         }
     }
-    updateScales()
-    {
-        for (var i = 0; i < this.scaleableElements.length; i++)
-        {
-            if (!this.scaleableElements[i].noScalable)
-            {
+    updateScales() {
+        for (var i = 0; i < this.scaleableElements.length; i++) {
+            if (!this.scaleableElements[i].noScalable) {
                 let percentage = this.scaleableElements[i].y / config.height * (this.scaleFactor.max - this.scaleFactor.min) + this.scaleFactor.min
-                if (this.scaleableElements[i].speedScale)
-                {
+                if (this.scaleableElements[i].speedScale) {
                     this.scaleableElements[i].speedScale(percentage);
                 }
                 this.scaleableElements[i].scale.set(percentage)
             }
         }
     }
-    removeFromLane(cat)
-    {
-        for (var i = this.lanes[cat.lane].length - 1; i >= 0; i--)
-        {
-            if (this.lanes[cat.lane][i] == cat)
-            {
+    removeFromLane(cat) {
+        for (var i = this.lanes[cat.lane].length - 1; i >= 0; i--) {
+            if (this.lanes[cat.lane][i] == cat) {
                 this.lanes[cat.lane].splice(i, 1);
                 return;
             }
         }
     }
-    gameOver()
-    {
+    gameOver() {
         this.environment.hideLines();
-        if (this.currentItem)
-        {
+        if (this.currentItem) {
             this.currentItem.kill = true;
-            if (this.currentItem.parent)
-            {
+            if (this.currentItem.parent) {
                 this.currentItem.parent.removeChild(this.currentItem);
             }
         }
@@ -422,56 +412,48 @@ export default class GameScreen extends Screen
         this.removeSpecialMode();
         // this.removeSpecialBackground();
         this.gameStarted = false;
+        this.killAllActions();
         this.killAll();
         this.HUD.hide();
-        for (var i = 0; i < this.catPawns.length; i++)
-        {
-            TweenLite.to(this.catPawns[i], 0.5,
-            {
+        for (var i = 0; i < this.catPawns.length; i++) {
+            TweenLite.to(this.catPawns[i], 0.5, {
                 alpha: 0
             });
         }
         // GAME_DATA.addCats(this.catLanesList);
-        setTimeout(() =>
-        {
-            this.screenManager.showPopUp('gameover',
-            {
+        setTimeout(() => {
+            this.screenManager.showPopUp('gameover', {
                 catsList: this.catLanesList,
                 points: this.currentPoints
             });
         }, 1000);
     }
-    killAfterSpecial()
-    {
-        for (var i = Math.floor(this.catList.length / 3); i >= 0; i--)
-        {
+    killAfterSpecial() {
+        for (var i = Math.floor(this.catList.length / 3); i >= 0; i--) {
             this.removeFromLane(this.catList[i]);
             this.catList[i].destroy(true);
         }
         // this.catList = [];
     }
-    killAll()
-    {
-        for (var i = this.catList.length - 1; i >= 0; i--)
-        {
+    killAll() {
+        for (var i = this.catList.length - 1; i >= 0; i--) {
             this.removeFromLane(this.catList[i]);
             this.catList[i].destroy(true);
         }
         // this.catList = [];
     }
-    start()
-    {
+    start() {
         this.gameStarted = true;
     }
-    update(delta)
-    {
+    update(delta) {
         delta *= this.gameTimeScale;
-
+        if (this.actionSpeed) {
+            delta *= this.actionSpeed;
+        }
         this.gameTimer += delta;
-        if (this.gameStarted)
-        {
-            if (this.gameTimer >= (this.timeToNext * this.gameSpeed))
-            {
+        if (this.gameStarted) {
+            // console.log(this.actionSpeed);
+            if (this.gameTimer >= (this.timeToNext * this.gameSpeed)) {
                 this.gameTimer = 0;
                 this.addCat();
             }
@@ -480,86 +462,60 @@ export default class GameScreen extends Screen
 
             this.timeToNext = this.timeToNextStandard + Math.sin(this.timerSin) * 0.1
 
-            // console.log(this.timeToNext);
-            if (this.isAutoCollectMode)
-            {
-                if (this.autoCollectTimer <= 0)
-                {
+            // //console.log(this.timeToNext);
+            if (this.isAutoCollectMode) {
+                if (this.autoCollectTimer <= 0) {
                     this.removeAutoCollectMode();
-                }
-                else
-                {
+                } else {
                     this.autoCollectTimer -= delta;
                     this.updateAutoCollectBar();
                 }
-            }
-            else
-            {
-                if (this.specialTimer <= 0)
-                {
+            } else {
+                if (this.specialTimer <= 0) {
                     this.removeSpecialMode();
-                }
-                else
-                {
+                } else {
                     this.specialTimer -= delta;
                     this.updateSpecialBar();
                 }
             }
 
-            if (this.itemTimer <= 0)
-            {
+            if (this.itemTimer <= 0) {
                 this.addItem();
-            }
-            else
-            {
+            } else {
                 this.itemTimer -= delta;
             }
 
-            if (this.currentItem)
-            {
-                if (this.currentItem.kill && this.currentItem.parent)
-                {
+            if (this.currentItem) {
+                if (this.currentItem.kill && this.currentItem.parent) {
                     this.currentItem.parent.removeChild(this.currentItem)
-                }
-                else if (!this.currentItem.kill)
-                {
+                } else if (!this.currentItem.kill) {
                     this.currentItem.update(delta);
                 }
             }
 
         }
         this.updateScales();
-        for (var i = this.catList.length - 1; i >= 0; i--)
-        {
-            if (this.catList[i].isFinished)
-            {
+        for (var i = this.catList.length - 1; i >= 0; i--) {
+            if (this.catList[i].isFinished) {
                 this.removeFromLane(this.catList[i]);
             }
-            if (this.catList[i].killed)
-            {
+            if (this.catList[i].killed) {
                 this.catList[i].parent.removeChild(this.catList[i]);
                 CATS_POOL.push(this.catList[i]);
                 this.catList.splice(i, 1);
-            }
-            else
-            {
+            } else {
                 this.catList[i].update(delta);
             }
         }
-        for (var i = this.particlesList.length - 1; i >= 0; i--)
-        {
-            if (this.particlesList[i].dead)
-            {
+        for (var i = this.particlesList.length - 1; i >= 0; i--) {
+            if (this.particlesList[i].dead) {
                 GAME_PARTICLES_POOL.push(this.particlesList[i]);
                 this.particlesList.splice(i, 1);
-            }
-            else
-            {
+            } else {
                 this.particlesList[i].update(delta)
             }
         }
-        for (var i = 0; i < this.particlesList.length; i++)
-        {
+        for (var i = 0; i < this.particlesList.length; i++) {
             this.particlesList[i].update(delta)
         }
         this.environment.update(delta);
@@ -567,30 +523,24 @@ export default class GameScreen extends Screen
 
     }
 
-    addItem()
-    {
+    addItem() {
         this.itemTimer = this.itemTimerMax + (Math.random() * this.itemTimerMax * 0.5)
-        if (!this.currentItem)
-        {
+        if (!this.currentItem) {
             this.currentItem = new GameItem();
-            this.currentItem.onCollect.add((item) =>
-            {
+            this.currentItem.onCollect.add((item) => {
                 this.collectItem(item)
             })
         }
         this.addChild(this.currentItem);
 
-        this.currentItem.reset(
-        {
+        this.currentItem.reset({
             x: config.width * 0.125,
             y: config.height + PAWN.height
         }, Math.floor(Math.random() * 3));
 
     }
-    collectItem(item)
-    {
-        switch (item.itemType)
-        {
+    collectItem(item) {
+        switch (item.itemType) {
             case 0:
                 // let tempTrophy = Math.floor(GAME_DATA.trophyData.collected * (Math.random() * 0.3 + 0.1))
                 // if (tempTrophy <= 0)
@@ -606,8 +556,7 @@ export default class GameScreen extends Screen
                 break;
             case 2:
                 let tempPoints = this.currentPoints * (Math.random() * 0.3 + 0.1)
-                if (tempPoints == 0)
-                {
+                if (tempPoints == 0) {
                     tempPoints = (50 * Math.random() + 0.1) / MAX_NUMBER
                 }
                 this.currentPoints += tempPoints
@@ -621,40 +570,30 @@ export default class GameScreen extends Screen
 
     }
 
-    onMouseMove(e)
-    {
+    onMouseMove(e) {
         return
         this.mousePosition = e.data.global;
-        if (this.mouseDown)
-        {
-            if (!this.getPawn())
-            {
+        if (this.mouseDown) {
+            if (!this.getPawn()) {
                 //this.releasePawn();
             }
         }
     }
-    onTapUp(e)
-    {
+    onTapUp(e) {
         this.mouseDown = false;
         this.releasePawn();
     }
 
-    onTapDown(e)
-    {
+    onTapDown(e) {
         this.mouseDown = true;
         this.mousePosition = e.data.global;
-        if (this.getPawn())
-        {
-            if (this.lanes[this.selectedPawn.lane].length)
-            {
+        if (this.getPawn()) {
+            if (this.lanes[this.selectedPawn.lane].length) {
                 let cat = this.lanes[this.selectedPawn.lane][0];
                 let dist = utils.distance(cat.x, cat.y, this.selectedPawn.x, this.selectedPawn.y)
-                if (dist < this.selectedPawn.width * 0.75 && !cat.isFinished)
-                {
+                if (dist < this.selectedPawn.width * 0.75 && !cat.isFinished) {
                     this.collectThisCat(cat, dist);
-                }
-                else if (dist < this.selectedPawn.width * 2)
-                {
+                } else if (dist < this.selectedPawn.width * 2) {
                     cat.finish();
                 }
             }
@@ -662,51 +601,47 @@ export default class GameScreen extends Screen
 
     }
 
-    missCat(cat)
-    {
+    missCat(cat) {
 
-        if (cat.catData.isAuto || this.isAutoCollectMode)
-        {
-            cat.finishTimer = -999
-                // cat.currentWaypointID = 0;
+        if (cat.catData.isAuto || this.isAutoCollectMode || this.actionAutoCollect) {
+            //cat.finishTimer = -999
+            cat.auto = true;
+            // cat.currentWaypointID = 0;
             this.collectThisCat(cat, 0, true);
             return;
         }
+        cat.auto = false;
+        // cat.finish();
         this.screenManager.shake();
         this.gameSpeed += 0.15
         let labelPos = {
             x: cat.x,
             y: cat.y - cat.height / 2
         }
-        if (labelPos.x > config.width * 0.9)
-        {
+        if (labelPos.x > config.width * 0.9) {
             labelPos.x -= config.width * 0.1
         }
-        if (this.gameSpeed > 1.1)
-        {
+        if (this.gameSpeed > 1.1) {
             this.gameSpeed = 1.1;
         }
 
-        if (!this.isSpecialMode)
-        {
+        if (!this.isSpecialMode) {
             this.specialAcc *= 0.5;
             this.updateSpecialBar();
             this.inGameEffects.popLabel(labelPos, 'MISS', 0, -1, 0.7);
             this.currentDeadCats--;
-            if (this.currentDeadCats <= 0)
-            {
+            if (this.currentDeadCats <= 0) {
                 this.gameOver();
             }
         }
 
-        if(cat.parent){
+        if (cat.parent) {
             cat.parent.removeChild(cat);
             this.frontCats.addChild(cat);
         }
         this.HUD.updateHUD(this.currentPoints, this.currentDeadCats)
     }
-    collectThisCat(cat, dist, auto = false)
-    {
+    collectThisCat(cat, dist, auto = false) {
         cat.collectCat(dist);
         let labelPos = {
             x: cat.x,
@@ -723,54 +658,46 @@ export default class GameScreen extends Screen
             points: 0,
             special: 0
         }
-        if (dist < PAWN.width * 0.2)
-        {
+        if (dist < PAWN.width * 0.2) {
             points = 10;
             this.gameSpeed -= 0.05
             labelData.special += 0.065;
             labelData.text = 'PURRFECT\n+'
             labelData.scale = 1
-            this.inGameEffects.addBean(cat,
-            {
+            this.inGameEffects.addBean(cat, {
                 x: cat.x,
                 y: 0
             });
             this.inGameEffects.addBombAreaBean(cat);
-        }
-        else if (dist < PAWN.width * 0.5)
-        {
+        } else if (dist < PAWN.width * 0.5) {
             points = 5;
             this.gameSpeed -= 0.025
             labelData.special += 0.05;
             labelData.text = 'GREAT\n+'
             labelData.scale = 0.9
-            this.inGameEffects.addBean(cat,
-            {
+            this.inGameEffects.addBean(cat, {
                 x: cat.x,
                 y: 0
             });
-        }
-        else
-        {
+        } else {
             points = 1;
             this.gameSpeed -= 0.01
             labelData.special += 0.025;
             labelData.text = 'GOOD\n+'
             labelData.scale = 0.75
         }
-        console.log(auto, labelData.special);
-        if (!auto)
-        {
+        //console.log(auto, labelData.special);
+        if (!auto) {
 
             this.specialAcc += labelData.special;
         }
-        if (this.isSpecialMode)
-        {
+        if (this.isSpecialMode) {
             points *= 2;
         }
         points *= cat.catData.pointsMultiplier;
         points += points * cat.catData.collectedMultiplier
         points += points * GAME_DATA.trophyData.collectedMultiplier;
+        points += points * this.actionMultiplier;
         points /= MAX_NUMBER;
 
         this.currentPoints += points;
@@ -781,46 +708,37 @@ export default class GameScreen extends Screen
         // labelData.text += utils.formatPointsLabel(points);
         this.inGameEffects.popLabel(labelPos, labelData.text, 0, 3, labelData.scale);
 
-        if (!this.isAutoCollectMode)
-        {
-            if (!this.isSpecialMode)
-            {
+        if (!this.isAutoCollectMode) {
+            if (!this.isSpecialMode) {
                 this.updateSpecialBar();
 
-                if (this.specialAcc >= 1)
-                {
+                if (this.specialAcc >= 1) {
                     this.addSpecialMode();
                 }
             }
         }
-        if (this.gameSpeed < 0.75)
-        {
+        if (this.gameSpeed < 0.75) {
             this.gameSpeed = 0.75;
         }
-        if(cat.parent){
+        if (cat.parent) {
             cat.parent.removeChild(cat);
             this.frontCats.addChild(cat);
         }
         this.HUD.updateHUD(this.currentPoints, this.currentDeadCats)
-            // console.log(this.gameSpeed);
+            // //console.log(this.gameSpeed);
     }
-    releasePawn()
-    {
-        if (this.selectedPawn)
-        {
+    releasePawn() {
+        if (this.selectedPawn) {
             this.selectedPawn.release();
             this.selectedPawn = null;
         }
     }
-    getPawn()
-    {
+    getPawn() {
         let dist = 0;
-        for (var i = 0; i < this.catPawns.length; i++)
-        {
+        for (var i = 0; i < this.catPawns.length; i++) {
             let pawn = this.catPawns[i];
             dist = utils.distance(this.mousePosition.x, this.mousePosition.y, pawn.x, pawn.y);
-            if (dist < PAWN.width * pawn.scale.x * 1.25)
-            {
+            if (dist < PAWN.width * pawn.scale.x * 1.25) {
                 pawn.hold();
                 this.selectedPawn = pawn;
                 return true;
@@ -828,33 +746,27 @@ export default class GameScreen extends Screen
         }
         return false;
     }
-    transitionOut(nextScreen)
-    {
+    transitionOut(nextScreen) {
         this.removeEvents();
         this.nextScreen = nextScreen;
-        setTimeout(function()
-        {
+        setTimeout(function() {
             this.endTransitionOut();
         }.bind(this), 0);
     }
-    transitionIn()
-    {
+    transitionIn() {
         super.transitionIn();
     }
-    destroy()
-    {
+    destroy() {
 
     }
-    removeEvents()
-    {
+    removeEvents() {
         this.gameContainer.interactive = false;
         // this.screenManager.topMenu.onBackClick.removeAll();
         this.gameContainer.off('mousemove', this.onMouseMove.bind(this));
         this.gameContainer.off('mousedown', this.onTapDown.bind(this)).off('touchstart', this.onTapDown.bind(this));
         this.gameContainer.off('mouseup', this.onTapUp.bind(this)).off('touchend', this.onTapUp.bind(this)).off('mouseupoutside', this.onTapUp.bind(this));
     }
-    addEvents()
-    {
+    addEvents() {
         this.removeEvents();
         // this.screenManager.topMenu.onBackClick.add(this.redirectToInit.bind(this));
         this.gameContainer.interactive = true;

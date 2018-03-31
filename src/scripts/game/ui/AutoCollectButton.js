@@ -33,7 +33,7 @@ export default class AutoCollectButton extends PIXI.Container
         this.interactive = true;
         this.buttonMode = true;
 
-        this.spriteTrophy = new PIXI.Sprite.from('pickup_fish');
+        this.spriteTrophy = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
         this.container.addChild(this.spriteTrophy);
         this.spriteTrophy.anchor.set(1, 0.5)
         this.spriteTrophy.scale.set(this.h / this.spriteTrophy.height * 0.35)
@@ -78,7 +78,7 @@ export default class AutoCollectButton extends PIXI.Container
             this.enableAutoCollect.dispatch(this);
         }
         // this.enable()
-        // this.sprite.texture = new PIXI.Texture.from('results_newcat_star');
+        // this.sprite.texture = PIXI.Texture.from('results_newcat_star');
     }
     deactive()
     {
@@ -86,7 +86,7 @@ export default class AutoCollectButton extends PIXI.Container
         this.deactived = true;
         this.spriteTrophy.visible = true;
         this.sprite.x = 10;
-        this.sprite.texture = new PIXI.Texture.from('deactive_engine');
+        this.sprite.texture = PIXI.Texture.from('deactive_engine');
         this.sprite.scale.set(this.defaultSpriteScale)
         this.sprite.y = this.h / 2;
         this.priceLabel.text = utils.formatPointsLabel(this.catData.autoCollectPrice / MAX_NUMBER);
@@ -103,7 +103,7 @@ export default class AutoCollectButton extends PIXI.Container
         this.deactived = false;
         this.spriteTrophy.visible = true;
         this.sprite.x = 10;
-        this.sprite.texture = new PIXI.Texture.from('engine_icon');
+        this.sprite.texture = PIXI.Texture.from('engine_icon');
         this.sprite.scale.set(this.defaultSpriteScale)
         this.sprite.y = this.h / 2;
         this.priceLabel.text = utils.formatPointsLabel(this.catData.autoCollectPrice / MAX_NUMBER);
@@ -118,7 +118,7 @@ export default class AutoCollectButton extends PIXI.Container
     {
         this.enabled = true;
         this.deactived = false;
-        this.sprite.texture = new PIXI.Texture.from('active_engine');
+        this.sprite.texture = PIXI.Texture.from('active_engine');
         this.sprite.scale.set(this.defaultSpriteScale * 1.5)
         this.spriteTrophy.visible = false;
         this.sprite.x = this.w / 2 - this.sprite.width / 2;
