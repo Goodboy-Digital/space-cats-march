@@ -117,7 +117,9 @@ export default class HUD extends PIXI.Container {
         this.lifesLabel.y = this.catHead.y - this.lifesLabel.height / 2
             // this.catHead.scale.set(0,2)
 
-        this.pointsIcon = new PIXI.Sprite.from('icon_paw');
+            // new PIXI.Sprite.from(GAME_DATA.moneyData.softIcon);
+
+        this.pointsIcon = new PIXI.Sprite.from(GAME_DATA.moneyData.softIcon);
         this.addChild(this.pointsIcon);
         this.pointsIcon.anchor.set(0.5);
         this.pointsIconScale = this.powerBarContainer.height / this.pointsIcon.width * 0.75;
@@ -151,7 +153,7 @@ export default class HUD extends PIXI.Container {
 
         this.hudActionList = new HUDActionsList({
             w: this.forceQuitButton.width,
-            h: this.forceQuitButton.width * 4
+            h: this.forceQuitButton.width * 3
         });
         this.addChild(this.hudActionList);
         this.hudActionList.onStartAction.add(this.startActionCallback.bind(this))

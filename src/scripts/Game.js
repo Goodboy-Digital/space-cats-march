@@ -20,7 +20,7 @@ export default class Game {
         window.renderer = new PIXI.Application({
         	width:config.width,
         	height:config.height,
-        	resolution:2,
+        	resolution:1.5,
         	// antialias:true
         	// config.width || 800, config.height || 600, config.rendererOptions
         });//new Renderer(config.width || 800, config.height || 600, config.rendererOptions);

@@ -2,6 +2,8 @@ import * as PIXI from 'pixi.js';
 import Signals from 'signals';
 import config from '../../../config';
 import StandardPop from './StandardPop';
+import ShopList from '../../ui/shop/ShopList';
+import ShopItem from '../../ui/shop/ShopItem';
 export default class ShopPopUp extends StandardPop
 {
     constructor(label, screenManager)
@@ -57,7 +59,7 @@ export default class ShopPopUp extends StandardPop
 
         this.playButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
         this.playButton.anchor.set(0.5)
-        this.playButton.scale.set(0.25)
+        this.playButton.scale.set(config.height / this.playButton.height * 0.05)
         // this.playButtonScale = this.logoMask.height / this.playButton.height * 0.35
         // this.playButton.scale.set(this.playButtonScale);
         // this.playButton.y = config.height - this.container.y - this.playButton.height / 2 - 20
@@ -85,8 +87,36 @@ export default class ShopPopUp extends StandardPop
         videoLabel.y = - this.h / 3 + 50
         this.cancelButton.x =  -75
         this.cancelButton.y =  50
-        this.playButton.x =  0//75
-        this.playButton.y =  50
+        this.playButton.x =  -config.width / 2 + this.playButton.width
+        this.playButton.y = -config.height / 2 + this.playButton.height
+
+        let shopRect = {
+            w: config.width * 0.85,
+            h: config.height * 0.65
+        }
+        let pageItens = 6
+        this.shopList = new ShopList(shopRect, pageItens);
+
+        this.shopList.x = - shopRect.w / 2
+        this.shopList.y = - shopRect.h / 2
+
+        this.container.addChild(this.shopList)
+
+        let shopItens = [];
+        for (var i = 0; i < GAME_DATA.actionsData.length; i++) {
+            let shopItem = new ShopItem({w:shopRect.w, h:shopRect.h/pageItens});    
+            shopItem.setData(GAME_DATA.actionsData[i], 'actionsDataStatic')        
+            shopItens.push(shopItem)
+        }
+
+        for (var i = 0; i < GAME_DATA.shopData.length; i++) {
+            let shopItem = new ShopItem({w:shopRect.w, h:shopRect.h/pageItens});
+            shopItem.setData(GAME_DATA.shopData[i], 'shopDataStatic')         
+            shopItens.push(shopItem)
+        }
+
+        this.shopList.addItens(shopItens);
+        // this.shopList.updateItems(GAME_DATA.shopDataStatic);
 
     }
     update(delta){
@@ -94,9 +124,9 @@ export default class ShopPopUp extends StandardPop
     }
     show(param)
     {
-        console.log('onasodnasdnasdnjasndkjas');
         this.toRemove = false;
         this.onShow.dispatch(this);
+        this.shopList.updateItems();
 
         this.container.scale.set(0, 2)
         TweenLite.to(this.container.scale, 1,

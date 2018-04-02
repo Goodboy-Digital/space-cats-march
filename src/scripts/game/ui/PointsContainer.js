@@ -2,19 +2,17 @@ import * as PIXI from 'pixi.js';
 import Signals from 'signals';
 import config from '../../config';
 import utils from '../../utils';
-export default class PointsContainer extends PIXI.Container
-{
-    constructor()
-    {
+export default class PointsContainer extends PIXI.Container {
+    constructor() {
         super();
 
         this.pointsContainer = new PIXI.Container();
+
         this.currentPointsSprite = new PIXI.Sprite.from('score_plinth');
         this.currentPointsSprite.scale.set(config.height / this.currentPointsSprite.height * 0.1)
         this.pointsContainer.addChild(this.currentPointsSprite);
 
-        this.pointsLabelInfo = new PIXI.Text('YOUR SCORE',
-        {
+        this.pointsLabelInfo = new PIXI.Text('YOUR SCORE', {
             fontFamily: 'blogger_sansregular',
             fontSize: '42px',
             fill: 0xFFFFFF,
@@ -25,10 +23,9 @@ export default class PointsContainer extends PIXI.Container
         this.pointsLabelInfo.pivot.y = this.pointsLabelInfo.height;
         this.pointsLabelInfo.y = -this.pointsLabelInfo.height;
         this.currentPointsSprite.addChild(this.pointsLabelInfo);
+        this.currentPointsSprite.y = 10
 
-
-        this.currentPointsLabel = new PIXI.Text('0',
-        {
+        this.currentPointsLabel = new PIXI.Text('0', {
             fontFamily: 'blogger_sansregular',
             fontSize: '124px',
             fill: 0xFFFFFF,
@@ -46,8 +43,7 @@ export default class PointsContainer extends PIXI.Container
         this.currentHighscoreSprite.scale.set(config.height / this.currentHighscoreSprite.height * 0.1)
         this.pointsContainer.addChild(this.currentHighscoreSprite);
 
-        this.higscoreLabelInfo = new PIXI.Text('ALL TIME BEST',
-        {
+        this.higscoreLabelInfo = new PIXI.Text('ALL TIME BEST', {
             fontFamily: 'blogger_sansregular',
             fontSize: '42px',
             fill: 0xFFFFFF,
@@ -59,8 +55,7 @@ export default class PointsContainer extends PIXI.Container
         this.higscoreLabelInfo.y = -this.higscoreLabelInfo.height;
         this.currentHighscoreSprite.addChild(this.higscoreLabelInfo);
 
-        this.higscoreLabel = new PIXI.Text('0',
-        {
+        this.higscoreLabel = new PIXI.Text('0', {
             fontFamily: 'blogger_sansregular',
             fontSize: '124px',
             fill: 0xFFFFFF,
@@ -72,17 +67,83 @@ export default class PointsContainer extends PIXI.Container
         this.higscoreLabel.y = 10;
         this.currentHighscoreSprite.anchor.set(0.5);
         this.currentHighscoreSprite.addChild(this.higscoreLabel);
-        this.currentHighscoreSprite.y = this.currentPointsSprite.height + 10
+        this.currentHighscoreSprite.y = this.currentPointsSprite.height + 10 + this.currentPointsSprite.y
+
+
+
+        this.coinsContainer = new PIXI.Container();
+        this.coinSprite = new PIXI.Sprite.from(GAME_DATA.moneyData.softIcon);
+        this.coinsContainer.addChild(this.coinSprite);
+        this.coinSprite.anchor.set(0.5);
+
+        this.moneyLabel = new PIXI.Text('0', {
+            fontFamily: 'blogger_sansregular',
+            fontSize: '42px',
+            fill: 0xFFFFFF,
+            align: 'center',
+            fontWeight: '800'
+        });
+        this.moneyLabel.pivot.y = this.moneyLabel.height / 2;
+        this.coinsContainer.addChild(this.moneyLabel);
+
+        this.coinSprite.scale.set(this.currentPointsSprite.height / this.coinSprite.height * 0.5)
+        this.moneyLabel.scale.set(this.currentPointsSprite.height / this.moneyLabel.height * 0.5)
+        this.moneyLabel.x = this.coinSprite.width * 0.75
+        this.pointsContainer.addChild(this.coinsContainer);
+        this.coinsContainer.pivot.x = this.coinsContainer.width / 2 - this.coinSprite.width * 0.5;
+        this.coinsContainer.pivot.y = this.coinsContainer.height + 15;
+        this.currentMoney = 0;
+        this.currentPoints = 0;
+
 
         this.addChild(this.pointsContainer);
-        // this.pointsContainer.x = config.width / 2
-        // this.pointsContainer.y = config.height / 2 + this.currentPointsSprite.height + 10
     }
-    updatePoints(current, high)
-    {
-    	// console.log(current, high);
+    erasePoints(delay = 0) {
+        let moneyObj = {
+            current: this.currentPoints
+        }
+        TweenLite.to(moneyObj, 1, {
+            delay:delay,
+            current: 0,
+            onUpdateParams:[moneyObj],
+            onUpdate: (moneyObj) => {
+                this.currentPointsLabel.pivot.x = this.currentPointsLabel.width / 2;
+                this.currentPointsLabel.text = utils.formatPointsLabel(moneyObj.current / MAX_NUMBER);
+            },
+            onComplete:()=>{
+                this.currentPointsLabel.pivot.x = this.currentPointsLabel.width / 2;
+                this.currentPointsLabel.text = '0'
+            }
+        })
+    }
+    updateMoney(money, force, delay = 0) {
+
+        if(force){
+            this.moneyLabel.text = utils.formatPointsLabel(money / MAX_NUMBER);
+            return;
+        }
+        let moneyObj = {
+            current: this.currentMoney,
+            target: money
+        }
+        TweenLite.to(moneyObj, 1, {
+            delay:delay,
+            current: money,
+            onUpdateParams:[moneyObj],
+            onUpdate: (moneyObj) => {
+                this.moneyLabel.text = utils.formatPointsLabel(moneyObj.current / MAX_NUMBER);
+            },
+            onComplete:()=>{
+                this.currentMoney = money;
+            }
+        })
+    }
+    updatePoints(current, high, currentNumber) {
+        // console.log(current, high);
         this.currentPointsLabel.text = current
         this.higscoreLabel.text = high
+
+        this.currentPoints = currentNumber;
 
         this.currentPointsLabel.pivot.x = this.currentPointsLabel.width / 2;
         this.currentPointsLabel.pivot.y = this.currentPointsLabel.height / 2;

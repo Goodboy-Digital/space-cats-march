@@ -2,10 +2,8 @@ import * as PIXI from 'pixi.js';
 import config from '../../config';
 import utils from '../../utils';
 import Signals from 'signals';
-export default class GameItem extends PIXI.Container
-{
-    constructor()
-    {
+export default class GameItem extends PIXI.Container {
+    constructor() {
 
         super();
 
@@ -44,11 +42,10 @@ export default class GameItem extends PIXI.Container
 
         this.onCollect = new Signals();
     }
-    collect()
-    {
-    	if(this.collecting){
-    		return
-    	}
+    collect() {
+        if (this.collecting) {
+            return
+        }
         this.onCollect.dispatch(this);
         this.collected();
         this.velocity = {
@@ -56,8 +53,7 @@ export default class GameItem extends PIXI.Container
             y: 0
         }
     }
-    reset(pos, type = 0)
-    {
+    reset(pos, type = 0) {
         this.itemType = type;
         this.currentTexture = this.pickupsSprites[type];
         this.spriteItem.texture = PIXI.Texture.from(this.pickupsSprites[type]);
@@ -65,7 +61,7 @@ export default class GameItem extends PIXI.Container
         this.x = pos.x;
         this.y = pos.y;
         this.velocity = {
-            x: 0,
+            x: config.width * 0.1,
             y: -config.height * 0.25
         }
         this.kill = false;
@@ -73,45 +69,41 @@ export default class GameItem extends PIXI.Container
         this.sprite.scale.set(1);
         this.spriteItem.scale.set(1);
         this.container.alpha = 1;
+        this.tempX = 0;
     }
-    collected()
-    {
+    collected() {
         this.collecting = true;
         this.sprite.scale.set(0.5);
-        TweenLite.to(this.sprite.scale, 0.5,
-        {
+        TweenLite.to(this.sprite.scale, 0.5, {
             x: 1,
             y: 1,
             ease: Elastic.easeOut
         })
 
         this.spriteItem.scale.set(0.5);
-        TweenLite.to(this.spriteItem.scale, 0.75,
-        {
+        TweenLite.to(this.spriteItem.scale, 0.75, {
             x: 1.2,
             y: 1.2,
             ease: Elastic.easeOut
         })
 
-        TweenLite.to(this.container, 0.25,
-        {
-        	alpha:0,
-        	delay:0.75
+        TweenLite.to(this.container, 0.25, {
+            alpha: 0,
+            delay: 0.75
         })
     }
-    update(delta)
-    {
-        if (this.collecting)
-        {
+    update(delta) {
+        if (this.collecting) {
             return;
         }
         this.y += this.velocity.y * delta;
-        this.x = this.startPos.x + Math.sin(this.sin) * this.dist;
+        this.tempX += (this.velocity.x * delta);
+        this.x = this.startPos.x + Math.sin(this.sin) * this.dist + this.tempX;
+        // console.log(this.x);
         this.rotation = Math.sin(this.sin) * 0.2
-        this.spriteItem.rotation = - this.rotation - Math.cos(this.sin) * 0.2
+        this.spriteItem.rotation = -this.rotation - Math.cos(this.sin) * 0.2
         this.sin += 0.1;
-        if (this.y < -PAWN.height)
-        {
+        if (this.y < -PAWN.height) {
             this.kill = true;
         }
     }

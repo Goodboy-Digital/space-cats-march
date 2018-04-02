@@ -96,6 +96,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.shopPopUp = new ShopPopUp('shop', this);
         this.shopPopUp.onHide.add(() =>
         {
+            this.gameOverPopUp.updateCurrency();
             //this.showPopUp('gameover')
             // this.toGame()
                 // this.toGame()
@@ -145,6 +146,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         // this.showPopUp('gameover')
         // this.toGame();
         this.showPopUp('init')
+        // this.showPopUp('shop')
 
     }
     showPopUp(label, param = null)
@@ -180,6 +182,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         {
             this.prevPopUp.parent.removeChild(this.prevPopUp);
             this.prevPopUp = null;
+            console.log('REMOVE');
         }
     }
 

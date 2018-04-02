@@ -96,6 +96,7 @@ export default class Cat extends PIXI.Container
         {
             return;
         }
+        // console.log(delta);
         this.timer += delta;
         if(!this.isFinished){
             this.updateAnimation(delta);

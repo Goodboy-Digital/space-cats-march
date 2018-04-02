@@ -180,13 +180,14 @@ export default class GameScreen extends Screen {
             }
         }
         this[actionData.var] = actionData.default;
-        this.HUD.updateActionList();
+        // this.HUD.updateActionList();
     }
     addAction(actionData) {
-        if(GAME_DATA.sessionData.tokens < actionData.cost){
-            return;
-        }
-        GAME_DATA.sessionData.tokens -= actionData.cost;
+        // if(GAME_DATA.sessionData.tokens < actionData.cost){
+        //     return;
+        // }
+        // GAME_DATA.sessionData.tokens -= actionData.cost;
+        console.log(actionData);
         for (var i = this.currentActions.length - 1; i >= 0; i--) {
             if (this.currentActions[i].type == actionData.type) {
                 return false;
@@ -194,7 +195,7 @@ export default class GameScreen extends Screen {
         }
         this.currentActions.push(actionData);
         this[actionData.var] = actionData.value;
-        this.HUD.updateActionList();
+        // this.HUD.updateActionList();
     }
     resetActionsVariables() {
         this.actionAutoCollect = false;

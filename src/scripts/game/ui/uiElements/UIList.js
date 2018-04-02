@@ -2,6 +2,8 @@ import * as PIXI from 'pixi.js';
 export default class UIList extends PIXI.Container {
     constructor() {
         super();
+        this.container = new PIXI.Container();
+        this.addChild(this.container);
         this.elementsList = [];
         this.w = 0;
         this.h = 0;
@@ -64,7 +66,6 @@ export default class UIList extends PIXI.Container {
             }
 
             this.elementsList[i].x = nextX + chunkSize * align - this.elementsList[i].width * align;
-            // pixig.x = nextX
 
             this.elementsList[i].y = this.h / 2 - this.elementsList[i].height / 2
         }
