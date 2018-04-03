@@ -23,17 +23,7 @@ export default class HUDItensContainer extends PIXI.Container {
         this.backButton.buttonMode = true;
         this.backButton.on('mouseup', this.onClick.bind(this)).on('touchend', this.onClick.bind(this));
 
-        if (this.actionData) {
-            this.backButton.texture = PIXI.Texture.from('game_button_base_borderless');
-            this.setTexture(this.actionData.icon)
-            console.log(this.backButton.width / 2 + 10);
-            this.counter = new CircleCounter(60, 50);
-            this.counter.build(0xefd9f2, 0xFFFFFF)
-            this.addChild(this.counter);
-            this.counter.update(0)
-            this.backButton.scale.set(100 / this.backButton.height)
-        }
-
+       
         this.addChild(this.backButton);
         this.timer = 0;
     }
@@ -42,27 +32,11 @@ export default class HUDItensContainer extends PIXI.Container {
         this.sprite.scale.set(this.backButton.height / this.sprite.height * 0.5);
     }
     reset() {
-        if (this.actionData) {
-            this.counter.update(0, true);
-        }
     }
     finishReset() {
-        if (this.actionData) {
-            this.counter.update(0, true);
-            this.counter.scale.set(0.75);
-            TweenLite.to(this.counter.scale, 0.5, {x:1,y:1, ease:Back.easeOut})
-        }
     }
-    onClick() {
-        if (this.acting) {
-            return;
-        }
-        this.acting = true;
+    onClick() {        
         this.onClickItem.dispatch(this.actionData);
-        if (this.actionData) {
-            this.timer = this.actionData.time;
-            this.counter.update(0, true);
-        }
     }
     updateCounter(value) {
         if (value >= 1) {

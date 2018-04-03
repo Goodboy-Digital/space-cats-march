@@ -9,7 +9,7 @@ export default class PointsContainer extends PIXI.Container {
         this.pointsContainer = new PIXI.Container();
 
         this.currentPointsSprite = new PIXI.Sprite.from('score_plinth');
-        this.currentPointsSprite.scale.set(config.height / this.currentPointsSprite.height * 0.1)
+        this.currentPointsSprite.scale.set(config.height / this.currentPointsSprite.height * 0.08)
         this.pointsContainer.addChild(this.currentPointsSprite);
 
         this.pointsLabelInfo = new PIXI.Text('YOUR SCORE', {
@@ -40,7 +40,7 @@ export default class PointsContainer extends PIXI.Container {
 
 
         this.currentHighscoreSprite = new PIXI.Sprite.from('score_plinth');
-        this.currentHighscoreSprite.scale.set(config.height / this.currentHighscoreSprite.height * 0.1)
+        this.currentHighscoreSprite.scale.set(config.height / this.currentHighscoreSprite.height * 0.08)
         this.pointsContainer.addChild(this.currentHighscoreSprite);
 
         this.higscoreLabelInfo = new PIXI.Text('ALL TIME BEST', {
@@ -74,7 +74,7 @@ export default class PointsContainer extends PIXI.Container {
         this.coinsContainer = new PIXI.Container();
         this.coinSprite = new PIXI.Sprite.from(GAME_DATA.moneyData.softIcon);
         this.coinsContainer.addChild(this.coinSprite);
-        this.coinSprite.anchor.set(0.5);
+        this.coinSprite.anchor.set(0, 0.5);
 
         this.moneyLabel = new PIXI.Text('0', {
             fontFamily: 'blogger_sansregular',
@@ -87,14 +87,15 @@ export default class PointsContainer extends PIXI.Container {
         this.coinsContainer.addChild(this.moneyLabel);
 
         this.coinSprite.scale.set(this.currentPointsSprite.height / this.coinSprite.height * 0.5)
-        this.moneyLabel.scale.set(this.currentPointsSprite.height / this.moneyLabel.height * 0.5)
-        this.moneyLabel.x = this.coinSprite.width * 0.75
+        this.moneyLabel.scale.set(this.currentPointsSprite.height / this.moneyLabel.height * 0.65)
+        this.moneyLabel.x = this.coinSprite.width * 1.25
         this.pointsContainer.addChild(this.coinsContainer);
-        this.coinsContainer.pivot.x = this.coinsContainer.width / 2 - this.coinSprite.width * 0.5;
+        // this.coinsContainer.pivot.x = this.coinsContainer.width / 2 - this.coinSprite.width * 0.5;
         this.coinsContainer.pivot.y = this.coinsContainer.height + 15;
         this.currentMoney = 0;
         this.currentPoints = 0;
-
+        this.coinsContainer.y = -this.coinSprite.height / 2
+        this.coinsContainer.x = - this.coinsContainer.width / 2;
 
         this.addChild(this.pointsContainer);
     }
@@ -120,21 +121,29 @@ export default class PointsContainer extends PIXI.Container {
 
         if(force){
             this.moneyLabel.text = utils.formatPointsLabel(money / MAX_NUMBER);
+            this.coinsContainer.x = - this.coinsContainer.width / 2 ;
+            this.currentMoney = money;
             return;
+        }
+        if(this.currentTween){
+            TweenLite.killTweensOf(this.currentTween);
         }
         let moneyObj = {
             current: this.currentMoney,
             target: money
         }
-        TweenLite.to(moneyObj, 1, {
+        this.currentMoney = money;
+        this.currentTween = TweenLite.to(moneyObj, 0.5, {
             delay:delay,
             current: money,
             onUpdateParams:[moneyObj],
             onUpdate: (moneyObj) => {
                 this.moneyLabel.text = utils.formatPointsLabel(moneyObj.current / MAX_NUMBER);
+                this.coinsContainer.x = - this.coinsContainer.width / 2 ;
             },
             onComplete:()=>{
-                this.currentMoney = money;
+                
+                this.coinsContainer.x = - this.coinsContainer.width / 2;
             }
         })
     }

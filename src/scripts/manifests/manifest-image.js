@@ -8,12 +8,12 @@ const assets = [
 	"url":"assets/image\\bigblur.png"
 	},
 	{
-	"id":"cat_01",
-	"url":"assets/image\\cat_01.png"
-	},
-	{
 	"id":"cat_head",
 	"url":"assets/image\\cat_head.png"
+	},
+	{
+	"id":"cat_01",
+	"url":"assets/image\\cat_01.png"
 	},
 	{
 	"id":"glass",
@@ -28,12 +28,12 @@ const assets = [
 	"url":"assets/image\\lane_texture - Copy.png"
 	},
 	{
-	"id":"lane_texture",
-	"url":"assets/image\\lane_texture.png"
-	},
-	{
 	"id":"lettering",
 	"url":"assets/image\\lettering.png"
+	},
+	{
+	"id":"lane_texture",
+	"url":"assets/image\\lane_texture.png"
 	},
 	{
 	"id":"logo",
@@ -60,12 +60,12 @@ const assets = [
 	"url":"assets/image\\planet1.png"
 	},
 	{
-	"id":"planet2",
-	"url":"assets/image\\planet2.png"
-	},
-	{
 	"id":"planet3",
 	"url":"assets/image\\planet3.png"
+	},
+	{
+	"id":"planet2",
+	"url":"assets/image\\planet2.png"
 	},
 	{
 	"id":"planet4",
@@ -76,16 +76,32 @@ const assets = [
 	"url":"assets/image\\vignette-tex.png"
 	},
 	{
-	"id":"vignette-tex2",
-	"url":"assets/image\\vignette-tex2.png"
-	},
-	{
 	"id":"vignette",
 	"url":"assets/image\\vignette.png"
 	},
 	{
+	"id":"vignette-tex2",
+	"url":"assets/image\\vignette-tex2.png"
+	},
+	{
 	"id":"spark2",
 	"url":"assets/image\\particles\\spark2.png"
+	},
+	{
+	"id":"pickup_bubble",
+	"url":"assets/image\\pickups\\pickup_bubble.png"
+	},
+	{
+	"id":"pickup_fish",
+	"url":"assets/image\\pickups\\pickup_fish.png"
+	},
+	{
+	"id":"pickup_mouse",
+	"url":"assets/image\\pickups\\pickup_mouse.png"
+	},
+	{
+	"id":"pickup_octopus",
+	"url":"assets/image\\pickups\\pickup_octopus.png"
 	},
 	{
 	"id":"cat_orange_00000",
@@ -100,12 +116,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_orange_00002.png"
 	},
 	{
-	"id":"cat_orange_00003",
-	"url":"assets/image\\frames\\cat_orange_00003.png"
-	},
-	{
 	"id":"cat_orange_00004",
 	"url":"assets/image\\frames\\cat_orange_00004.png"
+	},
+	{
+	"id":"cat_orange_00003",
+	"url":"assets/image\\frames\\cat_orange_00003.png"
 	},
 	{
 	"id":"cat_orange_00005",
@@ -136,12 +152,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_orange_00011.png"
 	},
 	{
-	"id":"cat_orange_00012",
-	"url":"assets/image\\frames\\cat_orange_00012.png"
-	},
-	{
 	"id":"cat_orange_00013",
 	"url":"assets/image\\frames\\cat_orange_00013.png"
+	},
+	{
+	"id":"cat_orange_00012",
+	"url":"assets/image\\frames\\cat_orange_00012.png"
 	},
 	{
 	"id":"cat_orange_00014",
@@ -152,12 +168,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_orange_00015.png"
 	},
 	{
-	"id":"cat_orange_00016",
-	"url":"assets/image\\frames\\cat_orange_00016.png"
-	},
-	{
 	"id":"cat_orange_00017",
 	"url":"assets/image\\frames\\cat_orange_00017.png"
+	},
+	{
+	"id":"cat_orange_00016",
+	"url":"assets/image\\frames\\cat_orange_00016.png"
 	},
 	{
 	"id":"cat_orange_00018",
@@ -172,12 +188,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_pink_00000.png"
 	},
 	{
-	"id":"cat_pink_00001",
-	"url":"assets/image\\frames\\cat_pink_00001.png"
-	},
-	{
 	"id":"cat_pink_00002",
 	"url":"assets/image\\frames\\cat_pink_00002.png"
+	},
+	{
+	"id":"cat_pink_00001",
+	"url":"assets/image\\frames\\cat_pink_00001.png"
 	},
 	{
 	"id":"cat_pink_00003",
@@ -188,12 +204,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_pink_00004.png"
 	},
 	{
-	"id":"cat_pink_00005",
-	"url":"assets/image\\frames\\cat_pink_00005.png"
-	},
-	{
 	"id":"cat_pink_00006",
 	"url":"assets/image\\frames\\cat_pink_00006.png"
+	},
+	{
+	"id":"cat_pink_00005",
+	"url":"assets/image\\frames\\cat_pink_00005.png"
 	},
 	{
 	"id":"cat_pink_00007",
@@ -204,16 +220,16 @@ const assets = [
 	"url":"assets/image\\frames\\cat_pink_00008.png"
 	},
 	{
-	"id":"cat_pink_00009",
-	"url":"assets/image\\frames\\cat_pink_00009.png"
+	"id":"cat_pink_00011",
+	"url":"assets/image\\frames\\cat_pink_00011.png"
 	},
 	{
 	"id":"cat_pink_00010",
 	"url":"assets/image\\frames\\cat_pink_00010.png"
 	},
 	{
-	"id":"cat_pink_00011",
-	"url":"assets/image\\frames\\cat_pink_00011.png"
+	"id":"cat_pink_00009",
+	"url":"assets/image\\frames\\cat_pink_00009.png"
 	},
 	{
 	"id":"cat_pink_00012",
@@ -224,12 +240,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_pink_00013.png"
 	},
 	{
-	"id":"cat_pink_00014",
-	"url":"assets/image\\frames\\cat_pink_00014.png"
-	},
-	{
 	"id":"cat_pink_00015",
 	"url":"assets/image\\frames\\cat_pink_00015.png"
+	},
+	{
+	"id":"cat_pink_00014",
+	"url":"assets/image\\frames\\cat_pink_00014.png"
 	},
 	{
 	"id":"cat_pink_00016",
@@ -256,16 +272,16 @@ const assets = [
 	"url":"assets/image\\frames\\cat_turquoise_00001.png"
 	},
 	{
+	"id":"cat_turquoise_00004",
+	"url":"assets/image\\frames\\cat_turquoise_00004.png"
+	},
+	{
 	"id":"cat_turquoise_00002",
 	"url":"assets/image\\frames\\cat_turquoise_00002.png"
 	},
 	{
 	"id":"cat_turquoise_00003",
 	"url":"assets/image\\frames\\cat_turquoise_00003.png"
-	},
-	{
-	"id":"cat_turquoise_00004",
-	"url":"assets/image\\frames\\cat_turquoise_00004.png"
 	},
 	{
 	"id":"cat_turquoise_00005",
@@ -280,12 +296,12 @@ const assets = [
 	"url":"assets/image\\frames\\cat_turquoise_00007.png"
 	},
 	{
-	"id":"cat_turquoise_00008",
-	"url":"assets/image\\frames\\cat_turquoise_00008.png"
-	},
-	{
 	"id":"cat_turquoise_00009",
 	"url":"assets/image\\frames\\cat_turquoise_00009.png"
+	},
+	{
+	"id":"cat_turquoise_00008",
+	"url":"assets/image\\frames\\cat_turquoise_00008.png"
 	},
 	{
 	"id":"cat_turquoise_00010",
@@ -308,16 +324,16 @@ const assets = [
 	"url":"assets/image\\frames\\cat_turquoise_00014.png"
 	},
 	{
-	"id":"cat_turquoise_00015",
-	"url":"assets/image\\frames\\cat_turquoise_00015.png"
-	},
-	{
 	"id":"cat_turquoise_00016",
 	"url":"assets/image\\frames\\cat_turquoise_00016.png"
 	},
 	{
 	"id":"cat_turquoise_00017",
 	"url":"assets/image\\frames\\cat_turquoise_00017.png"
+	},
+	{
+	"id":"cat_turquoise_00015",
+	"url":"assets/image\\frames\\cat_turquoise_00015.png"
 	},
 	{
 	"id":"cat_turquoise_00018",
@@ -332,28 +348,28 @@ const assets = [
 	"url":"assets/image\\frames\\cat_yellow_00000.png"
 	},
 	{
-	"id":"cat_yellow_00001",
-	"url":"assets/image\\frames\\cat_yellow_00001.png"
-	},
-	{
 	"id":"cat_yellow_00002",
 	"url":"assets/image\\frames\\cat_yellow_00002.png"
+	},
+	{
+	"id":"cat_yellow_00001",
+	"url":"assets/image\\frames\\cat_yellow_00001.png"
 	},
 	{
 	"id":"cat_yellow_00003",
 	"url":"assets/image\\frames\\cat_yellow_00003.png"
 	},
 	{
-	"id":"cat_yellow_00004",
-	"url":"assets/image\\frames\\cat_yellow_00004.png"
+	"id":"cat_yellow_00006",
+	"url":"assets/image\\frames\\cat_yellow_00006.png"
 	},
 	{
 	"id":"cat_yellow_00005",
 	"url":"assets/image\\frames\\cat_yellow_00005.png"
 	},
 	{
-	"id":"cat_yellow_00006",
-	"url":"assets/image\\frames\\cat_yellow_00006.png"
+	"id":"cat_yellow_00004",
+	"url":"assets/image\\frames\\cat_yellow_00004.png"
 	},
 	{
 	"id":"cat_yellow_00007",
@@ -376,20 +392,20 @@ const assets = [
 	"url":"assets/image\\frames\\cat_yellow_00011.png"
 	},
 	{
-	"id":"cat_yellow_00012",
-	"url":"assets/image\\frames\\cat_yellow_00012.png"
-	},
-	{
 	"id":"cat_yellow_00013",
 	"url":"assets/image\\frames\\cat_yellow_00013.png"
 	},
 	{
-	"id":"cat_yellow_00014",
-	"url":"assets/image\\frames\\cat_yellow_00014.png"
+	"id":"cat_yellow_00012",
+	"url":"assets/image\\frames\\cat_yellow_00012.png"
 	},
 	{
 	"id":"cat_yellow_00015",
 	"url":"assets/image\\frames\\cat_yellow_00015.png"
+	},
+	{
+	"id":"cat_yellow_00014",
+	"url":"assets/image\\frames\\cat_yellow_00014.png"
 	},
 	{
 	"id":"cat_yellow_00016",
@@ -408,22 +424,6 @@ const assets = [
 	"url":"assets/image\\frames\\cat_yellow_00019.png"
 	},
 	{
-	"id":"pickup_bubble",
-	"url":"assets/image\\pickups\\pickup_bubble.png"
-	},
-	{
-	"id":"pickup_fish",
-	"url":"assets/image\\pickups\\pickup_fish.png"
-	},
-	{
-	"id":"pickup_mouse",
-	"url":"assets/image\\pickups\\pickup_mouse.png"
-	},
-	{
-	"id":"pickup_octopus",
-	"url":"assets/image\\pickups\\pickup_octopus.png"
-	},
-	{
 	"id":"active_engine",
 	"url":"assets/image\\ui\\active_engine.png"
 	},
@@ -432,16 +432,24 @@ const assets = [
 	"url":"assets/image\\ui\\auto_collect_action.png"
 	},
 	{
-	"id":"auto_confirm",
-	"url":"assets/image\\ui\\auto_confirm.png"
-	},
-	{
 	"id":"back_button",
 	"url":"assets/image\\ui\\back_button.png"
 	},
 	{
+	"id":"auto_confirm",
+	"url":"assets/image\\ui\\auto_confirm.png"
+	},
+	{
 	"id":"bubble",
 	"url":"assets/image\\ui\\bubble.png"
+	},
+	{
+	"id":"button_off",
+	"url":"assets/image\\ui\\button_off.png"
+	},
+	{
+	"id":"button_on",
+	"url":"assets/image\\ui\\button_on.png"
 	},
 	{
 	"id":"buy_grey",
@@ -456,20 +464,20 @@ const assets = [
 	"url":"assets/image\\ui\\cat_coin.png"
 	},
 	{
-	"id":"deactive_engine",
-	"url":"assets/image\\ui\\deactive_engine.png"
-	},
-	{
 	"id":"double_points_action",
 	"url":"assets/image\\ui\\double_points_action.png"
 	},
 	{
-	"id":"double_speed_action",
-	"url":"assets/image\\ui\\double_speed_action.png"
+	"id":"deactive_engine",
+	"url":"assets/image\\ui\\deactive_engine.png"
 	},
 	{
 	"id":"engine_icon",
 	"url":"assets/image\\ui\\engine_icon.png"
+	},
+	{
+	"id":"double_speed_action",
+	"url":"assets/image\\ui\\double_speed_action.png"
 	},
 	{
 	"id":"game_button_base",
@@ -488,20 +496,32 @@ const assets = [
 	"url":"assets/image\\ui\\game_button_off.png"
 	},
 	{
-	"id":"game_button_on",
-	"url":"assets/image\\ui\\game_button_on.png"
-	},
-	{
 	"id":"goodboy",
 	"url":"assets/image\\ui\\goodboy.png"
+	},
+	{
+	"id":"game_button_on",
+	"url":"assets/image\\ui\\game_button_on.png"
 	},
 	{
 	"id":"goodboy_logo",
 	"url":"assets/image\\ui\\goodboy_logo.png"
 	},
 	{
+	"id":"icon_back",
+	"url":"assets/image\\ui\\icon_back.png"
+	},
+	{
 	"id":"icon_border",
 	"url":"assets/image\\ui\\icon_border.png"
+	},
+	{
+	"id":"icon_close",
+	"url":"assets/image\\ui\\icon_close.png"
+	},
+	{
+	"id":"icon_confirm",
+	"url":"assets/image\\ui\\icon_confirm.png"
 	},
 	{
 	"id":"icon_lives",
@@ -510,6 +530,14 @@ const assets = [
 	{
 	"id":"icon_paw",
 	"url":"assets/image\\ui\\icon_paw.png"
+	},
+	{
+	"id":"icon_play",
+	"url":"assets/image\\ui\\icon_play.png"
+	},
+	{
+	"id":"icon_shop",
+	"url":"assets/image\\ui\\icon_shop.png"
 	},
 	{
 	"id":"info",
@@ -540,6 +568,10 @@ const assets = [
 	"url":"assets/image\\ui\\results_lock.png"
 	},
 	{
+	"id":"results_locked_cat",
+	"url":"assets/image\\ui\\results_locked_cat.png"
+	},
+	{
 	"id":"results_newcat_glow",
 	"url":"assets/image\\ui\\results_newcat_glow.png"
 	},
@@ -558,10 +590,6 @@ const assets = [
 	{
 	"id":"results_orange_cat",
 	"url":"assets/image\\ui\\results_orange_cat.png"
-	},
-	{
-	"id":"results_locked_cat",
-	"url":"assets/image\\ui\\results_locked_cat.png"
 	},
 	{
 	"id":"results_pink_cat",
@@ -600,6 +628,10 @@ const assets = [
 	"url":"assets/image\\ui\\spaceship.png"
 	},
 	{
+	"id":"text_auto_rescue",
+	"url":"assets/image\\ui\\text_auto_rescue.png"
+	},
+	{
 	"id":"text_catnip_frenzy",
 	"url":"assets/image\\ui\\text_catnip_frenzy.png"
 	},
@@ -616,6 +648,14 @@ const assets = [
 	"url":"assets/image\\ui\\token_quant.png"
 	},
 	{
+	"id":"trophy",
+	"url":"assets/image\\ui\\trophy.png"
+	},
+	{
+	"id":"treasure_chest",
+	"url":"assets/image\\ui\\treasure_chest.png"
+	},
+	{
 	"id":"ui_bg",
 	"url":"assets/image\\ui\\ui_bg.png"
 	},
@@ -624,8 +664,20 @@ const assets = [
 	"url":"assets/image\\ui\\video_icon.png"
 	},
 	{
-	"id":"text_auto_rescue",
-	"url":"assets/image\\ui\\text_auto_rescue.png"
+	"id":"white_arm",
+	"url":"assets/image\\cats\\white_cat\\white_arm.png"
+	},
+	{
+	"id":"white_belly",
+	"url":"assets/image\\cats\\white_cat\\white_belly.png"
+	},
+	{
+	"id":"white_head",
+	"url":"assets/image\\cats\\white_cat\\white_head.png"
+	},
+	{
+	"id":"white_leg",
+	"url":"assets/image\\cats\\white_cat\\white_leg.png"
 	},
 	{
 	"id":"cat_orange_arm",
@@ -648,32 +700,16 @@ const assets = [
 	"url":"assets/image\\cats\\pink_cat\\cat_pink_arm.png"
 	},
 	{
-	"id":"cat_pink_belly",
-	"url":"assets/image\\cats\\pink_cat\\cat_pink_belly.png"
-	},
-	{
 	"id":"cat_pink_head",
 	"url":"assets/image\\cats\\pink_cat\\cat_pink_head.png"
 	},
 	{
+	"id":"cat_pink_belly",
+	"url":"assets/image\\cats\\pink_cat\\cat_pink_belly.png"
+	},
+	{
 	"id":"cat_pink_leg",
 	"url":"assets/image\\cats\\pink_cat\\cat_pink_leg.png"
-	},
-	{
-	"id":"white_arm",
-	"url":"assets/image\\cats\\white_cat\\white_arm.png"
-	},
-	{
-	"id":"white_belly",
-	"url":"assets/image\\cats\\white_cat\\white_belly.png"
-	},
-	{
-	"id":"white_head",
-	"url":"assets/image\\cats\\white_cat\\white_head.png"
-	},
-	{
-	"id":"white_leg",
-	"url":"assets/image\\cats\\white_cat\\white_leg.png"
 	}
 ];
 

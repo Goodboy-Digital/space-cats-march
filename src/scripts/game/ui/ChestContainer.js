@@ -14,11 +14,11 @@ export default class ChestContainer extends PIXI.Container
         this.chestBubble = new PIXI.Sprite.from('pickup_bubble');
         this.chestBubble.anchor.set(0.5, 0.5);
 
-        let chestIcon = new PIXI.Sprite.from('results_newcat_rays_01');
+        let chestIcon = new PIXI.Sprite.from('treasure_chest');
         chestIcon.anchor.set(0.5, 0.5);
-        chestIcon.scale.set(1.2);
-        chestIcon.blendMode = PIXI.BLEND_MODES.ADD
-        chestIcon.alpha= 0.25
+        chestIcon.scale.set(this.chestBubble.width / chestIcon.width * 0.65);
+        // chestIcon.blendMode = PIXI.BLEND_MODES.ADD
+        // chestIcon.alpha= 0.25
         // chestIcon.y = -this.chestBubble.height * 0.15;
 
         this.quantchest = new PIXI.Text('Open a free\nchest!\n35:05',
@@ -56,9 +56,11 @@ export default class ChestContainer extends PIXI.Container
         
     }
     activeContainer(){
-    	this.quantchest.text = 'COLLECT YOUR\nPRIZE'
+    	this.quantchest.text = 'OPEN YOUR \nPRIZE'
     	this.quantchest.pivot.x = this.quantchest.width / 2;
         this.quantchest.pivot.y = this.quantchest.height / 2;
+        this.quantchest.y = - this.chestBubble.height / 2 - this.quantchest.height / 4
+
     	TweenLite.to(this.container.scale, 0.75, {x:this.containerScale, y:this.containerScale, ease:Elastic.easeOut})
     }
     updateTimer(){
@@ -82,9 +84,11 @@ export default class ChestContainer extends PIXI.Container
   		if(minutes < 10){
   			minutes = '0'+minutes;
   		}
-    	this.quantchest.text = 'NEW PRIZE IN\n'+minutes + ':' + seconds
+    	this.quantchest.text = 'FREE CHEST IN\n'+minutes + ':' + seconds
     	this.quantchest.pivot.x = this.quantchest.width / 2;
         this.quantchest.pivot.y = this.quantchest.height / 2;
+        this.quantchest.y = - this.chestBubble.height / 2 - this.quantchest.height / 4
+
     	// this.quantchest.text = dist.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
     	// this.quantchest.text = GAME_DATA.chestData.lastChestTime.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
     }
@@ -105,6 +109,7 @@ export default class ChestContainer extends PIXI.Container
     	this.chestSin += 0.05
         this.chestSin %= Math.PI * 2;
         this.container.rotation = Math.sin(this.chestSin) * 0.1 + 0.2
+        this.quantchest.rotation = -this.container.rotation
         // this.container.scale.set(this.containerScale + Math.sin(this.chestSin) * 0.01, this.containerScale + Math.cos(this.chestSin) * 0.01)
     }
 }

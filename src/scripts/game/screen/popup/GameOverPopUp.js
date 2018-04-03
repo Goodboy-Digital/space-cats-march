@@ -117,7 +117,7 @@ export default class GameOverPopUp extends StandardPop {
         this.pointsContainer = new PointsContainer();
         this.addChild(this.pointsContainer)
         this.pointsContainer.x = config.width / 2
-        this.pointsContainer.y = config.height / 2 + this.pointsContainer.height / 2
+        this.pointsContainer.y = config.height / 2 + this.pointsContainer.height * 0.75
 
         this.trophyContainer = new TrophyContainer();
         this.addChild(this.trophyContainer)
@@ -172,6 +172,11 @@ export default class GameOverPopUp extends StandardPop {
         GAME_DATA.activeCat(data);
         this.catItemList.updateItemActive(data.catID);
         this.updateCatsQuant();
+        console.log(data);
+        console.log(GAME_DATA.moneyData.currentCoins, data.require);
+        console.log(GAME_DATA.moneyData.currentCoins, data.require);
+        console.log(GAME_DATA.moneyData.currentCoins, data.require);
+        console.log(GAME_DATA.moneyData.currentCoins, data.require);
         GAME_DATA.moneyData.currentCoins -= data.require;
         this.pointsContainer.updateMoney(GAME_DATA.moneyData.currentCoins)
     }
@@ -309,6 +314,7 @@ export default class GameOverPopUp extends StandardPop {
     updateAllData() {
         this.updateCatsQuant();
         this.updateTrophyQuant();
+        this.catItemList.updateAllItens();
     }
     updateCatsQuant() {
         this.catItemList.updateAllItens();

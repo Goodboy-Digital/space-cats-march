@@ -12,7 +12,7 @@ export default class ShopList extends ListScroller
     }, itensPerPage = 4)
     {
         super(rect, itensPerPage);
-        this.onAutoCollect = new Signals();
+        this.onItemShop = new Signals();
         // this.onShopItem = new Signals();
         this.container = new PIXI.Container();
 
@@ -38,6 +38,7 @@ export default class ShopList extends ListScroller
     }
     onShopItemCallback(itemData, realCost){
     	GAME_DATA.buyUpgrade(itemData, realCost);
+        this.onItemShop.dispatch(itemData);
     	this.updateItems();
     }
     updateItems(){

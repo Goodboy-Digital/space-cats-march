@@ -167,7 +167,7 @@ export default class GameData {
             maxCollectedMultiplier: 100,
             multplierPerCollected: 0.0125,
             limitToMultiply: 1750,
-            icon: 'pickup_fish',
+            icon: 'trophy',
         }
 
         this.totalCatsAllowed = 1;
@@ -177,7 +177,7 @@ export default class GameData {
 
         this.gameTokens = {
             quant: 1,
-            icon: 'pickup_fish',
+            icon: 'trophy',
         }
         this.chestData = {
             lastChestTime: new Date(),
@@ -427,12 +427,16 @@ export default class GameData {
         return this[type][id];
     }
     buyUpgrade(data, realCost) {
+
+        
+
         let currType = this[data.staticData][data.id].shopType
         if(currType == 'hard'){
             this.trophyData.collected -= realCost;
         }else if(currType == 'soft'){
             this.moneyData.currentCoins -= realCost;
         }
+        this.updateCatsAllowed(0);
         this[data.dataType][data.id].level ++;
         STORAGE.storeObject('space-cats-game-data', this.getObjectData());
     }
@@ -620,12 +624,13 @@ export default class GameData {
             if (require <= this.moneyData.currentCoins) //prevCat.collected)
             {
                 this.catsData[i].canBeActive = true;
-                if (!this.catsAllowed[i]) {
-                    hasNew = i;
-                }
+                // if (!this.catsAllowed[i]) {
+                //     hasNew = i;
+                // }
                 temp.push(true);
                 this.totalCatsAllowed++;
             } else {
+                this.catsData[i].canBeActive = false;
                 temp.push(false);
             }
         }

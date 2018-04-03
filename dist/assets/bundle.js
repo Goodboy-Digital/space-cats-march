@@ -31633,6 +31633,8 @@ var CatItem = function (_UIList) {
         _this.elementsList.push(_this.autocollect);
         _this.container.addChild(_this.autocollect);
 
+        _this.backButton.on('mouseup', _this.activeCat.bind(_this)).on('touchend', _this.activeCat.bind(_this));
+
         return _this;
     }
 
@@ -31662,9 +31664,9 @@ var CatItem = function (_UIList) {
             this.totalLabel.text = quant == 0 ? '' : quant;
             this.bonusLabel.text = _utils2.default.cleanString(this.catData.collectedMultiplier.toFixed(1)) + '%';
             this.backButton.tint = 0xFFFFFF;
-            if (this.catData.canBeActive && !this.catData.active) {
-                // this.thumb.texture = PIXI.Texture.from('results_locked_cat');
-                // this.thumb.tint = 0;
+
+            if (this.catData.require <= GAME_DATA.moneyData.currentCoins && !this.catData.active) {
+                // if (this.catData.canBeActive && !this.catData.active) {
                 this.thumb.lock();
                 this.totalLabel.text = '';
                 this.catNameLabel.text = _utils2.default.formatPointsLabel(this.catData.require / MAX_NUMBER); //('active').toUpperCase();
@@ -31679,7 +31681,8 @@ var CatItem = function (_UIList) {
                 this.plusIcon.visible = false;
                 this.backButton.interactive = true;
                 this.backButton.buttonMode = true;
-                this.backButton.on('mouseup', this.activeCat.bind(this)).on('touchend', this.activeCat.bind(this));
+                // this.backButton.on('mouseup', this.activeCat.bind(this)).off('touchend', this.activeCat.bind(this));
+                // this.backButton.on('mouseup', this.activeCat.bind(this)).on('touchend', this.activeCat.bind(this));
             } else if (this.catData.active) {
                 this.backButton.off('mouseup', this.activeCat.bind(this)).off('touchend', this.activeCat.bind(this));
                 this.thumb.tint = 0xFFFFFF;
@@ -31693,6 +31696,8 @@ var CatItem = function (_UIList) {
                 this.plusIcon.visible = true;
 
                 this.backButton.alpha = 0;
+                this.backButton.interactive = false;
+                this.backButton.buttonMode = false;
                 this.autocollect.visible = true;
                 if (this.catData.collected >= this.catData.amountToAutoCollect) {} else {
                     // this.autocollect.visible = false;
@@ -31712,7 +31717,7 @@ var CatItem = function (_UIList) {
                 }
                 // this.autocollect.x = this.catNameLabel.x + this.catNameLabel.width + 25
             } else {
-                this.backButton.off('mouseup', this.activeCat.bind(this)).off('touchend', this.activeCat.bind(this));
+                // this.backButton.off('mouseup', this.activeCat.bind(this)).off('touchend', this.activeCat.bind(this));
                 // this.thumb.texture = PIXI.Texture.from('results_locked_cat');
                 this.coinIcon.visible = false;
                 this.thumb.lock();
@@ -31724,6 +31729,8 @@ var CatItem = function (_UIList) {
                 this.plusIcon.visible = false;
                 this.backButton.alpha = 1;
                 this.catNameLabel.style.fill = 0xe5519b;
+                this.backButton.interactive = false;
+                this.backButton.buttonMode = false;
             }
 
             var realSize = {
@@ -54375,7 +54382,7 @@ var GameData = function () {
             maxCollectedMultiplier: 100,
             multplierPerCollected: 0.0125,
             limitToMultiply: 1750,
-            icon: 'pickup_fish'
+            icon: 'trophy'
         };
 
         this.totalCatsAllowed = 1;
@@ -54385,7 +54392,7 @@ var GameData = function () {
 
         this.gameTokens = {
             quant: 1,
-            icon: 'pickup_fish'
+            icon: 'trophy'
         };
         this.chestData = {
             lastChestTime: new Date(),
@@ -54644,12 +54651,14 @@ var GameData = function () {
     }, {
         key: 'buyUpgrade',
         value: function buyUpgrade(data, realCost) {
+
             var currType = this[data.staticData][data.id].shopType;
             if (currType == 'hard') {
                 this.trophyData.collected -= realCost;
             } else if (currType == 'soft') {
                 this.moneyData.currentCoins -= realCost;
             }
+            this.updateCatsAllowed(0);
             this[data.dataType][data.id].level++;
             STORAGE.storeObject('space-cats-game-data', this.getObjectData());
         }
@@ -54860,12 +54869,13 @@ var GameData = function () {
                 if (require <= this.moneyData.currentCoins) //prevCat.collected)
                     {
                         this.catsData[i].canBeActive = true;
-                        if (!this.catsAllowed[i]) {
-                            hasNew = i;
-                        }
+                        // if (!this.catsAllowed[i]) {
+                        //     hasNew = i;
+                        // }
                         temp.push(true);
                         this.totalCatsAllowed++;
                     } else {
+                    this.catsData[i].canBeActive = false;
                     temp.push(false);
                 }
             }
@@ -55306,9 +55316,9 @@ var SpaceCatsScreenManager = function (_ScreenManager) {
         _this.addChild(_this.videoContainer);
 
         _this.videoContainer.visible = false;
-        // this.showPopUp('gameover')
+        _this.showPopUp('gameover');
         // this.toGame();
-        _this.showPopUp('init');
+        // this.showPopUp('init')
         // this.showPopUp('shop')
 
         return _this;
@@ -57407,7 +57417,7 @@ var GameOverPopUp = function (_StandardPop) {
         _this.pointsContainer = new _PointsContainer2.default();
         _this.addChild(_this.pointsContainer);
         _this.pointsContainer.x = _config2.default.width / 2;
-        _this.pointsContainer.y = _config2.default.height / 2 + _this.pointsContainer.height / 2;
+        _this.pointsContainer.y = _config2.default.height / 2 + _this.pointsContainer.height * 0.75;
 
         _this.trophyContainer = new _TrophyContainer2.default();
         _this.addChild(_this.trophyContainer);
@@ -57466,6 +57476,11 @@ var GameOverPopUp = function (_StandardPop) {
             GAME_DATA.activeCat(data);
             this.catItemList.updateItemActive(data.catID);
             this.updateCatsQuant();
+            console.log(data);
+            console.log(GAME_DATA.moneyData.currentCoins, data.require);
+            console.log(GAME_DATA.moneyData.currentCoins, data.require);
+            console.log(GAME_DATA.moneyData.currentCoins, data.require);
+            console.log(GAME_DATA.moneyData.currentCoins, data.require);
             GAME_DATA.moneyData.currentCoins -= data.require;
             this.pointsContainer.updateMoney(GAME_DATA.moneyData.currentCoins);
         }
@@ -57631,6 +57646,7 @@ var GameOverPopUp = function (_StandardPop) {
         value: function updateAllData() {
             this.updateCatsQuant();
             this.updateTrophyQuant();
+            this.catItemList.updateAllItens();
         }
     }, {
         key: 'updateCatsQuant',
@@ -58157,19 +58173,22 @@ var TrophyContainer = function (_PIXI$Container) {
 
                 var trophyIcon = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
                 trophyIcon.anchor.set(0.5, 0.5);
-                trophyIcon.scale.set(1);
-                trophyIcon.y = -_this.trophyBubble.height * 0.15;
+                trophyIcon.scale.set(_this.trophyBubble.height / trophyIcon.height * 0.3);
+                trophyIcon.y = -_this.trophyBubble.height * 0.05;
+                trophyIcon.x = -_this.trophyBubble.height * 0.15;
 
                 _this.quantTrophy = new PIXI.Text('0', {
                         fontFamily: 'blogger_sansregular',
-                        fontSize: '42px',
+                        fontSize: '54px',
                         fill: 0xFFFFFF,
-                        align: 'center',
+                        align: 'left',
                         fontWeight: '800'
                 });
                 // trophyIcon.x = -this.trophyBubble.width * 0.15;
                 _this.quantTrophy.pivot.x = _this.quantTrophy.width / 2;
-                _this.quantTrophy.y = -15;
+                _this.quantTrophy.pivot.y = _this.quantTrophy.height / 2;
+                _this.quantTrophy.y = trophyIcon.y + 5;
+                _this.quantTrophy.x = 15;
                 // this.currentPointsLabel.pivot.y = this.currentPointsLabel.height / 2;
 
                 var plusIcon = new PIXI.Sprite.from('results_arrow');
@@ -58209,7 +58228,7 @@ var TrophyContainer = function (_PIXI$Container) {
                         // console.log(data.bonus);
                         this.bonusTrophy.text = data.bonus;
                         this.quantTrophy.text = data.quant;
-                        this.quantTrophy.pivot.x = this.quantTrophy.width / 2;
+                        // this.quantTrophy.pivot.x = this.quantTrophy.width / 2;
                 }
         }, {
                 key: 'update',
@@ -58288,7 +58307,7 @@ var PointsContainer = function (_PIXI$Container) {
         _this.pointsContainer = new PIXI.Container();
 
         _this.currentPointsSprite = new PIXI.Sprite.from('score_plinth');
-        _this.currentPointsSprite.scale.set(_config2.default.height / _this.currentPointsSprite.height * 0.1);
+        _this.currentPointsSprite.scale.set(_config2.default.height / _this.currentPointsSprite.height * 0.08);
         _this.pointsContainer.addChild(_this.currentPointsSprite);
 
         _this.pointsLabelInfo = new PIXI.Text('YOUR SCORE', {
@@ -58318,7 +58337,7 @@ var PointsContainer = function (_PIXI$Container) {
         _this.currentPointsSprite.addChild(_this.currentPointsLabel);
 
         _this.currentHighscoreSprite = new PIXI.Sprite.from('score_plinth');
-        _this.currentHighscoreSprite.scale.set(_config2.default.height / _this.currentHighscoreSprite.height * 0.1);
+        _this.currentHighscoreSprite.scale.set(_config2.default.height / _this.currentHighscoreSprite.height * 0.08);
         _this.pointsContainer.addChild(_this.currentHighscoreSprite);
 
         _this.higscoreLabelInfo = new PIXI.Text('ALL TIME BEST', {
@@ -58350,7 +58369,7 @@ var PointsContainer = function (_PIXI$Container) {
         _this.coinsContainer = new PIXI.Container();
         _this.coinSprite = new PIXI.Sprite.from(GAME_DATA.moneyData.softIcon);
         _this.coinsContainer.addChild(_this.coinSprite);
-        _this.coinSprite.anchor.set(0.5);
+        _this.coinSprite.anchor.set(0, 0.5);
 
         _this.moneyLabel = new PIXI.Text('0', {
             fontFamily: 'blogger_sansregular',
@@ -58363,13 +58382,15 @@ var PointsContainer = function (_PIXI$Container) {
         _this.coinsContainer.addChild(_this.moneyLabel);
 
         _this.coinSprite.scale.set(_this.currentPointsSprite.height / _this.coinSprite.height * 0.5);
-        _this.moneyLabel.scale.set(_this.currentPointsSprite.height / _this.moneyLabel.height * 0.5);
-        _this.moneyLabel.x = _this.coinSprite.width * 0.75;
+        _this.moneyLabel.scale.set(_this.currentPointsSprite.height / _this.moneyLabel.height * 0.65);
+        _this.moneyLabel.x = _this.coinSprite.width * 1.25;
         _this.pointsContainer.addChild(_this.coinsContainer);
-        _this.coinsContainer.pivot.x = _this.coinsContainer.width / 2 - _this.coinSprite.width * 0.5;
+        // this.coinsContainer.pivot.x = this.coinsContainer.width / 2 - this.coinSprite.width * 0.5;
         _this.coinsContainer.pivot.y = _this.coinsContainer.height + 15;
         _this.currentMoney = 0;
         _this.currentPoints = 0;
+        _this.coinsContainer.y = -_this.coinSprite.height / 2;
+        _this.coinsContainer.x = -_this.coinsContainer.width / 2;
 
         _this.addChild(_this.pointsContainer);
         return _this;
@@ -58409,21 +58430,29 @@ var PointsContainer = function (_PIXI$Container) {
 
             if (force) {
                 this.moneyLabel.text = _utils2.default.formatPointsLabel(money / MAX_NUMBER);
+                this.coinsContainer.x = -this.coinsContainer.width / 2;
+                this.currentMoney = money;
                 return;
+            }
+            if (this.currentTween) {
+                TweenLite.killTweensOf(this.currentTween);
             }
             var moneyObj = {
                 current: this.currentMoney,
                 target: money
             };
-            TweenLite.to(moneyObj, 1, {
+            this.currentMoney = money;
+            this.currentTween = TweenLite.to(moneyObj, 0.5, {
                 delay: delay,
                 current: money,
                 onUpdateParams: [moneyObj],
                 onUpdate: function onUpdate(moneyObj) {
                     _this3.moneyLabel.text = _utils2.default.formatPointsLabel(moneyObj.current / MAX_NUMBER);
+                    _this3.coinsContainer.x = -_this3.coinsContainer.width / 2;
                 },
                 onComplete: function onComplete() {
-                    _this3.currentMoney = money;
+
+                    _this3.coinsContainer.x = -_this3.coinsContainer.width / 2;
                 }
             });
         }
@@ -58553,8 +58582,9 @@ var SpaceShipContainer = function (_PIXI$Container) {
 
                 var fishIcon = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
                 fishIcon.anchor.set(0.5, 0.5);
-                fishIcon.x = fishIcon.width + 20;
                 fishIcon.y = shipInfoSprite.height / 2;
+                fishIcon.scale.set(shipInfoSprite.height / fishIcon.height * 0.5);
+                fishIcon.x = fishIcon.width + 20;
                 shipInfoSprite.addChild(fishIcon);
 
                 var sellCatsInfo = new PIXI.Text('Do you want change your cats by fish?', {
@@ -58716,11 +58746,11 @@ var ChestContainer = function (_PIXI$Container) {
         _this.chestBubble = new PIXI.Sprite.from('pickup_bubble');
         _this.chestBubble.anchor.set(0.5, 0.5);
 
-        var chestIcon = new PIXI.Sprite.from('results_newcat_rays_01');
+        var chestIcon = new PIXI.Sprite.from('treasure_chest');
         chestIcon.anchor.set(0.5, 0.5);
-        chestIcon.scale.set(1.2);
-        chestIcon.blendMode = PIXI.BLEND_MODES.ADD;
-        chestIcon.alpha = 0.25;
+        chestIcon.scale.set(_this.chestBubble.width / chestIcon.width * 0.65);
+        // chestIcon.blendMode = PIXI.BLEND_MODES.ADD
+        // chestIcon.alpha= 0.25
         // chestIcon.y = -this.chestBubble.height * 0.15;
 
         _this.quantchest = new PIXI.Text('Open a free\nchest!\n35:05', {
@@ -58761,9 +58791,11 @@ var ChestContainer = function (_PIXI$Container) {
     (0, _createClass3.default)(ChestContainer, [{
         key: 'activeContainer',
         value: function activeContainer() {
-            this.quantchest.text = 'COLLECT YOUR\nPRIZE';
+            this.quantchest.text = 'OPEN YOUR \nPRIZE';
             this.quantchest.pivot.x = this.quantchest.width / 2;
             this.quantchest.pivot.y = this.quantchest.height / 2;
+            this.quantchest.y = -this.chestBubble.height / 2 - this.quantchest.height / 4;
+
             TweenLite.to(this.container.scale, 0.75, { x: this.containerScale, y: this.containerScale, ease: Elastic.easeOut });
         }
     }, {
@@ -58789,9 +58821,11 @@ var ChestContainer = function (_PIXI$Container) {
             if (minutes < 10) {
                 minutes = '0' + minutes;
             }
-            this.quantchest.text = 'NEW PRIZE IN\n' + minutes + ':' + seconds;
+            this.quantchest.text = 'FREE CHEST IN\n' + minutes + ':' + seconds;
             this.quantchest.pivot.x = this.quantchest.width / 2;
             this.quantchest.pivot.y = this.quantchest.height / 2;
+            this.quantchest.y = -this.chestBubble.height / 2 - this.quantchest.height / 4;
+
             // this.quantchest.text = dist.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
             // this.quantchest.text = GAME_DATA.chestData.lastChestTime.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
         }
@@ -58817,6 +58851,7 @@ var ChestContainer = function (_PIXI$Container) {
             this.chestSin += 0.05;
             this.chestSin %= Math.PI * 2;
             this.container.rotation = Math.sin(this.chestSin) * 0.1 + 0.2;
+            this.quantchest.rotation = -this.container.rotation;
             // this.container.scale.set(this.containerScale + Math.sin(this.chestSin) * 0.01, this.containerScale + Math.cos(this.chestSin) * 0.01)
         }
     }]);
@@ -59284,17 +59319,6 @@ var HUDItensContainer = function (_PIXI$Container) {
         _this.backButton.buttonMode = true;
         _this.backButton.on('mouseup', _this.onClick.bind(_this)).on('touchend', _this.onClick.bind(_this));
 
-        if (_this.actionData) {
-            _this.backButton.texture = PIXI.Texture.from('game_button_base_borderless');
-            _this.setTexture(_this.actionData.icon);
-            console.log(_this.backButton.width / 2 + 10);
-            _this.counter = new _CircleCounter2.default(60, 50);
-            _this.counter.build(0xefd9f2, 0xFFFFFF);
-            _this.addChild(_this.counter);
-            _this.counter.update(0);
-            _this.backButton.scale.set(100 / _this.backButton.height);
-        }
-
         _this.addChild(_this.backButton);
         _this.timer = 0;
         return _this;
@@ -59308,32 +59332,14 @@ var HUDItensContainer = function (_PIXI$Container) {
         }
     }, {
         key: 'reset',
-        value: function reset() {
-            if (this.actionData) {
-                this.counter.update(0, true);
-            }
-        }
+        value: function reset() {}
     }, {
         key: 'finishReset',
-        value: function finishReset() {
-            if (this.actionData) {
-                this.counter.update(0, true);
-                this.counter.scale.set(0.75);
-                TweenLite.to(this.counter.scale, 0.5, { x: 1, y: 1, ease: Back.easeOut });
-            }
-        }
+        value: function finishReset() {}
     }, {
         key: 'onClick',
         value: function onClick() {
-            if (this.acting) {
-                return;
-            }
-            this.acting = true;
             this.onClickItem.dispatch(this.actionData);
-            if (this.actionData) {
-                this.timer = this.actionData.time;
-                this.counter.update(0, true);
-            }
         }
     }, {
         key: 'updateCounter',
@@ -60132,7 +60138,7 @@ module.exports = exports['default'];
 
 
 Object.defineProperty(exports, "__esModule", {
-        value: true
+    value: true
 });
 
 var _getPrototypeOf = __webpack_require__(3);
@@ -60167,6 +60173,10 @@ var _config = __webpack_require__(6);
 
 var _config2 = _interopRequireDefault(_config);
 
+var _utils = __webpack_require__(11);
+
+var _utils2 = _interopRequireDefault(_utils);
+
 var _StandardPop2 = __webpack_require__(39);
 
 var _StandardPop3 = _interopRequireDefault(_StandardPop2);
@@ -60184,180 +60194,253 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ShopPopUp = function (_StandardPop) {
-        (0, _inherits3.default)(ShopPopUp, _StandardPop);
+    (0, _inherits3.default)(ShopPopUp, _StandardPop);
 
-        function ShopPopUp(label, screenManager) {
-                (0, _classCallCheck3.default)(this, ShopPopUp);
+    function ShopPopUp(label, screenManager) {
+        (0, _classCallCheck3.default)(this, ShopPopUp);
 
-                var _this = (0, _possibleConstructorReturn3.default)(this, (ShopPopUp.__proto__ || (0, _getPrototypeOf2.default)(ShopPopUp)).call(this, label, screenManager));
+        var _this = (0, _possibleConstructorReturn3.default)(this, (ShopPopUp.__proto__ || (0, _getPrototypeOf2.default)(ShopPopUp)).call(this, label, screenManager));
 
-                var videoLabel = new PIXI.Text('collect the cats and bla bla bla\nonboarding...', {
-                        fontFamily: 'blogger_sansregular',
-                        fontSize: '24px',
-                        fill: 0xFFFFFF,
-                        align: 'center',
-                        fontWeight: '800'
-                });
+        var videoLabel = new PIXI.Text('collect the cats and bla bla bla\nonboarding...', {
+            fontFamily: 'blogger_sansregular',
+            fontSize: '24px',
+            fill: 0xFFFFFF,
+            align: 'center',
+            fontWeight: '800'
+        });
 
-                _this.popUp.alpha = 0;
+        _this.popUp.alpha = 0;
 
-                _this.backgroundContainer = new PIXI.Container();
-                var tiled = new PIXI.extras.TilingSprite(PIXI.Texture.from('pattern'), 132, 200);
-                tiled.width = _config2.default.width;
-                tiled.height = _config2.default.height;
-                tiled.alpha = 0.05;
-                tiled.tileScale.set(0.5);
+        _this.backgroundContainer = new PIXI.Container();
+        var tiled = new PIXI.extras.TilingSprite(PIXI.Texture.from('pattern'), 132, 200);
+        tiled.width = _config2.default.width;
+        tiled.height = _config2.default.height;
+        tiled.alpha = 0.05;
+        tiled.tileScale.set(0.5);
 
-                _this.backgroundContainer.interactive = true;
+        _this.backgroundContainer.interactive = true;
 
-                _this.logoMask = new PIXI.Sprite.from('logo_mask_white');
-                _this.logoMask.anchor.set(0.5);
-                _this.logoMask.x = 0; //config.width / 2
-                _this.logoStartScale = _this.width / _this.logoMask.width;
-                _this.logoMask.scale.set(_this.logoStartScale);
-                _this.logoMask.y = 0; //config.height / 2
+        _this.logoMask = new PIXI.Sprite.from('logo_mask_white');
+        _this.logoMask.anchor.set(0.5);
+        _this.logoMask.x = 0; //config.width / 2
+        _this.logoStartScale = _this.width / _this.logoMask.width;
+        _this.logoMask.scale.set(_this.logoStartScale);
+        _this.logoMask.y = 0; //config.height / 2
 
-                var bgColor = new PIXI.Graphics().beginFill(0x12073f).drawRect(-_config2.default.width / 2, -_config2.default.height / 2, _config2.default.width, _config2.default.height);
-                _this.backgroundContainer.addChild(bgColor);
+        var bgColor = new PIXI.Graphics().beginFill(0x12073f).drawRect(-_config2.default.width / 2, -_config2.default.height / 2, _config2.default.width, _config2.default.height);
+        _this.backgroundContainer.addChild(bgColor);
 
-                var bigBlur = new PIXI.Sprite(PIXI.Texture.from('bigblur'));
-                _this.backgroundContainer.addChild(bigBlur);
-                bigBlur.width = _this.width; // 2;
-                bigBlur.height = _this.height; // 2;
-                bigBlur.alpha = 0.2;
-                bigBlur.anchor.set(0.5);
+        var bigBlur = new PIXI.Sprite(PIXI.Texture.from('bigblur'));
+        _this.backgroundContainer.addChild(bigBlur);
+        bigBlur.width = _this.width; // 2;
+        bigBlur.height = _this.height; // 2;
+        bigBlur.alpha = 0.2;
+        bigBlur.anchor.set(0.5);
 
-                tiled.x = -_config2.default.width / 2;
-                tiled.y = -_config2.default.height / 2;
+        tiled.x = -_config2.default.width / 2;
+        tiled.y = -_config2.default.height / 2;
 
-                _this.backgroundContainer.addChild(tiled);
-                // this.backgroundContainer.addChild(this.logoMask) 
-                // this.backgroundContainer.mask = this.logoMask
-                _this.container.addChild(_this.backgroundContainer);
+        _this.backgroundContainer.addChild(tiled);
+        // this.backgroundContainer.addChild(this.logoMask) 
+        // this.backgroundContainer.mask = this.logoMask
+        _this.container.addChild(_this.backgroundContainer);
 
-                _this.playButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-                _this.playButton.anchor.set(0.5);
-                _this.playButton.scale.set(_config2.default.height / _this.playButton.height * 0.05);
-                // this.playButtonScale = this.logoMask.height / this.playButton.height * 0.35
-                // this.playButton.scale.set(this.playButtonScale);
-                // this.playButton.y = config.height - this.container.y - this.playButton.height / 2 - 20
-                _this.playButton.interactive = true;
-                _this.playButton.buttonMode = true;
-                _this.playButton.on('mouseup', _this.confirm.bind(_this)).on('touchend', _this.confirm.bind(_this));
-                _this.container.addChild(_this.playButton);
+        _this.playButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
+        _this.playButton.anchor.set(0.5);
+        _this.playButton.scale.set(_config2.default.height / _this.playButton.height * 0.05);
+        // this.playButtonScale = this.logoMask.height / this.playButton.height * 0.35
+        // this.playButton.scale.set(this.playButtonScale);
+        // this.playButton.y = config.height - this.container.y - this.playButton.height / 2 - 20
+        _this.playButton.interactive = true;
+        _this.playButton.buttonMode = true;
+        _this.playButton.on('mouseup', _this.confirm.bind(_this)).on('touchend', _this.confirm.bind(_this));
+        _this.container.addChild(_this.playButton);
 
-                _this.cancelButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-                _this.cancelButton.anchor.set(0.5);
-                _this.cancelButton.scale.set(0.15);
-                // this.cancelButtonScale = this.logoMask.height / this.cancelButton.height * 0.35
-                // this.cancelButton.scale.set(this.cancelButtonScale);
-                // this.cancelButton.y = config.height - this.container.y - this.cancelButton.height / 2 - 20
-                _this.cancelButton.interactive = true;
-                _this.cancelButton.buttonMode = true;
-                // this.cancelButton.on('mouseup', this.close.bind(this)).on('touchend', this.close.bind(this));
-                // this.container.addChild(this.cancelButton)
+        _this.cancelButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
+        _this.cancelButton.anchor.set(0.5);
+        _this.cancelButton.scale.set(0.15);
+        // this.cancelButtonScale = this.logoMask.height / this.cancelButton.height * 0.35
+        // this.cancelButton.scale.set(this.cancelButtonScale);
+        // this.cancelButton.y = config.height - this.container.y - this.cancelButton.height / 2 - 20
+        _this.cancelButton.interactive = true;
+        _this.cancelButton.buttonMode = true;
+        // this.cancelButton.on('mouseup', this.close.bind(this)).on('touchend', this.close.bind(this));
+        // this.container.addChild(this.cancelButton)
 
 
-                // this.container.addChild(videoLabel)
-                videoLabel.pivot.x = videoLabel.width / 2;
-                videoLabel.pivot.y = videoLabel.height / 2;
+        // this.container.addChild(videoLabel)
+        videoLabel.pivot.x = videoLabel.width / 2;
+        videoLabel.pivot.y = videoLabel.height / 2;
 
-                videoLabel.y = -_this.h / 3 + 50;
-                _this.cancelButton.x = -75;
-                _this.cancelButton.y = 50;
-                _this.playButton.x = -_config2.default.width / 2 + _this.playButton.width;
-                _this.playButton.y = -_config2.default.height / 2 + _this.playButton.height;
+        videoLabel.y = -_this.h / 3 + 50;
+        _this.cancelButton.x = -75;
+        _this.cancelButton.y = 50;
+        _this.playButton.x = -_config2.default.width / 2 + _this.playButton.width;
+        _this.playButton.y = -_config2.default.height / 2 + _this.playButton.height;
 
-                var shopRect = {
-                        w: _config2.default.width * 0.85,
-                        h: _config2.default.height * 0.65
-                };
-                var pageItens = 6;
-                _this.shopList = new _ShopList2.default(shopRect, pageItens);
+        var shopRect = {
+            w: _config2.default.width * 0.85,
+            h: _config2.default.height * 0.65
+        };
+        var pageItens = 6;
+        _this.shopList = new _ShopList2.default(shopRect, pageItens);
 
-                _this.shopList.x = -shopRect.w / 2;
-                _this.shopList.y = -shopRect.h / 2;
+        _this.shopList.x = -shopRect.w / 2;
+        _this.shopList.y = -shopRect.h / 2;
 
-                _this.container.addChild(_this.shopList);
+        _this.container.addChild(_this.shopList);
 
-                var shopItens = [];
-                for (var i = 0; i < GAME_DATA.actionsData.length; i++) {
-                        var shopItem = new _ShopItem2.default({ w: shopRect.w, h: shopRect.h / pageItens });
-                        shopItem.setData(GAME_DATA.actionsData[i], 'actionsDataStatic');
-                        shopItens.push(shopItem);
-                }
-
-                for (var i = 0; i < GAME_DATA.shopData.length; i++) {
-                        var _shopItem = new _ShopItem2.default({ w: shopRect.w, h: shopRect.h / pageItens });
-                        _shopItem.setData(GAME_DATA.shopData[i], 'shopDataStatic');
-                        shopItens.push(_shopItem);
-                }
-
-                _this.shopList.addItens(shopItens);
-                // this.shopList.updateItems(GAME_DATA.shopDataStatic);
-
-                return _this;
+        var shopItens = [];
+        for (var i = 0; i < GAME_DATA.actionsData.length; i++) {
+            var shopItem = new _ShopItem2.default({
+                w: shopRect.w,
+                h: shopRect.h / pageItens
+            });
+            shopItem.setData(GAME_DATA.actionsData[i], 'actionsDataStatic');
+            shopItens.push(shopItem);
         }
 
-        (0, _createClass3.default)(ShopPopUp, [{
-                key: 'update',
-                value: function update(delta) {}
-        }, {
-                key: 'show',
-                value: function show(param) {
-                        this.toRemove = false;
-                        this.onShow.dispatch(this);
-                        this.shopList.updateItems();
+        for (var i = 0; i < GAME_DATA.shopData.length; i++) {
+            var _shopItem = new _ShopItem2.default({
+                w: shopRect.w,
+                h: shopRect.h / pageItens
+            });
+            _shopItem.setData(GAME_DATA.shopData[i], 'shopDataStatic');
+            shopItens.push(_shopItem);
+        }
 
-                        this.container.scale.set(0, 2);
-                        TweenLite.to(this.container.scale, 1, {
-                                x: 1,
-                                y: 1,
-                                ease: Elastic.easeOut
-                        });
-                }
-        }, {
-                key: 'afterHide',
-                value: function afterHide() {}
-        }, {
-                key: 'hide',
-                value: function hide() {
-                        var _this2 = this;
+        _this.shopList.addItens(shopItens);
+        _this.shopList.onItemShop.add(function () {
+            console.log(GAME_DATA.moneyData.currentCoins);
+            _this.updateMoney(GAME_DATA.moneyData.currentCoins, false);
+        });
 
-                        var dispatch = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-                        var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+        _this.coinsContainer = new PIXI.Container();
+        _this.coinSprite = new PIXI.Sprite.from(GAME_DATA.moneyData.softIcon);
+        _this.coinsContainer.addChild(_this.coinSprite);
+        _this.coinSprite.anchor.set(0, 0.5);
 
-                        console.log(callback);
-                        TweenLite.to(this.container.scale, 0.25, {
-                                x: 0,
-                                y: 1.5,
-                                ease: Back.easeIn,
-                                onComplete: function onComplete() {
-                                        if (dispatch) {
-                                                _this2.onHide.dispatch(_this2);
-                                        }
-                                        if (callback) {
-                                                callback();
-                                        }
-                                        _this2.afterHide();
-                                        _this2.toRemove = true;
-                                }
-                        });
+        _this.moneyLabel = new PIXI.Text('0', {
+            fontFamily: 'blogger_sansregular',
+            fontSize: '42px',
+            fill: 0xFFFFFF,
+            align: 'center',
+            fontWeight: '800'
+        });
+        _this.moneyLabel.pivot.y = _this.moneyLabel.height / 2;
+        _this.coinsContainer.addChild(_this.moneyLabel);
+
+        _this.coinSprite.scale.set(_config2.default.height / _this.coinSprite.height * 0.05);
+        _this.moneyLabel.scale.set(_config2.default.height / _this.moneyLabel.height * 0.065);
+        _this.moneyLabel.x = _this.coinSprite.width * 1.25;
+        // this.pointsContainer.addChild(this.coinsContainer);
+        // this.coinsContainer.pivot.x = this.coinsContainer.width / 2 - this.coinSprite.width * 0.5;
+        // this.coinsContainer.pivot.y = this.coinsContainer.height + 15;
+        _this.currentMoney = GAME_DATA.moneyData.currentCoins;
+        _this.coinsContainer.y = -_config2.default.height / 2 + _this.coinsContainer.height + 20;
+        _this.coinsContainer.x = -_this.coinsContainer.width / 2;
+
+        _this.container.addChild(_this.coinsContainer);
+
+        _this.updateMoney(GAME_DATA.moneyData.currentCoins, false);
+
+        return _this;
+    }
+
+    (0, _createClass3.default)(ShopPopUp, [{
+        key: 'update',
+        value: function update(delta) {}
+    }, {
+        key: 'show',
+        value: function show(param) {
+            this.toRemove = false;
+            this.onShow.dispatch(this);
+            this.shopList.updateItems();
+
+            this.container.scale.set(0, 2);
+            TweenLite.to(this.container.scale, 1, {
+                x: 1,
+                y: 1,
+                ease: Elastic.easeOut
+            });
+        }
+    }, {
+        key: 'afterHide',
+        value: function afterHide() {}
+    }, {
+        key: 'hide',
+        value: function hide() {
+            var _this2 = this;
+
+            var dispatch = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+            var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+            console.log(callback);
+            TweenLite.to(this.container.scale, 0.25, {
+                x: 0,
+                y: 1.5,
+                ease: Back.easeIn,
+                onComplete: function onComplete() {
+                    if (dispatch) {
+                        _this2.onHide.dispatch(_this2);
+                    }
+                    if (callback) {
+                        callback();
+                    }
+                    _this2.afterHide();
+                    _this2.toRemove = true;
                 }
-        }, {
-                key: 'confirm',
-                value: function confirm() {
-                        this.onConfirm.dispatch(this);
-                        this.hide();
+            });
+        }
+    }, {
+        key: 'updateMoney',
+        value: function updateMoney(money, force) {
+            var _this3 = this;
+
+            var delay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+
+            if (force) {
+                this.moneyLabel.text = _utils2.default.formatPointsLabel(money / MAX_NUMBER);
+                this.coinsContainer.x = -this.coinsContainer.width / 2;
+                this.currentMoney = money;
+                return;
+            }
+            if (this.currentTween) {
+                TweenLite.killTweensOf(this.currentTween);
+            }
+            var moneyObj = {
+                current: this.currentMoney,
+                target: money
+            };
+            this.currentMoney = money;
+            this.currentTween = TweenLite.to(moneyObj, 0.5, {
+                delay: delay,
+                current: money,
+                onUpdateParams: [moneyObj],
+                onUpdate: function onUpdate(moneyObj) {
+                    _this3.moneyLabel.text = _utils2.default.formatPointsLabel(moneyObj.current / MAX_NUMBER);
+                    _this3.coinsContainer.x = -_this3.coinsContainer.width / 2;
+                },
+                onComplete: function onComplete() {
+
+                    _this3.coinsContainer.x = -_this3.coinsContainer.width / 2;
                 }
-        }, {
-                key: 'close',
-                value: function close() {
-                        this.onClose.dispatch(this);
-                        this.hide();
-                }
-        }]);
-        return ShopPopUp;
+            });
+        }
+    }, {
+        key: 'confirm',
+        value: function confirm() {
+            this.onConfirm.dispatch(this);
+            this.hide();
+        }
+    }, {
+        key: 'close',
+        value: function close() {
+            this.onClose.dispatch(this);
+            this.hide();
+        }
+    }]);
+    return ShopPopUp;
 }(_StandardPop3.default);
 
 exports.default = ShopPopUp;
@@ -60435,7 +60518,7 @@ var ShopList = function (_ListScroller) {
 
         var _this = (0, _possibleConstructorReturn3.default)(this, (ShopList.__proto__ || (0, _getPrototypeOf2.default)(ShopList)).call(this, rect, itensPerPage));
 
-        _this.onAutoCollect = new _signals2.default();
+        _this.onItemShop = new _signals2.default();
         // this.onShopItem = new Signals();
         _this.container = new PIXI.Container();
 
@@ -60462,6 +60545,7 @@ var ShopList = function (_ListScroller) {
         key: 'onShopItemCallback',
         value: function onShopItemCallback(itemData, realCost) {
             GAME_DATA.buyUpgrade(itemData, realCost);
+            this.onItemShop.dispatch(itemData);
             this.updateItems();
         }
     }, {
@@ -67267,11 +67351,11 @@ var assets = [{
 	"id": "bigblur",
 	"url": "assets/image\\bigblur.png"
 }, {
-	"id": "cat_01",
-	"url": "assets/image\\cat_01.png"
-}, {
 	"id": "cat_head",
 	"url": "assets/image\\cat_head.png"
+}, {
+	"id": "cat_01",
+	"url": "assets/image\\cat_01.png"
 }, {
 	"id": "glass",
 	"url": "assets/image\\glass.png"
@@ -67282,11 +67366,11 @@ var assets = [{
 	"id": "lane_texture - Copy",
 	"url": "assets/image\\lane_texture - Copy.png"
 }, {
-	"id": "lane_texture",
-	"url": "assets/image\\lane_texture.png"
-}, {
 	"id": "lettering",
 	"url": "assets/image\\lettering.png"
+}, {
+	"id": "lane_texture",
+	"url": "assets/image\\lane_texture.png"
 }, {
 	"id": "logo",
 	"url": "assets/image\\logo.png"
@@ -67306,11 +67390,11 @@ var assets = [{
 	"id": "planet1",
 	"url": "assets/image\\planet1.png"
 }, {
-	"id": "planet2",
-	"url": "assets/image\\planet2.png"
-}, {
 	"id": "planet3",
 	"url": "assets/image\\planet3.png"
+}, {
+	"id": "planet2",
+	"url": "assets/image\\planet2.png"
 }, {
 	"id": "planet4",
 	"url": "assets/image\\planet4.png"
@@ -67318,14 +67402,26 @@ var assets = [{
 	"id": "vignette-tex",
 	"url": "assets/image\\vignette-tex.png"
 }, {
-	"id": "vignette-tex2",
-	"url": "assets/image\\vignette-tex2.png"
-}, {
 	"id": "vignette",
 	"url": "assets/image\\vignette.png"
 }, {
+	"id": "vignette-tex2",
+	"url": "assets/image\\vignette-tex2.png"
+}, {
 	"id": "spark2",
 	"url": "assets/image\\particles\\spark2.png"
+}, {
+	"id": "pickup_bubble",
+	"url": "assets/image\\pickups\\pickup_bubble.png"
+}, {
+	"id": "pickup_fish",
+	"url": "assets/image\\pickups\\pickup_fish.png"
+}, {
+	"id": "pickup_mouse",
+	"url": "assets/image\\pickups\\pickup_mouse.png"
+}, {
+	"id": "pickup_octopus",
+	"url": "assets/image\\pickups\\pickup_octopus.png"
 }, {
 	"id": "cat_orange_00000",
 	"url": "assets/image\\frames\\cat_orange_00000.png"
@@ -67336,11 +67432,11 @@ var assets = [{
 	"id": "cat_orange_00002",
 	"url": "assets/image\\frames\\cat_orange_00002.png"
 }, {
-	"id": "cat_orange_00003",
-	"url": "assets/image\\frames\\cat_orange_00003.png"
-}, {
 	"id": "cat_orange_00004",
 	"url": "assets/image\\frames\\cat_orange_00004.png"
+}, {
+	"id": "cat_orange_00003",
+	"url": "assets/image\\frames\\cat_orange_00003.png"
 }, {
 	"id": "cat_orange_00005",
 	"url": "assets/image\\frames\\cat_orange_00005.png"
@@ -67363,11 +67459,11 @@ var assets = [{
 	"id": "cat_orange_00011",
 	"url": "assets/image\\frames\\cat_orange_00011.png"
 }, {
-	"id": "cat_orange_00012",
-	"url": "assets/image\\frames\\cat_orange_00012.png"
-}, {
 	"id": "cat_orange_00013",
 	"url": "assets/image\\frames\\cat_orange_00013.png"
+}, {
+	"id": "cat_orange_00012",
+	"url": "assets/image\\frames\\cat_orange_00012.png"
 }, {
 	"id": "cat_orange_00014",
 	"url": "assets/image\\frames\\cat_orange_00014.png"
@@ -67375,11 +67471,11 @@ var assets = [{
 	"id": "cat_orange_00015",
 	"url": "assets/image\\frames\\cat_orange_00015.png"
 }, {
-	"id": "cat_orange_00016",
-	"url": "assets/image\\frames\\cat_orange_00016.png"
-}, {
 	"id": "cat_orange_00017",
 	"url": "assets/image\\frames\\cat_orange_00017.png"
+}, {
+	"id": "cat_orange_00016",
+	"url": "assets/image\\frames\\cat_orange_00016.png"
 }, {
 	"id": "cat_orange_00018",
 	"url": "assets/image\\frames\\cat_orange_00018.png"
@@ -67390,11 +67486,11 @@ var assets = [{
 	"id": "cat_pink_00000",
 	"url": "assets/image\\frames\\cat_pink_00000.png"
 }, {
-	"id": "cat_pink_00001",
-	"url": "assets/image\\frames\\cat_pink_00001.png"
-}, {
 	"id": "cat_pink_00002",
 	"url": "assets/image\\frames\\cat_pink_00002.png"
+}, {
+	"id": "cat_pink_00001",
+	"url": "assets/image\\frames\\cat_pink_00001.png"
 }, {
 	"id": "cat_pink_00003",
 	"url": "assets/image\\frames\\cat_pink_00003.png"
@@ -67402,11 +67498,11 @@ var assets = [{
 	"id": "cat_pink_00004",
 	"url": "assets/image\\frames\\cat_pink_00004.png"
 }, {
-	"id": "cat_pink_00005",
-	"url": "assets/image\\frames\\cat_pink_00005.png"
-}, {
 	"id": "cat_pink_00006",
 	"url": "assets/image\\frames\\cat_pink_00006.png"
+}, {
+	"id": "cat_pink_00005",
+	"url": "assets/image\\frames\\cat_pink_00005.png"
 }, {
 	"id": "cat_pink_00007",
 	"url": "assets/image\\frames\\cat_pink_00007.png"
@@ -67414,14 +67510,14 @@ var assets = [{
 	"id": "cat_pink_00008",
 	"url": "assets/image\\frames\\cat_pink_00008.png"
 }, {
-	"id": "cat_pink_00009",
-	"url": "assets/image\\frames\\cat_pink_00009.png"
+	"id": "cat_pink_00011",
+	"url": "assets/image\\frames\\cat_pink_00011.png"
 }, {
 	"id": "cat_pink_00010",
 	"url": "assets/image\\frames\\cat_pink_00010.png"
 }, {
-	"id": "cat_pink_00011",
-	"url": "assets/image\\frames\\cat_pink_00011.png"
+	"id": "cat_pink_00009",
+	"url": "assets/image\\frames\\cat_pink_00009.png"
 }, {
 	"id": "cat_pink_00012",
 	"url": "assets/image\\frames\\cat_pink_00012.png"
@@ -67429,11 +67525,11 @@ var assets = [{
 	"id": "cat_pink_00013",
 	"url": "assets/image\\frames\\cat_pink_00013.png"
 }, {
-	"id": "cat_pink_00014",
-	"url": "assets/image\\frames\\cat_pink_00014.png"
-}, {
 	"id": "cat_pink_00015",
 	"url": "assets/image\\frames\\cat_pink_00015.png"
+}, {
+	"id": "cat_pink_00014",
+	"url": "assets/image\\frames\\cat_pink_00014.png"
 }, {
 	"id": "cat_pink_00016",
 	"url": "assets/image\\frames\\cat_pink_00016.png"
@@ -67453,14 +67549,14 @@ var assets = [{
 	"id": "cat_turquoise_00001",
 	"url": "assets/image\\frames\\cat_turquoise_00001.png"
 }, {
+	"id": "cat_turquoise_00004",
+	"url": "assets/image\\frames\\cat_turquoise_00004.png"
+}, {
 	"id": "cat_turquoise_00002",
 	"url": "assets/image\\frames\\cat_turquoise_00002.png"
 }, {
 	"id": "cat_turquoise_00003",
 	"url": "assets/image\\frames\\cat_turquoise_00003.png"
-}, {
-	"id": "cat_turquoise_00004",
-	"url": "assets/image\\frames\\cat_turquoise_00004.png"
 }, {
 	"id": "cat_turquoise_00005",
 	"url": "assets/image\\frames\\cat_turquoise_00005.png"
@@ -67471,11 +67567,11 @@ var assets = [{
 	"id": "cat_turquoise_00007",
 	"url": "assets/image\\frames\\cat_turquoise_00007.png"
 }, {
-	"id": "cat_turquoise_00008",
-	"url": "assets/image\\frames\\cat_turquoise_00008.png"
-}, {
 	"id": "cat_turquoise_00009",
 	"url": "assets/image\\frames\\cat_turquoise_00009.png"
+}, {
+	"id": "cat_turquoise_00008",
+	"url": "assets/image\\frames\\cat_turquoise_00008.png"
 }, {
 	"id": "cat_turquoise_00010",
 	"url": "assets/image\\frames\\cat_turquoise_00010.png"
@@ -67492,14 +67588,14 @@ var assets = [{
 	"id": "cat_turquoise_00014",
 	"url": "assets/image\\frames\\cat_turquoise_00014.png"
 }, {
-	"id": "cat_turquoise_00015",
-	"url": "assets/image\\frames\\cat_turquoise_00015.png"
-}, {
 	"id": "cat_turquoise_00016",
 	"url": "assets/image\\frames\\cat_turquoise_00016.png"
 }, {
 	"id": "cat_turquoise_00017",
 	"url": "assets/image\\frames\\cat_turquoise_00017.png"
+}, {
+	"id": "cat_turquoise_00015",
+	"url": "assets/image\\frames\\cat_turquoise_00015.png"
 }, {
 	"id": "cat_turquoise_00018",
 	"url": "assets/image\\frames\\cat_turquoise_00018.png"
@@ -67510,23 +67606,23 @@ var assets = [{
 	"id": "cat_yellow_00000",
 	"url": "assets/image\\frames\\cat_yellow_00000.png"
 }, {
-	"id": "cat_yellow_00001",
-	"url": "assets/image\\frames\\cat_yellow_00001.png"
-}, {
 	"id": "cat_yellow_00002",
 	"url": "assets/image\\frames\\cat_yellow_00002.png"
+}, {
+	"id": "cat_yellow_00001",
+	"url": "assets/image\\frames\\cat_yellow_00001.png"
 }, {
 	"id": "cat_yellow_00003",
 	"url": "assets/image\\frames\\cat_yellow_00003.png"
 }, {
-	"id": "cat_yellow_00004",
-	"url": "assets/image\\frames\\cat_yellow_00004.png"
+	"id": "cat_yellow_00006",
+	"url": "assets/image\\frames\\cat_yellow_00006.png"
 }, {
 	"id": "cat_yellow_00005",
 	"url": "assets/image\\frames\\cat_yellow_00005.png"
 }, {
-	"id": "cat_yellow_00006",
-	"url": "assets/image\\frames\\cat_yellow_00006.png"
+	"id": "cat_yellow_00004",
+	"url": "assets/image\\frames\\cat_yellow_00004.png"
 }, {
 	"id": "cat_yellow_00007",
 	"url": "assets/image\\frames\\cat_yellow_00007.png"
@@ -67543,17 +67639,17 @@ var assets = [{
 	"id": "cat_yellow_00011",
 	"url": "assets/image\\frames\\cat_yellow_00011.png"
 }, {
-	"id": "cat_yellow_00012",
-	"url": "assets/image\\frames\\cat_yellow_00012.png"
-}, {
 	"id": "cat_yellow_00013",
 	"url": "assets/image\\frames\\cat_yellow_00013.png"
 }, {
-	"id": "cat_yellow_00014",
-	"url": "assets/image\\frames\\cat_yellow_00014.png"
+	"id": "cat_yellow_00012",
+	"url": "assets/image\\frames\\cat_yellow_00012.png"
 }, {
 	"id": "cat_yellow_00015",
 	"url": "assets/image\\frames\\cat_yellow_00015.png"
+}, {
+	"id": "cat_yellow_00014",
+	"url": "assets/image\\frames\\cat_yellow_00014.png"
 }, {
 	"id": "cat_yellow_00016",
 	"url": "assets/image\\frames\\cat_yellow_00016.png"
@@ -67567,32 +67663,26 @@ var assets = [{
 	"id": "cat_yellow_00019",
 	"url": "assets/image\\frames\\cat_yellow_00019.png"
 }, {
-	"id": "pickup_bubble",
-	"url": "assets/image\\pickups\\pickup_bubble.png"
-}, {
-	"id": "pickup_fish",
-	"url": "assets/image\\pickups\\pickup_fish.png"
-}, {
-	"id": "pickup_mouse",
-	"url": "assets/image\\pickups\\pickup_mouse.png"
-}, {
-	"id": "pickup_octopus",
-	"url": "assets/image\\pickups\\pickup_octopus.png"
-}, {
 	"id": "active_engine",
 	"url": "assets/image\\ui\\active_engine.png"
 }, {
 	"id": "auto_collect_action",
 	"url": "assets/image\\ui\\auto_collect_action.png"
 }, {
-	"id": "auto_confirm",
-	"url": "assets/image\\ui\\auto_confirm.png"
-}, {
 	"id": "back_button",
 	"url": "assets/image\\ui\\back_button.png"
 }, {
+	"id": "auto_confirm",
+	"url": "assets/image\\ui\\auto_confirm.png"
+}, {
 	"id": "bubble",
 	"url": "assets/image\\ui\\bubble.png"
+}, {
+	"id": "button_off",
+	"url": "assets/image\\ui\\button_off.png"
+}, {
+	"id": "button_on",
+	"url": "assets/image\\ui\\button_on.png"
 }, {
 	"id": "buy_grey",
 	"url": "assets/image\\ui\\buy_grey.png"
@@ -67603,17 +67693,17 @@ var assets = [{
 	"id": "cat_coin",
 	"url": "assets/image\\ui\\cat_coin.png"
 }, {
-	"id": "deactive_engine",
-	"url": "assets/image\\ui\\deactive_engine.png"
-}, {
 	"id": "double_points_action",
 	"url": "assets/image\\ui\\double_points_action.png"
 }, {
-	"id": "double_speed_action",
-	"url": "assets/image\\ui\\double_speed_action.png"
+	"id": "deactive_engine",
+	"url": "assets/image\\ui\\deactive_engine.png"
 }, {
 	"id": "engine_icon",
 	"url": "assets/image\\ui\\engine_icon.png"
+}, {
+	"id": "double_speed_action",
+	"url": "assets/image\\ui\\double_speed_action.png"
 }, {
 	"id": "game_button_base",
 	"url": "assets/image\\ui\\game_button_base.png"
@@ -67627,23 +67717,38 @@ var assets = [{
 	"id": "game_button_off",
 	"url": "assets/image\\ui\\game_button_off.png"
 }, {
-	"id": "game_button_on",
-	"url": "assets/image\\ui\\game_button_on.png"
-}, {
 	"id": "goodboy",
 	"url": "assets/image\\ui\\goodboy.png"
+}, {
+	"id": "game_button_on",
+	"url": "assets/image\\ui\\game_button_on.png"
 }, {
 	"id": "goodboy_logo",
 	"url": "assets/image\\ui\\goodboy_logo.png"
 }, {
+	"id": "icon_back",
+	"url": "assets/image\\ui\\icon_back.png"
+}, {
 	"id": "icon_border",
 	"url": "assets/image\\ui\\icon_border.png"
+}, {
+	"id": "icon_close",
+	"url": "assets/image\\ui\\icon_close.png"
+}, {
+	"id": "icon_confirm",
+	"url": "assets/image\\ui\\icon_confirm.png"
 }, {
 	"id": "icon_lives",
 	"url": "assets/image\\ui\\icon_lives.png"
 }, {
 	"id": "icon_paw",
 	"url": "assets/image\\ui\\icon_paw.png"
+}, {
+	"id": "icon_play",
+	"url": "assets/image\\ui\\icon_play.png"
+}, {
+	"id": "icon_shop",
+	"url": "assets/image\\ui\\icon_shop.png"
 }, {
 	"id": "info",
 	"url": "assets/image\\ui\\info.png"
@@ -67666,6 +67771,9 @@ var assets = [{
 	"id": "results_lock",
 	"url": "assets/image\\ui\\results_lock.png"
 }, {
+	"id": "results_locked_cat",
+	"url": "assets/image\\ui\\results_locked_cat.png"
+}, {
 	"id": "results_newcat_glow",
 	"url": "assets/image\\ui\\results_newcat_glow.png"
 }, {
@@ -67680,9 +67788,6 @@ var assets = [{
 }, {
 	"id": "results_orange_cat",
 	"url": "assets/image\\ui\\results_orange_cat.png"
-}, {
-	"id": "results_locked_cat",
-	"url": "assets/image\\ui\\results_locked_cat.png"
 }, {
 	"id": "results_pink_cat",
 	"url": "assets/image\\ui\\results_pink_cat.png"
@@ -67711,6 +67816,9 @@ var assets = [{
 	"id": "spaceship",
 	"url": "assets/image\\ui\\spaceship.png"
 }, {
+	"id": "text_auto_rescue",
+	"url": "assets/image\\ui\\text_auto_rescue.png"
+}, {
 	"id": "text_catnip_frenzy",
 	"url": "assets/image\\ui\\text_catnip_frenzy.png"
 }, {
@@ -67723,14 +67831,29 @@ var assets = [{
 	"id": "token_quant",
 	"url": "assets/image\\ui\\token_quant.png"
 }, {
+	"id": "trophy",
+	"url": "assets/image\\ui\\trophy.png"
+}, {
+	"id": "treasure_chest",
+	"url": "assets/image\\ui\\treasure_chest.png"
+}, {
 	"id": "ui_bg",
 	"url": "assets/image\\ui\\ui_bg.png"
 }, {
 	"id": "video_icon",
 	"url": "assets/image\\ui\\video_icon.png"
 }, {
-	"id": "text_auto_rescue",
-	"url": "assets/image\\ui\\text_auto_rescue.png"
+	"id": "white_arm",
+	"url": "assets/image\\cats\\white_cat\\white_arm.png"
+}, {
+	"id": "white_belly",
+	"url": "assets/image\\cats\\white_cat\\white_belly.png"
+}, {
+	"id": "white_head",
+	"url": "assets/image\\cats\\white_cat\\white_head.png"
+}, {
+	"id": "white_leg",
+	"url": "assets/image\\cats\\white_cat\\white_leg.png"
 }, {
 	"id": "cat_orange_arm",
 	"url": "assets/image\\cats\\orange_cat\\cat_orange_arm.png"
@@ -67747,26 +67870,14 @@ var assets = [{
 	"id": "cat_pink_arm",
 	"url": "assets/image\\cats\\pink_cat\\cat_pink_arm.png"
 }, {
-	"id": "cat_pink_belly",
-	"url": "assets/image\\cats\\pink_cat\\cat_pink_belly.png"
-}, {
 	"id": "cat_pink_head",
 	"url": "assets/image\\cats\\pink_cat\\cat_pink_head.png"
 }, {
+	"id": "cat_pink_belly",
+	"url": "assets/image\\cats\\pink_cat\\cat_pink_belly.png"
+}, {
 	"id": "cat_pink_leg",
 	"url": "assets/image\\cats\\pink_cat\\cat_pink_leg.png"
-}, {
-	"id": "white_arm",
-	"url": "assets/image\\cats\\white_cat\\white_arm.png"
-}, {
-	"id": "white_belly",
-	"url": "assets/image\\cats\\white_cat\\white_belly.png"
-}, {
-	"id": "white_head",
-	"url": "assets/image\\cats\\white_cat\\white_head.png"
-}, {
-	"id": "white_leg",
-	"url": "assets/image\\cats\\white_cat\\white_leg.png"
 }];
 
 exports.default = assets;

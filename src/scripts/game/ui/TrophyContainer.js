@@ -18,20 +18,23 @@ export default class TrophyContainer extends PIXI.Container
 
         let trophyIcon = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
         trophyIcon.anchor.set(0.5, 0.5);
-        trophyIcon.scale.set(1);
-        trophyIcon.y = -this.trophyBubble.height * 0.15;
+        trophyIcon.scale.set( this.trophyBubble.height / trophyIcon.height * 0.3);
+        trophyIcon.y = -this.trophyBubble.height * 0.05;
+        trophyIcon.x = -this.trophyBubble.height * 0.15;
 
         this.quantTrophy = new PIXI.Text('0',
         {
             fontFamily: 'blogger_sansregular',
-            fontSize: '42px',
+            fontSize: '54px',
             fill: 0xFFFFFF,
-            align: 'center',
+            align: 'left',
             fontWeight: '800'
         });
         // trophyIcon.x = -this.trophyBubble.width * 0.15;
         this.quantTrophy.pivot.x = this.quantTrophy.width / 2;
-        this.quantTrophy.y = -15;
+        this.quantTrophy.pivot.y = this.quantTrophy.height / 2;
+        this.quantTrophy.y = trophyIcon.y+5;
+        this.quantTrophy.x = 15;
         // this.currentPointsLabel.pivot.y = this.currentPointsLabel.height / 2;
 
         let plusIcon = new PIXI.Sprite.from('results_arrow');
@@ -69,7 +72,7 @@ export default class TrophyContainer extends PIXI.Container
         // console.log(data.bonus);
         this.bonusTrophy.text = data.bonus;
         this.quantTrophy.text = data.quant;
-        this.quantTrophy.pivot.x = this.quantTrophy.width / 2;
+        // this.quantTrophy.pivot.x = this.quantTrophy.width / 2;
     }
     update(delta)
     {

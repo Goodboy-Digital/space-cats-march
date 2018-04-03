@@ -54,8 +54,9 @@ export default class SpaceShipContainer extends PIXI.Container
 
         let fishIcon = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
         fishIcon.anchor.set(0.5, 0.5);
-        fishIcon.x = fishIcon.width + 20
         fishIcon.y = shipInfoSprite.height / 2
+        fishIcon.scale.set(shipInfoSprite.height / fishIcon.height * 0.5)
+        fishIcon.x = fishIcon.width + 20
         shipInfoSprite.addChild(fishIcon);
 
 
