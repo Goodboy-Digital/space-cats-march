@@ -15,6 +15,7 @@ export default class CatItem extends UIList {
         this.onAutoCollect = new Signals();
         this.onActiveCat = new Signals();
         this.catData = catData;
+        this.staticData = GAME_DATA.getStaticCatData(catData.catID);
         
         this.thumbH = 0;
         this.background = new PIXI.Graphics().beginFill(0xFFFFFF).drawRect(0, 0, rect.w, rect.h);
@@ -62,7 +63,7 @@ export default class CatItem extends UIList {
         this.container.addChild(this.plusIcon);
         // this.plusIcon.scale.set(this.thumbH / this.plusIcon.height * 0.25)
 
-
+        // console.log(this.catData);
         this.bonusLabel = new PIXI.Text(this.catData.collectedMultiplier.toFixed(3) + '%', {
             fontFamily: 'blogger_sansregular',
             fontSize: '14px',
@@ -99,7 +100,7 @@ export default class CatItem extends UIList {
         this.container.addChild(this.activeButtonContainer)
 
 
-        this.autocollect = new AutoCollectButton(this.catData)
+        this.autocollect = new AutoCollectButton(this.staticData)
         this.autocollect.scaleContent = false;
         this.autocollect.fitWidth = 1;
         this.autocollect.align = 1;
@@ -124,17 +125,18 @@ export default class CatItem extends UIList {
     }
     updateItem(catData) {
         this.catData = catData;
+        this.staticData = GAME_DATA.getStaticCatData(catData.catID);
         let quant = utils.formatPointsLabel(this.catData.collected / MAX_NUMBER);
 
         this.totalLabel.text = quant == 0 ? '' : quant
         this.bonusLabel.text = utils.cleanString(this.catData.collectedMultiplier.toFixed(1)) + '%';
         this.backButton.tint = 0xFFFFFF;
 
-        if (this.catData.require <= GAME_DATA.moneyData.currentCoins && !this.catData.active) {
+        if (this.staticData.cost <= GAME_DATA.moneyData.currentCoins && !this.catData.active) {
         // if (this.catData.canBeActive && !this.catData.active) {
             this.thumb.lock();
             this.totalLabel.text = ''
-            this.catNameLabel.text = utils.formatPointsLabel(this.catData.require / MAX_NUMBER) //('active').toUpperCase();
+            this.catNameLabel.text = utils.formatPointsLabel(this.staticData.cost / MAX_NUMBER) //('active').toUpperCase();
             this.plusIcon.texture = PIXI.Texture.from('results_lock');
             this.autocollect.visible = false;
             this.coinIcon.visible = true;
@@ -154,8 +156,8 @@ export default class CatItem extends UIList {
             this.thumb.tint = 0xFFFFFF;
             this.thumb.unlock();
             this.coinIcon.visible = false;
-            this.thumb.updateCatTextures(this.catData.catSrc); //.texture = PIXI.Texture.from(this.catData.catThumb);
-            this.catNameLabel.text = this.catData.catName.toUpperCase();
+            this.thumb.updateCatTextures(this.staticData.catSrc); //.texture = PIXI.Texture.from(this.catData.catThumb);
+            this.catNameLabel.text = this.staticData.catName.toUpperCase();
             this.plusIcon.texture = PIXI.Texture.from('results_arrow');
             this.catNameLabel.style.fill = 0xFFFFFF;
             this.bonusLabel.visible = true;
@@ -165,7 +167,7 @@ export default class CatItem extends UIList {
             this.backButton.interactive = false;
             this.backButton.buttonMode = false;
             this.autocollect.visible = true;
-            if (this.catData.collected >= this.catData.amountToAutoCollect) {
+            if (this.catData.collected >= this.staticData.amountToAutoCollect) {
 
             } else {
                 // this.autocollect.visible = false;
@@ -176,10 +178,10 @@ export default class CatItem extends UIList {
             } else {
                 if (GAME_DATA.isPossibleBuyAuto(this.catData.catID)) {
 
-                    this.autocollect.reset(this.catData);
+                    this.autocollect.reset(this.staticData);
                 } else {
 
-                    this.autocollect.deactive(this.catData);
+                    this.autocollect.deactive(this.staticData);
                 }
                 // if()
             }
@@ -187,10 +189,11 @@ export default class CatItem extends UIList {
         } else {
             // this.backButton.off('mouseup', this.activeCat.bind(this)).off('touchend', this.activeCat.bind(this));
             // this.thumb.texture = PIXI.Texture.from('results_locked_cat');
+            // console.log(this.staticData);
             this.coinIcon.visible = false;
             this.thumb.lock();
             this.totalLabel.text = ''
-            this.catNameLabel.text = ('unlock at\n' + utils.formatPointsLabel(this.catData.require / MAX_NUMBER)).toUpperCase();
+            this.catNameLabel.text = ('unlock at\n' + utils.formatPointsLabel(this.staticData.cost / MAX_NUMBER)).toUpperCase();
             this.plusIcon.texture = PIXI.Texture.from('results_lock');
             this.autocollect.visible = false;
             this.bonusLabel.visible = false;
@@ -222,7 +225,7 @@ export default class CatItem extends UIList {
             this.coinIcon.x = this.catNameLabel.x - this.catNameLabel.width / 2 - this.coinIcon.width / 2 - 5;
         }
 
-        this.autocollect.updateData(catData);
+        this.autocollect.updateData(this.staticData);
 
         // this.updateHorizontalList();
         this.updateHorizontalList();

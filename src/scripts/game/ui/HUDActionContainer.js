@@ -79,6 +79,9 @@ export default class HUDActionContainer extends PIXI.Container {
         this.backButton.texture = PIXI.Texture.from('game_button_base_borderless');
         this.acting = false;
         this.backButton.tint = 0xFFFFFF
+        this.coolDownLabel.text = '';
+        this.sprite.tint = 0xFFFFFF;
+        this.cooldown = 0;
         if (this.actionData) {
             this.counter.update(0, true);
         }

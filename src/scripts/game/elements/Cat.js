@@ -51,8 +51,9 @@ export default class Cat extends PIXI.Container
         this.lane = lane;
         this.catData = catData;
         this.catID = catData.catID;
+        this.catDataStatic = GAME_DATA.getStaticCatData(this.catID);
         // this.spriteList = CAT_LIST[catData.catID] //catData.animationList; //getPossibleCat();//CAT_LIST[this.lane]
-        this.animation.updateCatTextures(catData.catSrc)
+        this.animation.updateCatTextures(this.catDataStatic.catSrc)
         this.sin = 0;
         this.onDie.removeAll();
         this.finishTimer = -1;

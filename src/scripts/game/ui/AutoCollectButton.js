@@ -19,7 +19,7 @@ export default class AutoCollectButton extends PIXI.Container
         this.h = this.backButton.height;
         // this.background.alpha = 0
         // this.container.addChild(this.background)
-        this.catData = catData;
+        this.catDataStatic = catData;
 
 
 
@@ -61,7 +61,7 @@ export default class AutoCollectButton extends PIXI.Container
     }
     updateData(catData)
     {
-        this.catData = catData;
+        this.catDataStatic = catData;
     }
     onClick()
     {
@@ -89,7 +89,7 @@ export default class AutoCollectButton extends PIXI.Container
         this.sprite.texture = PIXI.Texture.from('deactive_engine');
         this.sprite.scale.set(this.defaultSpriteScale)
         this.sprite.y = this.h / 2;
-        this.priceLabel.text = utils.formatPointsLabel(this.catData.autoCollectPrice / MAX_NUMBER);
+        this.priceLabel.text = utils.formatPointsLabel(this.catDataStatic.autoCollectPrice / MAX_NUMBER);
         this.spriteTrophy.x = this.w - this.spriteTrophy.width / 2 + 5
         this.priceLabel.x = this.spriteTrophy.x - this.spriteTrophy.width - this.priceLabel.width - 5
         this.priceLabel.y = this.h / 2 - this.priceLabel.height / 2
@@ -106,7 +106,7 @@ export default class AutoCollectButton extends PIXI.Container
         this.sprite.texture = PIXI.Texture.from('engine_icon');
         this.sprite.scale.set(this.defaultSpriteScale)
         this.sprite.y = this.h / 2;
-        this.priceLabel.text = utils.formatPointsLabel(this.catData.autoCollectPrice / MAX_NUMBER);
+        this.priceLabel.text = utils.formatPointsLabel(this.catDataStatic.autoCollectPrice / MAX_NUMBER);
         this.spriteTrophy.x = this.w - this.spriteTrophy.width / 2 + 5
         this.priceLabel.x = this.spriteTrophy.x - this.spriteTrophy.width - this.priceLabel.width - 5
         this.priceLabel.y = this.h / 2 - this.priceLabel.height / 2

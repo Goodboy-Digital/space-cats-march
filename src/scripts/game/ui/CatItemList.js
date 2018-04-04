@@ -134,10 +134,11 @@ export default class CatItemList extends PIXI.Container
         this.enableDrag = false;
         this.dragging = false;
         this.goingDown = 0;
-        this.lastItemClicked = cat;
+        this.lastItemClicked = cat
+        let staticData = GAME_DATA.getStaticCatData(cat.catData.catID);
         this.spaceShipInfoContainer.y = this.catListContainer.y + this.lastItemClicked.y;
         this.spaceShipInfoContainer.visible = true;
-        this.spaceShipInfoLabel.text = utils.formatPointsLabel(this.lastItemClicked.catData.autoCollectPrice / MAX_NUMBER);
+        this.spaceShipInfoLabel.text = utils.formatPointsLabel(staticData.autoCollectPrice / MAX_NUMBER);
         // this.container.alpha = 0.75;
         this.spaceShipInfoContainer.alpha = 0;
         TweenLite.to(this.spaceShipInfoContainer, 0.5,

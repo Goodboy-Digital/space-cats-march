@@ -1,161 +1,63 @@
+import utils  from '../../utils';
+import shopDataStatic  from './ShopDataStatic';
+import actionDataStatic  from './ActionDataStatic';
+import catDataStatic  from './CatDataStatic';
 export default class GameData {
     constructor() {
 
         this.catsData = [];
 
-        this.actionsDataStatic = []
-        this.actionsDataStatic.push({
-            id: 0,
-            shopType: 'soft',
-            type: 'double_points',
-            var: 'actionMultiplier',
-            shopDesc: 'actionSpeed',
-            default: 1,
-            value: 2,
-            cost: 1,
-            costMax: 1000,
-            icon: 'double_points_action',
-            time: 15,
-            timeMax: 60,
-            level: 1,
-            levelMax: 10,
-            active: true,
-            waitTime: 300,
-            waitTimeMin: 30
-        });
-        this.actionsDataStatic.push({
-            id: 1,
-            shopType: 'soft',
-            type: 'double_speed',
-            var: 'actionSpeed',
-            shopDesc: 'actionSpeed',
-            default: 1,
-            value: 2,
-            cost: 1,
-            costMax: 100000,
-            icon: 'double_speed_action',
-            time: 15,
-            timeMax: 60,
-            level: 1,
-            levelMax: 10,
-            active: true,
-            waitTime: 200,
-            waitTimeMin: 20
-        });
-        this.actionsDataStatic.push({
-            id: 2,
-            shopType: 'soft',
-            type: 'auto_collect',
-            var: 'actionAutoCollect',
-            shopDesc: 'actionSpeed',
-            default: false,
-            value: true,
-            cost: 1,
-            costMax: 1000000,
-            icon: 'auto_collect_action',
-            time: 15,
-            timeMax: 60,
-            level: 1,
-            levelMax: 10,
-            active: true,
-            waitTime: 100,
-            waitTimeMin: 10
-        });
+
+        this.catDataStatic = catDataStatic;
+
+        this.shopDataStatic = shopDataStatic;
+
+        this.actionsDataStatic = actionDataStatic;
+        
 
         this.actionsData = []
         this.actionsData.push({
             id: 0,
-            level: 1,
+            level: 0,
             active: true,
             staticData: 'actionsDataStatic',
             dataType: 'actionsData',
         });
         this.actionsData.push({
             id: 1,
-            level: 1,
+            level: 0,
             active: true,
             staticData: 'actionsDataStatic',
             dataType: 'actionsData',
         });
         this.actionsData.push({
             id: 2,
-            level: 1,
+            level: 0,
             active: true,
             staticData: 'actionsDataStatic',
             dataType: 'actionsData',
         });
 
-        this.shopDataStatic = []
-        this.shopDataStatic.push({
-            id: 0,
-            shopType: 'hard',
-            type: 'double_points',
-            var: 'actionMultiplier',
-            default: 1,
-            value: 2,
-            cost: 1,
-            costMax: 1000,
-            icon: 'double_points_action',
-            shopDesc: 'actionSpeed',
-            time: 5,
-            level: 1,
-            levelMax: 10,
-            active: true,
-            waitTime: 10
-        });
-        this.shopDataStatic.push({
-            id: 1,
-            shopType: 'hard',
-            type: 'double_speed',
-            var: 'actionSpeed',
-            default: 1,
-            value: 2,
-            cost: 1,
-            costMax: 10000,
-            icon: 'double_speed_action',
-            shopDesc: 'actionSpeed',
-            time: 15,
-            level: 1,
-            levelMax: 10,
-            active: true,
-            waitTime: 10
-        });
-        this.shopDataStatic.push({
-            id: 2,
-            shopType: 'video',
-            type: 'auto_collect',
-            var: 'actionAutoCollect',
-            default: false,
-            value: true,
-            cost: 1,
-            costMax: 10000,
-            icon: 'auto_collect_action',
-            shopDesc: 'actionSpeed',
-            time: 15,
-            level: 1,
-            levelMax: 10,
-            active: true,
-            waitTime: 10
-        });
+
 
         this.shopData = []
         this.shopData.push({
             id: 0,
-            level: 1,
+            level: 0,
             active: true,
             staticData: 'shopDataStatic',
             dataType: 'shopData',
         });
         this.shopData.push({
             id: 1,
-            level: 1,
+            level: 0,
             active: true,
             staticData: 'shopDataStatic',
             dataType: 'shopData',
         });
         this.shopData.push({
             id: 2,
-            level: 1,
+            level: 0,
             active: true,
             staticData: 'shopDataStatic',
             dataType: 'shopData',
@@ -197,7 +99,7 @@ export default class GameData {
             tokens: 1,
         }
 
-        this.version = '0.0.0.10';
+        this.version = '0.0.0.13';
 
         this.resetCatData();
     }
@@ -208,17 +110,9 @@ export default class GameData {
             collected: 0,
             active: true,
             canBeActive: true,
-            isAuto: false,
-            autoCollectPrice: 100,
-            amountToAutoCollect: 100,
+            isAuto: false,            
             pointsMultiplier: 1,
-            collectedMultiplier: 0,
-            maxCollectedMultiplier: 10,
-            limitCatsToMultiply: 1500,
-            catSrc: 'cat_orange_',
-            catThumb: 'results_orange_cat',
-            catName: 'pancakes',
-            require: null
+            collectedMultiplier: 0,            
         })
 
         this.catsData.push({
@@ -226,17 +120,9 @@ export default class GameData {
             collected: 0,
             active: false,
             canBeActive: false,
-            isAuto: false,
-            autoCollectPrice: 1000,
-            amountToAutoCollect: 200,
+            isAuto: false,            
             pointsMultiplier: 3,
-            collectedMultiplier: 0,
-            maxCollectedMultiplier: 15,
-            limitCatsToMultiply: 1500,
-            catSrc: 'cat_pink_',
-            catThumb: 'results_pink_cat',
-            catName: 'mr.\npotatoes',
-            require: 100
+            collectedMultiplier: 0,            
         })
 
         this.catsData.push({
@@ -244,17 +130,9 @@ export default class GameData {
             collected: 0,
             active: false,
             canBeActive: false,
-            isAuto: false,
-            autoCollectPrice: 10000,
-            amountToAutoCollect: 300,
+            isAuto: false,            
             pointsMultiplier: 5,
-            collectedMultiplier: 0,
-            maxCollectedMultiplier: 20,
-            limitCatsToMultiply: 1500,
-            catSrc: 'cat_orange_',
-            catThumb: 'results_turquoise_cat',
-            catName: 'lucifurr',
-            require: 5000
+            collectedMultiplier: 0,            
         })
 
         this.catsData.push({
@@ -262,119 +140,63 @@ export default class GameData {
             collected: 0,
             active: false,
             canBeActive: false,
-            isAuto: false,
-            autoCollectPrice: 100000,
-            amountToAutoCollect: 400,
+            isAuto: false,            
             pointsMultiplier: 10,
-            collectedMultiplier: 0,
-            maxCollectedMultiplier: 30,
-            limitCatsToMultiply: 1500,
-            catSrc: 'cat_pink_',
-            catThumb: 'results_yellow_cat',
-            catName: 'fluffy',
-            require: 500000
+            collectedMultiplier: 0,            
         })
         this.catsData.push({
             catID: 4,
             collected: 0,
             active: false,
             canBeActive: false,
-            isAuto: false,
-            autoCollectPrice: 100000,
-            amountToAutoCollect: 400,
+            isAuto: false,            
             pointsMultiplier: 10,
-            collectedMultiplier: 0,
-            maxCollectedMultiplier: 30,
-            limitCatsToMultiply: 1500,
-            catSrc: 'cat_pink_',
-            catThumb: 'results_yellow_cat',
-            catName: 'joe',
-            require: 5000000
+            collectedMultiplier: 0,            
         })
         this.catsData.push({
             catID: 5,
             collected: 0,
             active: false,
             canBeActive: false,
-            isAuto: false,
-            autoCollectPrice: 100000,
-            amountToAutoCollect: 400,
+            isAuto: false,            
             pointsMultiplier: 10,
-            collectedMultiplier: 0,
-            maxCollectedMultiplier: 30,
-            limitCatsToMultiply: 1500,
-            catSrc: 'cat_pink_',
-            catThumb: 'results_yellow_cat',
-            catName: 'clermont',
-            require: 50000000
+            collectedMultiplier: 0,            
         })
         this.catsData.push({
             catID: 6,
             collected: 0,
             active: false,
             canBeActive: false,
-            isAuto: false,
-            autoCollectPrice: 100000,
-            amountToAutoCollect: 400,
+            isAuto: false,            
             pointsMultiplier: 10,
-            collectedMultiplier: 0,
-            maxCollectedMultiplier: 30,
-            limitCatsToMultiply: 1500,
-            catSrc: 'cat_pink_',
-            catThumb: 'results_yellow_cat',
-            catName: 'julien',
-            require: 500000000
+            collectedMultiplier: 0,            
         })
         this.catsData.push({
             catID: 7,
             collected: 0,
             active: false,
             canBeActive: false,
-            isAuto: false,
-            autoCollectPrice: 100000,
-            amountToAutoCollect: 400,
+            isAuto: false,            
             pointsMultiplier: 10,
-            collectedMultiplier: 0,
-            maxCollectedMultiplier: 30,
-            limitCatsToMultiply: 1500,
-            catSrc: 'cat_pink_',
-            catThumb: 'results_yellow_cat',
-            catName: 'mat',
-            require: 750000000
+            collectedMultiplier: 0,            
         })
         this.catsData.push({
             catID: 8,
             collected: 0,
             active: false,
             canBeActive: false,
-            isAuto: false,
-            autoCollectPrice: 100000,
-            amountToAutoCollect: 400,
+            isAuto: false,            
             pointsMultiplier: 10,
-            collectedMultiplier: 0,
-            maxCollectedMultiplier: 30,
-            limitCatsToMultiply: 1500,
-            catSrc: 'cat_pink_',
-            catThumb: 'results_yellow_cat',
-            catName: 'john',
-            require: 1000000000
+            collectedMultiplier: 0,            
         })
         this.catsData.push({
             catID: 9,
             collected: 0,
             active: false,
             canBeActive: false,
-            isAuto: false,
-            autoCollectPrice: 100000,
-            amountToAutoCollect: 400,
+            isAuto: false,            
             pointsMultiplier: 10,
-            collectedMultiplier: 0,
-            maxCollectedMultiplier: 30,
-            limitCatsToMultiply: 1500,
-            catSrc: 'cat_pink_',
-            catThumb: 'results_yellow_cat',
-            catName: 'james',
-            require: 300000000000
+            collectedMultiplier: 0,            
         })
 
         this.catsData.push({
@@ -382,17 +204,9 @@ export default class GameData {
             collected: 0,
             active: false,
             canBeActive: false,
-            isAuto: false,
-            autoCollectPrice: 100000,
-            amountToAutoCollect: 400,
+            isAuto: false,            
             pointsMultiplier: 10,
-            collectedMultiplier: 0,
-            maxCollectedMultiplier: 30,
-            limitCatsToMultiply: 1500,
-            catSrc: 'cat_pink_',
-            catThumb: 'results_yellow_cat',
-            catName: 'kim',
-            require: 800000000000
+            collectedMultiplier: 0,            
         })
 
         this.catsData.push({
@@ -400,18 +214,17 @@ export default class GameData {
             collected: 0,
             active: false,
             canBeActive: false,
-            isAuto: false,
-            autoCollectPrice: 100000,
-            amountToAutoCollect: 400,
+            isAuto: false,            
             pointsMultiplier: 10,
-            collectedMultiplier: 0,
-            maxCollectedMultiplier: 30,
-            limitCatsToMultiply: 1500,
-            catSrc: 'cat_pink_',
-            catThumb: 'results_yellow_cat',
-            catName: 'oswaldo',
-            require: 2500000000000
+            collectedMultiplier: 0,            
         })
+    }
+    getStaticCatData(id) {
+        for (var i = 0; i < this.catDataStatic.length; i++) {
+            if(this.catDataStatic[i].catID == id){
+                return this.catDataStatic[i];
+            }
+        }
     }
     canBuyIt(data) {
         let currType = this[data.staticData][data.id].shopType
@@ -448,9 +261,12 @@ export default class GameData {
             }
         }
         let level = data.level;
-        let shopCoast = shopData.costMax / shopData.levelMax * level;// + shopData.cost;
 
-        // console.log(shopCoast, shopData);
+        console.log(level, shopData.levelMax, shopData.cost, shopData.costMax);
+        let easeCost = utils.easeInExpo(level / shopData.levelMax, shopData.cost, shopData.costMax, 1)
+        // let easeCost = utils.easeOutCubic(level / shopData.levelMax, shopData.cost, shopData.costMax, 1)
+        console.log(easeCost);
+        let shopCoast = easeCost
         return {
             cost: shopCoast
         }
@@ -495,7 +311,7 @@ export default class GameData {
         STORAGE.storeObject('space-cats-game-data', this.getObjectData());
     }
     isPossibleBuyAuto(id) {
-        let cat = this.catsData[id];
+        let cat = this.getStaticCatData(this.catsData[id].catID);
         if (cat.autoCollectPrice <= this.trophyData.collected) {
             return true
         }
@@ -617,8 +433,8 @@ export default class GameData {
         this.totalCatsAllowed = 1;
         let temp = [true]
         let hasNew = false;
-        for (var i = 1; i < this.catsData.length; i++) {
-            let require = this.catsData[i].require;
+        for (var i = 1; i < this.catDataStatic.length; i++) {
+            let require = this.catDataStatic[i].cost;
             // let prevCat = this.catsData[require.catID]
             // console.log('this car require ', require.quant, points);
             if (require <= this.moneyData.currentCoins) //prevCat.collected)
@@ -654,12 +470,13 @@ export default class GameData {
     }
     enableAutoCollect(id) {
         let data = this.catsData[id];
+        let staticData = this.getStaticCatData(data.catID);
         // console.log(data);
-        if (this.trophyData.collected < data.autoCollectPrice) {
+        if (this.trophyData.collected < staticData.autoCollectPrice) {
             console.log('something wrong');
             return
         }
-        this.updateTrophy(-data.autoCollectPrice)
+        this.updateTrophy(-staticData.autoCollectPrice)
             // this.trophyData.collected -= data.autoCollectPrice
         this.catsData[id].isAuto = true;
         STORAGE.storeObject('space-cats-game-data', this.getObjectData());
@@ -667,9 +484,11 @@ export default class GameData {
     addCats(list) {
         for (var i = 0; i < list.length; i++) {
             this.catsData[i].collected += list[i];
+            let staticData = this.getStaticCatData(this.catsData[i].catID);
 
-            let mult = this.catsData[i].collected / this.catsData[i].limitCatsToMultiply * this.catsData[i].maxCollectedMultiplier;
+            let mult = this.catsData[i].collected / staticData.limitCatsToMultiply * staticData.maxCollectedMultiplier;
             this.catsData[i].collectedMultiplier = mult;
+            console.log(mult);
 
         }
         STORAGE.storeObject('space-cats-game-data', this.getObjectData());

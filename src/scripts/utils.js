@@ -43,7 +43,7 @@ export default
             tempPoints = this.cleanString(tempPoints)
             return tempPoints
         }
-        
+
         if (tempPoints >= 1000000000000000000000000000)
         {
             tempPoints /= 1000000000000000000000000000;
@@ -127,7 +127,8 @@ export default
     },
     cleanString(str)
     {
-        if(str.toString().indexOf('.') == -1){
+        if (str.toString().indexOf('.') == -1)
+        {
             return str
         }
         for (var i = str.length - 1; i >= 0; i--)
@@ -507,69 +508,20 @@ export default
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     },
 
-    linear(t)
+    linearTween(t, b, c, d)
     {
-        return t
-    },
-    // accelerating from zero velocity
-    easeInQuad(t)
-    {
-        return t * t
-    },
-    // decelerating to zero velocity
-    easeOutQuad(t)
-    {
-        return t * (2 - t)
-    },
-    // acceleration until halfway, then deceleration
-    easeInOutQuad(t)
-    {
-        return t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t
-    },
-    // accelerating from zero velocity 
-    easeInCubic(t)
-    {
-        return t * t * t
+        return c * t / d + b;
     },
     // decelerating to zero velocity 
-    easeOutCubic(t)
+    easeOutCubic(t, b, c, d)
     {
-        return (--t) * t * t + 1
+        t /= d;
+        t--;
+        return c * (t * t * t + 1) + b;
     },
-    // acceleration until halfway, then deceleration 
-    easeInOutCubic(t)
+    easeInExpo(t, b, c, d)
     {
-        return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
+        return c * Math.pow(2, 10 * (t / d - 1)) + b;
     },
-    // accelerating from zero velocity 
-    easeInQuart(t)
-    {
-        return t * t * t * t
-    },
-    // decelerating to zero velocity 
-    easeOutQuart(t)
-    {
-        return 1 - (--t) * t * t * t
-    },
-    // acceleration until halfway, then deceleration
-    easeInOutQuart(t)
-    {
-        return t < .5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t
-    },
-    // accelerating from zero velocity
-    easeInQuint(t)
-    {
-        return t * t * t * t * t
-    },
-    // decelerating to zero velocity
-    easeOutQuint(t)
-    {
-        return 1 + (--t) * t * t * t * t
-    },
-    // acceleration until halfway, then deceleration 
-    easeInOutQuint(t)
-    {
-        return t < .5 ? 16 * t * t * t * t * t : 1 + 16 * (--t) * t * t * t * t
-    }
 
 }

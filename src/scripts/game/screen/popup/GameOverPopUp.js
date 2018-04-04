@@ -172,12 +172,8 @@ export default class GameOverPopUp extends StandardPop {
         GAME_DATA.activeCat(data);
         this.catItemList.updateItemActive(data.catID);
         this.updateCatsQuant();
-        console.log(data);
-        console.log(GAME_DATA.moneyData.currentCoins, data.require);
-        console.log(GAME_DATA.moneyData.currentCoins, data.require);
-        console.log(GAME_DATA.moneyData.currentCoins, data.require);
-        console.log(GAME_DATA.moneyData.currentCoins, data.require);
-        GAME_DATA.moneyData.currentCoins -= data.require;
+        let staticData = GAME_DATA.getStaticCatData(data.catID)
+        GAME_DATA.moneyData.currentCoins -= staticData.cost;
         this.pointsContainer.updateMoney(GAME_DATA.moneyData.currentCoins)
     }
     onAutoCollect(data) {
