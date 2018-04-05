@@ -54337,7 +54337,7 @@ var GameData = function () {
             tokens: 1
         };
 
-        this.version = '0.0.0.13';
+        this.version = '0.0.0.14';
 
         this.resetCatData();
     }
