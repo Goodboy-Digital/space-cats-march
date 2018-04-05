@@ -88,9 +88,20 @@ export default class ShopButton extends PIXI.Container {
         this.priceLabel.x = this.backButton.width / 2
         this.priceLabel.y = this.h / 2 - this.priceLabel.height / 2
     }
+    deactiveMax() {
+        this.enabled = false;
+        this.deactived = true;
+        this.backButton.tint = 0xFFFFFF;
+        this.priceLabel.style.fill = 0xe5519b;
+        this.priceLabel.text = 'MAX'
+        this.priceLabel.x = this.backButton.width / 2 - this.priceLabel.width / 2;
+        this.backButton.alpha = 1;
+        this.sprite.visible = false;
+    }
     deactive() {
         this.enabled = false;
         this.deactived = true;
+        this.sprite.visible = true;
         this.backButton.tint = 0xFFFFFF;
         this.priceLabel.style.fill = 0xe5519b;
         this.backButton.alpha = 1;
@@ -98,6 +109,7 @@ export default class ShopButton extends PIXI.Container {
     enable() {
         this.enabled = true;
         this.deactived = false;
+        this.sprite.visible = true;
         this.backButton.tint = 0x6250e5;
         this.backButton.alpha = 1;
         this.priceLabel.style.fill = 0xFFFFFF;

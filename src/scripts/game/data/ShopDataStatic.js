@@ -3,37 +3,71 @@ data.push(
 {
     id: 0,
     shopType: 'hard',
-    type: 'double_points',
+    type: 'cat_multiplier',
     var: 'actionMultiplier',
-    default: 1,
-    value: 2,
-    cost: 1,
-    costMax: 10000000,
-    icon: 'double_points_action',
-    shopDesc: 'actionSpeed',
-    time: 5,
+    default: 1,    
+    icon: 'morecats',
+    shopDesc: 'Multiply all your cats after collect them',
+    activeTime: 15,
     level: 1,
-    levelMax: 100,
+    levelMax: 1000,
     active: true,
-    waitTime: 10
+    stats:
+    {
+        cost:
+        {
+            typeCurve: 'easeInExpo',
+            min: 50,
+            max: 1000000,
+        },
+        value:
+        {
+            typeCurve: 'linearTween',
+            min: 1,
+            max: 10,
+        },
+        // cooldown:
+        // {
+        //     typeCurve: 'linearTween',
+        //     min: 330,
+        //     max: 20,
+        // },
+        // activeTime:
+        // {
+        //     typeCurve: 'linearTween',
+        //     min: 15,
+        //     max: 60,
+        // },
+    }
 });
 data.push(
 {
     id: 1,
     shopType: 'hard',
-    type: 'double_speed',
+    type: 'discount',
     var: 'actionSpeed',
-    default: 1,
-    value: 2,
-    cost: 1,
-    costMax: 10000000,
-    icon: 'double_speed_action',
+    default: 1,    
+    icon: 'discount',
     shopDesc: 'actionSpeed',
-    time: 15,
+    activeTime: 15,
     level: 1,
-    levelMax: 100,
+    levelMax: 50,
     active: true,
-    waitTime: 10
+    stats:
+    {
+        cost:
+        {
+            typeCurve: 'linearTween',
+            min: 50,
+            max: 55,
+        },
+        value:
+        {
+            typeCurve: 'easeInExpo',
+            min: 1,
+            max: 1.8,
+        },        
+    }
 });
 data.push(
 {
@@ -43,22 +77,40 @@ data.push(
     var: 'actionAutoCollect',
     default: false,
     value: true,
-    cost: 1,
-    costMax: 1000000,
-    icon: 'auto_collect_action',
+    icon: 'treasure_chest_03',
     shopDesc: 'actionSpeed',
-    time: 15,
+    activeTime: 15,
     level: 1,
-    levelMax: 100,
+    levelMax: 1000,
     active: true,
-    waitTime: 10,
     stats:
     {
-        typeCurve: 'easeInExpo',
-        type: 'cost',
-        min: 50,
-        max: 1000000,
+        cost:
+        {
+            typeCurve: 'easeInExpo',
+            min: 50,
+            max: 1000000,
+        },
+        // value:
+        // {
+        //     typeCurve: 'linearTween',
+        //     min: 1.1,
+        //     max: 10,
+        // },
+        // cooldown:
+        // {
+        //     typeCurve: 'linearTween',
+        //     min: 330,
+        //     max: 20,
+        // },
+        // activeTime:
+        // {
+        //     typeCurve: 'linearTween',
+        //     min: 15,
+        //     max: 60,
+        // },
     }
+
 });
 
 export default data;

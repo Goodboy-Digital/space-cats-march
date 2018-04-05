@@ -16,7 +16,7 @@ export default class CatAnimation extends StaticCat
         this.lleg.scale.y = 1 + Math.cos(this.bodySin) * 0.15
 
         this.rarm.rotation = this.armsRot + Math.cos(this.bodySin) * 0.1
-        this.rarm.scale.x = 1 + Math.sin(this.bodySin) * 0.1
+        this.rarm.scale.x = -1 + Math.sin(this.bodySin) * 0.1
         this.rarm.scale.y = 1 + Math.cos(this.bodySin) * 0.1
 
         this.larm.rotation = -this.armsRot - Math.sin(this.bodySin) * 0.1

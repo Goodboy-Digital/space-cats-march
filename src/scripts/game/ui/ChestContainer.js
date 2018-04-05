@@ -38,14 +38,14 @@ export default class ChestContainer extends PIXI.Container
 
         this.container.addChild(chestIcon);
         this.container.addChild(this.quantchest);
-        this.container.addChild(this.chestBubble);
+        // this.container.addChild(this.chestBubble);
         this.addChild(this.container)
-        this.containerScale = config.width / this.container.width * 0.35
+        this.containerScale = config.width / this.container.width * 0.25
         this.container.scale.set(this.containerScale)
 
         this.container.interactive = true;
         this.container.buttonMode = true;
-        this.container.on('mouseup', this.onChestClick.bind(this)).on('touchend', this.onChestClick.bind(this));
+        this.container.on('mousedown', this.onChestClick.bind(this)).on('touchstart', this.onChestClick.bind(this));
         //this.actualTime = 
 
         this.updateTimer();
@@ -59,7 +59,7 @@ export default class ChestContainer extends PIXI.Container
     	this.quantchest.text = 'OPEN YOUR \nPRIZE'
     	this.quantchest.pivot.x = this.quantchest.width / 2;
         this.quantchest.pivot.y = this.quantchest.height / 2;
-        this.quantchest.y = - this.chestBubble.height / 2 - this.quantchest.height / 4
+        this.quantchest.y = - this.chestBubble.height / 2 //- this.quantchest.height / 4
 
     	TweenLite.to(this.container.scale, 0.75, {x:this.containerScale, y:this.containerScale, ease:Elastic.easeOut})
     }
@@ -87,7 +87,7 @@ export default class ChestContainer extends PIXI.Container
     	this.quantchest.text = 'FREE CHEST IN\n'+minutes + ':' + seconds
     	this.quantchest.pivot.x = this.quantchest.width / 2;
         this.quantchest.pivot.y = this.quantchest.height / 2;
-        this.quantchest.y = - this.chestBubble.height / 2 - this.quantchest.height / 4
+        this.quantchest.y = - this.chestBubble.height / 2 //- this.quantchest.height / 4
 
     	// this.quantchest.text = dist.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
     	// this.quantchest.text = GAME_DATA.chestData.lastChestTime.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");

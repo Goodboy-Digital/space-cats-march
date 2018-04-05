@@ -109,6 +109,9 @@ export default class ShopList extends PIXI.Container {
         }
     }
     startDrag(e) {
+        if(this.catListContainer.height < this.containerBackground.height){
+            return
+        }
         this.enableDrag = true;
         this.goingDown = 0;
         TweenLite.killTweensOf(this.catListContainer);

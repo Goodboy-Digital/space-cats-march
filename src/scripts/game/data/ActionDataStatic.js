@@ -7,17 +7,43 @@ data.push(
     var: 'actionMultiplier',
     shopDesc: 'actionSpeed',
     default: 1,
-    value: 2,
-    cost: 1,
-    costMax: 1000,
-    icon: 'double_points_action',
+    value: 2,    
+    icon: 'coin_pig',
     time: 15,
     timeMax: 60,
     level: 1,
-    levelMax: 10,
+    levelMax: 1000,
     active: true,
     waitTime: 300,
-    waitTimeMin: 30
+    waitTimeMin: 30,
+    stats:
+    {
+        cost:
+        {
+            typeCurve: 'easeInExpo',
+            min: 50,
+            max: 1000000,
+        },
+        value:
+        {
+            typeCurve: 'linearTween',
+            min: 1,
+            max: 10,
+        },
+        cooldown:
+        {
+            typeCurve: 'linearTween',
+            min: 330,
+            max: 20,
+        },
+        activeTime:
+        {
+            typeCurve: 'linearTween',
+            min: 15,
+            max: 60,
+        },
+
+    }
 });
 data.push(
 {
@@ -27,17 +53,44 @@ data.push(
     var: 'actionSpeed',
     shopDesc: 'actionSpeed',
     default: 1,
-    value: 2,
-    cost: 1,
-    costMax: 100000,
-    icon: 'double_speed_action',
+    value: 2,    
+    icon: 'rollerskate',
     time: 15,
     timeMax: 60,
     level: 1,
-    levelMax: 10,
+    levelMax: 1000,
     active: true,
     waitTime: 200,
-    waitTimeMin: 20
+    waitTimeMin: 20,
+    stats:
+    {
+        cost:
+        {
+            typeCurve: 'easeInExpo',
+            min: 50,
+            max: 1000000,
+        },
+        value:
+        {
+            typeCurve: 'linearTween',
+            min: 1,
+            max: 3.5,
+        },
+        cooldown:
+        {
+            typeCurve: 'linearTween',
+            min: 330,
+            max: 20,
+        },
+        activeTime:
+        {
+            typeCurve: 'linearTween',
+            min: 15,
+            max: 60,
+        },
+
+
+    }
 });
 data.push(
 {
@@ -47,17 +100,45 @@ data.push(
     var: 'actionAutoCollect',
     shopDesc: 'actionSpeed',
     default: false,
-    value: true,
-    cost: 1,
-    costMax: 1000000,
-    icon: 'auto_collect_action',
+    value: true,    
+    icon: 'automate',
     time: 15,
     timeMax: 60,
     level: 1,
-    levelMax: 10,
+    levelMax: 1000,
     active: true,
     waitTime: 100,
-    waitTimeMin: 10
+    waitTimeMin: 10,
+    stats:
+    {
+        cost:
+        {
+            typeCurve: 'easeInExpo',
+            min: 50,
+            max: 1000000,
+        },
+        value:
+        {
+            typeCurve: 'linearTween',
+            min: 1,
+            max: 1,
+        },
+        cooldown:
+        {
+            typeCurve: 'linearTween',
+            min: 330,
+            max: 20,
+        },
+        activeTime:
+        {
+            typeCurve: 'linearTween',
+            min: 15,
+            max: 60,
+        },
+
+
+
+    }
 });
 
 export default data;

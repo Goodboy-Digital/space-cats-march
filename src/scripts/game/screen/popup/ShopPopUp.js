@@ -127,7 +127,8 @@ export default class ShopPopUp extends StandardPop
         }
 
         this.shopList.addItens(shopItens);
-        this.shopList.onItemShop.add(()=>{
+        this.shopList.onItemShop.add(() =>
+        {
             console.log(GAME_DATA.moneyData.currentCoins);
             this.updateMoney(GAME_DATA.moneyData.currentCoins, false)
         })
@@ -150,17 +151,14 @@ export default class ShopPopUp extends StandardPop
 
         this.coinSprite.scale.set(config.height / this.coinSprite.height * 0.05)
         this.moneyLabel.scale.set(config.height / this.moneyLabel.height * 0.065)
-        this.moneyLabel.x = this.coinSprite.width * 1.25
-            // this.pointsContainer.addChild(this.coinsContainer);
-            // this.coinsContainer.pivot.x = this.coinsContainer.width / 2 - this.coinSprite.width * 0.5;
-            // this.coinsContainer.pivot.y = this.coinsContainer.height + 15;
+        this.moneyLabel.x = this.coinSprite.width * 1.25;
         this.currentMoney = GAME_DATA.moneyData.currentCoins;
         this.coinsContainer.y = -config.height / 2 + this.coinsContainer.height + 20
         this.coinsContainer.x = -this.coinsContainer.width / 2
 
         this.container.addChild(this.coinsContainer);
 
-        this.updateMoney(GAME_DATA.moneyData.currentCoins, false)
+        this.updateMoney(GAME_DATA.moneyData.currentCoins, true)
 
     }
     update(delta)
@@ -174,6 +172,7 @@ export default class ShopPopUp extends StandardPop
         this.shopList.updateItems();
 
         this.container.scale.set(0, 2)
+        this.updateMoney(GAME_DATA.moneyData.currentCoins, true)
         TweenLite.to(this.container.scale, 1,
         {
             x: 1,
@@ -187,7 +186,6 @@ export default class ShopPopUp extends StandardPop
     }
     hide(dispatch = true, callback = null)
     {
-        console.log(callback);
         TweenLite.to(this.container.scale, 0.25,
         {
             x: 0,
@@ -210,13 +208,15 @@ export default class ShopPopUp extends StandardPop
     }
     updateMoney(money, force, delay = 0)
     {
-if(force){
+        if (force)
+        {
             this.moneyLabel.text = utils.formatPointsLabel(money / MAX_NUMBER);
-            this.coinsContainer.x = - this.coinsContainer.width / 2 ;
+            this.coinsContainer.x = -this.coinsContainer.width / 2;
             this.currentMoney = money;
             return;
         }
-        if(this.currentTween){
+        if (this.currentTween)
+        {
             TweenLite.killTweensOf(this.currentTween);
         }
         let moneyObj = {
@@ -224,17 +224,20 @@ if(force){
             target: money
         }
         this.currentMoney = money;
-        this.currentTween = TweenLite.to(moneyObj, 0.5, {
-            delay:delay,
+        this.currentTween = TweenLite.to(moneyObj, 0.5,
+        {
+            delay: delay,
             current: money,
-            onUpdateParams:[moneyObj],
-            onUpdate: (moneyObj) => {
+            onUpdateParams: [moneyObj],
+            onUpdate: (moneyObj) =>
+            {
                 this.moneyLabel.text = utils.formatPointsLabel(moneyObj.current / MAX_NUMBER);
-                this.coinsContainer.x = - this.coinsContainer.width / 2 ;
+                this.coinsContainer.x = -this.coinsContainer.width / 2;
             },
-            onComplete:()=>{
-                
-                this.coinsContainer.x = - this.coinsContainer.width / 2;
+            onComplete: () =>
+            {
+
+                this.coinsContainer.x = -this.coinsContainer.width / 2;
             }
         })
     }

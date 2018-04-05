@@ -16,7 +16,7 @@ export default class PrizeContainer extends UIList
         this.prizeDark.alpha = 0.75;
         this.prizeDark.interactive = true;
         this.prizeDark.buttonMode = true;
-        this.prizeDark.on('mouseup', this.collect.bind(this)).on('touchend', this.collect.bind(this));
+        this.prizeDark.on('mousedown', this.collect.bind(this)).on('touchstart', this.collect.bind(this));
         this.addChild(this.prizeDark);
 
         this.starBackground = new PIXI.Sprite.from('results_newcat_rays_02');
@@ -96,25 +96,22 @@ export default class PrizeContainer extends UIList
         let list = GAME_DATA.getChestPrize();
 
         for (var i = 0; i < this.itensList.length; i++) {
-            // this.itensList[i].setTexture('results_orange_cat');
-            // this.itensList[i].alpha = 0;
             this.itensList[i].forceHide();
         }
         this.updateHorizontalList();
 
         for (var i = 0; i < this.itensList.length; i++) {
             let item = list[i]//this.itensList[i];
-            let itemC = this.itensList[i]//this.itensList[i];
-            console.log(list[i]);
-            console.log(list[i], 'list');
+            let itemC = this.itensList[i]
             if(item.type == 'trophy'){
-                console.log('TEXTURE');
                 itemC.setTexture(list[i].icon);
-            }else{                
+            }else if(item.type == 'cat'){              
                 itemC.setCat(list[i].icon);
+            }else{                
+                itemC.setTexture(list[i].icon);
             }
             itemC.show(0.15 * i + 0.1);
-            itemC.setValue(list[i].quant)
+            itemC.setValue(utils.formatPointsLabel(list[i].quant / MAX_NUMBER))
             // TweenLite.from(item.scale, 0.5, {x:0, y:0, delay:0.1 * i, ease:Back.easeOut});
             // TweenLite.to(item, 0.5, {alpha:1});
         }

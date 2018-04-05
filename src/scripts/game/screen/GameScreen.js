@@ -167,6 +167,8 @@ export default class GameScreen extends Screen {
     }
     killAllActions() {
         this.HUD.killAllActions();
+
+
         for (var i = this.currentActions.length - 1; i >= 0; i--) {
             this[this.currentActions[i].var] = this.currentActions[i].default;
         }
@@ -183,18 +185,28 @@ export default class GameScreen extends Screen {
         // this.HUD.updateActionList();
     }
     addAction(actionData) {
-        // if(GAME_DATA.sessionData.tokens < actionData.cost){
-        //     return;
-        // }
-        // GAME_DATA.sessionData.tokens -= actionData.cost;
-        console.log(actionData);
         for (var i = this.currentActions.length - 1; i >= 0; i--) {
             if (this.currentActions[i].type == actionData.type) {
                 return false;
             }
         }
+
+        let leveldActionData = GAME_DATA.getActionStats(actionData);
+            console.log(    leveldActionData);
+            console.log(    leveldActionData);
+            console.log(    leveldActionData);
+            console.log(    leveldActionData);
+            console.log(    leveldActionData);
+            console.log(    leveldActionData);
+            console.log(    leveldActionData);
+            console.log(    leveldActionData);
+            console.log(    leveldActionData);
+            console.log(    leveldActionData);
+            console.log(    leveldActionData);
+            console.log(    leveldActionData);
+
         this.currentActions.push(actionData);
-        this[actionData.var] = actionData.value;
+        this[actionData.var] = leveldActionData.value;
         // this.HUD.updateActionList();
     }
     resetActionsVariables() {

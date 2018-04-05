@@ -118,8 +118,8 @@ export default class AutoCollectButton extends PIXI.Container
     {
         this.enabled = true;
         this.deactived = false;
-        this.sprite.texture = PIXI.Texture.from('active_engine');
-        this.sprite.scale.set(this.defaultSpriteScale * 1.5)
+        this.sprite.texture = PIXI.Texture.from('automate');
+        this.sprite.scale.set(this.defaultSpriteScale)
         this.spriteTrophy.visible = false;
         this.sprite.x = this.w / 2 - this.sprite.width / 2;
         this.sprite.y = this.h / 2;

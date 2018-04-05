@@ -140,6 +140,7 @@ export default class CatItemList extends PIXI.Container
         this.spaceShipInfoContainer.visible = true;
         this.spaceShipInfoLabel.text = utils.formatPointsLabel(staticData.autoCollectPrice / MAX_NUMBER);
         // this.container.alpha = 0.75;
+        console.log(    'ADICIONAR UM COVER AQUI NA LISTA DE GATOS');
         this.spaceShipInfoContainer.alpha = 0;
         TweenLite.to(this.spaceShipInfoContainer, 0.5,
         {

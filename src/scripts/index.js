@@ -53,23 +53,7 @@ function startLoader()
 
 function configGame(evt)
 {
-    let cats = ['cat_orange_', 'cat_pink_', 'cat_turquoise_', 'cat_yellow_']
-    window.CAT_LIST = [];
-    let tot = 19;
-    for (var j = 0; j < cats.length; j++)
-    {
-        let temp = [];
-        for (var i = 0; i < tot; i++)
-        {
-            let id = '0000' + i;
-            if (i > 9)
-            {
-                id = '000' + i;
-            }
-            temp.push(PIXI.Texture.from(cats[j] + id));
-        }
-        CAT_LIST.push(temp);
-    }
+   
     // console.log(CAT_LIST);
     window.GAME_DATA = new GameData();
     let sotrageData = STORAGE.getObject('space-cats-game-data')

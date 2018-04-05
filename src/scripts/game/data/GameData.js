@@ -1,9 +1,14 @@
-import utils  from '../../utils';
-import shopDataStatic  from './ShopDataStatic';
-import actionDataStatic  from './ActionDataStatic';
-import catDataStatic  from './CatDataStatic';
-export default class GameData {
-    constructor() {
+import utils from '../../utils';
+import shopDataStatic from './ShopDataStatic';
+import actionDataStatic from './ActionDataStatic';
+import catDataStatic from './CatDataStatic';
+import shopDataList from './shopDataList';
+import catDataList from './CatDataList';
+import actionDataList from './actionDataList';
+export default class GameData
+{
+    constructor()
+    {
 
         this.catsData = [];
 
@@ -13,55 +18,10 @@ export default class GameData {
         this.shopDataStatic = shopDataStatic;
 
         this.actionsDataStatic = actionDataStatic;
-        
 
-        this.actionsData = []
-        this.actionsData.push({
-            id: 0,
-            level: 0,
-            active: true,
-            staticData: 'actionsDataStatic',
-            dataType: 'actionsData',
-        });
-        this.actionsData.push({
-            id: 1,
-            level: 0,
-            active: true,
-            staticData: 'actionsDataStatic',
-            dataType: 'actionsData',
-        });
-        this.actionsData.push({
-            id: 2,
-            level: 0,
-            active: true,
-            staticData: 'actionsDataStatic',
-            dataType: 'actionsData',
-        });
+        this.actionsData = actionDataList;
 
-
-
-        this.shopData = []
-        this.shopData.push({
-            id: 0,
-            level: 0,
-            active: true,
-            staticData: 'shopDataStatic',
-            dataType: 'shopData',
-        });
-        this.shopData.push({
-            id: 1,
-            level: 0,
-            active: true,
-            staticData: 'shopDataStatic',
-            dataType: 'shopData',
-        });
-        this.shopData.push({
-            id: 2,
-            level: 0,
-            active: true,
-            staticData: 'shopDataStatic',
-            dataType: 'shopData',
-        });
+        this.shopData = shopDataList;
 
         this.trophyData = {
             collected: 0,
@@ -91,7 +51,7 @@ export default class GameData {
 
         this.moneyData = {
             currentCoins: 0,
-            softIcon: 'cat_coin',
+            softIcon: 'cat_coin_02',
             videoIcon: 'video_icon',
         }
 
@@ -103,179 +63,149 @@ export default class GameData {
 
         this.resetCatData();
     }
-    resetCatData() {
+    resetCatData()
+    {
         this.catsData = [];
-        this.catsData.push({
-            catID: 0,
-            collected: 0,
-            active: true,
-            canBeActive: true,
-            isAuto: false,            
-            pointsMultiplier: 1,
-            collectedMultiplier: 0,            
-        })
-
-        this.catsData.push({
-            catID: 1,
-            collected: 0,
-            active: false,
-            canBeActive: false,
-            isAuto: false,            
-            pointsMultiplier: 3,
-            collectedMultiplier: 0,            
-        })
-
-        this.catsData.push({
-            catID: 2,
-            collected: 0,
-            active: false,
-            canBeActive: false,
-            isAuto: false,            
-            pointsMultiplier: 5,
-            collectedMultiplier: 0,            
-        })
-
-        this.catsData.push({
-            catID: 3,
-            collected: 0,
-            active: false,
-            canBeActive: false,
-            isAuto: false,            
-            pointsMultiplier: 10,
-            collectedMultiplier: 0,            
-        })
-        this.catsData.push({
-            catID: 4,
-            collected: 0,
-            active: false,
-            canBeActive: false,
-            isAuto: false,            
-            pointsMultiplier: 10,
-            collectedMultiplier: 0,            
-        })
-        this.catsData.push({
-            catID: 5,
-            collected: 0,
-            active: false,
-            canBeActive: false,
-            isAuto: false,            
-            pointsMultiplier: 10,
-            collectedMultiplier: 0,            
-        })
-        this.catsData.push({
-            catID: 6,
-            collected: 0,
-            active: false,
-            canBeActive: false,
-            isAuto: false,            
-            pointsMultiplier: 10,
-            collectedMultiplier: 0,            
-        })
-        this.catsData.push({
-            catID: 7,
-            collected: 0,
-            active: false,
-            canBeActive: false,
-            isAuto: false,            
-            pointsMultiplier: 10,
-            collectedMultiplier: 0,            
-        })
-        this.catsData.push({
-            catID: 8,
-            collected: 0,
-            active: false,
-            canBeActive: false,
-            isAuto: false,            
-            pointsMultiplier: 10,
-            collectedMultiplier: 0,            
-        })
-        this.catsData.push({
-            catID: 9,
-            collected: 0,
-            active: false,
-            canBeActive: false,
-            isAuto: false,            
-            pointsMultiplier: 10,
-            collectedMultiplier: 0,            
-        })
-
-        this.catsData.push({
-            catID: 10,
-            collected: 0,
-            active: false,
-            canBeActive: false,
-            isAuto: false,            
-            pointsMultiplier: 10,
-            collectedMultiplier: 0,            
-        })
-
-        this.catsData.push({
-            catID: 11,
-            collected: 0,
-            active: false,
-            canBeActive: false,
-            isAuto: false,            
-            pointsMultiplier: 10,
-            collectedMultiplier: 0,            
-        })
+        for (var i = 0; i < catDataList.length; i++)
+        {
+            let cat = {};
+            let catData = catDataList[i];
+            for (let type in catData)
+            {
+                cat[type] = catData[type];
+            }
+            this.catsData.push(cat)
+        }
     }
-    getStaticCatData(id) {
-        for (var i = 0; i < this.catDataStatic.length; i++) {
-            if(this.catDataStatic[i].catID == id){
+    getStaticCatData(id)
+    {
+        for (var i = 0; i < this.catDataStatic.length; i++)
+        {
+            if (this.catDataStatic[i].catID == id)
+            {
                 return this.catDataStatic[i];
             }
         }
     }
-    canBuyIt(data) {
+    canBuyIt(data)
+    {
         let currType = this[data.staticData][data.id].shopType
         let staticData = this[data.staticData][data.id]
         let cost = this.getShopValues(data).cost;
-         if(currType == 'hard'){
+        if (currType == 'hard')
+        {
             return this.trophyData.collected >= cost;
-        }else if(currType == 'soft'){
-            return this.moneyData.currentCoins  >= cost;
+        }
+        else if (currType == 'soft')
+        {
+            return this.moneyData.currentCoins >= cost;
         }
     }
-    getUpdatedItem(type, id) {
+    getUpdatedItem(type, id)
+    {
         return this[type][id];
     }
-    buyUpgrade(data, realCost) {
-
-        
-
+    buyUpgrade(data, realCost)
+    {
         let currType = this[data.staticData][data.id].shopType
-        if(currType == 'hard'){
+        if (currType == 'hard')
+        {
             this.trophyData.collected -= realCost;
-        }else if(currType == 'soft'){
+        }
+        else if (currType == 'soft')
+        {
             this.moneyData.currentCoins -= realCost;
         }
         this.updateCatsAllowed(0);
-        this[data.dataType][data.id].level ++;
-        STORAGE.storeObject('space-cats-game-data', this.getObjectData());
+        this[data.dataType][data.id].level++;
+        this.SAVE();
     }
-    getShopValues(data) {
+    getActionStats(data, isStatic = false)
+    {
+        let shopData = data;
+        if (data.staticData)
+        {
+            for (var i = 0; i < this[data.staticData].length; i++)
+            {
+                if (this[data.staticData][i].id == data.id)
+                {
+                    shopData = this[data.staticData][i];
+                }
+            }
+        }
+        let level = data.level;
+        let stats = shopData.stats;
+        let levelPercent = level / shopData.levelMax
+        let leveledStats = {};
+        let easeCost = 0;
+        leveledStats.type = shopData.type;
+        for (let type in stats)
+        {
+            let tempData = stats[type];
+            easeCost = tempData.min;
+            levelPercent = level / shopData.levelMax
+
+            if (levelPercent > 0)
+            {
+
+                if(tempData.min > tempData.max){
+                    // easeCost = tempData.min - easeCost;
+                    easeCost = tempData.min - utils[tempData.typeCurve](levelPercent, tempData.max, tempData.min, 1) + tempData.max
+                    // console.log(shopData.type, easeCost, tempData.typeCurve, levelPercent, tempData.min, tempData.max);
+                }else{
+
+                easeCost = utils[tempData.typeCurve](levelPercent, tempData.min, tempData.max, 1)
+                }
+
+            }
+
+
+
+            leveledStats[type] = easeCost;
+        }
+        return leveledStats;
+    }
+    getShopValues(data)
+    {
         let shopData;
-        for (var i = 0; i < this.shopDataStatic.length; i++) {
-            if (this.shopDataStatic[i].id == data.id) {
+
+
+        let discountData = GAME_DATA.shopDataStatic.find(function(element)
+        {
+            return element.type == 'discount';
+        });
+        let discountShopData = this.shopData[discountData.id];
+        let discountStats = this.getActionStats(discountShopData, true);
+
+        for (var i = 0; i < this.shopDataStatic.length; i++)
+        {
+            if (this.shopDataStatic[i].id == data.id)
+            {
                 shopData = this.shopDataStatic[i];
             }
         }
         let level = data.level;
 
-        console.log(level, shopData.levelMax, shopData.cost, shopData.costMax);
-        let easeCost = utils.easeInExpo(level / shopData.levelMax, shopData.cost, shopData.costMax, 1)
-        // let easeCost = utils.easeOutCubic(level / shopData.levelMax, shopData.cost, shopData.costMax, 1)
-        console.log(easeCost);
-        let shopCoast = easeCost
+        let costData = shopData.stats.cost;
+        let levelPercent = level / shopData.levelMax
+        let easeCost = costData.min;
+        if (levelPercent > 0)
+        {
+            easeCost = utils[costData.typeCurve](levelPercent, costData.min, costData.max, 1)
+        }
+        let shopCoast = Math.floor(easeCost / discountStats.value);
         return {
             cost: shopCoast
         }
 
     }
-    getItemValues(data) {
+    getItemValues(data)
+    {
         let actionData;
-        for (var i = 0; i < this.actionsDataStatic.length; i++) {
-            if (this.actionsDataStatic[i].id == data.id) {
+        for (var i = 0; i < this.actionsDataStatic.length; i++)
+        {
+            if (this.actionsDataStatic[i].id == data.id)
+            {
                 actionData = this.actionsDataStatic[i];
             }
         }
@@ -289,44 +219,60 @@ export default class GameData {
         }
 
     }
-    applyPrizes(list) {
+    applyPrizes(list)
+    {
         // console.log('apply list', list);
         let cats = []
-        for (var i = 0; i < this.catsData.length; i++) {
+        for (var i = 0; i < this.catsData.length; i++)
+        {
             cats.push(0);
         }
-        for (var i = 0; i < list.length; i++) {
+        for (var i = 0; i < list.length; i++)
+        {
             let item = list[i];
-            if (item.type == 'cat') {
+            if (item.type == 'cat')
+            {
                 // console.log('add cat', item.quant);
                 // this.catsData[item.id].quant += item.quant
                 cats[item.id] += item.quant;
             }
-            if (item.type == 'trophy') {
+            if (item.type == 'trophy')
+            {
                 this.updateTrophy(item.quant)
+                    // this.trophyData.collected += item.quant;
+            }
+            if (item.type == 'coins')
+            {
+                this.addCoins(item.quant)
                     // this.trophyData.collected += item.quant;
             }
         }
         this.addCats(cats)
-        STORAGE.storeObject('space-cats-game-data', this.getObjectData());
+        this.SAVE();
     }
-    isPossibleBuyAuto(id) {
+    isPossibleBuyAuto(id)
+    {
         let cat = this.getStaticCatData(this.catsData[id].catID);
-        if (cat.autoCollectPrice <= this.trophyData.collected) {
+        if (cat.autoCollectPrice <= this.trophyData.collected)
+        {
             return true
         }
         return false
     }
-    getChestPrize() {
+    getChestPrize()
+    {
         let prizesList = [];
         let availableIds = [];
-        for (var i = 0; i < this.catsData.length; i++) {
-            if (this.catsData[i].active) {
+        for (var i = 0; i < this.catsData.length; i++)
+        {
+            if (this.catsData[i].active)
+            {
                 availableIds.push(this.catsData[i].catID);
             }
         }
 
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < 3; i++)
+        {
             let rnd1 = Math.random();
             let obj = {
                 type: 'cat',
@@ -334,13 +280,22 @@ export default class GameData {
                 quant: 0,
                 icon: 0,
             }
-            if (rnd1 < 0.3) {
+            if (rnd1 < 0.33)
+            {
                 obj.type = 'trophy';
                 obj.quant = this.getTrophyAmount();
                 obj.icon = this.trophyData.icon
-            } else {
+            }
+            else if (rnd1 < 0.66)
+            {
+                obj.type = 'coins';
+                obj.quant = this.getCoinAmount();
+                obj.icon = this.moneyData.softIcon
+            }
+            else
+            {
                 let id = Math.floor(availableIds.length * Math.random())
-                let cat = this.catsData[id]
+                let cat = this.getStaticCatData(this.catsData[id].catID)
                 obj.id = cat.catID
                 obj.icon = cat.catSrc
                 obj.quant = Math.ceil(cat.collected * Math.random() * 0.5 + 15 * Math.random() + 10)
@@ -350,8 +305,10 @@ export default class GameData {
         }
         return prizesList
     }
-    loadData(data) {
-        if (!data.chestData || !data.version || data.version != this.version) {
+    loadData(data)
+    {
+        if (!data.chestData || !data.version || data.version != this.version)
+        {
             STORAGE.reset();
             location.reload();
         }
@@ -361,9 +318,11 @@ export default class GameData {
         this.moneyData = data.money;
         this.actionsData = data.actionsData;
         this.shopData = data.shopData;
-        for (var name in data) {
+        for (var name in data)
+        {
             let n = name.indexOf("cat");
-            if (n >= 0) {
+            if (n >= 0)
+            {
                 // console.log(parseInt(name.substring(3)));
                 // console.log(data[name]);
                 let id = parseInt(name.substring(3))
@@ -374,7 +333,8 @@ export default class GameData {
         this.chestData.lastChestTime = new Date(this.chestData.lastChestTime);
 
     }
-    getObjectData() {
+    getObjectData()
+    {
         let obj = {
             trophy: this.trophyData,
             chestData: this.chestData,
@@ -384,17 +344,20 @@ export default class GameData {
             shopData: this.shopData,
             actionsData: this.actionsData,
         }
-        for (var i = 0; i < this.catsData.length; i++) {
+        for (var i = 0; i < this.catsData.length; i++)
+        {
             obj['cat' + this.catsData[i].catID] = this.catsData[i];
         }
 
         return obj
     }
-    getNumberTrophyToSend() {
+    getNumberTrophyToSend()
+    {
         let trophys = 0;
         let catsAcc = 0;
         let catsPercentageAcc = 0;
-        for (var i = 0; i < this.catsData.length; i++) {
+        for (var i = 0; i < this.catsData.length; i++)
+        {
             catsAcc += this.catsData[i].collected;
             catsPercentageAcc += this.catsData[i].collectedMultiplier;
         }
@@ -402,38 +365,57 @@ export default class GameData {
         trophys = catsAcc * (this.trophyData.multplierPerCollected * this.trophyData.collected * 0.05) + Math.ceil(catsAcc * 0.2) // + Math.ceil(catsAcc * 0.1) * catsPercentageAcc//Math.ceil(catsAcc * 0.15) + 2
         return Math.ceil(trophys);
     }
-    sendCatsToEarth() {
+    sendCatsToEarth()
+    {
         this.updateTrophy(this.getNumberTrophyToSend());
         this.resetCatData();
-        STORAGE.storeObject('space-cats-game-data', this.getObjectData());
+        this.moneyData.currentCoins = 0;
+        this.SAVE();
     }
-    getTrophyAmount() {
+    getCoinAmount()
+    {
+        let tempCoins = Math.floor(this.moneyData.currentCoins * (Math.random() * 0.1 + 0.1))
+        if (tempCoins <= 0)
+        {
+            tempCoins += 100 // MAX_NUMBER
+        }
+        return tempCoins;
+    }
+    getTrophyAmount()
+    {
         let tempTrophy = Math.floor(this.trophyData.collected * (Math.random() * 0.05 + 0.05))
-        if (tempTrophy <= 0) {
+        if (tempTrophy <= 0)
+        {
             tempTrophy = 1 // MAX_NUMBER
         }
         return tempTrophy;
     }
-    updateTrophy(collected) {
+    updateTrophy(collected)
+    {
         this.trophyData.collected += collected
         let mult = this.trophyData.collected * this.trophyData.multplierPerCollected // this.trophyData.maxCollectedMultiplier * this.trophyData.maxCollectedMultiplier;
         this.trophyData.collectedMultiplier = mult //* 0.01;
 
         //console.log(this.trophyData);
-        STORAGE.storeObject('space-cats-game-data', this.getObjectData());
+        this.SAVE();
     }
-    addCoins(points) {
+    addCoins(points)
+    {
         this.moneyData.currentCoins += points;
+        this.SAVE();
     }
-    updateCatsAllowed(points) {
+    updateCatsAllowed(points)
+    {
         this.addCoins(points);
-        if (points > this.maxPoints) {
+        if (points > this.maxPoints)
+        {
             this.maxPoints = points;
         }
         this.totalCatsAllowed = 1;
         let temp = [true]
         let hasNew = false;
-        for (var i = 1; i < this.catDataStatic.length; i++) {
+        for (var i = 1; i < this.catDataStatic.length; i++)
+        {
             let require = this.catDataStatic[i].cost;
             // let prevCat = this.catsData[require.catID]
             // console.log('this car require ', require.quant, points);
@@ -445,44 +427,54 @@ export default class GameData {
                 // }
                 temp.push(true);
                 this.totalCatsAllowed++;
-            } else {
+            }
+            else
+            {
                 this.catsData[i].canBeActive = false;
                 temp.push(false);
             }
         }
         this.catsAllowed = temp;
-        STORAGE.storeObject('space-cats-game-data', this.getObjectData());
+        this.SAVE();
         return hasNew;
     }
-    activeCat(data) {
+    activeCat(data)
+    {
         this.catsData[data.catID].active = true;
-        STORAGE.storeObject('space-cats-game-data', this.getObjectData());
+        this.SAVE();
     }
-    startNewRound() {
+    startNewRound()
+    {
         this.totalCatsAllowed = 0;
-        for (var i = 0; i < this.catsData.length; i++) {
-            if (this.catsData[i].active) {
+        for (var i = 0; i < this.catsData.length; i++)
+        {
+            if (this.catsData[i].active)
+            {
                 this.totalCatsAllowed++
             }
         }
         this.sessionData.tokens = this.gameTokens.quant;
         // console.log('cats', this.totalCatsAllowed);
     }
-    enableAutoCollect(id) {
+    enableAutoCollect(id)
+    {
         let data = this.catsData[id];
         let staticData = this.getStaticCatData(data.catID);
         // console.log(data);
-        if (this.trophyData.collected < staticData.autoCollectPrice) {
+        if (this.trophyData.collected < staticData.autoCollectPrice)
+        {
             console.log('something wrong');
             return
         }
         this.updateTrophy(-staticData.autoCollectPrice)
             // this.trophyData.collected -= data.autoCollectPrice
         this.catsData[id].isAuto = true;
-        STORAGE.storeObject('space-cats-game-data', this.getObjectData());
+        this.SAVE();
     }
-    addCats(list) {
-        for (var i = 0; i < list.length; i++) {
+    addCats(list)
+    {
+        for (var i = 0; i < list.length; i++)
+        {
             this.catsData[i].collected += list[i];
             let staticData = this.getStaticCatData(this.catsData[i].catID);
 
@@ -491,9 +483,14 @@ export default class GameData {
             console.log(mult);
 
         }
-        STORAGE.storeObject('space-cats-game-data', this.getObjectData());
+        this.SAVE();
     }
-    getAllowedCatsData() {
+    getAllowedCatsData()
+    {
         return this.catsData[Math.floor(Math.random() * this.totalCatsAllowed)]
+    }
+    SAVE()
+    {
+        STORAGE.storeObject('space-cats-game-data', this.getObjectData());
     }
 }

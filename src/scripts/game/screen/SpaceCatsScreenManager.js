@@ -191,7 +191,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
     }
     loadVideo(callback, callbackParams)
     {
-        this.videoContainer.off('mouseup', this.afterVideoCallback, callbackParams).off('touchend', this.afterVideoCallback, callbackParams);
+        this.videoContainer.off('mousedown', this.afterVideoCallback, callbackParams).off('touchstart', this.afterVideoCallback, callbackParams);
         if (callback)
         {
             this.afterVideoCallback = callback;
@@ -201,7 +201,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
             this.afterVideoCallback = this.toGameWithBonus.bind(this);
         }
 
-        this.videoContainer.on('mouseup', this.afterVideoCallback, callbackParams).on('touchend', this.afterVideoCallback, callbackParams);
+        this.videoContainer.on('mousedown', this.afterVideoCallback, callbackParams).on('touchstart', this.afterVideoCallback, callbackParams);
         // console.log(callback);
         this.videoContainer.visible = true;
     }

@@ -51,7 +51,7 @@ data.push(
     collectedMultiplier: 0,
     maxCollectedMultiplier: 20,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_orange_',
+    catSrc: 'cat_turquoise_',
     catThumb: 'results_turquoise_cat',
     catName: 'lucifurr',
     cost: 5000
@@ -70,7 +70,7 @@ data.push(
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_pink_',
+    catSrc: 'cat_yellow_',
     catThumb: 'results_yellow_cat',
     catName: 'fluffy',
     cost: 500000

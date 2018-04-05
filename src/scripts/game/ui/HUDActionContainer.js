@@ -51,6 +51,7 @@ export default class HUDActionContainer extends PIXI.Container {
         this.cooldown = 0;
     }
     setTexture(texture) {
+        
         this.sprite.texture = new PIXI.Texture.from(texture);
         this.sprite.scale.set(this.backButton.height / this.sprite.height * 0.5);
         this.sprite.anchor.set(0.5);
@@ -82,19 +83,17 @@ export default class HUDActionContainer extends PIXI.Container {
         this.coolDownLabel.text = '';
         this.sprite.tint = 0xFFFFFF;
         this.cooldown = 0;
-        if (this.actionData) {
             this.counter.update(0, true);
-        }
         // this.ableToAct = true;
     }
     updateData(actionData) {
         this.actionData = actionData;
         this.actionDataStatic = GAME_DATA.actionsDataStatic[this.actionData.id];
+        this.leveldActionData = GAME_DATA.getActionStats(this.actionData);
         this.ableToAct = true;
         // this.setTexture(this.actionDataStatic.icon)
     }
     finishReset() {
-        if (this.actionData) {
             this.counter.update(0, true);
             this.counter.scale.set(0.75);
             TweenLite.to(this.counter.scale, 0.5, {
@@ -106,9 +105,8 @@ export default class HUDActionContainer extends PIXI.Container {
                 alpha: 1
             })
             this.sprite.tint = 0;
-            this.cooldown = this.actionDataStatic.waitTime;
+            this.cooldown = this.leveldActionData.cooldown;
             this.ableToAct = false;
-        }
     }
     onClick() {
         if (!this.ableToAct) {
@@ -119,7 +117,7 @@ export default class HUDActionContainer extends PIXI.Container {
         this.acting = true;
         this.ableToAct = false;
         this.onClickItem.dispatch(this.actionData);
-        this.timer = this.actionDataStatic.time;
+        this.timer = this.leveldActionData.activeTime;
         this.counter.update(0, true);
     }
     updateCounter(value) {
@@ -140,7 +138,7 @@ export default class HUDActionContainer extends PIXI.Container {
         if (this.acting) {
             this.timer -= delta;
             this.backButton.tint = 0xAAAAAA
-            this.updateCounter(1 - this.timer / this.actionDataStatic.time);
+            this.updateCounter(1 - this.timer / this.leveldActionData.activeTime);
         } else if (this.cooldown > 0) {
             let minutes = parseInt(this.cooldown / 60, 10)
             let seconds = parseInt(this.cooldown % 60, 10);
