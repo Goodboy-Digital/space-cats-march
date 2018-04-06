@@ -13,43 +13,54 @@ export default class ShopList extends ListScroller
     {
         super(rect, itensPerPage);
         this.onItemShop = new Signals();
+        this.onVideoItemShop = new Signals();
         // this.onShopItem = new Signals();
         this.container = new PIXI.Container();
 
 
 
         this.itens = [];
-        
+
     }
 
-    addItens(itens){
-    	for (var i = 0; i < itens.length; i++)
+    addItens(itens)
+    {
+        for (var i = 0; i < itens.length; i++)
         {
-        	let tempItem = itens[i];
+            let tempItem = itens[i];
             this.catListContainer.addChild(tempItem)
             tempItem.y = this.itemHeight * this.itens.length - 1;
-            if(tempItem.onConfirmShop){
-            	tempItem.onConfirmShop.add(this.onShopItemCallback.bind(this));
+            if (tempItem.onConfirmShop)
+            {
+                tempItem.onConfirmShop.add(this.onShopItemCallback.bind(this));
             }
             this.itens.push(tempItem);
 
         }
         this.lastItemClicked = this.itens[0]
     }
-    onShopItemCallback(itemData, realCost){
-    	GAME_DATA.buyUpgrade(itemData, realCost);
-        this.onItemShop.dispatch(itemData);
-    	this.updateItems();
-    }
-    updateItems(){
-    	for (var i = 0; i < this.itens.length; i++)
+    onShopItemCallback(itemData, realCost)
+    {
+        let staticData = GAME_DATA[itemData.staticData][itemData.id];
+        if (staticData.shopType == 'video')
         {
-        	this.itens[i].updateData()
+            this.onVideoItemShop.dispatch(itemData);
+            return
+        }
+        GAME_DATA.buyUpgrade(itemData, realCost);
+        this.onItemShop.dispatch(itemData);
+        this.updateItems();
+    }
+    updateItems()
+    {
+        for (var i = 0; i < this.itens.length; i++)
+        {
+            this.itens[i].updateData()
         }
     }
     update(delta)
     {
-       
+
 
     }
     updateAllItens()
@@ -59,5 +70,5 @@ export default class ShopList extends ListScroller
             this.catsItemList[i].updateItem(GAME_DATA.catsData[i])
         }
     }
-    
+
 }

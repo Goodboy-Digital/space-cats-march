@@ -47,6 +47,7 @@ export default class HUDActionsList extends UIList
             }
             else
             {
+                this.itensList[i].visible = true;
                 this.itensList[i].updateData(GAME_DATA.actionsData[i]);
             }
         }

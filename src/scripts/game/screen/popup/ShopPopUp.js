@@ -129,8 +129,14 @@ export default class ShopPopUp extends StandardPop
         this.shopList.addItens(shopItens);
         this.shopList.onItemShop.add(() =>
         {
-            console.log(GAME_DATA.moneyData.currentCoins);
             this.updateMoney(GAME_DATA.moneyData.currentCoins, false)
+        })
+
+        this.shopList.onVideoItemShop.add((item) =>
+        {
+            let staticData = GAME_DATA[item.staticData][item.id];
+            console.log(item);
+            this.screenManager.loadVideo(this.openVideoCallback.bind(this, staticData));
         })
 
         this.coinsContainer = new PIXI.Container();
@@ -160,6 +166,23 @@ export default class ShopPopUp extends StandardPop
 
         this.updateMoney(GAME_DATA.moneyData.currentCoins, true)
 
+        this.screenManager.prizeContainer.onPrizeCollected.add(this.hidePrizeContainer.bind(this));
+
+    }
+    openVideoCallback(data)
+    {
+        console.log(data);
+        console.log(data);
+        console.log(data);
+        this.screenManager.closeVideo();
+        this.screenManager.prizeContainer.show(data.value);
+    }
+    hidePrizeContainer(){
+        if(!this.visible){
+            return;
+        }
+        this.shopList.updateItems();
+        this.updateMoney(GAME_DATA.moneyData.currentCoins, false)
     }
     update(delta)
     {

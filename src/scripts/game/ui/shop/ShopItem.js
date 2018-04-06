@@ -85,8 +85,11 @@ export default class ShopItem extends UIList
         this.container.addChild(this.shopButton);
 
         this.onConfirmShop = new Signals();
-
-        // this.addChild(this.container)
+        this.icons = {
+            value: 'icon_increase',
+            cooldown: 'icon_duration_orange',
+            activeTime: 'icon_duration_blue',
+        }
 
     }
     onShopItem(itemData)
@@ -103,7 +106,8 @@ export default class ShopItem extends UIList
         let cost = utils.formatPointsLabel(shopItemValues.cost / MAX_NUMBER);
         // let levelPercent = this.staticData.levelMax / ((this.staticData.levelMax + 1)  - currentLevel);
         this.shopButton.updateCoast(cost)
-            // if(shopItemValues.cost >= GAME_DATA.moneyData.currentCoins){
+
+
         if (!GAME_DATA.canBuyIt(this.itemData))
         {
             this.shopButton.deactive();
@@ -114,13 +118,15 @@ export default class ShopItem extends UIList
         }
         this.itemIcon.texture = PIXI.Texture.from(this.staticData.icon)
 
-        console.log(leveldValues);
         this.levelLabel.text = 'Level ' + this.itemData.level
 
-        if(this.itemData.level <= 0){
+        if (this.itemData.level <= 0)
+        {
             this.attributesList.visible = false;
             this.levelContainer.visible = false;
-        }else{
+        }
+        else
+        {
             this.attributesList.visible = true;
             this.levelContainer.visible = true;
         }
@@ -151,7 +157,7 @@ export default class ShopItem extends UIList
         this.updateHorizontalList();
         this.descriptionContainer.y = 0;
         this.descriptionLabel.text = this.staticData.shopDesc.toUpperCase()
-        // this.descriptionLabel.x = this.attributesList.x + this.attributesList.width / 2
+            // this.descriptionLabel.x = this.attributesList.x + this.attributesList.width / 2
 
     }
     updateData()
@@ -193,7 +199,10 @@ export default class ShopItem extends UIList
 
                     let attContainer = new PIXI.Container();
 
-                    let attIcon = new PIXI.Sprite.from('results_arrow');
+
+
+
+                    let attIcon = new PIXI.Sprite.from(this.icons[type]);
                     attIcon.scale.set(this.attributesList.w / attIcon.width * 0.1)
                     let attValue = new PIXI.Text('000',
                     {
@@ -212,7 +221,7 @@ export default class ShopItem extends UIList
                     attValue.y = attIcon.y + attIcon.height / 2 - attValue.height / 2;
 
                     attContainer.align = 0
-                    // attContainer.fitHeight = 0
+                        // attContainer.fitHeight = 0
                     this.attributesList.elementsList.push(attContainer);
                     this.attributesList.container.addChild(attContainer);
                     this.attributesList[type] = attValue;
@@ -220,8 +229,8 @@ export default class ShopItem extends UIList
             }
             this.attributesList.updateHorizontalList();
 
-                console.log(this.h, this.attributesList.elementsList, this.descriptionContainer);
-                this.descriptionContainer.y = 0;
+            console.log(this.h, this.attributesList.elementsList, this.descriptionContainer);
+            this.descriptionContainer.y = 0;
         }
         this.updateValues();
 

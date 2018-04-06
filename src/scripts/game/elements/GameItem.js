@@ -21,18 +21,18 @@ export default class GameItem extends PIXI.Container {
         this.standardScale = this.w / this.sprite.width;
         this.container.scale.set(this.standardScale);
 
-
         // this.sprite.alpha = 0;
         this.noScalable = false;
 
-        this.pickupsSprites = [GAME_DATA.trophyData.icon, 'pickup_mouse', 'pickup_octopus']
+        this.pickupsSprites = [GAME_DATA.trophyData.icon, 'pickup_mouse', GAME_DATA.moneyData.softIcon, 'treasure_chest_01']
         this.spriteItem = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
         this.spriteItem.anchor.set(0.5, 0.5);
 
         this.generalSpeed = 5;
 
-        this.container.addChild(this.spriteItem);
+        // this.sprite.alpha = 0;
         this.container.addChild(this.sprite);
+        this.container.addChild(this.spriteItem);
         this.addChild(this.container);
         this.interactive = true;
         this.buttonMode = true;
@@ -67,7 +67,11 @@ export default class GameItem extends PIXI.Container {
         this.kill = false;
         this.collecting = false;
         this.sprite.scale.set(1);
-        this.spriteItem.scale.set(1);
+        if(this.spriteItem.width > this.spriteItem.height){
+            this.spriteItem.scale.set(this.sprite.width / (this.spriteItem.width / this.spriteItem.scale.x) * 0.65);
+        }else{
+            this.spriteItem.scale.set(this.sprite.height / (this.spriteItem.height / this.spriteItem.scale.y) * 0.65);
+        }
         this.container.alpha = 1;
         this.tempX = 0;
     }

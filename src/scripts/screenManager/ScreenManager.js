@@ -13,6 +13,9 @@ export default class ScreenManager extends PIXI.Container{
 		this.screenList.push(screen);
 		this.currentScreen = screen;
 		screen.screenManager = this;
+		if(screen.onAdded){
+			screen.onAdded();
+		}
 	}
 	backScreen(){
 		this.change(this.prevScreen);

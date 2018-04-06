@@ -33,7 +33,7 @@ export default class ShopButton extends PIXI.Container {
         this.interactive = true;
         this.buttonMode = true;
 
-        this.on('mouseup', this.onClick.bind(this)).on('touchend', this.onClick.bind(this));
+        this.on('mousedown', this.onClick.bind(this)).on('touchstart', this.onClick.bind(this));
 
         this.priceLabel = new PIXI.Text('100k', {
             fontFamily: 'blogger_sansregular',

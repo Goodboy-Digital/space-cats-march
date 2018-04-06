@@ -36,7 +36,7 @@ export default class PrizeContainer extends UIList
 
         this.logoMask = new PIXI.Sprite.from('logo_mask_white');
         this.logoMask.anchor.set(0.5);
-        this.logoStartScale = config.width / this.logoMask.width * 0.5;
+        this.logoStartScale = config.width / this.logoMask.width * 0.75;
         this.logoMask.scale.set(this.logoStartScale)
         this.logoMask.x = config.width / 2
         this.logoMask.y = config.height / 2
@@ -58,22 +58,24 @@ export default class PrizeContainer extends UIList
 
         this.prizesContainer = new PIXI.Container();
         this.addChild(this.prizesContainer);
-        this.itensList = [];
+        this.itensList1 = [];
 
         this.w = this.logoMask.width * 0.8
         this.h = this.logoMask.height * 0.3
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < 5; i++)
         {
             let item = new PrizeItemContainer(this.w / 3, this.w / 3);
             item.scaleContentMax = true;
+            item.fitHeight = 1;
             item.setTexture('results_orange_cat');
-            this.itensList.push(item);
+            this.itensList1.push(item);
             this.elementsList.push(item);
             this.prizesContainer.addChild(item);
         }
+
+
         this.prizesContainer.x = config.width / 2 - this.w / 2;
         this.prizesContainer.y = config.height / 2 - this.h / 2;
-        this.updateHorizontalList();
     }
     update(delta)
     {
@@ -82,7 +84,8 @@ export default class PrizeContainer extends UIList
             this.starBackground.rotation += 0.05
         }
     }
-    collect(){
+    collect()
+    {
         this.onPrizeCollected.dispatch();
         this.hide();
     }
@@ -90,30 +93,60 @@ export default class PrizeContainer extends UIList
     {
         this.visible = false;
     }
-    show()
+    show(numberOfPrizes = 2)
     {
-        console.log('SHOW PRIZE');
-        let list = GAME_DATA.getChestPrize();
+        if (this.parent)
+        {
+            this.parent.setChildIndex(this, this.parent.children.length - 1)
+        }
 
-        for (var i = 0; i < this.itensList.length; i++) {
-            this.itensList[i].forceHide();
+        this.h = this.logoMask.height * 0.3 * ((5 / numberOfPrizes))
+
+        this.h = Math.min(this.h, this.logoMask.height * 0.4)
+
+        let list = GAME_DATA.getChestPrize(numberOfPrizes);
+        this.elementsList = [];
+        for (var i = 0; i < this.itensList1.length; i++)
+        {
+            this.elementsList.push(this.itensList1[i])
+            this.itensList1[i].forceHide();
+        }
+
+        for (var i = list.length; i < this.itensList1.length; i++)
+        {
+            for (var j = this.elementsList.length - 1; j >= 0; j--)
+            {
+                if (this.itensList1[i] == this.elementsList[j])
+                {
+                    this.elementsList.splice(j, 1)
+                }
+            }
         }
         this.updateHorizontalList();
 
-        for (var i = 0; i < this.itensList.length; i++) {
-            let item = list[i]//this.itensList[i];
-            let itemC = this.itensList[i]
-            if(item.type == 'trophy'){
+        this.prizesContainer.x = config.width / 2 - this.w / 2;
+        this.prizesContainer.y = config.height / 2 - this.h / 2;
+
+        for (var i = 0; i < list.length; i++)
+        {
+            let item = list[i] //this.itensList1[i];
+            let itemC = this.itensList1[i]
+            if (item.type == 'trophy')
+            {
                 itemC.setTexture(list[i].icon);
-            }else if(item.type == 'cat'){              
+            }
+            else if (item.type == 'cat')
+            {
                 itemC.setCat(list[i].icon);
-            }else{                
+            }
+            else
+            {
                 itemC.setTexture(list[i].icon);
             }
             itemC.show(0.15 * i + 0.1);
             itemC.setValue(utils.formatPointsLabel(list[i].quant / MAX_NUMBER))
-            // TweenLite.from(item.scale, 0.5, {x:0, y:0, delay:0.1 * i, ease:Back.easeOut});
-            // TweenLite.to(item, 0.5, {alpha:1});
+                // TweenLite.from(item.scale, 0.5, {x:0, y:0, delay:0.1 * i, ease:Back.easeOut});
+                // TweenLite.to(item, 0.5, {alpha:1});
         }
         GAME_DATA.applyPrizes(list);
         this.prizeDark.alpha = 0;
@@ -140,5 +173,6 @@ export default class PrizeContainer extends UIList
             alpha: 0.75
         });
         this.visible = true;
+        console.log('WHAT');
     }
 }

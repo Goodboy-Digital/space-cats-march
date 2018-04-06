@@ -40,7 +40,7 @@ export default class ChestContainer extends PIXI.Container
         this.container.addChild(this.quantchest);
         // this.container.addChild(this.chestBubble);
         this.addChild(this.container)
-        this.containerScale = config.width / this.container.width * 0.25
+        this.containerScale = config.width / this.container.width * 0.15
         this.container.scale.set(this.containerScale)
 
         this.container.interactive = true;
@@ -108,8 +108,8 @@ export default class ChestContainer extends PIXI.Container
     	
     	this.chestSin += 0.05
         this.chestSin %= Math.PI * 2;
-        this.container.rotation = Math.sin(this.chestSin) * 0.1 + 0.2
+        // this.container.rotation = Math.sin(this.chestSin) * 0.1 + 0.2
         this.quantchest.rotation = -this.container.rotation
-        // this.container.scale.set(this.containerScale + Math.sin(this.chestSin) * 0.01, this.containerScale + Math.cos(this.chestSin) * 0.01)
+        this.container.scale.set(this.containerScale + Math.sin(this.chestSin) * 0.01, this.containerScale + Math.cos(this.chestSin) * 0.01)
     }
 }

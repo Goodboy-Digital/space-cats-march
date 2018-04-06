@@ -76,7 +76,7 @@ data.push(
     type: 'auto_collect',
     var: 'actionAutoCollect',
     default: false,
-    value: true,
+    value: 5,
     icon: 'treasure_chest_03',
     shopDesc: 'actionSpeed',
     activeTime: 15,

@@ -42,7 +42,9 @@ export default class SpaceShipContainer extends PIXI.Container
 
         this.infoIcon = new PIXI.Sprite.from('info');
         this.infoIcon.anchor.set(0.5, 0.5);
+        this.infoIcon.scale.set((this.spaceShipBubble.width) / this.infoIcon.width * 0.2);
         this.container.addChild(this.infoIcon);
+
         this.infoIcon.x = this.spaceShipBubble.width / 3.5;
         this.infoIcon.y = this.spaceShipBubble.height / 3.5;
 
@@ -92,14 +94,16 @@ export default class SpaceShipContainer extends PIXI.Container
         this.confirmSpaceship.y = shipInfoSprite.height / 2;
         shipInfoSprite.addChild(this.confirmSpaceship);
 
-        shipInfoSprite.scale.set(shipInfoSprite.width / config.width * 0.75)
-        this.spaceShipInfoContainer.x = -this.spaceShipInfoContainer.width
+        shipInfoSprite.scale.set(config.width / shipInfoSprite.width * 0.9)
         this.container.addChild(this.spaceShipInfoContainer);
 
         this.spaceShipInfoContainer.visible = false;
         this.confirmSpaceship.interactive = true;
         this.confirmSpaceship.buttonMode = true;
         this.confirmSpaceship.on('mousedown', this.onSpaceshipClick.bind(this)).on('touchstart', this.onSpaceshipClick.bind(this));
+
+        this.spaceShipInfoContainer.scale.set(config.width / this.spaceShipInfoContainer.width / this.containerScale * 0.65)
+        this.spaceShipInfoContainer.x = -this.spaceShipInfoContainer.width
 
     }
     onSpaceshipClick(){

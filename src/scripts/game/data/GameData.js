@@ -99,6 +99,9 @@ export default class GameData
         else if (currType == 'soft')
         {
             return this.moneyData.currentCoins >= cost;
+        }else if (currType == 'video')
+        {
+            return true;
         }
     }
     getUpdatedItem(type, id)
@@ -259,7 +262,7 @@ export default class GameData
         }
         return false
     }
-    getChestPrize()
+    getChestPrize(tot = 2)
     {
         let prizesList = [];
         let availableIds = [];
@@ -271,7 +274,7 @@ export default class GameData
             }
         }
 
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < tot; i++)
         {
             let rnd1 = Math.random();
             let obj = {

@@ -8,9 +8,9 @@ export default class UIBar extends PIXI.Container
     {
         super();
         this.powerBarContainer = new PIXI.Container();
-        this.powerBarBackground = new PIXI.Sprite.from('powerbar_border');
-        this.powerBarBarBg = new PIXI.Sprite.from('powerbar_bar');
-        this.powerBarBar = new PIXI.Sprite.from('powerbar_bar');
+        this.powerBarBackground = new PIXI.Sprite.from('progressbar_frame');
+        this.powerBarBarBg = new PIXI.Sprite.from('progressbar_bar');
+        this.powerBarBar = new PIXI.Sprite.from('progressbar_bar');
         this.powerBarMask = new PIXI.Graphics().beginFill(0xff0000).drawRect(0, 0, this.powerBarBar.width, this.powerBarBar.height);
 
         this.powerBarContainer.addChild(this.powerBarBackground)

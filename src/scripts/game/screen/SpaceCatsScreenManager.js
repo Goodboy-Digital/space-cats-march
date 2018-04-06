@@ -1,12 +1,12 @@
 import * as PIXI from 'pixi.js';
 import ScreenManager from '../../screenManager/ScreenManager';
-import TopMenu from './topMenu/TopMenu'
 import StartPopUp from './popup/StartPopUp'
 import GameOverPopUp from './popup/GameOverPopUp'
 import OnboardingPopUp from './popup/OnboardingPopUp'
 import ShopPopUp from './popup/ShopPopUp'
 import AskVideoPopUp from './popup/AskVideoPopUp'
 import config from '../../config';
+import PrizeContainer from '../ui/PrizeContainer';
 export default class SpaceCatsScreenManager extends ScreenManager
 {
     constructor()
@@ -46,6 +46,17 @@ export default class SpaceCatsScreenManager extends ScreenManager
         goodboy.y = goodboy.height;
         // bigBlur.blendMode = PIXI.BLEND_MODES.ADD
         this.timeScale = 1;
+
+
+
+        this.popUpContainer = new PIXI.Container();
+        this.addChild(this.popUpContainer);
+
+
+        this.prizeContainer = new PrizeContainer();
+        // this.prizeContainer.onPrizeCollected.add(this.hidePrizeContainer.bind(this));
+        this.addChild(this.prizeContainer)
+
 
 
 
@@ -103,8 +114,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         });
 
 
-        this.popUpContainer = new PIXI.Container();
-        this.addChild(this.popUpContainer);
+        
         this.popUpList = [];
         this.popUpList.push(this.startPopUp);
         this.popUpList.push(this.gameOverPopUp);
@@ -129,6 +139,9 @@ export default class SpaceCatsScreenManager extends ScreenManager
             align: 'center',
             fontWeight: '800'
         });
+
+
+        
 
         this.videoContainer.addChild(videoLabel)
         videoLabel.pivot.x = videoLabel.width / 2;
