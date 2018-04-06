@@ -24,7 +24,7 @@ export default class GameItem extends PIXI.Container {
         // this.sprite.alpha = 0;
         this.noScalable = false;
 
-        this.pickupsSprites = [GAME_DATA.trophyData.icon, 'pickup_mouse', GAME_DATA.moneyData.softIcon, 'treasure_chest_01']
+        this.pickupsSprites = [GAME_DATA.trophyData.icon, 'automate', GAME_DATA.moneyData.softIcon, 'treasure_chest_01']
         this.spriteItem = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
         this.spriteItem.anchor.set(0.5, 0.5);
 

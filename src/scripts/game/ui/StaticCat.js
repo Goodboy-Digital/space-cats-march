@@ -13,6 +13,10 @@ export default class StaticCat extends PIXI.Container
         this.currentCatLabel = 'cat_orange_'
         this.zero = new PIXI.Graphics().beginFill(0xFF0000).drawCircle(0, 0, 10);
 
+        this.normalHead = new PIXI.Texture.from(this.currentCatLabel + 'head_01');
+        this.collectedHead = new PIXI.Texture.from(this.currentCatLabel + 'head_02');
+        this.deadHead = new PIXI.Texture.from(this.currentCatLabel + 'head_03');
+
         this.head = new PIXI.Sprite.from(this.currentCatLabel + 'head_01');
         this.head.anchor.set(0.5, 0.9)
 
@@ -20,14 +24,14 @@ export default class StaticCat extends PIXI.Container
         this.body.anchor.set(0.5, 0.65)
         this.body.y = this.body.height * 0.5
 
-        this.armsRot = 0//Math.PI * 0.3
+        this.armsRot = 0 //Math.PI * 0.3
 
 
         this.rarm = new PIXI.Sprite.from(this.currentCatLabel + 'arm');
         this.rarm.anchor.set(0.95, 0)
         this.rarm.rotation = this.armsRot
         this.rarm.x = -this.body.width * this.body.anchor.x + this.rarm.width * 1.35;
-        this.rarm.scale.set(-1,1)
+        this.rarm.scale.set(-1, 1)
 
         this.larm = new PIXI.Sprite.from(this.currentCatLabel + 'arm');
         this.larm.anchor.set(0.95, 0)
@@ -71,7 +75,7 @@ export default class StaticCat extends PIXI.Container
     }
     lock()
     {
-    	this.updateCatTextures('white_');
+        this.updateCatTextures('white_');
         this.lleg.tint = 0xE5519B;
         this.rleg.tint = 0xE5519B;
         this.larm.tint = 0xE5519B;
@@ -79,6 +83,20 @@ export default class StaticCat extends PIXI.Container
         this.body.tint = 0xE5519B;
         this.head.tint = 0xE5519B;
 
+    }
+    happy()
+    {
+
+        this.head.texture = this.collectedHead
+    }
+    sad()
+    {
+
+        this.head.texture = this.deadHead
+    }
+    normal()
+    {
+        this.head.texture = this.normalHead
     }
     updateCatTextures(src)
     {
@@ -89,5 +107,8 @@ export default class StaticCat extends PIXI.Container
         this.rarm.texture = PIXI.Texture.from(this.currentCatLabel + 'arm');
         this.body.texture = PIXI.Texture.from(this.currentCatLabel + 'body');
         this.head.texture = PIXI.Texture.from(this.currentCatLabel + 'head_01');
+        this.normalHead = PIXI.Texture.from(this.currentCatLabel + 'head_01');
+        this.collectedHead = PIXI.Texture.from(this.currentCatLabel + 'head_02');
+        this.deadHead = PIXI.Texture.from(this.currentCatLabel + 'head_03');
     }
 }

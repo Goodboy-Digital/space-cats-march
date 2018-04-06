@@ -5,6 +5,7 @@ import utils from '../../../utils';
 import StandardPop from './StandardPop';
 import ShopList from '../../ui/shop/ShopList';
 import ShopItem from '../../ui/shop/ShopItem';
+import UIButton from '../../ui/uiElements/UIButton';
 export default class ShopPopUp extends StandardPop
 {
     constructor(label, screenManager)
@@ -58,25 +59,21 @@ export default class ShopPopUp extends StandardPop
         this.container.addChild(this.backgroundContainer);
 
 
-        this.playButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        this.playButton.anchor.set(0.5)
-        this.playButton.scale.set(config.height / this.playButton.height * 0.05)
-            // this.playButtonScale = this.logoMask.height / this.playButton.height * 0.35
-            // this.playButton.scale.set(this.playButtonScale);
-            // this.playButton.y = config.height - this.container.y - this.playButton.height / 2 - 20
-        this.playButton.interactive = true;
-        this.playButton.buttonMode = true;
-        this.playButton.on('mouseup', this.confirm.bind(this)).on('touchend', this.confirm.bind(this));
-        this.container.addChild(this.playButton)
+        this.backButton = new UIButton('icon_back')        
+        this.backButton.scale.set(config.height / this.backButton.height * 0.1)
+        this.backButton.interactive = true;
+        this.backButton.buttonMode = true;
+        this.backButton.on('mousedown', this.confirm.bind(this)).on('touchstart', this.confirm.bind(this));
+        this.container.addChild(this.backButton)
 
-        this.cancelButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        this.cancelButton.anchor.set(0.5)
-        this.cancelButton.scale.set(0.15)
-            // this.cancelButtonScale = this.logoMask.height / this.cancelButton.height * 0.35
-            // this.cancelButton.scale.set(this.cancelButtonScale);
-            // this.cancelButton.y = config.height - this.container.y - this.cancelButton.height / 2 - 20
-        this.cancelButton.interactive = true;
-        this.cancelButton.buttonMode = true;
+        // this.cancelButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
+        // this.cancelButton.anchor.set(0.5)
+        // this.cancelButton.scale.set(0.15)
+        //     // this.cancelButtonScale = this.logoMask.height / this.cancelButton.height * 0.35
+        //     // this.cancelButton.scale.set(this.cancelButtonScale);
+        //     // this.cancelButton.y = config.height - this.container.y - this.cancelButton.height / 2 - 20
+        // this.cancelButton.interactive = true;
+        // this.cancelButton.buttonMode = true;
         // this.cancelButton.on('mouseup', this.close.bind(this)).on('touchend', this.close.bind(this));
         // this.container.addChild(this.cancelButton)
 
@@ -86,15 +83,17 @@ export default class ShopPopUp extends StandardPop
         videoLabel.pivot.y = videoLabel.height / 2;
 
         videoLabel.y = -this.h / 3 + 50
-        this.cancelButton.x = -75
-        this.cancelButton.y = 50
-        this.playButton.x = -config.width / 2 + this.playButton.width
-        this.playButton.y = -config.height / 2 + this.playButton.height
+        // this.cancelButton.x = -75
+        // this.cancelButton.y = 50
+        this.backButton.icon.scale.x = -1
+        this.backButton.x = config.width / 2 - this.backButton.width
+        this.backButton.y = config.height / 2 - this.backButton.height
 
         let shopRect = {
             w: config.width * 0.85,
             h: config.height * 0.65
         }
+        this.margin = (config.width - shopRect.w) / 2;
         let pageItens = 6
         this.shopList = new ShopList(shopRect, pageItens);
 
@@ -130,6 +129,7 @@ export default class ShopPopUp extends StandardPop
         this.shopList.onItemShop.add(() =>
         {
             this.updateMoney(GAME_DATA.moneyData.currentCoins, false)
+            this.updateTrophy(GAME_DATA.trophyData.collected, false)
         })
 
         this.shopList.onVideoItemShop.add((item) =>
@@ -139,6 +139,20 @@ export default class ShopPopUp extends StandardPop
             this.screenManager.loadVideo(this.openVideoCallback.bind(this, staticData));
         })
 
+        this.shopList.onShowInfo.add((item, button) =>
+        {
+            
+            let globalPos = button.toGlobal({x:-button.width / 2, y:-button.height / 2});
+            let staticData = GAME_DATA[item.staticData][item.id];
+            this.screenManager.showInfo(globalPos, staticData.icon, staticData.shopDesc, {x:0.5, y:-0.5});
+            // this.screenManager.showInfo(globalPos, staticData.icon, staticData.shopDesc, {x:-0.25, y:0.25});
+        })
+
+        this.backCurrencyContainer = new PIXI.Graphics().beginFill(0).drawRect(0,0,config.width,  config.height * 0.06)
+        this.container.addChild(this.backCurrencyContainer);
+        this.backCurrencyContainer.alpha = 0.5;
+        this.backCurrencyContainer.x = -config.width / 2
+        this.backCurrencyContainer.y = -config.height / 2 + 50
         this.coinsContainer = new PIXI.Container();
         this.coinSprite = new PIXI.Sprite.from(GAME_DATA.moneyData.softIcon);
         this.coinsContainer.addChild(this.coinSprite);
@@ -156,24 +170,48 @@ export default class ShopPopUp extends StandardPop
         this.coinsContainer.addChild(this.moneyLabel);
 
         this.coinSprite.scale.set(config.height / this.coinSprite.height * 0.05)
-        this.moneyLabel.scale.set(config.height / this.moneyLabel.height * 0.065)
+        this.moneyLabel.scale.set(config.height / this.moneyLabel.height * 0.045)
         this.moneyLabel.x = this.coinSprite.width * 1.25;
         this.currentMoney = GAME_DATA.moneyData.currentCoins;
-        this.coinsContainer.y = -config.height / 2 + this.coinsContainer.height + 20
+        this.coinsContainer.y = this.backCurrencyContainer.y + this.backCurrencyContainer.height / 2//-config.height / 2 + this.coinsContainer.height + 50
         this.coinsContainer.x = -this.coinsContainer.width / 2
 
+
+
+        this.trophyContainer = new PIXI.Container();
+        this.trophySprite = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
+        this.trophyContainer.addChild(this.trophySprite);
+        this.trophySprite.anchor.set(0, 0.5);
+
+        this.trophyLabel = new PIXI.Text('0',
+        {
+            fontFamily: 'blogger_sansregular',
+            fontSize: '42px',
+            fill: 0xFFFFFF,
+            align: 'center',
+            fontWeight: '800'
+        });
+        this.trophyLabel.pivot.y = this.trophyLabel.height / 2;
+        this.trophyContainer.addChild(this.trophyLabel);
+
+        this.trophySprite.scale.set(config.height / this.trophySprite.height * 0.05)
+        this.trophyLabel.scale.set(config.height / this.trophyLabel.height * 0.045)
+        this.trophyLabel.x = this.trophySprite.width * 1.25;
+        this.currentTrophy = GAME_DATA.trophyData.collected;
+        this.trophyContainer.y = this.backCurrencyContainer.y + this.backCurrencyContainer.height / 2//-config.height / 2 + this.trophyContainer.height + 50
+        this.trophyContainer.x = this.trophyContainer.width / 2// - this.trophyContainer.width
+
         this.container.addChild(this.coinsContainer);
+        this.container.addChild(this.trophyContainer);
 
         this.updateMoney(GAME_DATA.moneyData.currentCoins, true)
+        this.updateTrophy(GAME_DATA.trophyData.collected, true)
 
         this.screenManager.prizeContainer.onPrizeCollected.add(this.hidePrizeContainer.bind(this));
 
     }
     openVideoCallback(data)
     {
-        console.log(data);
-        console.log(data);
-        console.log(data);
         this.screenManager.closeVideo();
         this.screenManager.prizeContainer.show(data.value);
     }
@@ -183,6 +221,7 @@ export default class ShopPopUp extends StandardPop
         }
         this.shopList.updateItems();
         this.updateMoney(GAME_DATA.moneyData.currentCoins, false)
+        this.updateTrophy(GAME_DATA.trophyData.collected, false)
     }
     update(delta)
     {
@@ -196,6 +235,7 @@ export default class ShopPopUp extends StandardPop
 
         this.container.scale.set(0, 2)
         this.updateMoney(GAME_DATA.moneyData.currentCoins, true)
+        this.updateTrophy(GAME_DATA.trophyData.collected, true)
         TweenLite.to(this.container.scale, 1,
         {
             x: 1,
@@ -234,7 +274,7 @@ export default class ShopPopUp extends StandardPop
         if (force)
         {
             this.moneyLabel.text = utils.formatPointsLabel(money / MAX_NUMBER);
-            this.coinsContainer.x = -this.coinsContainer.width / 2;
+            this.coinsContainer.x = -config.width / 2 + this.margin;
             this.currentMoney = money;
             return;
         }
@@ -255,12 +295,47 @@ export default class ShopPopUp extends StandardPop
             onUpdate: (moneyObj) =>
             {
                 this.moneyLabel.text = utils.formatPointsLabel(moneyObj.current / MAX_NUMBER);
-                this.coinsContainer.x = -this.coinsContainer.width / 2;
+                this.coinsContainer.x =-config.width / 2 + this.margin;
             },
             onComplete: () =>
             {
 
-                this.coinsContainer.x = -this.coinsContainer.width / 2;
+                this.coinsContainer.x =-config.width / 2 + this.margin;
+            }
+        })
+    }
+    updateTrophy(money, force, delay = 0)
+    {
+        if (force)
+        {
+            this.trophyLabel.text = utils.formatPointsLabel(money / MAX_NUMBER);
+            this.trophyContainer.x =  config.width / 2 - this.margin - this.trophyContainer.width;
+            this.currentTrophy = money;
+            return;
+        }
+        if (this.currentTween)
+        {
+            TweenLite.killTweensOf(this.currentTween);
+        }
+        let moneyObj = {
+            current: this.currentTrophy,
+            target: money
+        }
+        this.currentTrophy = money;
+        this.currentTween = TweenLite.to(moneyObj, 0.5,
+        {
+            delay: delay,
+            current: money,
+            onUpdateParams: [moneyObj],
+            onUpdate: (moneyObj) =>
+            {
+                this.trophyLabel.text = utils.formatPointsLabel(moneyObj.current / MAX_NUMBER);
+                this.trophyContainer.x = config.width / 2 - this.margin - this.trophyContainer.width;
+            },
+            onComplete: () =>
+            {
+
+                this.trophyContainer.x = config.width / 2 - this.margin - this.trophyContainer.width;
             }
         })
     }

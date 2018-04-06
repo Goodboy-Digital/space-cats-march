@@ -48,7 +48,7 @@ export default class ShopItem extends UIList
         this.levelContainer.addChild(this.levelBar);
         // this.levelLabel.fitHeight = 0.7;
         this.levelContainer.scaleContentMax = true;
-        this.levelContainer.listScl = 0.15;
+        this.levelContainer.listScl = 0.1;
         // this.levelLabel.scaleContent = false;
         this.elementsList.push(this.levelContainer);
         this.container.addChild(this.levelContainer);
@@ -68,7 +68,7 @@ export default class ShopItem extends UIList
         });
 
         this.descriptionContainer.scaleContentMax = true;
-        this.descriptionContainer.listScl = 0.5;
+        this.descriptionContainer.listScl = 0.45;
         // this.descriptionContainer.align = 0.5;
 
         this.elementsList.push(this.descriptionContainer);
@@ -85,12 +85,30 @@ export default class ShopItem extends UIList
         this.container.addChild(this.shopButton);
 
         this.onConfirmShop = new Signals();
+        this.onShowInfo = new Signals();
         this.icons = {
             value: 'icon_increase',
             cooldown: 'icon_duration_orange',
             activeTime: 'icon_duration_blue',
         }
 
+        this.infoButton = new PIXI.Sprite.from('info');
+        // this.itemIcon.scaleContent = true;
+        this.infoButton.listScl = 0.1;
+        this.infoButton.align = 1;
+        this.infoButton.fitHeight = 0.45;
+        // this.infoButton.scaleContentMax = true;
+        this.elementsList.push(this.infoButton);
+        this.container.addChild(this.infoButton);
+        this.infoButton.interactive = true;
+        this.infoButton.buttonMode = true;
+        this.infoButton.on('mousedown', this.onInfoCallback.bind(this)).on('touchstart', this.onInfoCallback.bind(this));
+
+        // this.itemIcon.scaleContent = false;
+
+    }
+    onInfoCallback(){
+        this.onShowInfo.dispatch(this.itemData, this.infoButton);
     }
     onShopItem(itemData)
     {
@@ -163,7 +181,6 @@ export default class ShopItem extends UIList
     updateData()
     {
         this.itemData = GAME_DATA.getUpdatedItem(this.itemData.dataType, this.itemData.id)
-        console.log(this.itemData.level, this.staticData.levelMax);
         if (this.itemData.level >= this.staticData.levelMax)
         {
             this.levelLabel.text = 'Level ' + this.staticData.levelMax;

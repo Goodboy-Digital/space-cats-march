@@ -54,6 +54,7 @@ export default class Cat extends PIXI.Container
         this.catDataStatic = GAME_DATA.getStaticCatData(this.catID);
         // this.spriteList = CAT_LIST[catData.catID] //catData.animationList; //getPossibleCat();//CAT_LIST[this.lane]
         this.animation.updateCatTextures(this.catDataStatic.catSrc)
+        this.animation.normal();
         this.sin = 0;
         this.onDie.removeAll();
         this.finishTimer = -1;
@@ -243,6 +244,7 @@ export default class Cat extends PIXI.Container
         }
         this.noScalable = true;
         this.animation.scale.set(this.animationScaleStandard * 1.5, this.animationScaleStandard * 0.5);
+        this.animation.happy();
         this.resetVelocity();
         this.finishTimer = -1;
         this.animationSpeed = 99999;
@@ -293,6 +295,7 @@ export default class Cat extends PIXI.Container
         this.velocity.y = -Math.random() * 100 - 500;
         this.gravity = 4000;
         this.angularSpeed = (Math.random() * 0.1 - 0.05) * 60;
+        this.animation.sad();
         this.animation.scale.set(this.animationScaleStandard * 1.2, this.animationScaleStandard * 0.8);
         TweenLite.to(this.animation.scale, 0.5,
         {

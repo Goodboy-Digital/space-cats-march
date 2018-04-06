@@ -3,6 +3,8 @@ import Signals from 'signals';
 import config from '../../config';
 import utils from '../../utils';
 import CatItem from './CatItem';
+import UIList from './uiElements/UIList';
+import UIButton from './uiElements/UIButton';
 export default class CatItemList extends PIXI.Container
 {
     constructor(rect = {
@@ -13,6 +15,7 @@ export default class CatItemList extends PIXI.Container
         super();
         this.onAutoCollect = new Signals();
         this.onActiveCat = new Signals();
+        this.onInfoAutoCollect = new Signals();
         this.container = new PIXI.Container();
         this.catListContainer = new PIXI.Container();
         this.containerBackground = new PIXI.Graphics().beginFill(0x000000).drawRect(0, 0, rect.w, rect.h);
@@ -64,11 +67,47 @@ export default class CatItemList extends PIXI.Container
         let shipInfoSprite = new PIXI.Sprite.from('score_plinth');
         this.spaceShipInfoContainer.addChild(shipInfoSprite);
 
+        this.uiList = new UIList();
+        this.uiList.h = shipInfoSprite.height * 0.75;
+        this.uiList.w = shipInfoSprite.width // * 0.8;
+        shipInfoSprite.addChild(this.uiList);
+
+
+        this.infoButton = new PIXI.Sprite.from('info');
+        this.infoButton.anchor.set(0.5)
+        // shipInfoSprite.addChild(this.infoButton);
+        this.infoButton.scale.set(shipInfoSprite.width / this.infoButton.width * 0.15);
+        this.infoButton.interactive = true;
+        this.infoButton.buttonMode = true;
+        this.infoButton.fitHeight = 0.5;
+        this.infoButton.on('mousedown', this.onInfoCallback.bind(this)).on('touchstart', this.onInfoCallback.bind(this));
+        shipInfoSprite.addChild(this.infoButton);
+        this.infoButton.x = shipInfoSprite.width
+        // this.uiList.elementsList.push(this.infoButton);
+        // this.uiList.addChild(this.infoButton);
+
+        this.closeSpaceship = new UIButton('icon_close');
+        this.closeSpaceship.back.anchor.set(0)
+        this.closeSpaceship.icon.position.set(this.closeSpaceship.back.width / 2, this.closeSpaceship.back.height / 2)
+        this.closeSpaceship.scale.set(shipInfoSprite.height / this.closeSpaceship.height * 0.55);
+        this.closeSpaceship.align = 1 - 0.65;
+        this.closeSpaceship.interactive = true;
+        this.closeSpaceship.buttonMode = true;
+        this.closeSpaceship.on('mousedown', this.onHideAuto.bind(this)).on('touchstart', this.onHideAuto.bind(this));
+
+        // this.closeSpaceship.x = shipInfoSprite.width - this.closeSpaceship.width / 2 - (shipInfoSprite.height - this.closeSpaceship.height) / 2
+        // this.closeSpaceship.y = shipInfoSprite.height / 2;
+        this.uiList.elementsList.push(this.closeSpaceship);
+        this.uiList.addChild(this.closeSpaceship);
+
+
         let fishIcon = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
-        fishIcon.anchor.set(0.5, 0.5);
-        fishIcon.x = fishIcon.width + 20
-        fishIcon.y = shipInfoSprite.height / 2
-        shipInfoSprite.addChild(fishIcon);
+        // fishIcon.anchor.set(0.5, 0.5);
+        // fishIcon.x = fishIcon.width + 20
+        // fishIcon.y = shipInfoSprite.height / 2
+        fishIcon.align = 1;
+        this.uiList.elementsList.push(fishIcon);
+        this.uiList.addChild(fishIcon);
         fishIcon.scale.set(shipInfoSprite.height / fishIcon.height * 0.35);
 
 
@@ -80,6 +119,7 @@ export default class CatItemList extends PIXI.Container
             align: 'left',
             fontWeight: '800'
         });
+
         shipInfoSprite.addChild(sellCatsInfo);
         sellCatsInfo.x = shipInfoSprite.width / 2 - sellCatsInfo.width / 2
         sellCatsInfo.y = 20
@@ -92,27 +132,46 @@ export default class CatItemList extends PIXI.Container
             align: 'left',
             fontWeight: '800'
         });
-        this.spaceShipInfoLabel.x = fishIcon.x + fishIcon.width - 20
-        this.spaceShipInfoLabel.y = fishIcon.y - this.spaceShipInfoLabel.height / 2
-        shipInfoSprite.addChild(this.spaceShipInfoLabel);
+        // this.spaceShipInfoLabel.x = fishIcon.x + fishIcon.width - 20
+        // this.spaceShipInfoLabel.y = fishIcon.y - this.spaceShipInfoLabel.height / 2
+        this.spaceShipInfoLabel.align = 0;
+        this.uiList.elementsList.push(this.spaceShipInfoLabel);
+        this.uiList.addChild(this.spaceShipInfoLabel);
 
-        this.confirmSpaceship = new PIXI.Sprite.from('auto_confirm');
-        this.confirmSpaceship.anchor.set(0.5);
+        this.confirmSpaceship = new UIButton('icon_confirm');
+        this.confirmSpaceship.back.anchor.set(0)
+        this.confirmSpaceship.icon.position.set(this.confirmSpaceship.back.width / 2, this.confirmSpaceship.back.height / 2)
         this.confirmSpaceship.scale.set(shipInfoSprite.height / this.confirmSpaceship.height * 0.55);
+        this.confirmSpaceship.align = 0.65;
+        this.confirmSpaceship.interactive = true;
+        this.confirmSpaceship.buttonMode = true;
+        this.confirmSpaceship.on('mousedown', this.onConfirmAuto.bind(this)).on('touchstart', this.onConfirmAuto.bind(this));
 
-        this.confirmSpaceship.x = shipInfoSprite.width - this.confirmSpaceship.width / 2 - (shipInfoSprite.height - this.confirmSpaceship.height) / 2
-        this.confirmSpaceship.y = shipInfoSprite.height / 2;
-        shipInfoSprite.addChild(this.confirmSpaceship);
+        // this.confirmSpaceship.x = shipInfoSprite.width - this.confirmSpaceship.width / 2 - (shipInfoSprite.height - this.confirmSpaceship.height) / 2
+        // this.confirmSpaceship.y = shipInfoSprite.height / 2;
+        this.uiList.elementsList.push(this.confirmSpaceship);
+        this.uiList.addChild(this.confirmSpaceship);
 
         shipInfoSprite.scale.set(rect.w / shipInfoSprite.width)
             // this.spaceShipInfoContainer.x = -this.spaceShipInfoContainer.width
         this.addChild(this.spaceShipInfoContainer);
 
         this.spaceShipInfoContainer.visible = false;
-        this.confirmSpaceship.interactive = true;
-        this.confirmSpaceship.buttonMode = true;
         shipInfoSprite.x = rect.w / 2 - shipInfoSprite.width / 2;
-        this.confirmSpaceship.on('mouseup', this.onConfirmAuto.bind(this)).on('touchend', this.onConfirmAuto.bind(this));
+        this.uiList.updateHorizontalList();
+        this.uiList.y = shipInfoSprite.height / shipInfoSprite.scale.y - this.uiList.h;
+
+        
+        // this.infoButton.x = rescueCats.x + rescueCats.width / 2;
+        // this.infoButton.y = rescueCats.y + rescueCats.height / 2;
+    }
+    onHideAuto(){
+        this.spaceShipInfoContainer.visible = false;
+        this.container.alpha = 1;
+        this.lastItemClicked.visible = true;
+    }
+    onInfoCallback(){
+        this.onInfoAutoCollect.dispatch();
     }
     onConfirmAuto()
     {
@@ -140,7 +199,8 @@ export default class CatItemList extends PIXI.Container
         this.spaceShipInfoContainer.visible = true;
         this.spaceShipInfoLabel.text = utils.formatPointsLabel(staticData.autoCollectPrice / MAX_NUMBER);
         // this.container.alpha = 0.75;
-        console.log(    'ADICIONAR UM COVER AQUI NA LISTA DE GATOS');
+        console.log('ADICIONAR UM COVER AQUI NA LISTA DE GATOS');
+        this.uiList.updateHorizontalList();
         this.spaceShipInfoContainer.alpha = 0;
         TweenLite.to(this.spaceShipInfoContainer, 0.5,
         {
@@ -213,7 +273,7 @@ export default class CatItemList extends PIXI.Container
                 ease: Back.easeOut
             })
         }
-        else if (target!= 0)
+        else if (target != 0)
         {
             console.log('target', target);
             TweenLite.to(this.catListContainer, 0.75,

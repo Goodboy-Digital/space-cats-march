@@ -53,7 +53,7 @@ export default class HUDActionContainer extends PIXI.Container {
     setTexture(texture) {
         
         this.sprite.texture = new PIXI.Texture.from(texture);
-        this.sprite.scale.set(this.backButton.height / this.sprite.height * 0.5);
+        this.sprite.scale.set(this.backButton.height / this.sprite.height * 0.85);
         this.sprite.anchor.set(0.5);
         this.sprite.x = this.backButton.width / 2;
         this.sprite.y = this.backButton.height / 2;

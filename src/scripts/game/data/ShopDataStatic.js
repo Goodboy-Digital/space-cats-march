@@ -7,7 +7,7 @@ data.push(
     var: 'actionMultiplier',
     default: 1,    
     icon: 'morecats',
-    shopDesc: 'Multiply all your cats after collect them',
+    shopDesc: 'Multiply all your cats\nafter collect them',
     activeTime: 15,
     level: 1,
     levelMax: 1000,

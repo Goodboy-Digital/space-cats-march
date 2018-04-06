@@ -13,6 +13,7 @@ export default class ShopList extends ListScroller
     {
         super(rect, itensPerPage);
         this.onItemShop = new Signals();
+        this.onShowInfo = new Signals();
         this.onVideoItemShop = new Signals();
         // this.onShopItem = new Signals();
         this.container = new PIXI.Container();
@@ -33,11 +34,15 @@ export default class ShopList extends ListScroller
             if (tempItem.onConfirmShop)
             {
                 tempItem.onConfirmShop.add(this.onShopItemCallback.bind(this));
+                tempItem.onShowInfo.add(this.onShowInfoCallback.bind(this));
             }
             this.itens.push(tempItem);
 
         }
         this.lastItemClicked = this.itens[0]
+    }
+    onShowInfoCallback(itemData, button){
+        this.onShowInfo.dispatch(itemData, button);
     }
     onShopItemCallback(itemData, realCost)
     {

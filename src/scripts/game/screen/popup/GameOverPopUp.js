@@ -11,6 +11,7 @@ import SpaceShipContainer from '../../ui/SpaceShipContainer';
 import ChestContainer from '../../ui/ChestContainer';
 // import PrizeContainer from '../../ui/PrizeContainer';
 import GameOverCatsContainer from '../../ui/GameOverCatsContainer';
+import UIButton from '../../ui/uiElements/UIButton';
 import HUD from '../../ui/HUD';
 export default class GameOverPopUp extends StandardPop
 {
@@ -45,6 +46,7 @@ export default class GameOverPopUp extends StandardPop
         this.catItemList.updateAllItens();
         this.catItemList.onAutoCollect.add(this.onAutoCollect.bind(this));
         this.catItemList.onActiveCat.add(this.onActiveCat.bind(this));
+        this.catItemList.onInfoAutoCollect.add(this.onInfoAutoCollect.bind(this));
         this.catListContainer.x = -this.catItemList.width / 2;
         this.catListContainer.y = -this.catItemList.height / 2
         this.container.addChild(this.catListContainer);
@@ -92,9 +94,7 @@ export default class GameOverPopUp extends StandardPop
         this.container.addChild(this.resetButton2)
 
 
-        this.shopButton = new PIXI.Sprite(PIXI.Texture.from('shop_button'));
-        this.shopButton.anchor.set(0.5)
-            // this.shopButton.scale.set(-0.5, 0.5)
+        this.shopButton = new UIButton('icon_shop')
         this.shopButtonScale = this.logoMask.height / this.shopButton.height * 0.20
         this.shopButton.scale.set(this.shopButtonScale, this.shopButtonScale);
         this.shopButton.x = config.width * 0.17 - config.width / 2
@@ -119,7 +119,7 @@ export default class GameOverPopUp extends StandardPop
         this.pointsContainer = new PointsContainer();
         this.addChild(this.pointsContainer)
         this.pointsContainer.x = config.width / 2
-        this.pointsContainer.y = config.height / 2 + this.pointsContainer.height * 0.75
+        this.pointsContainer.y = this.logoMask.y + this.logoMask.height - this.pointsContainer.height * 0.25// - this.pointsContainer.height//config.height / 2 + this.pointsContainer.height * 0.75
 
         this.trophyContainer = new TrophyContainer();
         this.addChild(this.trophyContainer)
@@ -139,7 +139,7 @@ export default class GameOverPopUp extends StandardPop
         this.screenBlocker.alpha = 0.5
         this.screenBlocker.interactive = true;
         this.screenBlocker.buttonMode = true;
-        this.screenBlocker.on('mouseup', this.closeSpaceship.bind(this)).on('touchend', this.closeSpaceship.bind(this));
+        this.screenBlocker.on('mousedown', this.closeSpaceship.bind(this)).on('touchstart', this.closeSpaceship.bind(this));
         this.screenBlocker.visible = false;
 
         this.spaceShipContainer = new SpaceShipContainer();
@@ -157,6 +157,10 @@ export default class GameOverPopUp extends StandardPop
         this.spaceShipContainer.onConfirm.add(() =>
         {
             this.onConfirmSpaceship();
+        })
+        this.spaceShipContainer.onInfoSpaceship.add(() =>
+        {
+            this.screenManager.showInfo({x:config.width / 2, y:config.height / 2}, 'spaceship', 'You gonna lose everything\nbut worth to get the trophies', {x:0, y:0.5})
         })
 
 
@@ -177,6 +181,9 @@ export default class GameOverPopUp extends StandardPop
         this.updateTrophyQuant();
         this.screenManager.closeVideo();
         this.catItemList.updateAllItens()
+    }
+    onInfoAutoCollect(){
+        this.screenManager.showInfo({x:config.width / 2, y:config.height / 2}, 'automate', 'This cat will be collected\nautomatically', {x:0, y:0.5})
     }
     onActiveCat(data)
     {
@@ -528,7 +535,5 @@ export default class GameOverPopUp extends StandardPop
         this.chestContainer.update(delta)
         this.screenManager.prizeContainer.update(delta)
         this.catItemList.update(delta)
-            // this.hud.update(delta)
-            // this.catAnimation.update(delta);
     }
 }

@@ -52,7 +52,7 @@ export default class GameData
         this.moneyData = {
             currentCoins: 0,
             softIcon: 'cat_coin_02',
-            videoIcon: 'video_icon',
+            videoIcon: 'icon_play_video',
         }
 
         this.sessionData = {

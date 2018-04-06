@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import Signals from 'signals';
 import config from '../../../config';
 import StandardPop from './StandardPop';
+import UIButton from '../../ui/uiElements/UIButton';
 export default class AskVideoPopUp extends StandardPop
 {
     constructor(label, screenManager)
@@ -53,9 +54,9 @@ export default class AskVideoPopUp extends StandardPop
         this.container.addChild(this.backgroundContainer);
 
 
-        this.playButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        this.playButton.anchor.set(0.5)
-        this.playButton.scale.set(0.15)
+        this.playButton = new UIButton('icon_confirm');
+        // this.playButton.anchor.set(0.5)
+        this.playButton.scale.set(config.width / this.playButton.width * 0.15)
         // this.playButtonScale = this.logoMask.height / this.playButton.height * 0.35
         // this.playButton.scale.set(this.playButtonScale);
         // this.playButton.y = config.height - this.container.y - this.playButton.height / 2 - 20
@@ -64,9 +65,9 @@ export default class AskVideoPopUp extends StandardPop
         this.playButton.on('mouseup', this.confirm.bind(this)).on('touchend', this.confirm.bind(this));
         this.container.addChild(this.playButton)
 
-         this.cancelButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        this.cancelButton.anchor.set(0.5)
-        this.cancelButton.scale.set(0.15)
+        this.cancelButton = new UIButton('icon_close');
+        // this.cancelButton.anchor.set(0.5)
+        this.cancelButton.scale.set(config.width / this.cancelButton.width * 0.15)
         // this.cancelButtonScale = this.logoMask.height / this.cancelButton.height * 0.35
         // this.cancelButton.scale.set(this.cancelButtonScale);
         // this.cancelButton.y = config.height - this.container.y - this.cancelButton.height / 2 - 20
@@ -79,6 +80,8 @@ export default class AskVideoPopUp extends StandardPop
         this.container.addChild(videoLabel)
         videoLabel.pivot.x = videoLabel.width / 2;
         videoLabel.pivot.y = videoLabel.height / 2;
+
+        videoLabel.scale.set(config.height / videoLabel.height * 0.07)
 
         videoLabel.y = - this.h / 3 + 50
         this.cancelButton.x =  -75

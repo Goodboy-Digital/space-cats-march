@@ -137,11 +137,14 @@ export default class GameScreen extends Screen
 
         this.environment.hideLines(true);
 
+
     }
 
     onAdded()
     {
         this.screenManager.prizeContainer.onPrizeCollected.add(this.hidePrizeContainer.bind(this));
+        this.screenManager.askVideoContainer.onConfirm.add(this.onConfirmOffer.bind(this));
+        this.screenManager.askVideoContainer.onCancel.add(this.hidePrizeContainer.bind(this));
     }
     build(param)
     {
@@ -159,7 +162,9 @@ export default class GameScreen extends Screen
     }
     offerPrize()
     {
-        this.onConfirmOffer();
+        this.screenManager.showAskVideo();
+        this.isPaused = true;
+        // this.onConfirmOffer();
     }
     onConfirmOffer()
     {
@@ -432,6 +437,15 @@ export default class GameScreen extends Screen
         //     }
         // }
 
+
+        // setTimeout(()=>{
+        //     this.offerPrize();
+        // }, 1000);
+
+
+
+
+
         if (startWithBonus)
         {
             this.addAutoCollectMode();
@@ -660,7 +674,7 @@ export default class GameScreen extends Screen
         }
         this.addChild(this.currentItem);
 
-        let ids = [0,0,1,1,2,2,3,3,3]
+        let ids = [0,1,2,3,3,3,3,3,3,3]
         this.currentItem.reset(
         {
             x: config.width * 0.125,
