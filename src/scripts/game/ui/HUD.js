@@ -143,7 +143,7 @@ export default class HUD extends PIXI.Container {
         this.forceQuitButton.setTexture('spaceship');
         this.forceQuitButton.onClickItem.add(this.gameOver.bind(this))
 
-        this.forceQuitButton.x = this.forceQuitButton.width // + this.marginTop
+        this.forceQuitButton.x = this.forceQuitButton.width + this.marginTop
         this.forceQuitButton.y = this.h
 
         this.forceQuiteScale = this.powerBarContainer.height / this.forceQuitButton.width * 2;
@@ -153,13 +153,13 @@ export default class HUD extends PIXI.Container {
 
         this.hudActionList = new HUDActionsList({
             w: this.forceQuitButton.width,
-            h: this.forceQuitButton.width * 3
+            h: this.forceQuitButton.width * 3.5
         });
         this.addChild(this.hudActionList);
         this.hudActionList.onStartAction.add(this.startActionCallback.bind(this))
         this.hudActionList.onFinishAction.add(this.finishActionCallback.bind(this))
-        this.hudActionList.x = config.width - this.hudActionList.width //* 1.5
-        this.hudActionList.y = this.h
+        this.hudActionList.x = config.width - this.marginTop// - this.hudActionList.width //* 1.5
+        this.hudActionList.y = this.h - this.forceQuitButton.height / 2
 
         this.onForceGameOver = new Signals();
         this.onStartAction = new Signals();
@@ -171,6 +171,7 @@ export default class HUD extends PIXI.Container {
 
     }
     updateActionList() {
+        console.log('UPDATE ACTIONSSS');
         this.hudActionList.updateActionList();
     }
     killAllActions() {
@@ -224,7 +225,7 @@ export default class HUD extends PIXI.Container {
         this.forceQuitButton.x = -this.forceQuitButton.width
 
         TweenLite.to(this.forceQuitButton, 0.35, {
-            x: this.forceQuitButton.width / 2,
+            x: this.forceQuitButton.width / 2 + this.marginTop,
             delay: 0.5,
             ease: Back.easeOut
         })
@@ -241,6 +242,9 @@ export default class HUD extends PIXI.Container {
                 this.gameStart = true;
             }
         });
+
+
+        console.log('SHOW ACTION LIST');
         this.hudActionList.show();
 
     }

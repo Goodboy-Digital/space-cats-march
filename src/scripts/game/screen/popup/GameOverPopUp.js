@@ -64,34 +64,32 @@ export default class GameOverPopUp extends StandardPop
         this.playButton.scale.set(0);
 
 
-        this.resetButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        this.resetButton.anchor.set(0.5)
-            // this.resetButton.scale.set(-0.5, 0.5)
-        this.resetButtonScale = this.logoMask.height / this.resetButton.height * 0.15
-        this.resetButton.scale.set(-this.resetButtonScale, this.resetButtonScale);
-        this.resetButton.x = -config.width / 2 + this.resetButton.width;
-        this.resetButton.y = -config.height / 2 + this.resetButton.height + config.height * 0.2;
-        // this.resetButton.y = -300
-        this.resetButton.interactive = true;
-        this.resetButton.buttonMode = true;
-        this.resetButton.on('mouseup', this.addMany.bind(this)).on('touchend', this.addMany.bind(this));
-        // this.resetButton.on('mouseup', this.redirectToInit.bind(this)).on('touchend', this.redirectToInit.bind(this));
-        this.container.addChild(this.resetButton)
+        // this.resetButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
+        // this.resetButton.anchor.set(0.5)
+        //     // this.resetButton.scale.set(-0.5, 0.5)
+        // this.resetButtonScale = this.logoMask.height / this.resetButton.height * 0.15
+        // this.resetButton.scale.set(-this.resetButtonScale, this.resetButtonScale);
+        // this.resetButton.x = -config.width / 2 + this.resetButton.width;
+        // this.resetButton.y = -config.height / 2 + this.resetButton.height + config.height * 0.2;
+        // // this.resetButton.y = -300
+        // this.resetButton.interactive = true;
+        // this.resetButton.buttonMode = true;
+        // this.resetButton.on('mouseup', this.addMany.bind(this)).on('touchend', this.addMany.bind(this));
+        // // this.resetButton.on('mouseup', this.redirectToInit.bind(this)).on('touchend', this.redirectToInit.bind(this));
+        // this.container.addChild(this.resetButton)
 
 
-        this.resetButton2 = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        this.resetButton2.anchor.set(0.5)
-            // this.resetButton2.scale.set(-0.5, 0.5)
-        this.resetButton2Scale = this.logoMask.height / this.resetButton2.height * 0.15
-        this.resetButton2.scale.set(-this.resetButton2Scale, this.resetButton2Scale);
-        this.resetButton2.x = config.width / 2 - this.resetButton2.width;
-        this.resetButton2.y = -config.height / 2 + this.resetButton2.height + config.height * 0.2;
-        // this.resetButton2.y = -300
-        this.resetButton2.interactive = true;
-        this.resetButton2.buttonMode = true;
-        this.resetButton2.on('mouseup', this.resetAll.bind(this)).on('touchend', this.resetAll.bind(this));
-        // this.resetButton2.on('mouseup', this.redirectToInit.bind(this)).on('touchend', this.redirectToInit.bind(this));
-        this.container.addChild(this.resetButton2)
+        this.settingsButton = new UIButton('icon_settings', 0.75)
+        this.settingsButtonScale = this.logoMask.height / this.settingsButton.height * 0.15
+        this.settingsButton.scale.set(this.settingsButtonScale, this.settingsButtonScale);
+        // console.log(this.settingsButton.width);
+        this.settingsButton.x = config.width / 2 - this.settingsButton.width;
+        this.settingsButton.y = -config.height / 2 + this.settingsButton.height + config.height * 0.2;
+        // this.settingsButton.y = -300
+        this.settingsButton.interactive = true;
+        this.settingsButton.buttonMode = true;
+        this.settingsButton.on('mouseup', this.openSettings.bind(this)).on('touchend', this.openSettings.bind(this));
+        this.container.addChild(this.settingsButton)
 
 
         this.shopButton = new UIButton('icon_shop')
@@ -107,11 +105,8 @@ export default class GameOverPopUp extends StandardPop
         this.shopInfo.anchor.set(0.5);
         this.shopInfo.scale.set((this.shopButton.width / this.shopButtonScale) / this.shopInfo.width * 0.4);
         this.shopButton.addChild(this.shopInfo)
-            // this.container.addChild(this.shopInfo);
         this.shopInfo.x = this.shopButton.width / this.shopButtonScale * 0.5;
         this.shopInfo.y = -this.shopButton.height / this.shopButtonScale * 0.5;
-        // this.shopInfo.y = this.shopButton.height / 3.5;
-        // this.shopButton.on('mouseup', this.resetAll.bind(this)).on('touchend', this.resetAll.bind(this));
         this.shopButton.on('mousedown', this.redirectToShop.bind(this)).on('touchstart', this.redirectToShop.bind(this));
         this.container.addChild(this.shopButton)
 
@@ -148,7 +143,12 @@ export default class GameOverPopUp extends StandardPop
         this.spaceShipContainer.y = config.height * 0.6
         this.spaceShipContainer.onOpenInfo.add(() =>
         {
-            this.showScreenBlocker();
+            if(this.possibleToSendToEarth()){                
+                this.spaceShipContainer.openSpaceshipInfoCallback();
+                this.showScreenBlocker();
+            }else{
+                this.screenManager.showInfo({x:config.width / 2, y:config.height / 2}, 'spaceship', 'You need to collect at least \n'+GAME_DATA.minimumAmountOfCatsToReset+' different cats to send them to \nEarth', {x:0, y:0.5})
+            }
         })
         this.spaceShipContainer.onCloseInfo.add(() =>
         {
@@ -165,6 +165,7 @@ export default class GameOverPopUp extends StandardPop
 
 
         this.screenManager.prizeContainer.onPrizeCollected.add(this.hidePrizeContainer.bind(this));
+        this.screenManager.settingsContainer.onHide.add(this.updateCurrency.bind(this));
         // this.addChild(this.screenManager.prizeContainer)
 
         this.pointsContainer.updateMoney(GAME_DATA.moneyData.currentCoins, true)
@@ -173,8 +174,16 @@ export default class GameOverPopUp extends StandardPop
         this.addChild(this.gameOverCatsContainer)
         this.gameOverCatsContainer.hide();
         this.gameOverCatsContainer.onHide.add(this.onHideCatsGameOverList.bind(this));
+        // this.gameOverCatsContainer.show([5000,50,50,50,50,50,50,50,50,50,50,50]);
+
+        // this.hud = new HUD();
+        // this.container.addChild(this.hud)
+        // this.hud.x = -config.width / 2 - 300
     }
 
+    openSettings(){
+        this.screenManager.openSettings();
+    }
     enableAutoCollect(data)
     {
         GAME_DATA.enableAutoCollect(data)
@@ -262,6 +271,7 @@ export default class GameOverPopUp extends StandardPop
     spaceshipVideoCallback()
     {
         // this.spaceShipContainer.visible = false;
+        this.catItemList.resetPosition();
         this.screenManager.closeVideo();
         GAME_DATA.sendCatsToEarth();
         this.updateCatsQuant();
@@ -291,6 +301,7 @@ export default class GameOverPopUp extends StandardPop
     }
     onConfirmChest()
     {
+        this.catItemList.resetPosition();
         this.screenManager.prizeContainer.show(2);
         //this.screenManager.loadVideo(this.openChestVideoCallback.bind(this));
     }
@@ -362,9 +373,10 @@ export default class GameOverPopUp extends StandardPop
 
 
         // return
-        if (!GAME_DATA.catsData[1].active)
+        if (!this.updateCatsAllowed())
         {
-            this.spaceShipContainer.visible = false;
+            //this.spaceShipContainer.visible = false;
+
         }
         else
         {
@@ -401,6 +413,40 @@ export default class GameOverPopUp extends StandardPop
 
         this.trophyContainer.updateData(data);
     }
+    possibleToSendToEarth(){
+        let activeCats = 0;
+        for (var i = 0; i < GAME_DATA.catsData.length; i++) {
+            if(GAME_DATA.catsData[i].active){
+                activeCats ++;
+            }
+        }
+        if (activeCats >= GAME_DATA.minimumAmountOfCatsToReset)
+        {            
+            return true
+        }
+        else
+        {
+            return false
+        }
+    }
+    updateCatsAllowed(){
+        let activeCats = 0;
+        for (var i = 0; i < GAME_DATA.catsData.length; i++) {
+            if(GAME_DATA.catsData[i].active){
+                activeCats ++;
+            }
+        }
+        if (activeCats < 0)
+        {
+            this.spaceShipContainer.visible = false;
+            return false
+        }
+        else
+        {
+            this.spaceShipContainer.visible = true;
+            return true
+        }
+    }
     onHideCatsGameOverList()
     {
         this.pointsContainer.updateMoney(GAME_DATA.moneyData.currentCoins, false, 0.25)
@@ -410,6 +456,7 @@ export default class GameOverPopUp extends StandardPop
     }
     updateCurrency()
     {
+        console.log('ON HIDE');
         this.pointsContainer.updateMoney(GAME_DATA.moneyData.currentCoins, true, 0)
         this.updateTrophyQuant();
     }
@@ -422,20 +469,19 @@ export default class GameOverPopUp extends StandardPop
         if (param)
         {
 
-            console.log(param.catsList);
             let totCats = 0;
             for (var i = 0; i < param.catsList.length; i++)
             {
                 totCats += param.catsList[i]
             }
             let updatedCatList = param.catsList
+            param.points = Math.round(param.points * MAX_NUMBER);
             if (totCats > 0)
             {
-                updatedCatList = this.gameOverCatsContainer.show(param.catsList);
+                updatedCatList = this.gameOverCatsContainer.show(param.catsList, param.points);
             }
 
             GAME_DATA.addCats(updatedCatList);
-            param.points = Math.round(param.points * MAX_NUMBER);
 
             let hasNew = GAME_DATA.updateCatsAllowed(param.points);
             let current = utils.formatPointsLabel(param.points / MAX_NUMBER);
@@ -457,16 +503,9 @@ export default class GameOverPopUp extends StandardPop
 
 
 
+        this.catItemList.resetPosition();
 
-
-        // if (!GAME_DATA.catsData[1].active)
-        // {
-        //     this.spaceShipContainer.visible = false;
-        // }
-        // else
-        // {
-        //     this.spaceShipContainer.visible = true;
-        // }
+        this.updateCatsAllowed();
 
 
         this.logoMask.scale.set(5)
@@ -535,5 +574,7 @@ export default class GameOverPopUp extends StandardPop
         this.chestContainer.update(delta)
         this.screenManager.prizeContainer.update(delta)
         this.catItemList.update(delta)
+        this.gameOverCatsContainer.update(delta);
+        // this.hud.update(delta)
     }
 }

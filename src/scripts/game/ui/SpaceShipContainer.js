@@ -26,7 +26,7 @@ export default class SpaceShipContainer extends PIXI.Container
 
         let trophyIcon = new PIXI.Sprite.from('spaceship');
         trophyIcon.anchor.set(0.5, 0.5);
-        trophyIcon.scale.set(0.3)
+        trophyIcon.scale.set(this.spaceShipBubble.width / trophyIcon.width * 0.5)
         this.container.addChild(trophyIcon);
 
         this.availableTrohpy = new PIXI.Text('1.5T',
@@ -120,7 +120,7 @@ export default class SpaceShipContainer extends PIXI.Container
         let sellCatsInfo = new PIXI.Text('Do you want send your cats\nback to Earth?',
         {
             fontFamily: 'blogger_sansregular',
-            fontSize: '48px',
+            fontSize: '24px',
             fill: 0xFFFFFF,
             align: 'center',
             fontWeight: '800'
@@ -144,8 +144,9 @@ export default class SpaceShipContainer extends PIXI.Container
         
 
         this.confirmSpaceship = new UIButton('icon_play_video')
-        this.confirmSpaceship.back.anchor.set(0)
-        this.confirmSpaceship.icon.position.set(this.confirmSpaceship.back.width / 2, this.confirmSpaceship.back.height / 2)
+        this.confirmSpaceship.zeroAnchor();
+        // this.confirmSpaceship.back.anchor.set(0)
+        // this.confirmSpaceship.icon.position.set(this.confirmSpaceship.back.width / 2, this.confirmSpaceship.back.height / 2)
         this.confirmSpaceship.fitHeight = 0.5;
         this.confirmSpaceship.scaleContentMax = true;
         this.uiList.elementsList.push(this.confirmSpaceship);
@@ -173,7 +174,6 @@ export default class SpaceShipContainer extends PIXI.Container
         this.onInfoSpaceship.dispatch();
     }
     onSpaceshipClick(){
-
         this.onConfirm.dispatch();
     }
     closeSpaceship()
@@ -191,10 +191,7 @@ export default class SpaceShipContainer extends PIXI.Container
         })
 
     }
-    openSpaceshipInfo(){
-        if(this.spaceInfoOpen){
-            return
-        }
+    openSpaceshipInfoCallback(){
         this.spaceShipInfoLabel.text = 'x' + utils.formatPointsLabel(GAME_DATA.getNumberTrophyToSend() / MAX_NUMBER);
 
         this.spaceShipInfoContainer.alpha = 0;
@@ -206,6 +203,11 @@ export default class SpaceShipContainer extends PIXI.Container
         this.spaceInfoOpen = true;
 
         this.uiList.updateHorizontalList();
+    }
+    openSpaceshipInfo(){
+        if(this.spaceInfoOpen){
+            return
+        }
 
         this.onOpenInfo.dispatch();
     }

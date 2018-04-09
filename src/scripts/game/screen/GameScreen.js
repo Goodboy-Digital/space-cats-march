@@ -679,7 +679,7 @@ export default class GameScreen extends Screen
         {
             x: config.width * 0.125,
             y: config.height + PAWN.height
-        }, ids[Math.floor(Math.random() * ids.lenght)]);
+        }, ids[Math.floor(Math.random() * ids.length)]);
         //, Math.floor(Math.random() * 3));
 
     }

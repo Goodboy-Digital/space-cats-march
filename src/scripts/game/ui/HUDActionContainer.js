@@ -12,13 +12,13 @@ export default class HUDActionContainer extends PIXI.Container {
         this.onFinishAction = new Signals();
 
         this.backButton = new PIXI.Sprite.from('game_button_base');
+        this.topButton = new PIXI.Sprite.from('powerup_background_on');
         // this.backButton.anchor.set(0.5);
 
         this.sprite = new PIXI.Sprite.from('spaceship');
         this.sprite.anchor.set(0.5);
-        this.sprite.x = this.backButton.width / 2;
-        this.sprite.y = this.backButton.height / 2;
-        this.backButton.addChild(this.sprite);
+        // this.sprite.x = this.backButton.width / 2;
+        // this.sprite.y = this.backButton.height / 2;
 
         this.backButton.interactive = true;
         this.backButton.buttonMode = true;
@@ -31,9 +31,9 @@ export default class HUDActionContainer extends PIXI.Container {
             align: 'center',
             fontWeight: '800'
         });
-        this.backButton.addChild(this.coolDownLabel);
+        // this.backButton.addChild(this.coolDownLabel);
 
-        this.backButton.texture = PIXI.Texture.from('game_button_base_borderless');
+        this.backButton.texture = PIXI.Texture.from('powerup_background');
         this.setTexture(this.actionDataStatic.icon)
         this.counter = new CircleCounter(60, 58);
         this.counter.build(0xefd9f2, 0xFFFFFF)
@@ -42,9 +42,15 @@ export default class HUDActionContainer extends PIXI.Container {
         this.counter.x = 55
         this.counter.y = 55
         
+        this.topButton.mask = this.counter.circleMask;
+
+        // this.counter.update(0.5)
 
         // this.tokenPrice.scale.set(110 / this.tokenPrice.height * 0.4)
         this.addChild(this.backButton);
+        this.addChild(this.topButton);
+        this.addChild(this.sprite);
+        this.addChild(this.coolDownLabel);
         // this.addChild(this.tokenPrice);
         this.updateData(this.actionData)
         this.timer = 0;
@@ -55,6 +61,9 @@ export default class HUDActionContainer extends PIXI.Container {
         this.sprite.texture = new PIXI.Texture.from(texture);
         this.sprite.scale.set(this.backButton.height / this.sprite.height * 0.85);
         this.sprite.anchor.set(0.5);
+        this.backButton.scale.set(110 / this.backButton.height)
+        this.topButton.scale.set(110 / this.topButton.height)
+        this.sprite.scale.set(this.topButton.height / this.sprite.height * 0.6)
         this.sprite.x = this.backButton.width / 2;
         this.sprite.y = this.backButton.height / 2;
         this.coolDownLabel.text = '00:00';
@@ -62,28 +71,35 @@ export default class HUDActionContainer extends PIXI.Container {
         this.coolDownLabel.pivot.y = this.coolDownLabel.height / 2;
         this.coolDownLabel.x = this.backButton.width / 2;
         this.coolDownLabel.y = this.backButton.height / 2;
+
+        this.coolDownLabel.scale.set(this.backButton.width / this.coolDownLabel.width * 0.6)
+
+        this.topButton.alpha = 0;
         this.coolDownLabel.alpha = 0;
-        this.backButton.scale.set(110 / this.backButton.height)
     }
     enable() {
         this.disabled = false;
         this.backButton.tint = 0xFFFFFF
+        this.topButton.alpha = 0;
             // this.tokenPrice.texture = PIXI.Texture.from('token_price');
     }
     disable() {
         this.disabled = true;
         // this.ableToAct = false;
         this.backButton.tint = 0xAAAAAA
+        // this.topButton.alpha = 0;
             // this.tokenPrice.texture = PIXI.Texture.from('token_grey');
     }
     reset() {
-        this.backButton.texture = PIXI.Texture.from('game_button_base_borderless');
+        // this.backButton.texture = PIXI.Texture.from('game_button_base_borderless');
         this.acting = false;
         this.backButton.tint = 0xFFFFFF
         this.coolDownLabel.text = '';
         this.sprite.tint = 0xFFFFFF;
+        this.sprite.alpha = 1;
         this.cooldown = 0;
-            this.counter.update(0, true);
+        this.counter.update(1, true);
+        this.topButton.alpha = 0;
         // this.ableToAct = true;
     }
     updateData(actionData) {
@@ -104,8 +120,10 @@ export default class HUDActionContainer extends PIXI.Container {
             TweenLite.to(this.coolDownLabel, 0.5, {
                 alpha: 1
             })
-            this.sprite.tint = 0;
+            this.sprite.alpha = 0.5;
+            // this.sprite.tint = 0;
             this.cooldown = this.leveldActionData.cooldown;
+            this.topButton.alpha = 0;
             this.ableToAct = false;
     }
     onClick() {
@@ -113,7 +131,8 @@ export default class HUDActionContainer extends PIXI.Container {
             return;
         }
         this.coolDownLabel.alpha = 0;
-        this.backButton.texture = PIXI.Texture.from('game_button_base_borderless_green');
+        this.topButton.alpha = 1;
+        // this.backButton.texture = PIXI.Texture.from('game_button_base_borderless_green');
         this.acting = true;
         this.ableToAct = false;
         this.onClickItem.dispatch(this.actionData);
@@ -129,9 +148,9 @@ export default class HUDActionContainer extends PIXI.Container {
     }
     finishAction() {
         this.acting = false;
-        this.backButton.texture = PIXI.Texture.from('game_button_base_borderless');
+        // this.backButton.texture = PIXI.Texture.from('game_button_base_borderless');
         this.finishReset();
-        this.backButton.tint = 0xFFFFFF
+        // this.backButton.tint = 0xFFFFFF
         this.onFinishAction.dispatch(this.actionData);
     }
     update(delta) {
@@ -159,6 +178,17 @@ export default class HUDActionContainer extends PIXI.Container {
         this.coolDownLabel.text = '';
         this.ableToAct = true;
         this.sprite.tint = 0xFFFFFF;
+        this.sprite.alpha = 1;
+    }
+    totallyDisabled() {
+        this.ableToAct = false;
+        this.sprite.alpha = 0.5;
+        this.alpha = 0;
+    }
+    available() {
+        this.ableToAct = true;
+        this.sprite.alpha = 1;
+        this.alpha = 1;
     }
     hide() {
         // this.visible = false;

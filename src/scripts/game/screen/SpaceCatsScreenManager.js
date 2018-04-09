@@ -9,6 +9,8 @@ import config from '../../config';
 import PrizeContainer from '../ui/PrizeContainer';
 import InfoContainer from '../ui/InfoContainer';
 import AskVideoContainer from '../ui/AskVideoContainer';
+import SettingsContainer from '../ui/SettingsContainer';
+import CoinsExplosion from '../effects/CoinsExplosion';
 export default class SpaceCatsScreenManager extends ScreenManager
 {
     constructor()
@@ -61,6 +63,11 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.prizeContainer.hide();
 
 
+        this.settingsContainer = new SettingsContainer({w:config.width * 0.6, h:config.height * 0.5});
+        this.addChild(this.settingsContainer)
+        this.settingsContainer.x = config.width / 2;
+        this.settingsContainer.y = config.height / 2;
+        this.settingsContainer.hide();
 
 
         this.startPopUp = new StartPopUp('init', this);
@@ -172,8 +179,19 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.askVideoContainer = new AskVideoContainer();
         this.addChild(this.askVideoContainer)
         this.askVideoContainer.hide();
+
+        this.coinsExplosion = new CoinsExplosion();
+        this.addChild(this.coinsExplosion);
+        // this.askVideoContainer.hide();
         // this.infoContainer.show({x:200, y:200})
 
+    }
+    addCoinsParticles(pos, quant = 10, customData = {}){
+        this.coinsExplosion.show(pos, quant, customData)
+    }
+    openSettings(){
+
+        this.settingsContainer.show();
     }
     showAskVideo()
     {
@@ -208,6 +226,8 @@ export default class SpaceCatsScreenManager extends ScreenManager
     {
         super.update(delta * this.timeScale);
 
+        this.coinsExplosion.update(delta);
+
         if (this.currentPopUp)
         {
             this.currentPopUp.update(delta * this.timeScale)
@@ -216,7 +236,6 @@ export default class SpaceCatsScreenManager extends ScreenManager
         {
             this.prevPopUp.parent.removeChild(this.prevPopUp);
             this.prevPopUp = null;
-            console.log('REMOVE');
         }
     }
 

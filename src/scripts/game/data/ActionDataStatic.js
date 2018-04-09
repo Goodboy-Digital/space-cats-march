@@ -20,14 +20,15 @@ data.push(
     {
         cost:
         {
-            typeCurve: 'easeInExpo',
+            typeCurve: 'easeInCirc',
             min: 50,
-            max: 1000000,
+            max: 100000000,
+            hideOnShop:true
         },
         value:
         {
             typeCurve: 'linearTween',
-            min: 1,
+            min: 1.5,
             max: 10,
         },
         cooldown:
@@ -66,14 +67,15 @@ data.push(
     {
         cost:
         {
-            typeCurve: 'easeInExpo',
+            typeCurve: 'easeInCirc',
             min: 50,
-            max: 1000000,
+            max: 100000000,
+            hideOnShop:true
         },
         value:
         {
             typeCurve: 'linearTween',
-            min: 1,
+            min: 1.5,
             max: 3.5,
         },
         cooldown:
@@ -113,15 +115,17 @@ data.push(
     {
         cost:
         {
-            typeCurve: 'easeInExpo',
+            typeCurve: 'easeInCirc',
             min: 50,
-            max: 1000000,
+            max: 100000000,
+            hideOnShop:true
         },
         value:
         {
             typeCurve: 'linearTween',
             min: 1,
             max: 1,
+            hideOnShop:true
         },
         cooldown:
         {

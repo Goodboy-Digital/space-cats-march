@@ -10,7 +10,7 @@ export default class HUDItensContainer extends PIXI.Container {
         this.onClickItem = new Signals();
         this.onFinishAction = new Signals();
 
-        this.backButton = new PIXI.Sprite.from('game_button_base');
+        this.backButton = new PIXI.Sprite.from('powerup_background');
         this.backButton.anchor.set(0.5);
 
 

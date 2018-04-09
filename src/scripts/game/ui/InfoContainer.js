@@ -53,7 +53,7 @@ export default class InfoContainer extends UIList
             align: 'center',
             fontWeight: '800'
         });
-        this.infoList.scaleContentMax = true;
+        this.infoLabel.scaleContentMax = true;
         this.infoList.addChild(this.infoLabel);
         this.infoList.elementsList.push(this.infoLabel);
         this.infoItens.push(this.infoLabel);

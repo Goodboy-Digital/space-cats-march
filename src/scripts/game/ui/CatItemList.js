@@ -87,8 +87,9 @@ export default class CatItemList extends PIXI.Container
         // this.uiList.addChild(this.infoButton);
 
         this.closeSpaceship = new UIButton('icon_close');
-        this.closeSpaceship.back.anchor.set(0)
-        this.closeSpaceship.icon.position.set(this.closeSpaceship.back.width / 2, this.closeSpaceship.back.height / 2)
+        this.closeSpaceship.zeroAnchor();
+        // this.closeSpaceship.back.anchor.set(0)
+        // this.closeSpaceship.icon.position.set(this.closeSpaceship.back.width / 2, this.closeSpaceship.back.height / 2)
         this.closeSpaceship.scale.set(shipInfoSprite.height / this.closeSpaceship.height * 0.55);
         this.closeSpaceship.align = 1 - 0.65;
         this.closeSpaceship.interactive = true;
@@ -114,7 +115,7 @@ export default class CatItemList extends PIXI.Container
         let sellCatsInfo = new PIXI.Text('Do you want automatize this cat?',
         {
             fontFamily: 'blogger_sansregular',
-            fontSize: '32px',
+            fontSize: '20px',
             fill: 0xFFFFFF,
             align: 'left',
             fontWeight: '800'
@@ -122,12 +123,12 @@ export default class CatItemList extends PIXI.Container
 
         shipInfoSprite.addChild(sellCatsInfo);
         sellCatsInfo.x = shipInfoSprite.width / 2 - sellCatsInfo.width / 2
-        sellCatsInfo.y = 20
+        sellCatsInfo.y = 12
 
         this.spaceShipInfoLabel = new PIXI.Text('x 582',
         {
             fontFamily: 'blogger_sansregular',
-            fontSize: '64px',
+            fontSize: '48px',
             fill: 0xFFFFFF,
             align: 'left',
             fontWeight: '800'
@@ -139,8 +140,9 @@ export default class CatItemList extends PIXI.Container
         this.uiList.addChild(this.spaceShipInfoLabel);
 
         this.confirmSpaceship = new UIButton('icon_confirm');
-        this.confirmSpaceship.back.anchor.set(0)
-        this.confirmSpaceship.icon.position.set(this.confirmSpaceship.back.width / 2, this.confirmSpaceship.back.height / 2)
+        this.confirmSpaceship.zeroAnchor();
+        // this.confirmSpaceship.back.anchor.set(0)
+        // this.confirmSpaceship.icon.position.set(this.confirmSpaceship.back.width / 2, this.confirmSpaceship.back.height / 2)
         this.confirmSpaceship.scale.set(shipInfoSprite.height / this.confirmSpaceship.height * 0.55);
         this.confirmSpaceship.align = 0.65;
         this.confirmSpaceship.interactive = true;
@@ -164,6 +166,9 @@ export default class CatItemList extends PIXI.Container
         
         // this.infoButton.x = rescueCats.x + rescueCats.width / 2;
         // this.infoButton.y = rescueCats.y + rescueCats.height / 2;
+    }
+    resetPosition(){
+        this.catListContainer.y = 0;
     }
     onHideAuto(){
         this.spaceShipInfoContainer.visible = false;
@@ -266,7 +271,6 @@ export default class CatItemList extends PIXI.Container
         }
         else if (target + maxH < this.containerBackground.height)
         {
-            console.log(maxH - this.containerBackground.height);
             TweenLite.to(this.catListContainer, 0.75,
             {
                 y: this.containerBackground.height - maxH, // - this.catListContainer.height,
@@ -275,7 +279,6 @@ export default class CatItemList extends PIXI.Container
         }
         else if (target != 0)
         {
-            console.log('target', target);
             TweenLite.to(this.catListContainer, 0.75,
             {
                 y: target,

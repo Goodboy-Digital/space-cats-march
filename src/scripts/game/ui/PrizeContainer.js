@@ -67,7 +67,7 @@ export default class PrizeContainer extends UIList
             let item = new PrizeItemContainer(this.w / 3, this.w / 3);
             item.scaleContentMax = true;
             item.fitHeight = 1;
-            item.setTexture('results_orange_cat');
+            // item.setTexture('results_orange_cat');
             this.itensList1.push(item);
             this.elementsList.push(item);
             this.prizesContainer.addChild(item);

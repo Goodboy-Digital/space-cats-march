@@ -68,7 +68,7 @@ export default class AskVideoContainer extends UIList
         this.descriptionLabel = new PIXI.Text('do you want to watch a video\n bla bla bla bla bla',
         {
             fontFamily: 'blogger_sansregular',
-            fontSize: '48px',
+            fontSize: '24px',
             fill: 0xFFFFFF,
             align: 'center',
             fontWeight: '800'

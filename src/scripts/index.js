@@ -15,6 +15,8 @@ window.STORAGE = new LocalStorage();
 
 window.CATS_POOL = [];
 window.LABEL_POOL = [];
+window.COINS_POOL = [];
+
 window.CLASSES = {}
 
 window.PAWN = {
@@ -32,6 +34,7 @@ window.SOUND_MANAGER = new SoundManager();
 SOUND_MANAGER.load(audioToLoad);
 
 window.MAX_NUMBER = 1000000;
+
 startLoader();
 
 // window.getPossibleCat = function(id = -1){

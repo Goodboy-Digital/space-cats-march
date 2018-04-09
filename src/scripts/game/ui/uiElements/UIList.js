@@ -11,6 +11,11 @@ export default class UIList extends PIXI.Container
         this.h = 0;
     }
 
+    debug(){
+        this.debugGr = new PIXI.Graphics().beginFill(0xFF0000).drawRect(0, 0, this.w, this.h)
+        this.container.addChild(this.debugGr)
+        this.debugGr.alpha = 0.5;
+    }
     updateHorizontalList()
     {
         let listSizes = [];

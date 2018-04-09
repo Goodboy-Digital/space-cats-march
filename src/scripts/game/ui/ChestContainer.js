@@ -35,7 +35,7 @@ export default class ChestContainer extends PIXI.Container
         this.container.addChild(chestIcon);
         this.container.addChild(this.quantchest);
         this.addChild(this.container)
-        this.containerScale = config.width / this.container.width * 0.25
+        this.containerScale = config.width / this.container.width * 0.35
         this.container.scale.set(this.containerScale)
 
         this.container.interactive = true;

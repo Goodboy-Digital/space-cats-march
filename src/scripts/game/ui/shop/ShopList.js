@@ -29,7 +29,7 @@ export default class ShopList extends ListScroller
         for (var i = 0; i < itens.length; i++)
         {
             let tempItem = itens[i];
-            this.catListContainer.addChild(tempItem)
+            this.listContainer.addChild(tempItem)
             tempItem.y = this.itemHeight * this.itens.length - 1;
             if (tempItem.onConfirmShop)
             {
@@ -44,7 +44,7 @@ export default class ShopList extends ListScroller
     onShowInfoCallback(itemData, button){
         this.onShowInfo.dispatch(itemData, button);
     }
-    onShopItemCallback(itemData, realCost)
+    onShopItemCallback(itemData, realCost, button)
     {
         let staticData = GAME_DATA[itemData.staticData][itemData.id];
         if (staticData.shopType == 'video')
@@ -53,7 +53,7 @@ export default class ShopList extends ListScroller
             return
         }
         GAME_DATA.buyUpgrade(itemData, realCost);
-        this.onItemShop.dispatch(itemData);
+        this.onItemShop.dispatch(itemData, button);
         this.updateItems();
     }
     updateItems()

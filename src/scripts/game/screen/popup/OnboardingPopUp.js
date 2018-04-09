@@ -55,14 +55,10 @@ export default class OnboardingPopUp extends StandardPop
 
 
         this.playButton = new UIButton('icon_confirm');
-        // this.playButton.anchor.set(0.5)
         this.playButton.scale.set(config.width / this.playButton.width * 0.15)
-        // this.playButtonScale = this.logoMask.height / this.playButton.height * 0.35
-        // this.playButton.scale.set(this.playButtonScale);
-        // this.playButton.y = config.height - this.container.y - this.playButton.height / 2 - 20
         this.playButton.interactive = true;
         this.playButton.buttonMode = true;
-        this.playButton.on('mouseup', this.confirm.bind(this)).on('touchend', this.confirm.bind(this));
+        this.playButton.on('mousedown', this.confirm.bind(this)).on('touchstart', this.confirm.bind(this));
         this.container.addChild(this.playButton)
 
          this.cancelButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));

@@ -66,18 +66,6 @@ export default class ShopPopUp extends StandardPop
         this.backButton.on('mousedown', this.confirm.bind(this)).on('touchstart', this.confirm.bind(this));
         this.container.addChild(this.backButton)
 
-        // this.cancelButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        // this.cancelButton.anchor.set(0.5)
-        // this.cancelButton.scale.set(0.15)
-        //     // this.cancelButtonScale = this.logoMask.height / this.cancelButton.height * 0.35
-        //     // this.cancelButton.scale.set(this.cancelButtonScale);
-        //     // this.cancelButton.y = config.height - this.container.y - this.cancelButton.height / 2 - 20
-        // this.cancelButton.interactive = true;
-        // this.cancelButton.buttonMode = true;
-        // this.cancelButton.on('mouseup', this.close.bind(this)).on('touchend', this.close.bind(this));
-        // this.container.addChild(this.cancelButton)
-
-
         // this.container.addChild(videoLabel)
         videoLabel.pivot.x = videoLabel.width / 2;
         videoLabel.pivot.y = videoLabel.height / 2;
@@ -126,8 +114,10 @@ export default class ShopPopUp extends StandardPop
         }
 
         this.shopList.addItens(shopItens);
-        this.shopList.onItemShop.add(() =>
+        this.shopList.onItemShop.add((item, button) =>
         {
+            let globalPos = {x:button.transform.worldTransform.tx, y:button.transform.worldTransform.ty};
+            this.screenManager.addCoinsParticles(globalPos, 1, {forceX:0, forceY:100,texture:'icon_increase', gravity:0});
             this.updateMoney(GAME_DATA.moneyData.currentCoins, false)
             this.updateTrophy(GAME_DATA.trophyData.collected, false)
         })
@@ -142,9 +132,10 @@ export default class ShopPopUp extends StandardPop
         this.shopList.onShowInfo.add((item, button) =>
         {
             
-            let globalPos = button.toGlobal({x:-button.width / 2, y:-button.height / 2});
+            let globalPos = button.toGlobal({x:-button.width / 2, y:0});
             let staticData = GAME_DATA[item.staticData][item.id];
-            this.screenManager.showInfo(globalPos, staticData.icon, staticData.shopDesc, {x:0.5, y:-0.5});
+            globalPos.x = config.width / 2
+            this.screenManager.showInfo(globalPos, staticData.icon, staticData.shopDesc, {x:0, y:0});
             // this.screenManager.showInfo(globalPos, staticData.icon, staticData.shopDesc, {x:-0.25, y:0.25});
         })
 
@@ -153,6 +144,8 @@ export default class ShopPopUp extends StandardPop
         this.backCurrencyContainer.alpha = 0.5;
         this.backCurrencyContainer.x = -config.width / 2
         this.backCurrencyContainer.y = -config.height / 2 + 50
+        
+
         this.coinsContainer = new PIXI.Container();
         this.coinSprite = new PIXI.Sprite.from(GAME_DATA.moneyData.softIcon);
         this.coinsContainer.addChild(this.coinSprite);

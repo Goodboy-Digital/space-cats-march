@@ -11,6 +11,7 @@ export default class GameOverCatsList extends ListScroller
     }, itensPerPage = 4)
     {
         super(rect, itensPerPage);
+        this.maskGraphic.height = this.rect.h - this.itemHeight / 2
         this.onItemShop = new Signals();
         // this.onShopItem = new Signals();
         this.container = new PIXI.Container();
@@ -23,7 +24,7 @@ export default class GameOverCatsList extends ListScroller
         for (var i = 0; i < itens.length; i++)
         {
             let tempItem = itens[i];
-            this.catListContainer.addChild(tempItem)
+            this.listContainer.addChild(tempItem)
             tempItem.y = this.itemHeight * this.itens.length - 1;
             if (tempItem.onConfirmShop)
             {

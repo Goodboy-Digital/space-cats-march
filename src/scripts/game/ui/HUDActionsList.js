@@ -16,7 +16,7 @@ export default class HUDActionsList extends UIList
         this.onStartAction = new Signals();
         this.onFinishAction = new Signals();
 
-        this.containerBackground = new PIXI.Graphics().beginFill(0x000000).drawRect(0, 0, rect.w, rect.h);
+        this.containerBackground = new PIXI.Graphics().beginFill(0xFF0000).drawRect(0, 0, rect.w, rect.h);
         this.addChild(this.containerBackground)
         this.containerBackground.alpha = 0;
 
@@ -24,30 +24,35 @@ export default class HUDActionsList extends UIList
         {
             let data = GAME_DATA.actionsData[i];
             let item = new HUDActionContainer(GAME_DATA.actionsData[data.id]);
-            this.addChild(item);
-            item.fitWidth = 1;
+            let tempContainer = new PIXI.Container();
+            tempContainer.addChild(item);
+            this.addChild(tempContainer);
+            tempContainer.align = 0;
+            tempContainer.fitWidth = 1;
             item.onClickItem.add(this.onStartActionCallback.bind(this))
             item.onFinishAction.add(this.onFinishActionCallback.bind(this))
             this.itensList.push(item);
-            this.elementsList.push(item);
+            this.elementsList.push(tempContainer);
+            item.x = -item.width
         }
         this.updateData();
         this.updateVerticalList();
     }
     updateActionList()
     {
-        console.log('updateActionList');
+        console.log('UPDATE ACTIONSSS 222222222');
         this.updateData();
         for (var i = 0; i < this.itensList.length; i++)
         {
             console.log(GAME_DATA.actionsData[i].level);
             if (GAME_DATA.actionsData[i].level <= 0)
             {
-                this.itensList[i].visible = false;
+                this.itensList[i].totallyDisabled();
             }
             else
             {
-                this.itensList[i].visible = true;
+                console.log('showACTION', i);
+                this.itensList[i].available();
                 this.itensList[i].updateData(GAME_DATA.actionsData[i]);
             }
         }

@@ -62,7 +62,7 @@ export default class AskVideoPopUp extends StandardPop
         // this.playButton.y = config.height - this.container.y - this.playButton.height / 2 - 20
         this.playButton.interactive = true;
         this.playButton.buttonMode = true;
-        this.playButton.on('mouseup', this.confirm.bind(this)).on('touchend', this.confirm.bind(this));
+        this.playButton.on('mousedown', this.confirm.bind(this)).on('touchstart', this.confirm.bind(this));
         this.container.addChild(this.playButton)
 
         this.cancelButton = new UIButton('icon_close');
@@ -73,7 +73,7 @@ export default class AskVideoPopUp extends StandardPop
         // this.cancelButton.y = config.height - this.container.y - this.cancelButton.height / 2 - 20
         this.cancelButton.interactive = true;
         this.cancelButton.buttonMode = true;
-        this.cancelButton.on('mouseup', this.close.bind(this)).on('touchend', this.close.bind(this));
+        this.cancelButton.on('mousedown', this.close.bind(this)).on('touchstart', this.close.bind(this));
         this.container.addChild(this.cancelButton)
 
 

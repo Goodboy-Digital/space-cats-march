@@ -45,7 +45,7 @@ export default class AutoCollectButton extends PIXI.Container
         this.priceLabel = new PIXI.Text('100k',
         {
             fontFamily: 'blogger_sansregular',
-            fontSize: '32px',
+            fontSize: '18px',
             fill: 0xe5519b,
             align: 'center',
             fontWeight: '800'

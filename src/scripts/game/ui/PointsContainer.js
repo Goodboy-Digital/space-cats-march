@@ -14,7 +14,7 @@ export default class PointsContainer extends PIXI.Container {
 
         this.pointsLabelInfo = new PIXI.Text('YOUR SCORE', {
             fontFamily: 'blogger_sansregular',
-            fontSize: '42px',
+            fontSize: '22px',
             fill: 0xFFFFFF,
             align: 'center',
             fontWeight: '800'
@@ -27,7 +27,7 @@ export default class PointsContainer extends PIXI.Container {
 
         this.currentPointsLabel = new PIXI.Text('0', {
             fontFamily: 'blogger_sansregular',
-            fontSize: '124px',
+            fontSize: '60px',
             fill: 0xFFFFFF,
             align: 'center',
             fontWeight: '800'
@@ -45,7 +45,7 @@ export default class PointsContainer extends PIXI.Container {
 
         this.higscoreLabelInfo = new PIXI.Text('ALL TIME BEST', {
             fontFamily: 'blogger_sansregular',
-            fontSize: '42px',
+            fontSize: '22px',
             fill: 0xFFFFFF,
             align: 'center',
             fontWeight: '800'
@@ -57,7 +57,7 @@ export default class PointsContainer extends PIXI.Container {
 
         this.higscoreLabel = new PIXI.Text('0', {
             fontFamily: 'blogger_sansregular',
-            fontSize: '124px',
+            fontSize: '60px',
             fill: 0xFFFFFF,
             align: 'center',
             fontWeight: '800'
@@ -78,7 +78,7 @@ export default class PointsContainer extends PIXI.Container {
 
         this.moneyLabel = new PIXI.Text('0', {
             fontFamily: 'blogger_sansregular',
-            fontSize: '42px',
+            fontSize: '48px',
             fill: 0xFFFFFF,
             align: 'center',
             fontWeight: '800'
@@ -103,6 +103,8 @@ export default class PointsContainer extends PIXI.Container {
         let moneyObj = {
             current: this.currentPoints
         }
+        let globalCoinPos = this.coinSprite.getGlobalPosition();
+        globalCoinPos.x += this.coinSprite.width / 2
         TweenLite.to(moneyObj, 1, {
             delay:delay,
             current: 0,
@@ -110,6 +112,8 @@ export default class PointsContainer extends PIXI.Container {
             onUpdate: (moneyObj) => {
                 this.currentPointsLabel.pivot.x = this.currentPointsLabel.width / 2;
                 this.currentPointsLabel.text = utils.formatPointsLabel(moneyObj.current / MAX_NUMBER);
+                window.screenManager.addCoinsParticles(globalCoinPos, 3);
+
             },
             onComplete:()=>{
                 this.currentPointsLabel.pivot.x = this.currentPointsLabel.width / 2;

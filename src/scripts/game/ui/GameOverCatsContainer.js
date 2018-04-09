@@ -4,6 +4,7 @@ import config from '../../config';
 import utils from '../../utils';
 import GameOverItemContainer from './GameOverItemContainer';
 import UIList from './uiElements/UIList';
+import UIButton from './uiElements/UIButton';
 import GameOverCatsList from './GameOverCatsList';
 export default class GameOverCatsContainer extends UIList
 {
@@ -17,16 +18,9 @@ export default class GameOverCatsContainer extends UIList
         this.prizeDark.alpha = 0.75;
         this.interactive = true;
         this.buttonMode = true;
-        this.on('mouseup', this.collect.bind(this)).on('touchend', this.collect.bind(this));
+        // this.on('mouseup', this.collect.bind(this)).on('touchend', this.collect.bind(this));
         this.addChild(this.prizeDark);
 
-        // this.starBackground = new PIXI.Sprite.from('results_newcat_rays_02');
-        // this.starBackground.anchor.set(0.5)
-        // this.addChild(this.starBackground);
-        // this.starBackground.x = config.width / 2;
-        // this.starBackground.y = config.height / 2;
-        // this.starBackgroundScale = config.width / this.starBackground.width * 0.75;
-        // this.starBackground.scale.set(this.starBackgroundScale)
 
         this.backgroundContainer = new PIXI.Container();
         let tiled = new PIXI.extras.TilingSprite(PIXI.Texture.from('pattern'), 132, 200);
@@ -49,21 +43,24 @@ export default class GameOverCatsContainer extends UIList
         this.backgroundContainer.addChild(tiled)
 
         this.backgroundContainer.alpha = 0.5
-            // this.backgroundContainer.addChild(this.logoMask)
-            // this.backgroundContainer.mask = this.logoMask
         this.addChild(this.backgroundContainer);
 
+        this.listRect = {
+            w: config.width * 0.3,
+            h: config.height * 0.5
+        }
+
+        this.prizeFrame = new PIXI.Sprite(PIXI.Texture.from('info_panel'))
+        this.prizeFrame.scale.set(this.listRect.h / this.prizeFrame.height)
+        this.addChild(this.prizeFrame);
+        
         this.prizesContainer = new PIXI.Container();
         this.addChild(this.prizesContainer);
         this.itensList = [];
         this.itensList1 = [];
         this.itensList2 = [];
 
-        this.listRect = {
-            w: config.width * 0.3,
-            h: config.height * 0.65
-        }
-        this.pageItens = 6
+        this.pageItens = 5
 
         this.gameOverCatList1 = new GameOverCatsList(this.listRect, this.pageItens);
         this.gameOverCatList2 = new GameOverCatsList(this.listRect, this.pageItens);
@@ -78,6 +75,9 @@ export default class GameOverCatsContainer extends UIList
         this.prizesContainer.x = config.width / 2 - this.w / 2;
         this.prizesContainer.y = config.height / 2 - this.h / 2;
 
+        this.prizeFrame.x = config.width / 2 - this.prizeFrame.width / 2
+        this.prizeFrame.y = this.prizesContainer.y - this.gameOverCatList1.itemHeight / 2 + 5
+
         let found = GAME_DATA.shopDataStatic.find(function(element)
         {
             return element.type == 'cat_multiplier';
@@ -85,17 +85,85 @@ export default class GameOverCatsContainer extends UIList
         this.shopStaticData = found;
         this.itensPool = [];
 
-        console.log(found);
-        // this.itemData = cat_multiplier
-        // this.show([15,15,15,15,15,15,15,15,15]);
+        this.currentList = this.gameOverCatList1;
+
+
+        this.confirmButton = new UIButton('icon_back');
+        this.confirmButtonScale = config.width / this.confirmButton.width * 0.15
+        this.confirmButton.scale.set(this.confirmButtonScale)
+        this.confirmButton.icon.scale.x = this.confirmButton.icon.scale.x * -1;
+        this.confirmButton.interactive = true;
+        this.confirmButton.buttonMode = true;
+        this.confirmButton.on('mousedown', this.collect.bind(this)).on('touchstart', this.collect.bind(this));
+        this.addChild(this.confirmButton)
+        this.confirmButton.x = config.width - this.confirmButton.width //* 1.25;
+        this.confirmButton.y = config.height - this.confirmButton.height //* 1.25;
+
+
+        this.multiplierContainer =  new PIXI.Sprite.from('powerup_background');
+        this.multiplierContainer.anchor.set(0.5, 0.5);
+        this.multiplierSprite = new PIXI.Sprite.from(this.shopStaticData.icon);
+        this.multiplierSprite.anchor.set(0.5, 0.5);
+        this.multiplierSprite.scale.set(this.multiplierContainer.width / this.multiplierSprite.width * 0.75)
+        this.multiplierContainer.addChild(this.multiplierSprite);
+        this.multiplierContainer.scale.set(this.confirmButton.width / this.multiplierSprite.width * 0.75)
+        this.multiplierContainer.x = config.width - this.multiplierContainer.width //* 1.25;
+        this.multiplierContainer.y = this.multiplierContainer.height //* 1.25;
+
+        this.multiplierLabel = new PIXI.Text('0',
+        {
+            fontFamily: 'blogger_sansregular',
+            fontSize: '42px',
+            fill: 0xFFFFFF,
+            align: 'center',
+            fontWeight: '800'
+        });
+        this.multiplierLabel.y = this.multiplierContainer.height / this.multiplierContainer.scale.y * 0.5//* 0.5
+        this.multiplierLabel.pivot.x = this.multiplierLabel.width / 2;
+        this.multiplierContainer.addChild(this.multiplierLabel);
+
+        this.addChild(this.multiplierContainer)
+
+
+        this.coinsContainer = new PIXI.Container();
+        this.coinSprite = new PIXI.Sprite.from(GAME_DATA.moneyData.softIcon);
+        this.coinsContainer.addChild(this.coinSprite);
+        this.coinSprite.anchor.set(0, 0.5);
+
+        this.moneyLabel = new PIXI.Text('0',
+        {
+            fontFamily: 'blogger_sansregular',
+            fontSize: '42px',
+            fill: 0xFFFFFF,
+            align: 'center',
+            fontWeight: '800'
+        });
+        this.moneyLabel.pivot.y = this.moneyLabel.height / 2;
+        this.coinsContainer.addChild(this.moneyLabel);
+
+        this.coinSprite.scale.set(config.height / this.coinSprite.height * 0.075)
+        this.moneyLabel.scale.set(config.height / this.moneyLabel.height * 0.065)
+        this.moneyLabel.x = this.coinSprite.width * 1.25;
+        this.currentMoney = GAME_DATA.moneyData.currentCoins;
+        this.coinsContainer.x = config.width / 2 - this.coinsContainer.width / 2
+        this.coinsContainer.y = this.multiplierContainer.y
+        this.addChild(this.coinsContainer)
 
     }
     update(delta)
     {
-        // if (this.visible)
-        // {
+        if (this.visible)
+        {
+            if(this.gameOverCatList1.dragging){
+                this.currentList = this.gameOverCatList1;
+            }
+            else if(this.gameOverCatList2.dragging){
+                this.currentList = this.gameOverCatList2;            
+            }
+            this.gameOverCatList2.listContainer.y = this.currentList.listContainer.y;
+            this.gameOverCatList1.listContainer.y = this.currentList.listContainer.y;
         //     this.starBackground.rotation += 0.05
-        // }
+        }
     }
     collect()
     {
@@ -130,7 +198,6 @@ export default class GameOverCatsContainer extends UIList
         // this.elementsList.push(item);
         this.prizesContainer.addChild(item);
 
-        
     }
     hide()
     {
@@ -145,8 +212,14 @@ export default class GameOverCatsContainer extends UIList
         this.gameOverCatList2.dispose();
         this.visible = false;
     }
-    show(catList)
+    show(catList, points = 66666)
     {
+        this.multValue = GAME_DATA.getActionStats(GAME_DATA.shopData[this.shopStaticData.id]).value;
+        this.multiplierLabel.text = 'x'+utils.cleanString(this.multValue).toFixed(2);
+        this.multiplierLabel.pivot.x = this.multiplierLabel.width / 2;
+        this.currentMoney = 0;
+        this.updateMoney(0, true)
+        this.updateMoney(points, false, 0.75)
     	for (var i = 0; i < catList.length; i++) {
     		if(catList[i] > 0){
     			this.addCatItem(i);
@@ -160,7 +233,6 @@ export default class GameOverCatsContainer extends UIList
         if (dynamicData.level > 0)
         {
             this.leveledShopData = GAME_DATA.getActionStats(dynamicData);
-            console.log('SHOW PRIZE', this.leveledShopData);
         }
         let list = GAME_DATA.getChestPrize();
 
@@ -169,12 +241,12 @@ export default class GameOverCatsContainer extends UIList
             this.itensList[i].forceHide();
         }
         // this.updateHorizontalList();
-
+        let delay = 0;
         for (var i = 0; i < this.itensList.length; i++)
         {
             let item = list[i] //this.itensList[i];
             let itemC = this.itensList[i]
-            let delay = 0.15 * i + 0.1
+            delay = 0.1 * i + 0.1
             itemC.show(delay);
             itemC.setValue(catList[i])
 
@@ -182,10 +254,14 @@ export default class GameOverCatsContainer extends UIList
 	        {
 	            catList[i] *= this.leveledShopData.value;
 	            catList[i] = Math.ceil(catList[i]);
-            	itemC.updateQuant(catList[i], false, delay + 1)
+            	itemC.updateQuant(catList[i], false, delay + 1, 'x'+utils.cleanString(this.multValue).toFixed(2))
 	        }
 
         }
+        this.confirmButton.visible = false;
+        setTimeout(()=> {
+            this.showButton();
+        }, delay * 1000 + 1000);
         this.prizeDark.alpha = 0;
 
 
@@ -196,5 +272,50 @@ export default class GameOverCatsContainer extends UIList
         this.visible = true;
 
         return catList
+    }
+    showButton(){
+        this.confirmButton.visible = true;
+        this.confirmButton.scale.set(0);
+        TweenLite.to(this.confirmButton.scale, 0.75, {x:this.confirmButtonScale, y:this.confirmButtonScale, ease:Elastic.easeOut})
+    }
+    updateMoney(money, force, delay = 0)
+    {
+        if (force)
+        {
+            this.moneyLabel.text = utils.formatPointsLabel(money / MAX_NUMBER);
+            this.coinsContainer.x = config.width / 2 - this.coinsContainer.width / 2
+            this.currentMoney = money;
+            return;
+        }
+        if (this.currentTween)
+        {
+            TweenLite.killTweensOf(this.currentTween);
+        }
+        let moneyObj = {
+            current: this.currentMoney,
+            target: money
+        }
+
+
+        this.currentMoney = money;
+        this.currentTween = TweenLite.to(moneyObj, 0.5,
+        {
+            delay: delay,
+            current: money,
+            onUpdateParams: [moneyObj],
+            onUpdate: (moneyObj) =>
+            {
+                this.moneyLabel.text = utils.formatPointsLabel(moneyObj.current / MAX_NUMBER);
+                this.coinsContainer.x = config.width / 2 - this.coinsContainer.width / 2
+                let globalCoinPos = this.coinSprite.getGlobalPosition();
+                globalCoinPos.x += this.coinSprite.width / 2;
+                window.screenManager.addCoinsParticles(globalCoinPos, 1, {scale:0.05});
+            },
+            onComplete: () =>
+            {
+
+                this.coinsContainer.x = config.width / 2 - this.coinsContainer.width / 2
+            }
+        })
     }
 }

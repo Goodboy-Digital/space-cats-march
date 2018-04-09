@@ -62,6 +62,8 @@ export default class GameData
         this.version = '0.0.0.14';
 
         this.resetCatData();
+
+        this.minimumAmountOfCatsToReset = 3;
     }
     resetCatData()
     {
@@ -99,7 +101,8 @@ export default class GameData
         else if (currType == 'soft')
         {
             return this.moneyData.currentCoins >= cost;
-        }else if (currType == 'video')
+        }
+        else if (currType == 'video')
         {
             return true;
         }
@@ -151,13 +154,16 @@ export default class GameData
             if (levelPercent > 0)
             {
 
-                if(tempData.min > tempData.max){
+                if (tempData.min > tempData.max)
+                {
                     // easeCost = tempData.min - easeCost;
                     easeCost = tempData.min - utils[tempData.typeCurve](levelPercent, tempData.max, tempData.min, 1) + tempData.max
-                    // console.log(shopData.type, easeCost, tempData.typeCurve, levelPercent, tempData.min, tempData.max);
-                }else{
+                        // console.log(shopData.type, easeCost, tempData.typeCurve, levelPercent, tempData.min, tempData.max);
+                }
+                else
+                {
 
-                easeCost = utils[tempData.typeCurve](levelPercent, tempData.min, tempData.max, 1)
+                    easeCost = utils[tempData.typeCurve](levelPercent, tempData.min, tempData.max, 1)
                 }
 
             }
@@ -172,7 +178,6 @@ export default class GameData
     {
         let shopData;
 
-
         let discountData = GAME_DATA.shopDataStatic.find(function(element)
         {
             return element.type == 'discount';
@@ -182,13 +187,14 @@ export default class GameData
 
         for (var i = 0; i < this.shopDataStatic.length; i++)
         {
-            if (this.shopDataStatic[i].id == data.id)
+            if (this[data.staticData][i].id == data.id)
             {
-                shopData = this.shopDataStatic[i];
+                shopData = this[data.staticData][i];
             }
         }
         let level = data.level;
 
+        // console.log(data, shopData);
         let costData = shopData.stats.cost;
         let levelPercent = level / shopData.levelMax
         let easeCost = costData.min;
@@ -216,7 +222,7 @@ export default class GameData
         let shopCoast = actionData.costMax / actionData.levelMax * level * actionData.cost;
         let actionTime = actionData.timeMax / actionData.levelMax * level * actionData.time;
 
-        console.log(shopCoast);
+        // console.log(shopCoast);
         return {
             cost: shopCoast
         }
@@ -483,7 +489,7 @@ export default class GameData
 
             let mult = this.catsData[i].collected / staticData.limitCatsToMultiply * staticData.maxCollectedMultiplier;
             this.catsData[i].collectedMultiplier = mult;
-            console.log(mult);
+            // console.log(mult);
 
         }
         this.SAVE();

@@ -15,9 +15,10 @@ export default class CircleCounter extends PIXI.Container {
         this.frontShape = new PIXI.Graphics().beginFill(0xFFFFFF).drawCircle(0, 0, shapeRadius);
         this.frontShape.alpha = 0.5
         this.maskedShape = new PIXI.Graphics().beginFill(0xFFFFFF).drawCircle(0, 0, maskRadius);
-        this.addChild(this.maskedShape, this.frontShape);
+        // this.addChild(this.maskedShape);
+        // this.addChild(this.frontShape);
 
-        this.maskedShape.mask = this.circleMask;
+        // this.maskedShape.mask = this.circleMask;
 
         this.update(0);
     }

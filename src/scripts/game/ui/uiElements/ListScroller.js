@@ -2,29 +2,33 @@ import * as PIXI from 'pixi.js';
 import Signals from 'signals';
 import config from '../../../config';
 import utils from '../../../utils';
-export default class ShopList extends PIXI.Container {
+export default class ListScroller extends PIXI.Container {
     constructor(rect = {
         w: 500,
         h: 500
-    }, itensPerPage = 4) {
+    }, itensPerPage = 4, masked = true, space = 0) {
         super();
-
+        this.marginTop = 0;
+        this.space = space;
+        this.itens = [];
         this.container = new PIXI.Container();
-        this.catListContainer = new PIXI.Container();
+        this.listContainer = new PIXI.Container();
         this.containerBackground = new PIXI.Graphics().beginFill(0x000000).drawRect(0, 0, rect.w, rect.h);
         this.addChild(this.containerBackground)
         this.containerBackground.alpha = 0;
-        this.maskGraphic = new PIXI.Graphics().beginFill(0x000000).drawRect(0, 0, rect.w, rect.h);
-        this.addChild(this.maskGraphic)
 
         this.rect = rect;
         this.itemsPerPage = itensPerPage;
         this.itemHeight = this.rect.h / this.itemsPerPage;
 
-        this.container.addChild(this.catListContainer);
+        this.container.addChild(this.listContainer);
         this.container.addChild(this.containerBackground);
         this.addChild(this.container);
-        this.container.mask = this.maskGraphic;
+        if(masked){
+            this.maskGraphic = new PIXI.Graphics().beginFill(0x000000).drawRect(0, 0, rect.w, rect.h);
+            this.addChild(this.maskGraphic)
+            this.container.mask = this.maskGraphic;
+        }
         this.container.interactive = true;
 
         this.container.on('mousemove', this.moveDrag.bind(this))
@@ -38,6 +42,24 @@ export default class ShopList extends PIXI.Container {
             .on('touchendoutside', this.endDrag.bind(this))
             .on('mouseupoutside', this.endDrag.bind(this));
     }
+    addItens(itens, fit = false)
+    {
+        for (var i = 0; i < itens.length; i++)
+        {
+            let tempItem = itens[i];
+            this.listContainer.addChild(tempItem)
+            tempItem.y = (this.itemHeight + this.space)* this.itens.length - 1 + this.marginTop;   
+
+            if(fit){
+                tempItem.scale.set(this.itemHeight / tempItem.height);
+            }
+
+            console.log(tempItem.y);         
+            this.itens.push(tempItem);
+
+        }
+        this.lastItemClicked = this.itens[0]
+    }
     endDrag() {
         if (!this.enableDrag) {
             return;
@@ -46,7 +68,7 @@ export default class ShopList extends PIXI.Container {
         this.containerBackground.interactive = false;
 
         let target = 0;
-        let targY = this.catListContainer.y
+        let targY = this.listContainer.y
         let maxH = this.itemHeight * this.itens.length;
         if (this.goingDown == 1) {
             targY -= this.itemHeight / 2;
@@ -58,19 +80,17 @@ export default class ShopList extends PIXI.Container {
         }
 
         if (target > 0) {
-            TweenLite.to(this.catListContainer, 0.75, {
+            TweenLite.to(this.listContainer, 0.75, {
                 y: 0,
                 ease: Back.easeOut
             })
         } else if (target + maxH < this.containerBackground.height) {
-            console.log(maxH - this.containerBackground.height);
-            TweenLite.to(this.catListContainer, 0.75, {
-                y: this.containerBackground.height - maxH, // - this.catListContainer.height,
+            TweenLite.to(this.listContainer, 0.75, {
+                y: this.containerBackground.height - maxH, // - this.listContainer.height,
                 ease: Back.easeOut
             })
         } else if (target != 0) {
-            console.log('target', target);
-            TweenLite.to(this.catListContainer, 0.75, {
+            TweenLite.to(this.listContainer, 0.75, {
                 y: target,
                 ease: Back.easeOut
             })
@@ -97,7 +117,7 @@ export default class ShopList extends PIXI.Container {
                 y: e.data.global.y
             };
 
-            this.catListContainer.y -= this.dragVelocity.y
+            this.listContainer.y -= this.dragVelocity.y
 
             if (this.dragVelocity.y > 0) {
                 this.containerBackground.interactive = true;
@@ -109,12 +129,12 @@ export default class ShopList extends PIXI.Container {
         }
     }
     startDrag(e) {
-        if(this.catListContainer.height < this.containerBackground.height){
+        if(this.listContainer.height < this.containerBackground.height){
             return
         }
         this.enableDrag = true;
         this.goingDown = 0;
-        TweenLite.killTweensOf(this.catListContainer);
+        TweenLite.killTweensOf(this.listContainer);
         this.dragging = true;
         this.currentMousePos = {
             x: e.data.global.x,

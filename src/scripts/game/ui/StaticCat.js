@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+// import * as FILTERS from 'pixi-filters';
 export default class StaticCat extends PIXI.Container
 {
     constructor()
@@ -42,13 +43,13 @@ export default class StaticCat extends PIXI.Container
 
         this.rleg = new PIXI.Sprite.from(this.currentCatLabel + 'leg');
         this.rleg.anchor.set(0.5, 0.25)
-        this.rleg.x = -this.body.width * this.body.anchor.x + this.rleg.width * this.rleg.anchor.x + 10;
+        this.rleg.x = -this.body.width * this.body.anchor.x + this.rleg.width * this.rleg.anchor.x + this.rleg.width * 0.5;
         this.rleg.y = this.body.height * this.body.anchor.y //- this.lleg.height * this.lleg.anchor.y;
 
 
         this.lleg = new PIXI.Sprite.from(this.currentCatLabel + 'leg');
         this.lleg.anchor.set(0.5, 0.25)
-        this.lleg.x = this.body.width * this.body.anchor.x - this.lleg.width * this.lleg.anchor.x - 10;
+        this.lleg.x = this.body.width * this.body.anchor.x - this.lleg.width * this.lleg.anchor.x - this.lleg.width * 0.5;
         this.lleg.y = this.body.height * this.body.anchor.y //- this.lleg.height * this.lleg.anchor.y;
 
 
@@ -63,6 +64,8 @@ export default class StaticCat extends PIXI.Container
 
         this.animationContainer.y = -this.animationContainer.height * 0.5
 
+        this.lockImage = null;
+
     }
     unlock()
     {
@@ -72,16 +75,51 @@ export default class StaticCat extends PIXI.Container
         this.rarm.tint = 0xFFFFFF;
         this.body.tint = 0xFFFFFF;
         this.head.tint = 0xFFFFFF;
+        this.animationContainer.filters = null
     }
     lock()
     {
-        this.updateCatTextures('white_');
-        this.lleg.tint = 0xE5519B;
-        this.rleg.tint = 0xE5519B;
-        this.larm.tint = 0xE5519B;
-        this.rarm.tint = 0xE5519B;
-        this.body.tint = 0xE5519B;
-        this.head.tint = 0xE5519B;
+        if (!this.lockImage)
+        {
+
+
+            let whiteFilter = new PIXI.Filter(
+                null,
+                // fragment shader
+                [
+                    'precision highp float;',
+                    'uniform sampler2D uSampler;',
+                    'varying vec2 vTextureCoord;',
+                    'uniform vec3 _color;',
+
+                    'void main() {',
+
+                    'vec4 original = texture2D(uSampler, vTextureCoord);',
+                    'vec3 color = vec3(1.);',
+
+                    // 'gl_FragColor = original;',
+                    'gl_FragColor = vec4(_color, original.a);',
+                    'gl_FragColor.rgb *=  original.a;',
+                    '}'
+                ].join('\n'),
+                {
+                    _color:
+                    {
+                        type: 'vec3',
+                        value: [229 / 255, 81 / 255, 155 / 255]
+                    }
+                }
+            );
+
+            // whiteFilter.uniforms._color = [1.0, 0, 0]
+
+            this.animationContainer.filters = [whiteFilter];
+            // this.animationContainer.cacheAsBitmap = true;
+            this.animationContainer.tint = 0xE5519B
+            // this.lockImage = this.animationContainer
+        }
+        // let colorMatrix = new PIXI.filters.ColorMatrixFilter();
+        // colorMatrix.colorTone  (5,0,0xFFFFFF,0);
 
     }
     happy()

@@ -113,7 +113,7 @@ export default
         {
             let fix = 2
             tempPoints = tempPoints.toFixed(fix).toString()
-
+            // console.log(tempPoints + temp);
         }
         else if (tempPoints.toString().length > 4)
         {
@@ -522,6 +522,12 @@ export default
     easeInExpo(t, b, c, d)
     {
         return c * Math.pow(2, 10 * (t / d - 1)) + b;
+    },
+
+    easeInCirc(t, b, c, d)
+    {
+        t /= d;
+        return -c * (Math.sqrt(1 - t * t) - 1) + b;
     },
 
 }

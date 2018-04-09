@@ -107,12 +107,13 @@ export default class ShopItem extends UIList
         // this.itemIcon.scaleContent = false;
 
     }
-    onInfoCallback(){
+    onInfoCallback()
+    {
         this.onShowInfo.dispatch(this.itemData, this.infoButton);
     }
     onShopItem(itemData)
     {
-        this.onConfirmShop.dispatch(this.itemData, this.realCost);
+        this.onConfirmShop.dispatch(this.itemData, this.realCost, this.shopButton);
     }
     updateValues()
     {
@@ -150,20 +151,22 @@ export default class ShopItem extends UIList
         }
         if (this.attributesList)
         {
-
             for (let type in leveldValues)
             {
-                if (type != 'type' && type != 'cost')
+                if (this.staticData.stats[type])
                 {
-                    if (leveldValues[type])
+                    if (!this.staticData.stats[type].hideOnShop)
                     {
-                        if (leveldValues[type] < 100)
+                        if (leveldValues[type])
                         {
-                            this.attributesList[type].text = leveldValues[type].toFixed(2)
-                        }
-                        else
-                        {
-                            this.attributesList[type].text = utils.formatPointsLabel(leveldValues[type] / MAX_NUMBER);
+                            if (leveldValues[type] < 100)
+                            {
+                                this.attributesList[type].text = leveldValues[type].toFixed(2)
+                            }
+                            else
+                            {
+                                this.attributesList[type].text = utils.formatPointsLabel(leveldValues[type] / MAX_NUMBER);
+                            }
                         }
                     }
                 }
@@ -211,42 +214,44 @@ export default class ShopItem extends UIList
             let leveldValues = GAME_DATA.getActionStats(this.itemData);
             for (let type in leveldValues)
             {
-                if (type != 'type' && type != 'cost')
+                // if (type != 'type' && type != 'cost')
+                // {
+                if (this.staticData.stats[type])
                 {
-
-                    let attContainer = new PIXI.Container();
-
-
-
-
-                    let attIcon = new PIXI.Sprite.from(this.icons[type]);
-                    attIcon.scale.set(this.attributesList.w / attIcon.width * 0.1)
-                    let attValue = new PIXI.Text('000',
+                    if (!this.staticData.stats[type].hideOnShop)
                     {
-                        fontFamily: 'blogger_sansregular',
-                        fontSize: '18px',
-                        fill: 0xFFFFFF,
-                        align: 'right',
-                        fontWeight: '800'
-                    });
 
-                    attContainer.addChild(attIcon);
-                    attContainer.addChild(attValue);
+                        let attContainer = new PIXI.Container();
 
-                    attValue.scale.set(this.attributesList.h / attValue.height * 0.2)
-                    attValue.x = attIcon.x + attIcon.width + 5;
-                    attValue.y = attIcon.y + attIcon.height / 2 - attValue.height / 2;
+                        let attIcon = new PIXI.Sprite.from(this.icons[type]);
+                        attIcon.scale.set(this.attributesList.w / attIcon.width * 0.1)
+                        let attValue = new PIXI.Text('000',
+                        {
+                            fontFamily: 'blogger_sansregular',
+                            fontSize: '18px',
+                            fill: 0xFFFFFF,
+                            align: 'right',
+                            fontWeight: '800'
+                        });
 
-                    attContainer.align = 0
-                        // attContainer.fitHeight = 0
-                    this.attributesList.elementsList.push(attContainer);
-                    this.attributesList.container.addChild(attContainer);
-                    this.attributesList[type] = attValue;
+                        attContainer.addChild(attIcon);
+                        attContainer.addChild(attValue);
+
+                        attValue.scale.set(this.attributesList.h / attValue.height * 0.2)
+                        attValue.x = attIcon.x + attIcon.width + 5;
+                        attValue.y = attIcon.y + attIcon.height / 2 - attValue.height / 2;
+
+                        attContainer.align = 0
+                            // attContainer.fitHeight = 0
+                        this.attributesList.elementsList.push(attContainer);
+                        this.attributesList.container.addChild(attContainer);
+                        this.attributesList[type] = attValue;
+                    }
                 }
             }
             this.attributesList.updateHorizontalList();
 
-            console.log(this.h, this.attributesList.elementsList, this.descriptionContainer);
+            // console.log(this.h, this.attributesList.elementsList, this.descriptionContainer);
             this.descriptionContainer.y = 0;
         }
         this.updateValues();

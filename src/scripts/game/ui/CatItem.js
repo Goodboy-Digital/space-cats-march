@@ -81,7 +81,7 @@ export default class CatItem extends UIList {
         this.backButton = new PIXI.Sprite.from('back_button');
         this.catNameLabel = new PIXI.Text('', {
             fontFamily: 'blogger_sansregular',
-            fontSize: '32px',
+            fontSize: '18px',
             // fill: 0,
             fill: 0xe5519b,
             align: 'center',
