@@ -14,6 +14,7 @@
     "json:watch": "node ./tools/json-watch.js",
     "start": "npm run image && npm run model && npm run audio && webpack-dev-server --progress --colors --no-info --client-log-level error",
     "serve": "webpack-dev-server --progress --colors",
+    "dev:fb": "npm run assets & npm run assets:watch & npm run js:watch",
     "build": "webpack --progress --colors "
   },
   "author": "Jojo | Jordan Machado",
@@ -50,6 +51,7 @@
     "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
+    "crypto-js": "^3.1.9-1",
     "ffmpeg": "0.0.4",
     "gsap": "^1.20.3",
     "howler": "^2.0.9",

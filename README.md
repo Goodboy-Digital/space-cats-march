@@ -2,6 +2,11 @@
 
 description here of all the features comming soon:
 
+
+ https://www.facebook.com/embed/instantgames/184590992339091/player?game_url=https://localhost:8080
+
+
+
 - auto minify json
 - auto convert wav in .mp3 & .ogg
 - optimize obj

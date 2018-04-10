@@ -5,6 +5,7 @@
 	  <meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1">
 	  <meta name=apple-mobile-web-app-capable content=yes>
 	  <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <script src="https://connect.facebook.net/en_US/fbinstant.6.0.js"></script>
 	  <title>Space Cats</title>
   <!-- <link rel="stylesheet" href="assets/fonts/specimen_files/specimen_stylesheet.css" type="text/css" charset="utf-8" /> -->
     <link rel="stylesheet" href="assets/fonts/stylesheet.css" type="text/css" charset="utf-8" />
@@ -39,7 +40,29 @@
   </style>
   </head>
   <body>
-  	<p class="font-default">P L A Y S</p>
+  	<p class="font-default">P</p>
+
+
+      <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '184590992339091',
+        xfbml      : true,
+        version    : 'v2.8'
+      });
+      FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "//connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
+  <div id="og-game-holder"></div>
+
     <script src="assets/bundle.js" charset="utf-8"></script>
   </body>
 </html>

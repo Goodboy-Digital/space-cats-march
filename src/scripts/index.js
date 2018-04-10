@@ -10,8 +10,12 @@ import GameScreen from './game/screen/GameScreen';
 import SoundManager from './soundManager/SoundManager'
 import SoundManagerCordova from './soundManager/SoundManagerCordova'
 import imageManifest from './manifests/manifest-image'
+import FbManager from './fb/FbManager'
 
 window.STORAGE = new LocalStorage();
+
+window.GAME_ID = 184590992339091
+window.TOKEN = 'EAAYsfZAxiFmMBAGRGBwsQbhqBRq04GhaWGc4KOC2YRFEDzf8yA0cW0h8CxlZAkx6mnUK3bIJI9FDYkUASGTgAycujNZBqRZCI2AzpmiQfpFgpW61PNhqNfZCdIgkEl93de3LXyn00ZAtAPShcEVAjf9wZAhZCSMKE8R809ND4LcQ7gZDZD'
 
 window.CATS_POOL = [];
 window.LABEL_POOL = [];
@@ -43,6 +47,10 @@ startLoader();
 //     }
 //     return CAT_LIST[id];
 // }
+
+// window.FbManager = new FbManager();
+
+
 function startLoader()
 {
     for (var i = 0; i < imageManifest.length; i++)
@@ -52,6 +60,18 @@ function startLoader()
     PIXI.loader
         .add('./assets/fonts/stylesheet.css')
         .load(configGame);
+
+        console.log('try to connect');
+        FbManager.connect().then( ()=> {
+            FbManager.trackLoader(PIXI.loader);
+
+        })
+        .catch(e => {
+
+            console.log('CONNECT111?');
+            console.log(e);
+
+        })
 }
 
 function configGame(evt)
