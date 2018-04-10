@@ -15,8 +15,8 @@ export default class StaticCat extends PIXI.Container
         this.zero = new PIXI.Graphics().beginFill(0xFF0000).drawCircle(0, 0, 10);
 
         this.normalHead = new PIXI.Texture.from(this.currentCatLabel + 'head_01');
-        this.collectedHead = new PIXI.Texture.from(this.currentCatLabel + 'head_02');
-        this.deadHead = new PIXI.Texture.from(this.currentCatLabel + 'head_03');
+        // this.collectedHead = new PIXI.Texture.from(this.currentCatLabel + 'head_02');
+        // this.deadHead = new PIXI.Texture.from(this.currentCatLabel + 'head_03');
 
         this.head = new PIXI.Sprite.from(this.currentCatLabel + 'head_01');
         this.head.anchor.set(0.5, 0.9)
@@ -125,12 +125,12 @@ export default class StaticCat extends PIXI.Container
     happy()
     {
 
-        this.head.texture = this.collectedHead
+        // this.head.texture = this.collectedHead
     }
     sad()
     {
 
-        this.head.texture = this.deadHead
+        // this.head.texture = this.deadHead
     }
     normal()
     {
@@ -146,7 +146,7 @@ export default class StaticCat extends PIXI.Container
         this.body.texture = PIXI.Texture.from(this.currentCatLabel + 'body');
         this.head.texture = PIXI.Texture.from(this.currentCatLabel + 'head_01');
         this.normalHead = PIXI.Texture.from(this.currentCatLabel + 'head_01');
-        this.collectedHead = PIXI.Texture.from(this.currentCatLabel + 'head_02');
-        this.deadHead = PIXI.Texture.from(this.currentCatLabel + 'head_03');
+        // this.collectedHead = PIXI.Texture.from(this.currentCatLabel + 'head_02');
+        // this.deadHead = PIXI.Texture.from(this.currentCatLabel + 'head_03');
     }
 }

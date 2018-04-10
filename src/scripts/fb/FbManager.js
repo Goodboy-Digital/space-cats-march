@@ -81,7 +81,7 @@ class FbManager
 		// this.debugDiv.appendChild(p);
 
 	}
-	showAdd(cb) {
+	showAdd(cb, params) {
 		if(!this.live) return;
 		var ad = null;
 		FBInstant.getRewardedVideoAsync(
@@ -101,16 +101,16 @@ class FbManager
 			this.appendDebug(e);
 
 			if(cb) {
-				cb(true)
+				cb(params, true)
 			}
 		}, (err)=> {
 			console.log('Error', err);
 			this.appendDebug(err.code);
 			this.appendDebug(err.message);
 
-
+			// console.log(cb);
 			if(cb) {
-				cb(false)
+				cb(params, false)
 			}
 		});
 	}
@@ -199,7 +199,9 @@ class FbManager
 
 		loader.onProgress.add((e)=>{
 
-			FBInstant.setLoadingProgress(e * 100);
+			console.log(e);
+
+			FBInstant.setLoadingProgress(e.progress);
 
 		})
 	}

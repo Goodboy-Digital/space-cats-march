@@ -12,6 +12,7 @@ import InfoContainer from '../ui/InfoContainer';
 import AskVideoContainer from '../ui/AskVideoContainer';
 import SettingsContainer from '../ui/SettingsContainer';
 import CoinsExplosion from '../effects/CoinsExplosion';
+import FbManager from '../../fb/FbManager'
 export default class SpaceCatsScreenManager extends ScreenManager
 {
     constructor()
@@ -176,10 +177,10 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.addChild(this.videoContainer);
 
         this.videoContainer.visible = false;
-        this.showPopUp('gameover')
+        // this.showPopUp('gameover')
         // this.toGame();
-        // this.showPopUp('init')
-            // this.showPopUp('shop')
+        this.showPopUp('init')
+        // this.showPopUp('shop')
 
         this.infoContainer = new InfoContainer();
         this.addChild(this.infoContainer)
@@ -260,6 +261,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
     }
     loadVideo(callback, callbackParams)
     {
+
         this.videoContainer.off('mousedown', this.afterVideoCallback, callbackParams).off('touchstart', this.afterVideoCallback, callbackParams);
         if (callback)
         {
@@ -269,6 +271,8 @@ export default class SpaceCatsScreenManager extends ScreenManager
         {
             this.afterVideoCallback = this.toGameWithBonus.bind(this);
         }
+        FbManager.showAdd(this.afterVideoCallback, callbackParams)
+        return
 
         this.videoContainer.on('mousedown', this.afterVideoCallback, callbackParams).on('touchstart', this.afterVideoCallback, callbackParams);
         // console.log(callback);

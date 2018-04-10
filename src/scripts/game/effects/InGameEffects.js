@@ -2,12 +2,16 @@ import * as PIXI from 'pixi.js';
 import TweenLite from 'gsap';
 import config from '../../config';
 import utils from '../../utils';
+import * as PixiFilters from 'pixi-filters';
 export default class InGameEffects
 {
     constructor(game)
     {
         this.game = game;
 
+
+        console.log(PixiFilters);
+        
     }
 
 
@@ -132,7 +136,92 @@ export default class InGameEffects
             }
         })
     }
+    update(delta){
+        if(this.theGlitchIsBack){
 
+            this.glitchAcc ++;
+
+            if(this.glitchAcc % 5 == 0){
+                this.forwindButton.alpha = this.forwindButton.alpha ? 0 : 1
+            }
+            if(this.glitchAcc % 4 == 0){
+                this.glitch.slices = Math.ceil(Math.random() * 6) + 4//delta * 10;
+            }
+
+            // this.game.filters = [this.glitch]
+        }
+    }
+    removeSpeedUpModeItem(){
+        this.game.filters = []
+        this.theGlitchIsBack = false;
+        this.forwindButton.visible = false;
+    }
+    speedUpModeItem(){
+        if(!this.glitch){            
+            this.glitch = new PixiFilters.GlitchFilter();
+            this.forwindButton = new PIXI.Sprite(PIXI.Texture.from('icon_play')) 
+            this.game.UIContainer.addChild(this.forwindButton);
+            this.forwindButton.scale.set(config.width / this.forwindButton.width * 0.1)
+            this.forwindButton.anchor.set(0.5);
+            this.forwindButton.x = this.forwindButton.width;
+            this.forwindButton.y = config.height - this.forwindButton.height;
+            window.GLITCH = this.glitch;
+        }
+        this.forwindButton.visible = true;
+        this.forwindButton.alpha = 1;
+        this.glitch.slices = 15
+        this.glitch.fillMode = 3
+        this.glitch.minSize = 1
+        this.glitch.offset = 2
+        this.glitch.sampleSize = 512
+        this.glitch.seed = Math.random()
+        this.game.filters = [this.glitch]
+        this.theGlitchIsBack = true;
+        this.glitchAcc = 0;
+        // TweenLite.to(this.glitch, 30, {padding: 10000})
+    }
+    addAutocollectlModeItem()
+    {
+        if (!this.itemAutocollectContainer)
+        {
+            this.itemAutocollectContainer = new PIXI.Container();
+            this.autocollectGraphic = new PIXI.Graphics().beginFill(0xFF00FF).drawRect(0, 0, config.width, config.height * 0.1)
+            this.itemAutocollectContainer.addChild(this.autocollectGraphic);
+            this.autocollectGraphic.alpha = 0.2;
+            this.autoCollectSprite = new PIXI.Sprite(PIXI.Texture.from('text_auto_rescue'))
+            this.itemAutocollectContainer.addChild(this.autoCollectSprite);
+        }
+
+        this.itemAutocollectContainer.alpha = 1;
+
+        this.autoCollectSprite.scale.set(0)
+        TweenLite.to(this.autoCollectSprite.scale, 0.75, {x:1, y:1, ease:Elastic.easeOut})
+        this.autoCollectSprite.anchor.set(0.5)
+        this.autoCollectSprite.x = config.width / 2;
+        this.autoCollectSprite.y = this.autocollectGraphic.height / 2;
+        this.itemAutocollectContainer.y = config.height / 2 - this.autocollectGraphic.height / 2;
+
+        // target, force = 3, steps = 12, time = 1
+
+        this.shake(this.autoCollectSprite, 0.5, 15, 3);
+        this.game.UIContainer.addChild(this.itemAutocollectContainer);
+
+        TweenLite.to(this.itemAutocollectContainer, 0.5,
+        {
+            delay: 5,
+            alpha: 0,
+            y: this.itemAutocollectContainer.y - 50,
+
+        })
+
+    }
+    removeAutocollectlModeItem()
+    {
+        if (this.itemAutocollectContainer && this.itemAutocollectContainer.parent)
+        {
+            this.itemAutocollectContainer.parent.removeChild(this.itemAutocollectContainer);
+        }
+    }
     autocollectlMode()
     {
         let specContainer = new PIXI.Container();
@@ -140,16 +229,19 @@ export default class InGameEffects
         specContainer.addChild(graphics);
         graphics.alpha = 0.5;
 
-        let tempLabel = new PIXI.Text('AUTO COLLECT',
-        {
-            fontFamily: 'blogger_sansregular',
-            fontSize: '48px',
-            fill: 0xFFFFFF,
-            align: 'center',
-            fontWeight: '800'
-        });
-        tempLabel.pivot.x = tempLabel.width / 2;
-        tempLabel.pivot.y = tempLabel.height / 2;
+        let tempLabel = new PIXI.Sprite(PIXI.Texture.from('text_auto_rescue'))
+
+        // new PIXI.Text('AUTO COLLECT',
+        // {
+        //     fontFamily: 'blogger_sansregular',
+        //     fontSize: '48px',
+        //     fill: 0xFFFFFF,
+        //     align: 'center',
+        //     fontWeight: '800'
+        // });
+        // tempLabel.pivot.x = tempLabel.width / 2;
+        // tempLabel.pivot.y = tempLabel.height / 2;
+        tempLabel.anchor.set(0.5);
         tempLabel.x = config.width / 2;
         tempLabel.y = specContainer.height / 2;
         specContainer.addChild(tempLabel);

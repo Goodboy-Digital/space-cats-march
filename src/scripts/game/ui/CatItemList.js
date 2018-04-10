@@ -156,6 +156,15 @@ export default class CatItemList extends PIXI.Container
 
         shipInfoSprite.scale.set(rect.w / shipInfoSprite.width)
             // this.spaceShipInfoContainer.x = -this.spaceShipInfoContainer.width
+        this.blocker = new PIXI.Graphics().beginFill(0).drawRect(0, 0, config.width, config.height) //new PIXI.Sprite(PIXI.Texture.from('UIpiece.png'));
+        this.blocker.alpha = 0.75;
+        this.blocker.interactive = true;
+        this.blocker.buttonMode = true;
+        this.blocker.on('mousedown', this.onHideAuto.bind(this)).on('touchstart', this.onHideAuto.bind(this));
+        // this.blocker.on('mousedown', this.collect.bind(this)).on('touchstart', this.collect.bind(this));
+        
+
+
         this.addChild(this.spaceShipInfoContainer);
 
         this.spaceShipInfoContainer.visible = false;
@@ -174,15 +183,19 @@ export default class CatItemList extends PIXI.Container
         this.spaceShipInfoContainer.visible = false;
         this.container.alpha = 1;
         this.lastItemClicked.visible = true;
+        TweenLite.to(this.blocker, 0.5, {alpha:0, onComplete:()=>{
+            this.blocker.visible = false;
+        }})
     }
     onInfoCallback(){
         this.onInfoAutoCollect.dispatch();
     }
     onConfirmAuto()
     {
-        this.spaceShipInfoContainer.visible = false;
-        this.container.alpha = 1;
-        this.lastItemClicked.visible = true;
+        this.onHideAuto();
+        // this.spaceShipInfoContainer.visible = false;
+        // this.container.alpha = 1;
+        // this.lastItemClicked.visible = true;
         this.onAutoCollect.dispatch(this.lastItemClicked.catData);
         // this.updateAllItens()
     }
@@ -200,6 +213,17 @@ export default class CatItemList extends PIXI.Container
         this.goingDown = 0;
         this.lastItemClicked = cat
         let staticData = GAME_DATA.getStaticCatData(cat.catData.catID);
+        let globalPos = this.getGlobalPosition()
+        this.blocker.x = -globalPos.x;
+        this.blocker.y = -globalPos.y;
+        if(!this.blocker.parent){
+            this.addChildAt(this.blocker,this.getChildIndex(this.spaceShipInfoContainer));
+        }
+        this.blocker.alpha = 0;
+            this.blocker.visible = true;
+        TweenLite.to(this.blocker, 0.5, {alpha:0.5, onComplete:()=>{
+        }})
+
         this.spaceShipInfoContainer.y = this.catListContainer.y + this.lastItemClicked.y;
         this.spaceShipInfoContainer.visible = true;
         this.spaceShipInfoLabel.text = utils.formatPointsLabel(staticData.autoCollectPrice / MAX_NUMBER);

@@ -207,6 +207,10 @@ export default class GameScreen extends Screen
             this[this.currentActions[i].var] = this.currentActions[i].default;
         }
         this.currentActions = [];
+
+        this.inGameEffects.removeAutocollectlModeItem();
+        this.inGameEffects.removeSpeedUpModeItem();
+        
     }
     killAction(actionData)
     {
@@ -219,6 +223,17 @@ export default class GameScreen extends Screen
             }
         }
         this[actionData.var] = actionData.default;
+
+        if(actionData.var == 'actionAutoCollect'){
+            this.inGameEffects.removeAutocollectlModeItem();
+        }
+
+         if(actionData.var == 'actionSpeed'){
+            this.inGameEffects.removeSpeedUpModeItem();
+        }
+
+        
+
         // this.HUD.updateActionList();
     }
     addAction(actionData)
@@ -235,6 +250,14 @@ export default class GameScreen extends Screen
 
         this.currentActions.push(actionData);
         this[actionData.var] = leveldActionData.value;
+
+        if(actionData.var == 'actionAutoCollect'){
+            this.inGameEffects.addAutocollectlModeItem();
+        }
+
+         if(actionData.var == 'actionSpeed'){
+            this.inGameEffects.speedUpModeItem();
+        }
         // this.HUD.updateActionList();
     }
     resetActionsVariables()
@@ -426,24 +449,6 @@ export default class GameScreen extends Screen
         this.environment.showLines();
         this.HUD.startGame();
         this.updateSpecialBar(true);
-
-        // this.HUD.forceQuitButton.visible = false;
-        // for (var i = 0; i < GAME_DATA.catsData.length; i++)
-        // {
-        //     if (GAME_DATA.catsData[i].isAuto)
-        //     {
-        //         this.HUD.forceQuitButton.visible = true;
-        //         break;
-        //     }
-        // }
-
-
-        // setTimeout(()=>{
-        //     this.offerPrize();
-        // }, 1000);
-
-
-
 
 
         if (startWithBonus)
@@ -639,6 +644,8 @@ export default class GameScreen extends Screen
                     scale: 0.03
                 });
             }
+
+            this.inGameEffects.update(delta);
 
         }
         this.updateScales();

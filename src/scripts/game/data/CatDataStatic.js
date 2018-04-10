@@ -13,7 +13,8 @@ data.push(
     collectedMultiplier: 0,
     maxCollectedMultiplier: 10,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_orange_',
+    catSrc: 'cat_jeff_',
+    // catSrc: 'cat_orange_',
     catThumb: 'results_orange_cat',
     catName: 'pancakes',
     cost: 0
@@ -32,7 +33,7 @@ data.push(
     collectedMultiplier: 0,
     maxCollectedMultiplier: 15,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_pink_',
+    catSrc: 'cat_punk_',
     catThumb: 'results_pink_cat',
     catName: 'mr.\npotatoes',
     cost: 100
@@ -51,7 +52,7 @@ data.push(
     collectedMultiplier: 0,
     maxCollectedMultiplier: 20,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_turquoise_',
+    catSrc: 'cat_super_',
     catThumb: 'results_turquoise_cat',
     catName: 'lucifurr',
     cost: 5000
@@ -70,7 +71,7 @@ data.push(
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_yellow_',
+    catSrc: 'cat_business_',
     catThumb: 'results_yellow_cat',
     catName: 'fluffy',
     cost: 500000
@@ -88,7 +89,7 @@ data.push(
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_pink_',
+    catSrc: 'cat_bowie_',
     catThumb: 'results_yellow_cat',
     catName: 'joe',
     cost: 5000000
@@ -106,7 +107,7 @@ data.push(
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_pink_',
+    catSrc: 'cat_ufo_',
     catThumb: 'results_yellow_cat',
     catName: 'clermont',
     cost: 50000000

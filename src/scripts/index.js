@@ -77,6 +77,7 @@ function startLoader()
 function configGame(evt)
 {
    
+    FbManager.start()
     // console.log(CAT_LIST);
     window.GAME_DATA = new GameData();
     let sotrageData = STORAGE.getObject('space-cats-game-data')

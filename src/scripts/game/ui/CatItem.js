@@ -45,8 +45,9 @@ export default class CatItem extends UIList {
         this.thumb = new StaticCat();
         // new PIXI.Sprite.from(this.catData.catThumb);
         this.thumb.listScl = 0.2;
-        this.thumb.scaleContent = false;
-        this.thumb.fitHeight = 0.65;
+        this.thumb.scaleContentMax = true;
+        this.thumb.fitWidth = 0.5;
+        this.thumb.align = 0.5;
         this.thumb.animationContainer.x = this.thumb.width / 2;
         this.thumb.animationContainer.y = this.thumb.height / 2;
         this.elementsList.push(this.thumb);
@@ -134,6 +135,7 @@ export default class CatItem extends UIList {
 
         if (this.staticData.cost <= GAME_DATA.moneyData.currentCoins && !this.catData.active) {
         // if (this.catData.canBeActive && !this.catData.active) {
+            this.thumb.updateCatTextures(this.staticData.catSrc);
             this.thumb.lock();
             this.totalLabel.text = ''
             this.catNameLabel.text = utils.formatPointsLabel(this.staticData.cost / MAX_NUMBER) //('active').toUpperCase();
@@ -191,6 +193,7 @@ export default class CatItem extends UIList {
             // this.thumb.texture = PIXI.Texture.from('results_locked_cat');
             // console.log(this.staticData);
             this.coinIcon.visible = false;
+            this.thumb.updateCatTextures(this.staticData.catSrc);
             this.thumb.lock();
             this.totalLabel.text = ''
             this.catNameLabel.text = ('unlock at\n' + utils.formatPointsLabel(this.staticData.cost / MAX_NUMBER)).toUpperCase();

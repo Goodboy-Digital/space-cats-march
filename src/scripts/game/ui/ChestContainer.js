@@ -100,6 +100,10 @@ export default class ChestContainer extends PIXI.Container
     	// this.quantchest.text = GAME_DATA.chestData.lastChestTime.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
     }
     onChestClick(){
+        if(!this.isActive){
+            this.shake();
+            return;
+        }
     	this.onConfirm.dispatch();
 
     	GAME_DATA.chestData.lastChestTime = new Date();
@@ -123,5 +127,34 @@ export default class ChestContainer extends PIXI.Container
         // this.container.rotation = Math.sin(this.chestSin) * 0.1 + 0.2
         // this.quantchest.rotation = -this.container.rotation
         this.container.scale.set(this.containerScale + Math.sin(this.chestSin) * 0.03, this.containerScale + Math.cos(this.chestSin) * 0.03)
+    }
+
+    shake(force = 0.25, steps = 5, time = 0.4)
+    {
+
+        let timelinePosition = new TimelineLite();
+        let positionForce = (force * -20);
+        let spliterForce = (force * 20);
+        let pos = [positionForce * 2, positionForce, positionForce * 2, positionForce, positionForce * 2, positionForce]
+        let speed = time / pos.length;
+
+        for (var i = pos.length; i >= 0; i--)
+        {
+            timelinePosition.append(TweenLite.to(this.container, speed,
+            {
+                rotation: i % 2 == 0 ? 0.1 : -0.1,
+                // x: this.container.width / 2 + pos[i], //- positionForce / 2,
+                // y: 0, //Math.random() * positionForce - positionForce / 2,
+                ease: "easeNoneLinear"
+            }));
+        };
+
+        timelinePosition.append(TweenLite.to(this.container, speed,
+        {
+            rotation: 0,
+            // x: this.container.width / 2,
+            // y: 0,
+            ease: "easeeaseNoneLinear"
+        }));
     }
 }

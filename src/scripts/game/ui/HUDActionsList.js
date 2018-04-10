@@ -100,7 +100,7 @@ export default class HUDActionsList extends UIList
         {
             TweenLite.from(this.elementsList[i], 0.3,
             {
-                delay: 0.2 * i + 0.5,
+                delay: 0.1 * i + 0.2,
                 x: this.elementsList[i].x + this.elementsList[i].width + 20,
                 ease: Back.easeOut
             });
