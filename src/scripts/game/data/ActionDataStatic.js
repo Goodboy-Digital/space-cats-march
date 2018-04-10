@@ -21,6 +21,7 @@ data.push(
         cost:
         {
             typeCurve: 'easeInCirc',
+            zero: 50,
             min: 50,
             max: 100000000,
             hideOnShop:true
@@ -28,18 +29,21 @@ data.push(
         value:
         {
             typeCurve: 'linearTween',
+            zero: 1,
             min: 1.5,
             max: 10,
         },
         cooldown:
         {
             typeCurve: 'linearTween',
+            zero: 330,
             min: 330,
             max: 20,
         },
         activeTime:
         {
             typeCurve: 'linearTween',
+            zero: 15,
             min: 15,
             max: 60,
         },
@@ -68,6 +72,7 @@ data.push(
         cost:
         {
             typeCurve: 'easeInCirc',
+            zero: 50,
             min: 50,
             max: 100000000,
             hideOnShop:true
@@ -75,18 +80,21 @@ data.push(
         value:
         {
             typeCurve: 'linearTween',
+            zero: 1,
             min: 1.5,
             max: 3.5,
         },
         cooldown:
         {
             typeCurve: 'linearTween',
+            zero: 330,
             min: 330,
             max: 20,
         },
         activeTime:
         {
             typeCurve: 'linearTween',
+            zero: 15,
             min: 15,
             max: 60,
         },
@@ -116,6 +124,7 @@ data.push(
         cost:
         {
             typeCurve: 'easeInCirc',
+            zero: 50,
             min: 50,
             max: 100000000,
             hideOnShop:true
@@ -123,6 +132,7 @@ data.push(
         value:
         {
             typeCurve: 'linearTween',
+            zero: 1,
             min: 1,
             max: 1,
             hideOnShop:true
@@ -130,12 +140,14 @@ data.push(
         cooldown:
         {
             typeCurve: 'linearTween',
+            zero: 330,
             min: 330,
             max: 20,
         },
         activeTime:
         {
             typeCurve: 'linearTween',
+            zero: 15,
             min: 15,
             max: 60,
         },

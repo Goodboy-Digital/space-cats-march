@@ -58,7 +58,7 @@ export default class PrizeItemContainer extends PIXI.Container
     	this.itemCat.updateCatTextures(src)
     	this.itemCatScale = this.topBg.width / (this.itemCat.width / this.itemCat.scale.x) * 0.65
     	this.itemCat.scale.set(this.itemCatScale)
-    	this.itemCat.animationContainer.y = -this.itemCat.height / 2;
+    	this.itemCat.animationContainer.y = 0//this.itemCat.animationContainer.height / 2;
     }
     setTexture(texture)
     {
@@ -89,14 +89,14 @@ export default class PrizeItemContainer extends PIXI.Container
         this.itemSprite.scale.set(0);
         TweenLite.to(this.itemSprite.scale, 0.5,
         {
-            delay: delay,
+            delay: delay + 0.1,
             x: this.itemScale,
             y: this.itemScale,
             ease: Back.easeOut
         });
         TweenLite.to(this, 0.5,
         {
-            delay: delay,
+            delay: delay+0.1,
             alpha: 1
         });
     }

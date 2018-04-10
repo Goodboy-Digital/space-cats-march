@@ -17,7 +17,7 @@ data.push(
     active: false,
     canBeActive: false,
     isAuto: false,
-    pointsMultiplier: 3,
+    pointsMultiplier: 2,
     collectedMultiplier: 0,
 })
 
@@ -28,7 +28,7 @@ data.push(
     active: false,
     canBeActive: false,
     isAuto: false,
-    pointsMultiplier: 5,
+    pointsMultiplier: 3,
     collectedMultiplier: 0,
 })
 
@@ -39,7 +39,7 @@ data.push(
     active: false,
     canBeActive: false,
     isAuto: false,
-    pointsMultiplier: 10,
+    pointsMultiplier: 4,
     collectedMultiplier: 0,
 })
 data.push(
@@ -49,7 +49,7 @@ data.push(
     active: false,
     canBeActive: false,
     isAuto: false,
-    pointsMultiplier: 10,
+    pointsMultiplier: 5,
     collectedMultiplier: 0,
 })
 data.push(
@@ -59,7 +59,7 @@ data.push(
     active: false,
     canBeActive: false,
     isAuto: false,
-    pointsMultiplier: 10,
+    pointsMultiplier: 7,
     collectedMultiplier: 0,
 })
 data.push(
@@ -69,7 +69,7 @@ data.push(
     active: false,
     canBeActive: false,
     isAuto: false,
-    pointsMultiplier: 10,
+    pointsMultiplier: 9,
     collectedMultiplier: 0,
 })
 data.push(
@@ -79,7 +79,7 @@ data.push(
     active: false,
     canBeActive: false,
     isAuto: false,
-    pointsMultiplier: 10,
+    pointsMultiplier: 12,
     collectedMultiplier: 0,
 })
 data.push(
@@ -89,7 +89,7 @@ data.push(
     active: false,
     canBeActive: false,
     isAuto: false,
-    pointsMultiplier: 10,
+    pointsMultiplier: 15,
     collectedMultiplier: 0,
 })
 data.push(
@@ -99,7 +99,7 @@ data.push(
     active: false,
     canBeActive: false,
     isAuto: false,
-    pointsMultiplier: 10,
+    pointsMultiplier: 20,
     collectedMultiplier: 0,
 })
 
@@ -110,7 +110,7 @@ data.push(
     active: false,
     canBeActive: false,
     isAuto: false,
-    pointsMultiplier: 10,
+    pointsMultiplier: 30,
     collectedMultiplier: 0,
 })
 
@@ -121,7 +121,42 @@ data.push(
     active: false,
     canBeActive: false,
     isAuto: false,
-    pointsMultiplier: 10,
+    pointsMultiplier: 40,
+    collectedMultiplier: 0,
+});
+
+
+data.push(
+{
+    catID: 12,
+    collected: 0,
+    active: false,
+    canBeActive: false,
+    isAuto: false,
+    pointsMultiplier: 55,
+    collectedMultiplier: 0,
+});
+
+
+data.push(
+{
+    catID: 13,
+    collected: 0,
+    active: false,
+    canBeActive: false,
+    isAuto: false,
+    pointsMultiplier: 70,
+    collectedMultiplier: 0,
+});
+
+data.push(
+{
+    catID: 14,
+    collected: 0,
+    active: false,
+    canBeActive: false,
+    isAuto: false,
+    pointsMultiplier: 90,
     collectedMultiplier: 0,
 });
 

@@ -96,12 +96,12 @@ export default class InGameEffects
 
     specialMode()
     {
-    	let specContainer = new PIXI.Container();
-		let graphics = new PIXI.Graphics().beginFill(0xFFFFFF).drawRect(0,0,config.width, config.height * 0.1)
-		specContainer.addChild(graphics);
-		graphics.alpha = 0.5;
+        let specContainer = new PIXI.Container();
+        let graphics = new PIXI.Graphics().beginFill(0xFFFFFF).drawRect(0, 0, config.width, config.height * 0.1)
+        specContainer.addChild(graphics);
+        graphics.alpha = 0.5;
 
-		let tempLabel = new PIXI.Text('MEOWWWWW',
+        let tempLabel = new PIXI.Text('MEOWWWWW',
         {
             fontFamily: 'blogger_sansregular',
             fontSize: '64px',
@@ -115,20 +115,28 @@ export default class InGameEffects
         tempLabel.y = specContainer.height / 2;
         specContainer.addChild(tempLabel);
 
-		this.game.UIContainer.addChild(specContainer);
-		specContainer.y = config.height / 2 - specContainer.height / 2;
+        this.game.UIContainer.addChild(specContainer);
+        specContainer.y = config.height / 2 - specContainer.height / 2;
         this.shake(tempLabel);
-        TweenLite.to(specContainer, 0.5, {delay:1.2, alpha:0, y:specContainer.y - 50, onComplete:()=>{
-        	if(specContainer && specContainer.parent){
-        		specContainer.parent.removeChild(specContainer);
-        	}
-        }})
+        TweenLite.to(specContainer, 0.5,
+        {
+            delay: 1.2,
+            alpha: 0,
+            y: specContainer.y - 50,
+            onComplete: () =>
+            {
+                if (specContainer && specContainer.parent)
+                {
+                    specContainer.parent.removeChild(specContainer);
+                }
+            }
+        })
     }
 
     autocollectlMode()
     {
         let specContainer = new PIXI.Container();
-        let graphics = new PIXI.Graphics().beginFill(0xFF00FF).drawRect(0,0,config.width, config.height * 0.1)
+        let graphics = new PIXI.Graphics().beginFill(0xFF00FF).drawRect(0, 0, config.width, config.height * 0.1)
         specContainer.addChild(graphics);
         graphics.alpha = 0.5;
 
@@ -148,12 +156,20 @@ export default class InGameEffects
 
         this.game.UIContainer.addChild(specContainer);
         specContainer.y = config.height / 2 - specContainer.height / 2;
-        this.shake(tempLabel,0.5);
-        TweenLite.to(specContainer, 0.5, {delay:1.2, alpha:0, y:specContainer.y - 50, onComplete:()=>{
-            if(specContainer && specContainer.parent){
-                specContainer.parent.removeChild(specContainer);
+        this.shake(tempLabel, 0.5);
+        TweenLite.to(specContainer, 0.5,
+        {
+            delay: 1.2,
+            alpha: 0,
+            y: specContainer.y - 50,
+            onComplete: () =>
+            {
+                if (specContainer && specContainer.parent)
+                {
+                    specContainer.parent.removeChild(specContainer);
+                }
             }
-        }})
+        })
     }
 
     shake(target, force = 3, steps = 12, time = 1)
@@ -162,13 +178,16 @@ export default class InGameEffects
         let positionForce = (force * 50);
         let spliterForce = (force * 20);
         let speed = time / steps;
-        let startPos = {x:target.x,y:target.y}
+        let startPos = {
+            x: target.x,
+            y: target.y
+        }
         for (var i = steps; i >= 0; i--)
         {
             timelinePosition.append(TweenLite.to(target, speed,
             {
-                x: startPos.x+Math.random() * positionForce - positionForce / 2,
-                y: startPos.y+Math.random() * positionForce - positionForce / 2,
+                x: startPos.x + Math.random() * positionForce - positionForce / 2,
+                y: startPos.y + Math.random() * positionForce - positionForce / 2,
                 ease: "easeNoneLinear"
             }));
         };
@@ -181,6 +200,10 @@ export default class InGameEffects
         }));
     }
 
+    addCoinParticles(pos, quant = 1, custom = {})
+    {
+        window.screenManager.addCoinsParticles(pos, quant, custom);
+    }
 
     popLabel(pos, label, delay = 0, dir = 1, scale = 1, randonRotation = true)
     {

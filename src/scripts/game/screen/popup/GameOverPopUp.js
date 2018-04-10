@@ -52,8 +52,8 @@ export default class GameOverPopUp extends StandardPop
         this.container.addChild(this.catListContainer);
 
 
-        this.playButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        this.playButton.anchor.set(0.5)
+        this.playButton = new UIButton('icon_play', 0.6)//new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
+        // this.playButton.anchor.set(0.5)
         this.playButtonScale = this.logoMask.height / this.playButton.height * 0.3
         this.playButton.scale.set(this.playButtonScale);
         this.playButton.y = config.height - this.container.y - this.playButton.height / 2 - 20
@@ -165,7 +165,7 @@ export default class GameOverPopUp extends StandardPop
 
 
         this.screenManager.prizeContainer.onPrizeCollected.add(this.hidePrizeContainer.bind(this));
-        this.screenManager.settingsContainer.onHide.add(this.updateCurrency.bind(this));
+        this.screenManager.settingsContainer.onHide.add(this.onHideSettings.bind(this));
         // this.addChild(this.screenManager.prizeContainer)
 
         this.pointsContainer.updateMoney(GAME_DATA.moneyData.currentCoins, true)
@@ -451,12 +451,14 @@ export default class GameOverPopUp extends StandardPop
     {
         this.pointsContainer.updateMoney(GAME_DATA.moneyData.currentCoins, false, 0.25)
         this.pointsContainer.erasePoints(0.25)
-
         this.updateCatsQuant()
+    }
+    onHideSettings(){
+        this.updateCurrency();
+        this.updateCatsQuant();
     }
     updateCurrency()
     {
-        console.log('ON HIDE');
         this.pointsContainer.updateMoney(GAME_DATA.moneyData.currentCoins, true, 0)
         this.updateTrophyQuant();
     }

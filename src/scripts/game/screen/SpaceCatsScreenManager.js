@@ -6,6 +6,7 @@ import OnboardingPopUp from './popup/OnboardingPopUp'
 import ShopPopUp from './popup/ShopPopUp'
 import AskVideoPopUp from './popup/AskVideoPopUp'
 import config from '../../config';
+import utils from '../../utils';
 import PrizeContainer from '../ui/PrizeContainer';
 import InfoContainer from '../ui/InfoContainer';
 import AskVideoContainer from '../ui/AskVideoContainer';
@@ -63,7 +64,11 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.prizeContainer.hide();
 
 
-        this.settingsContainer = new SettingsContainer({w:config.width * 0.6, h:config.height * 0.5});
+        this.settingsContainer = new SettingsContainer(
+        {
+            w: config.width * 0.6,
+            h: config.height * 0.5
+        });
         this.addChild(this.settingsContainer)
         this.settingsContainer.x = config.width / 2;
         this.settingsContainer.y = config.height / 2;
@@ -73,12 +78,14 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.startPopUp = new StartPopUp('init', this);
         this.startPopUp.onConfirm.add(() =>
         {
+            this.coinsExplosion.killAll();
             this.showPopUp('onboarding')
                 // this.toGame()
         });
 
         this.startPopUp.onCatsRedirect.add(() =>
         {
+            this.coinsExplosion.killAll();
             this.showPopUp('gameover')
         });
 
@@ -98,12 +105,14 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.gameOverPopUp = new GameOverPopUp('gameover', this);
         this.gameOverPopUp.onConfirm.add(() =>
         {
+            this.coinsExplosion.killAll();
             this.toVideo()
                 // this.toGame()
         });
 
         this.gameOverPopUp.onShopRedirect.add(() =>
         {
+            this.coinsExplosion.killAll();
             this.showPopUp('shop')
         });
 
@@ -167,9 +176,9 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.addChild(this.videoContainer);
 
         this.videoContainer.visible = false;
-        // this.showPopUp('gameover')
-            // this.toGame();
-            this.showPopUp('init')
+        this.showPopUp('gameover')
+        // this.toGame();
+        // this.showPopUp('init')
             // this.showPopUp('shop')
 
         this.infoContainer = new InfoContainer();
@@ -185,11 +194,17 @@ export default class SpaceCatsScreenManager extends ScreenManager
         // this.askVideoContainer.hide();
         // this.infoContainer.show({x:200, y:200})
 
+        // utils.formatPointsLabel2(1000/MAX_NUMBER)
+        // utils.formatPointsLabel2(1000000/MAX_NUMBER)
+        // utils.formatPointsLabel2(1000000000/MAX_NUMBER)
+
     }
-    addCoinsParticles(pos, quant = 10, customData = {}){
+    addCoinsParticles(pos, quant = 10, customData = {})
+    {
         this.coinsExplosion.show(pos, quant, customData)
     }
-    openSettings(){
+    openSettings()
+    {
 
         this.settingsContainer.show();
     }
@@ -276,6 +291,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         if (this.currentScreen.label == 'GameScreen')
         {
             this.currentScreen.resetGame();
+            this.coinsExplosion.killAll();
         }
     }
     toLoad()

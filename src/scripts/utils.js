@@ -25,6 +25,36 @@ export default
         }
         return value
     },
+    // formatPointsLabel2(tempPoints){
+    //     let abv = ['','K','M','B','T','aa','bb','cc','dd','ee'];
+
+    //     let currentAbv = abv[Math.floor((tempPoints - 1).toString().length / 3)]
+
+    //     tempPoints = Math.round(tempPoints * MAX_NUMBER);
+    //     let lenght = Math.floor((tempPoints - 1).toString().length / 3) + 2;
+    //     // console.log(tempPoints, lenght);
+    //     let max = Math.pow(10, lenght)
+    //     // console.log(max);
+
+    //     console.log(tempPoints, max, 'div');
+    //     tempPoints /= max;
+    //     if (tempPoints.toString().length < 4)
+    //     {
+    //         let fix = 2
+    //         tempPoints = tempPoints.toFixed(fix).toString()
+    //         // console.log(tempPoints + temp);
+    //     }
+    //     else if (tempPoints.toString().length > 4)
+    //     {
+    //         let tempRound = Math.floor(tempPoints)
+    //         console.log(tempRound);
+    //         tempPoints = tempPoints.toFixed(4 - tempRound.toString().length - 1)
+    //     }
+
+    //     tempPoints = this.cleanString(tempPoints)
+
+    //     console.log(tempPoints + currentAbv);
+    // },
     formatPointsLabel(tempPoints)
     {
         let temp = ''

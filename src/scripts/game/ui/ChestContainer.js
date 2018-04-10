@@ -16,7 +16,7 @@ export default class ChestContainer extends PIXI.Container
         this.chestBackSin = 0;
         let chestIcon = new PIXI.Sprite.from('treasure_chest');
         chestIcon.anchor.set(0.5, 0.5);
-        chestIcon.scale.set(this.chestBubble.width / chestIcon.width * 0.65);
+        chestIcon.scale.set(this.chestBubble.width / chestIcon.width * 0.75);
 
         this.quantchest = new PIXI.Text('Open a free\nchest!\n35:05',
         {

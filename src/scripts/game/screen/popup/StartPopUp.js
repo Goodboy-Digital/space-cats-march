@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import Signals from 'signals';
 import config from '../../../config';
 import StandardPop from './StandardPop';
+import UIButton from '../../ui/uiElements/UIButton';
 export default class StartPopUp extends StandardPop
 {
     constructor(label, screenManager)
@@ -47,8 +48,8 @@ export default class StartPopUp extends StandardPop
 
         // this.container.addChild(this.playButton)
 
-        this.playButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        this.playButton.anchor.set(0.5)
+        this.playButton = new UIButton('icon_play', 0.6)//new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
+        // this.playButton.anchor.set(0.5)
         this.playButtonScale = this.logoMask.height / this.playButton.height * 0.5
         this.playButton.scale.set(this.playButtonScale);
         this.playButton.y = config.height - this.container.y - this.playButton.height / 2 - this.playButton.height / 3

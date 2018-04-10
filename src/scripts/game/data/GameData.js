@@ -65,6 +65,15 @@ export default class GameData
 
         this.minimumAmountOfCatsToReset = 3;
     }
+    resetShop(){
+        for (var i = this.actionsData.length - 1; i >= 0; i--) {
+            this.actionsData[i].level = 0;
+        }
+        for (var i = this.shopData.length - 1; i >= 0; i--) {
+            this.shopData[i].level = 0;
+        }
+        // this.SAVE();
+    }
     resetCatData()
     {
         this.catsData = [];
@@ -148,7 +157,8 @@ export default class GameData
         for (let type in stats)
         {
             let tempData = stats[type];
-            easeCost = tempData.min;
+            easeCost = tempData.zero;
+            
             levelPercent = level / shopData.levelMax
 
             if (levelPercent > 0)
@@ -158,7 +168,7 @@ export default class GameData
                 {
                     // easeCost = tempData.min - easeCost;
                     easeCost = tempData.min - utils[tempData.typeCurve](levelPercent, tempData.max, tempData.min, 1) + tempData.max
-                        // console.log(shopData.type, easeCost, tempData.typeCurve, levelPercent, tempData.min, tempData.max);
+                        
                 }
                 else
                 {
@@ -194,6 +204,9 @@ export default class GameData
         }
         let level = data.level;
 
+        
+        
+        
         // console.log(data, shopData);
         let costData = shopData.stats.cost;
         let levelPercent = level / shopData.levelMax
@@ -379,6 +392,7 @@ export default class GameData
         this.updateTrophy(this.getNumberTrophyToSend());
         this.resetCatData();
         this.moneyData.currentCoins = 0;
+        this.resetShop();
         this.SAVE();
     }
     getCoinAmount()

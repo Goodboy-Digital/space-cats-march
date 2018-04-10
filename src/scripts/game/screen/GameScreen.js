@@ -517,7 +517,9 @@ export default class GameScreen extends Screen
                 alpha: 0
             });
         }
-        // GAME_DATA.addCats(this.catLanesList);
+
+        this.screenManager.coinsExplosion.killAll()
+            // GAME_DATA.addCats(this.catLanesList);
         setTimeout(() =>
         {
             this.screenManager.showPopUp('gameover',
@@ -621,6 +623,23 @@ export default class GameScreen extends Screen
                 }
             }
 
+            if (this.actionMultiplier > 1)
+            {
+                let coinPos = {
+                    x: config.width * Math.random(),
+                    y: -10
+                }
+                this.inGameEffects.addCoinParticles(coinPos, 1,
+                {
+                    texture: 'cat_coin_particle',
+                    alphaDecress: 0.5,
+                    gravity: 500,
+                    forceX: 0,                    
+                    forceY: 0,                    
+                    scale: 0.03
+                });
+            }
+
         }
         this.updateScales();
         for (var i = this.catList.length - 1; i >= 0; i--)
@@ -674,7 +693,7 @@ export default class GameScreen extends Screen
         }
         this.addChild(this.currentItem);
 
-        let ids = [0,1,2,3,3,3,3,3,3,3]
+        let ids = [0, 1, 2, 3, 3, 3, 3, 3, 3, 3]
         this.currentItem.reset(
         {
             x: config.width * 0.125,
@@ -688,14 +707,13 @@ export default class GameScreen extends Screen
         switch (item.itemType)
         {
             case 0:
-                // let tempTrophy = Math.floor(GAME_DATA.trophyData.collected * (Math.random() * 0.3 + 0.1))
-                // if (tempTrophy <= 0)
-                // {
-                //     tempTrophy = 1 // MAX_NUMBER
-                // }
                 let tempTrophy = GAME_DATA.getTrophyAmount()
                 GAME_DATA.updateTrophy(tempTrophy);
-                this.inGameEffects.popLabel({x:item.x, y:item.y - 30}, '+' + utils.formatPointsLabel(tempTrophy / MAX_NUMBER), 0, 3, 1);
+                this.inGameEffects.popLabel(
+                {
+                    x: item.x,
+                    y: item.y - 30
+                }, '+' + utils.formatPointsLabel(tempTrophy / MAX_NUMBER), 0, 3, 1);
                 break;
             case 1:
                 this.addAutoCollectMode();
@@ -707,9 +725,20 @@ export default class GameScreen extends Screen
                     tempPoints = (50 * Math.random() + 0.1) / MAX_NUMBER
                 }
                 this.currentPoints += tempPoints
-                this.inGameEffects.popLabel({x:item.x, y:item.y - 20}, '+' + utils.formatPointsLabel(tempPoints), 0, 3, 1);
+                this.inGameEffects.popLabel(
+                {
+                    x: item.x,
+                    y: item.y - 20
+                }, '+' + utils.formatPointsLabel(tempPoints), 0, 3, 1);
+                this.inGameEffects.addCoinParticles(
+                {
+                    x: item.x,
+                    y: item.y - 20
+                }, 10);
+                break;
             case 3:
                 this.offerPrize();
+                break;
 
         }
 
@@ -814,6 +843,10 @@ export default class GameScreen extends Screen
             x: cat.x,
             y: cat.y
         }
+        let coinPos = {
+            x: cat.x,
+            y: cat.y - cat.height
+        }
         let points = 0;
         // if (labelPos.x > config.width * 0.85)
         // {
@@ -870,6 +903,22 @@ export default class GameScreen extends Screen
         {
             points *= 2;
         }
+
+        // forceY: Math.random() * 150 - 75,
+        this.inGameEffects.addCoinParticles(coinPos, points,
+        {
+            texture: 'cat_coin_particle',
+            alphaDecress: 0,
+            gravity: 500,
+            forceX: 400,
+            target:
+            {
+                timer: 1.5,
+                x: 20,
+                y: 20
+            },
+            scale: 0.03
+        });
         points *= cat.catData.pointsMultiplier;
         points += points * cat.catData.collectedMultiplier
         points += points * GAME_DATA.trophyData.collectedMultiplier;
@@ -883,7 +932,6 @@ export default class GameScreen extends Screen
         labelData.text = '+' + utils.formatPointsLabel(points);
         // labelData.text += utils.formatPointsLabel(points);
         this.inGameEffects.popLabel(labelPos, labelData.text, 0, 3, labelData.scale);
-
         if (!this.isAutoCollectMode)
         {
             if (!this.isSpecialMode)

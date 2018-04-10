@@ -156,16 +156,20 @@ export default class GameOverItemContainer extends PIXI.Container
                 this.quantLabel.x = this.topBg.width //+ this.quantLabel.width / 2;
                 this.quantLabel.y = this.topBg.height / 2 - this.quantLabel.height / 2;
 
-                // let globalCoinPos = {
-                //         x: this.itemSprite.position.x + this.itemSprite.width / 2,
-                //         y: this.itemSprite.position.y + this.itemSprite.height / 2
-                //     } //getGlobalPosition();
-                // window.screenManager.addCoinsParticles(globalCoinPos, 1,
-                // {
-                //     scale: 0.02,
-                //     texture: 'results_newcat_star',
-                //     customContainer: this.parent
-                // });
+
+                let globalCoinPos = {
+                    x: this.backTexture.width / 3 * Math.random() - this.backTexture.width / 6, // * Math.random(),
+                    y: this.backTexture.height / 4
+                }
+                window.screenManager.addCoinsParticles(globalCoinPos, 1,
+                {
+                    scale: 0.01,
+                    texture: 'results_newcat_star',
+                    customContainer: this.backTexture,
+                    gravity: -5,
+                    forceX: 0,
+                    forceY: Math.random() * 100,
+                });
             },
             onComplete: () =>
             {

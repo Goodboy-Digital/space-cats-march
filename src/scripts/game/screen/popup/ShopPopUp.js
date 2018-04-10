@@ -116,7 +116,7 @@ export default class ShopPopUp extends StandardPop
         this.shopList.addItens(shopItens);
         this.shopList.onItemShop.add((item, button) =>
         {
-            let globalPos = {x:button.transform.worldTransform.tx, y:button.transform.worldTransform.ty};
+            let globalPos = {x:button.transform.worldTransform.tx + button.width * Math.random(), y:button.transform.worldTransform.ty};
             this.screenManager.addCoinsParticles(globalPos, 1, {forceX:0, forceY:100,texture:'icon_increase', gravity:0});
             this.updateMoney(GAME_DATA.moneyData.currentCoins, false)
             this.updateTrophy(GAME_DATA.trophyData.collected, false)

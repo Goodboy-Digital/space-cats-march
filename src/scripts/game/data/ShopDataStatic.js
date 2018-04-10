@@ -17,6 +17,7 @@ data.push(
         cost:
         {
             typeCurve: 'easeInCirc',
+            zero: 50,
             min: 50,
             max: 10000000,
             hideOnShop:true
@@ -24,7 +25,8 @@ data.push(
         value:
         {
             typeCurve: 'linearTween',
-            min: 1,
+            zero: 1,
+            min: 1.2,
             max: 10,
         },
     }
@@ -47,6 +49,7 @@ data.push(
         cost:
         {
             typeCurve: 'easeInCirc',
+            zero: 50,
             min: 50,
             max: 100000,
             hideOnShop:true
@@ -54,6 +57,7 @@ data.push(
         value:
         {
             typeCurve: 'easeInExpo',
+            zero: 1,
             min: 1.2,
             max: 5,
         },        
@@ -78,6 +82,7 @@ data.push(
         cost:
         {
             typeCurve: 'easeInExpo',
+            zero: 50,
             min: 50,
             max: 1000000,
             hideOnShop:true

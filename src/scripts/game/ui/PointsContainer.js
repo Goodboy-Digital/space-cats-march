@@ -103,8 +103,8 @@ export default class PointsContainer extends PIXI.Container {
         let moneyObj = {
             current: this.currentPoints
         }
-        let globalCoinPos = this.coinSprite.getGlobalPosition();
-        globalCoinPos.x += this.coinSprite.width / 2
+        // let globalCoinPos = this.coinSprite.getGlobalPosition();
+        // globalCoinPos.x += this.coinSprite.width / 2
         TweenLite.to(moneyObj, 1, {
             delay:delay,
             current: 0,
@@ -112,8 +112,7 @@ export default class PointsContainer extends PIXI.Container {
             onUpdate: (moneyObj) => {
                 this.currentPointsLabel.pivot.x = this.currentPointsLabel.width / 2;
                 this.currentPointsLabel.text = utils.formatPointsLabel(moneyObj.current / MAX_NUMBER);
-                window.screenManager.addCoinsParticles(globalCoinPos, 3);
-
+                // window.screenManager.addCoinsParticles(globalCoinPos, 3);
             },
             onComplete:()=>{
                 this.currentPointsLabel.pivot.x = this.currentPointsLabel.width / 2;
