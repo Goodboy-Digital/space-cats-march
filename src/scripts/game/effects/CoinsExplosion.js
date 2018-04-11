@@ -45,15 +45,15 @@ export default class CoinsExplosion extends PIXI.Container
                     coin.alpha -= 1 * delta * coin.alphaDecress;
                     if (coin.target)
                     {
-                        coin.target.timer -= delta;
-                        if (coin.target.timer <= 0)
+                        coin.timer -= delta;
+                        if (coin.timer <= 0)
                         {
                             let angle = Math.atan2(coin.target.y - coin.y, coin.target.x - coin.x);
                             let targetX = Math.cos(angle) * 500
                             let targetY = Math.sin(angle) * 500
 
-                            coin.velocity.x = this.lerp(coin.velocity.x, targetX, 0.1)
-                            coin.velocity.y = this.lerp(coin.velocity.y, targetY, 0.1)
+                            coin.velocity.x = this.lerp(coin.velocity.x, targetX, 0.05)
+                            coin.velocity.y = this.lerp(coin.velocity.y, targetY, 0.05)
                             if (utils.distance(coin.x, coin.y, coin.target.x, coin.target.y) < coin.height)
                             {
                                 coin.alpha = 0;
@@ -118,10 +118,12 @@ export default class CoinsExplosion extends PIXI.Container
             coin.scale.set(1)
             coin.delay = (customData.delay != undefined ? customData.delay : 0)
             let scl = customData.scale || 0.03
+            coin.timer = 0;
             coin.target = customData.target
-            if (coin.target && !coin.target.timer)
+            if (coin.target)
             {
-                coin.target.timer = 0;
+                console.log(coin.target.timer);
+                coin.timer = coin.target.timer;
             }
             coin.scale.set(config.height / (coin.height * coin.scale.y) * (scl))
             let force = {

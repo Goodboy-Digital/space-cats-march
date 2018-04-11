@@ -177,9 +177,9 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.addChild(this.videoContainer);
 
         this.videoContainer.visible = false;
-        // this.showPopUp('gameover')
+        this.showPopUp('gameover')
         // this.toGame();
-        this.showPopUp('init')
+        // this.showPopUp('init')
         // this.showPopUp('shop')
 
         this.infoContainer = new InfoContainer();

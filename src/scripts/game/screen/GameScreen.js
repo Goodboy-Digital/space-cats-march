@@ -210,7 +210,7 @@ export default class GameScreen extends Screen
 
         this.inGameEffects.removeAutocollectlModeItem();
         this.inGameEffects.removeSpeedUpModeItem();
-        
+
     }
     killAction(actionData)
     {
@@ -916,11 +916,11 @@ export default class GameScreen extends Screen
         {
             texture: 'cat_coin_particle',
             alphaDecress: 0,
-            gravity: 500,
-            forceX: 400,
+            gravity: 800,
+            forceX: 600,
             target:
             {
-                timer: 1.5,
+                timer: 1,
                 x: 20,
                 y: 20
             },

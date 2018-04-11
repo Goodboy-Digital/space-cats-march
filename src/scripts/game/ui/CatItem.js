@@ -72,7 +72,7 @@ export default class CatItem extends UIList {
             align: 'center',
             fontWeight: '800'
         });
-        this.bonusLabel.listScl = 0.1;
+        this.bonusLabel.listScl = 0.075;
         this.bonusLabel.scaleContentMax = true;
         this.bonusLabel.align = 0;
         this.elementsList.push(this.bonusLabel);
@@ -82,7 +82,7 @@ export default class CatItem extends UIList {
         this.backButton = new PIXI.Sprite.from('back_button');
         this.catNameLabel = new PIXI.Text('', {
             fontFamily: 'blogger_sansregular',
-            fontSize: '18px',
+            fontSize: '16px',
             // fill: 0,
             fill: 0xe5519b,
             align: 'center',
@@ -92,6 +92,7 @@ export default class CatItem extends UIList {
         this.coinIcon.anchor.set(0.5)
         this.coinIcon.visible = false;
         this.activeButtonContainer.scaleContentMax = true;
+        this.activeButtonContainer.fitWidth = 0.9;
         this.activeButtonContainer.addChild(this.backButton);
         this.activeButtonContainer.addChild(this.catNameLabel);
         this.activeButtonContainer.addChild(this.coinIcon);

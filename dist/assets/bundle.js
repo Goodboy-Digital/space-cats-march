@@ -4882,6 +4882,13 @@ var UIButton = function (_PIXI$Container) {
             this.iconPos = this.icon.y;
         }
     }, {
+        key: 'customAnchor',
+        value: function customAnchor(x, y) {
+            this.back.anchor.set(x, y);
+            this.icon.position.set(this.back.width / 2 - this.back.width * this.back.anchor.x, this.back.height / 2 - this.back.height * this.back.anchor.y);
+            this.iconPos = this.icon.y;
+        }
+    }, {
         key: 'changeTexture',
         value: function changeTexture(tex) {
             this.icon.texture = PIXI.Texture.from(tex);
@@ -16502,6 +16509,11 @@ var ListScroller = function (_PIXI$Container) {
     }
 
     (0, _createClass3.default)(ListScroller, [{
+        key: 'resetPosition',
+        value: function resetPosition() {
+            this.listContainer.y = 0;
+        }
+    }, {
         key: 'addItens',
         value: function addItens(itens) {
             var fit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -34506,7 +34518,7 @@ var AutoCollectButton = function (_PIXI$Container) {
         _this.sprite = new PIXI.Sprite.from('engine_icon');
         _this.container.addChild(_this.sprite);
         _this.sprite.anchor.set(0, 0.5);
-        _this.defaultSpriteScale = _this.h / _this.sprite.height * 0.5;
+        _this.defaultSpriteScale = _this.h / _this.sprite.height * 0.35;
         _this.sprite.scale.set(_this.defaultSpriteScale);
         _this.sprite.x = 15;
         _this.sprite.y = _this.h / 2;
@@ -34516,15 +34528,15 @@ var AutoCollectButton = function (_PIXI$Container) {
         _this.spriteTrophy = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
         _this.container.addChild(_this.spriteTrophy);
         _this.spriteTrophy.anchor.set(1, 0.5);
-        _this.spriteTrophy.scale.set(_this.h / _this.spriteTrophy.height * 0.35);
-        _this.spriteTrophy.x = _this.spriteTrophy.width / 2;
+        _this.spriteTrophy.scale.set(_this.h / _this.spriteTrophy.height * 0.45);
+        _this.spriteTrophy.x = _this.spriteTrophy.width;
         _this.spriteTrophy.y = _this.h / 2;
 
         _this.on('mouseup', _this.onClick.bind(_this)).on('touchend', _this.onClick.bind(_this));
 
         _this.priceLabel = new PIXI.Text('100k', {
             fontFamily: 'blogger_sansregular',
-            fontSize: '18px',
+            fontSize: '16px',
             fill: 0xe5519b,
             align: 'center',
             fontWeight: '800'
@@ -34782,7 +34794,7 @@ var CatItem = function (_UIList) {
             align: 'center',
             fontWeight: '800'
         });
-        _this.bonusLabel.listScl = 0.1;
+        _this.bonusLabel.listScl = 0.075;
         _this.bonusLabel.scaleContentMax = true;
         _this.bonusLabel.align = 0;
         _this.elementsList.push(_this.bonusLabel);
@@ -34792,7 +34804,7 @@ var CatItem = function (_UIList) {
         _this.backButton = new PIXI.Sprite.from('back_button');
         _this.catNameLabel = new PIXI.Text('', {
             fontFamily: 'blogger_sansregular',
-            fontSize: '18px',
+            fontSize: '16px',
             // fill: 0,
             fill: 0xe5519b,
             align: 'center',
@@ -34802,6 +34814,7 @@ var CatItem = function (_UIList) {
         _this.coinIcon.anchor.set(0.5);
         _this.coinIcon.visible = false;
         _this.activeButtonContainer.scaleContentMax = true;
+        _this.activeButtonContainer.fitWidth = 0.9;
         _this.activeButtonContainer.addChild(_this.backButton);
         _this.activeButtonContainer.addChild(_this.catNameLabel);
         _this.activeButtonContainer.addChild(_this.coinIcon);
@@ -59680,8 +59693,8 @@ data.push({
         value: {
             typeCurve: 'linearTween',
             zero: 1,
-            min: 1.5,
-            max: 3.5
+            min: 1.2,
+            max: 3.2
         },
         cooldown: {
             typeCurve: 'linearTween',
@@ -59758,6 +59771,8 @@ module.exports = exports['default'];
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+var images = ['cat_orange_', 'cat_turquoise_', 'cat_pink_', 'cat_yellow_', 'cat_jeff_', 'cat_punk_', 'cat_super_', 'cat_business_', 'cat_bowie_', 'cat_ufo_', 'cat_alien_', 'cat_lucha_', 'cat_robot_', 'cat_snake_', 'cat_chef_', 'cat_chef_', 'cat_chef_'];
+var names = ['pancakes', 'puffy', 'cake', 'julien', 'cloud', 'purry\nvicious', 'clark\ncat', 'mr.\npuffington', 'catvid\nbowie', 'catzilla', 'wigglebutt', 'el\ngato', 'C4TN1P', 'kurt', 'chef', 'chef', 'chef'];
 var data = [];
 
 data.push({
@@ -59772,10 +59787,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 10,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_jeff_',
-    // catSrc: 'cat_orange_',
+    catSrc: images[data.length], // 'cat_jeff_',
     catThumb: 'results_orange_cat',
-    catName: 'pancakes',
+    catName: names[data.length],
     cost: 0
 });
 
@@ -59791,9 +59805,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 15,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_punk_',
+    catSrc: images[data.length], // 'cat_punk_',
     catThumb: 'results_pink_cat',
-    catName: 'mr.\npotatoes',
+    catName: names[data.length],
     cost: 100
 });
 
@@ -59809,9 +59823,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 20,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_super_',
+    catSrc: images[data.length], // 'cat_super_',
     catThumb: 'results_turquoise_cat',
-    catName: 'lucifurr',
+    catName: names[data.length],
     cost: 5000
 });
 
@@ -59827,9 +59841,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_business_',
+    catSrc: images[data.length], // 'cat_business_',
     catThumb: 'results_yellow_cat',
-    catName: 'fluffy',
+    catName: names[data.length],
     cost: 500000
 });
 data.push({
@@ -59844,9 +59858,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_bowie_',
+    catSrc: images[data.length], // 'cat_bowie_',
     catThumb: 'results_yellow_cat',
-    catName: 'joe',
+    catName: names[data.length],
     cost: 5000000
 });
 data.push({
@@ -59861,9 +59875,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_ufo_',
+    catSrc: images[data.length], // 'cat_ufo_',
     catThumb: 'results_yellow_cat',
-    catName: 'clermont',
+    catName: names[data.length],
     cost: 50000000
 });
 data.push({
@@ -59878,9 +59892,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_pink_',
+    catSrc: images[data.length], // 'cat_pink_',
     catThumb: 'results_yellow_cat',
-    catName: 'julien',
+    catName: names[data.length],
     cost: 500000000
 });
 data.push({
@@ -59895,9 +59909,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_pink_',
+    catSrc: images[data.length], // 'cat_pink_',
     catThumb: 'results_yellow_cat',
-    catName: 'mat',
+    catName: names[data.length],
     cost: 750000000
 });
 data.push({
@@ -59912,9 +59926,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_pink_',
+    catSrc: images[data.length], // 'cat_pink_',
     catThumb: 'results_yellow_cat',
-    catName: 'john',
+    catName: names[data.length],
     cost: 1000000000
 });
 data.push({
@@ -59929,9 +59943,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_pink_',
+    catSrc: images[data.length], // 'cat_pink_',
     catThumb: 'results_yellow_cat',
-    catName: 'james',
+    catName: names[data.length],
     cost: 300000000000
 });
 
@@ -59947,9 +59961,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_pink_',
+    catSrc: images[data.length], // 'cat_pink_',
     catThumb: 'results_yellow_cat',
-    catName: 'kim',
+    catName: names[data.length],
     cost: 8000000000000
 });
 
@@ -59965,9 +59979,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_pink_',
+    catSrc: images[data.length], // 'cat_pink_',
     catThumb: 'results_yellow_cat',
-    catName: 'oswaldo',
+    catName: names[data.length],
     cost: 25000000000000
 });
 
@@ -59983,9 +59997,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_pink_',
+    catSrc: images[data.length], // 'cat_pink_',
     catThumb: 'results_yellow_cat',
-    catName: 'oswaldo',
+    catName: names[data.length],
     cost: 550000000000000
 });
 
@@ -60001,9 +60015,9 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_pink_',
+    catSrc: images[data.length], // 'cat_pink_',
     catThumb: 'results_yellow_cat',
-    catName: 'oswaldo',
+    catName: names[data.length],
     cost: 7500000000000000
 });
 
@@ -60019,10 +60033,46 @@ data.push({
     collectedMultiplier: 0,
     maxCollectedMultiplier: 30,
     limitCatsToMultiply: 1500,
-    catSrc: 'cat_pink_',
+    catSrc: images[data.length], // 'cat_pink_',
     catThumb: 'results_yellow_cat',
-    catName: 'oswaldo',
-    cost: 85000000000000000
+    catName: names[data.length],
+    cost: 850000000000000000
+});
+
+data.push({
+    catID: 15,
+    collected: 0,
+    active: false,
+    canBeActive: false,
+    isAuto: false,
+    autoCollectPrice: 1000000,
+    amountToAutoCollect: 400,
+    pointsMultiplier: 1750,
+    collectedMultiplier: 0,
+    maxCollectedMultiplier: 30,
+    limitCatsToMultiply: 1500,
+    catSrc: images[data.length], // 'cat_pink_',
+    catThumb: 'results_yellow_cat',
+    catName: names[data.length],
+    cost: 1500000000000000000
+});
+
+data.push({
+    catID: 16,
+    collected: 0,
+    active: false,
+    canBeActive: false,
+    isAuto: false,
+    autoCollectPrice: 2000000,
+    amountToAutoCollect: 400,
+    pointsMultiplier: 200,
+    collectedMultiplier: 0,
+    maxCollectedMultiplier: 30,
+    limitCatsToMultiply: 1500,
+    catSrc: images[data.length], // 'cat_pink_',
+    catThumb: 'results_yellow_cat',
+    catName: names[data.length],
+    cost: 150000000000000000000
 });
 
 exports.default = data;
@@ -60219,6 +60269,25 @@ data.push({
     collectedMultiplier: 0
 });
 
+data.push({
+    catID: 15,
+    collected: 0,
+    active: false,
+    canBeActive: false,
+    isAuto: false,
+    pointsMultiplier: 110,
+    collectedMultiplier: 0
+});
+
+data.push({
+    catID: 16,
+    collected: 0,
+    active: false,
+    canBeActive: false,
+    isAuto: false,
+    pointsMultiplier: 130,
+    collectedMultiplier: 0
+});
 exports.default = data;
 module.exports = exports["default"];
 
@@ -60680,9 +60749,9 @@ var SpaceCatsScreenManager = function (_ScreenManager) {
         _this.addChild(_this.videoContainer);
 
         _this.videoContainer.visible = false;
-        // this.showPopUp('gameover')
+        _this.showPopUp('gameover');
         // this.toGame();
-        _this.showPopUp('init');
+        // this.showPopUp('init')
         // this.showPopUp('shop')
 
         _this.infoContainer = new _InfoContainer2.default();
@@ -61461,8 +61530,8 @@ var GameOverPopUp = function (_StandardPop) {
         _this.catItemList.onAutoCollect.add(_this.onAutoCollect.bind(_this));
         _this.catItemList.onActiveCat.add(_this.onActiveCat.bind(_this));
         _this.catItemList.onInfoAutoCollect.add(_this.onInfoAutoCollect.bind(_this));
-        _this.catListContainer.x = -_this.catItemList.width / 2;
-        _this.catListContainer.y = -_this.catItemList.height / 2;
+        _this.catListContainer.x = -_this.catItemList.width / 2 + _this.catItemList.upButton.width / 2;
+        _this.catListContainer.y = -_this.catItemList.height / 2 + _this.catItemList.upButton.height / 2;
         _this.container.addChild(_this.catListContainer);
 
         _this.playButton = new _UIButton2.default('icon_play', 0.6); //new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
@@ -61475,21 +61544,6 @@ var GameOverPopUp = function (_StandardPop) {
         _this.playButton.on('mousedown', _this.confirm.bind(_this)).on('touchstart', _this.confirm.bind(_this));
         _this.container.addChild(_this.playButton);
         _this.playButton.scale.set(0);
-
-        // this.resetButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        // this.resetButton.anchor.set(0.5)
-        //     // this.resetButton.scale.set(-0.5, 0.5)
-        // this.resetButtonScale = this.logoMask.height / this.resetButton.height * 0.15
-        // this.resetButton.scale.set(-this.resetButtonScale, this.resetButtonScale);
-        // this.resetButton.x = -config.width / 2 + this.resetButton.width;
-        // this.resetButton.y = -config.height / 2 + this.resetButton.height + config.height * 0.2;
-        // // this.resetButton.y = -300
-        // this.resetButton.interactive = true;
-        // this.resetButton.buttonMode = true;
-        // this.resetButton.on('mouseup', this.addMany.bind(this)).on('touchend', this.addMany.bind(this));
-        // // this.resetButton.on('mouseup', this.redirectToInit.bind(this)).on('touchend', this.redirectToInit.bind(this));
-        // this.container.addChild(this.resetButton)
-
 
         _this.settingsButton = new _UIButton2.default('icon_settings', 0.75);
         _this.settingsButtonScale = _this.logoMask.height / _this.settingsButton.height * 0.15;
@@ -62083,6 +62137,25 @@ var CatItemList = function (_PIXI$Container) {
         _this.container.mask = _this.maskGraphic;
         _this.container.interactive = true;
 
+        _this.upButton = new _UIButton2.default('icon_close');
+        _this.upButton.customAnchor(0.75, 0.75);
+        _this.upButton.scale.set(_this.rect.h / _this.upButton.height * 0.15);
+        _this.upButton.align = 1 - 0.65;
+        _this.upButton.interactive = true;
+        _this.upButton.buttonMode = true;
+        _this.upButton.on('mousedown', _this.onUpList.bind(_this)).on('touchstart', _this.onUpList.bind(_this));
+        _this.addChild(_this.upButton);
+
+        _this.downButton = new _UIButton2.default('icon_close');
+        _this.downButton.customAnchor(0.75, 0.25);
+        _this.downButton.scale.set(_this.rect.h / _this.downButton.height * 0.15);
+        _this.downButton.align = 1 - 0.65;
+        _this.downButton.interactive = true;
+        _this.downButton.buttonMode = true;
+        _this.downButton.y = _this.rect.h;
+        _this.downButton.on('mousedown', _this.onDownList.bind(_this)).on('touchstart', _this.onDownList.bind(_this));
+        _this.addChild(_this.downButton);
+
         _this.container.on('mousemove', _this.moveDrag.bind(_this)).on('touchmove', _this.moveDrag.bind(_this));
 
         _this.container.on('mousedown', _this.startDrag.bind(_this)).on('touchstart', _this.startDrag.bind(_this));
@@ -62111,28 +62184,18 @@ var CatItemList = function (_PIXI$Container) {
         _this.infoButton.on('mousedown', _this.onInfoCallback.bind(_this)).on('touchstart', _this.onInfoCallback.bind(_this));
         shipInfoSprite.addChild(_this.infoButton);
         _this.infoButton.x = shipInfoSprite.width;
-        // this.uiList.elementsList.push(this.infoButton);
-        // this.uiList.addChild(this.infoButton);
 
         _this.closeSpaceship = new _UIButton2.default('icon_close');
         _this.closeSpaceship.zeroAnchor();
-        // this.closeSpaceship.back.anchor.set(0)
-        // this.closeSpaceship.icon.position.set(this.closeSpaceship.back.width / 2, this.closeSpaceship.back.height / 2)
         _this.closeSpaceship.scale.set(shipInfoSprite.height / _this.closeSpaceship.height * 0.55);
         _this.closeSpaceship.align = 1 - 0.65;
         _this.closeSpaceship.interactive = true;
         _this.closeSpaceship.buttonMode = true;
         _this.closeSpaceship.on('mousedown', _this.onHideAuto.bind(_this)).on('touchstart', _this.onHideAuto.bind(_this));
-
-        // this.closeSpaceship.x = shipInfoSprite.width - this.closeSpaceship.width / 2 - (shipInfoSprite.height - this.closeSpaceship.height) / 2
-        // this.closeSpaceship.y = shipInfoSprite.height / 2;
         _this.uiList.elementsList.push(_this.closeSpaceship);
         _this.uiList.addChild(_this.closeSpaceship);
 
         var fishIcon = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
-        // fishIcon.anchor.set(0.5, 0.5);
-        // fishIcon.x = fishIcon.width + 20
-        // fishIcon.y = shipInfoSprite.height / 2
         fishIcon.align = 1;
         _this.uiList.elementsList.push(fishIcon);
         _this.uiList.addChild(fishIcon);
@@ -62157,36 +62220,26 @@ var CatItemList = function (_PIXI$Container) {
             align: 'left',
             fontWeight: '800'
         });
-        // this.spaceShipInfoLabel.x = fishIcon.x + fishIcon.width - 20
-        // this.spaceShipInfoLabel.y = fishIcon.y - this.spaceShipInfoLabel.height / 2
         _this.spaceShipInfoLabel.align = 0;
         _this.uiList.elementsList.push(_this.spaceShipInfoLabel);
         _this.uiList.addChild(_this.spaceShipInfoLabel);
 
         _this.confirmSpaceship = new _UIButton2.default('icon_confirm');
         _this.confirmSpaceship.zeroAnchor();
-        // this.confirmSpaceship.back.anchor.set(0)
-        // this.confirmSpaceship.icon.position.set(this.confirmSpaceship.back.width / 2, this.confirmSpaceship.back.height / 2)
         _this.confirmSpaceship.scale.set(shipInfoSprite.height / _this.confirmSpaceship.height * 0.55);
         _this.confirmSpaceship.align = 0.65;
         _this.confirmSpaceship.interactive = true;
         _this.confirmSpaceship.buttonMode = true;
         _this.confirmSpaceship.on('mousedown', _this.onConfirmAuto.bind(_this)).on('touchstart', _this.onConfirmAuto.bind(_this));
-
-        // this.confirmSpaceship.x = shipInfoSprite.width - this.confirmSpaceship.width / 2 - (shipInfoSprite.height - this.confirmSpaceship.height) / 2
-        // this.confirmSpaceship.y = shipInfoSprite.height / 2;
         _this.uiList.elementsList.push(_this.confirmSpaceship);
         _this.uiList.addChild(_this.confirmSpaceship);
 
         shipInfoSprite.scale.set(rect.w / shipInfoSprite.width);
-        // this.spaceShipInfoContainer.x = -this.spaceShipInfoContainer.width
         _this.blocker = new PIXI.Graphics().beginFill(0).drawRect(0, 0, _config2.default.width, _config2.default.height); //new PIXI.Sprite(PIXI.Texture.from('UIpiece.png'));
         _this.blocker.alpha = 0.75;
         _this.blocker.interactive = true;
         _this.blocker.buttonMode = true;
         _this.blocker.on('mousedown', _this.onHideAuto.bind(_this)).on('touchstart', _this.onHideAuto.bind(_this));
-        // this.blocker.on('mousedown', this.collect.bind(this)).on('touchstart', this.collect.bind(this));
-
 
         _this.addChild(_this.spaceShipInfoContainer);
 
@@ -62195,15 +62248,51 @@ var CatItemList = function (_PIXI$Container) {
         _this.uiList.updateHorizontalList();
         _this.uiList.y = shipInfoSprite.height / shipInfoSprite.scale.y - _this.uiList.h;
 
-        // this.infoButton.x = rescueCats.x + rescueCats.width / 2;
-        // this.infoButton.y = rescueCats.y + rescueCats.height / 2;
         return _this;
     }
 
     (0, _createClass3.default)(CatItemList, [{
+        key: 'onDownList',
+        value: function onDownList() {
+            var target = 0;
+            var targY = this.catListContainer.y;
+
+            targY -= this.itemHeight / 2;
+            target = Math.floor(targY / this.itemHeight) * this.itemHeight;
+
+            var maxH = this.itemHeight * this.catsItemList.length;
+
+            if (target + maxH < this.containerBackground.height) {
+                TweenLite.to(this.catListContainer, 0.75, {
+                    y: this.containerBackground.height - maxH, // - this.catListContainer.height,
+                    ease: Back.easeOut
+                });
+                this.downButton.visible = false;
+            } else {
+                TweenLite.to(this.catListContainer, 0.75, {
+                    y: target,
+                    ease: Back.easeOut
+                });
+                this.downButton.visible = true;
+            }
+            this.upButton.visible = true;
+        }
+    }, {
+        key: 'onUpList',
+        value: function onUpList() {
+            TweenLite.to(this.catListContainer, 0.5, {
+                y: 0,
+                ease: Back.easeOut
+            });
+            this.upButton.visible = false;
+            this.downButton.visible = true;
+        }
+    }, {
         key: 'resetPosition',
         value: function resetPosition() {
             this.catListContainer.y = 0;
+            this.upButton.visible = false;
+            this.downButton.visible = true;
         }
     }, {
         key: 'onHideAuto',
@@ -62213,9 +62302,12 @@ var CatItemList = function (_PIXI$Container) {
             this.spaceShipInfoContainer.visible = false;
             this.container.alpha = 1;
             this.lastItemClicked.visible = true;
-            TweenLite.to(this.blocker, 0.5, { alpha: 0, onComplete: function onComplete() {
+            TweenLite.to(this.blocker, 0.5, {
+                alpha: 0,
+                onComplete: function onComplete() {
                     _this2.blocker.visible = false;
-                } });
+                }
+            });
         }
     }, {
         key: 'onInfoCallback',
@@ -62256,13 +62348,14 @@ var CatItemList = function (_PIXI$Container) {
             }
             this.blocker.alpha = 0;
             this.blocker.visible = true;
-            TweenLite.to(this.blocker, 0.5, { alpha: 0.5, onComplete: function onComplete() {} });
+            TweenLite.to(this.blocker, 0.5, {
+                alpha: 0.5,
+                onComplete: function onComplete() {}
+            });
 
             this.spaceShipInfoContainer.y = this.catListContainer.y + this.lastItemClicked.y;
             this.spaceShipInfoContainer.visible = true;
             this.spaceShipInfoLabel.text = _utils2.default.formatPointsLabel(staticData.autoCollectPrice / MAX_NUMBER);
-            // this.container.alpha = 0.75;
-            console.log('ADICIONAR UM COVER AQUI NA LISTA DE GATOS');
             this.uiList.updateHorizontalList();
             this.spaceShipInfoContainer.alpha = 0;
             TweenLite.to(this.spaceShipInfoContainer, 0.5, {
@@ -62313,17 +62406,20 @@ var CatItemList = function (_PIXI$Container) {
                 targY += this.itemHeight / 2;
                 target = Math.ceil(targY / this.itemHeight) * this.itemHeight;
             }
-
+            this.upButton.visible = true;
+            this.downButton.visible = true;
             if (target > 0) {
                 TweenLite.to(this.catListContainer, 0.75, {
                     y: 0,
                     ease: Back.easeOut
                 });
+                this.upButton.visible = false;
             } else if (target + maxH < this.containerBackground.height) {
                 TweenLite.to(this.catListContainer, 0.75, {
                     y: this.containerBackground.height - maxH, // - this.catListContainer.height,
                     ease: Back.easeOut
                 });
+                this.downButton.visible = false;
             } else if (target != 0) {
                 TweenLite.to(this.catListContainer, 0.75, {
                     y: target,
@@ -63511,6 +63607,7 @@ var GameOverCatsContainer = function (_UIList) {
         value: function addCatItem(id) {
             var staticCat = GAME_DATA.getStaticCatData(id);
 
+            console.log(staticCat, id);
             var item = null;
             // console.log('POOL', this.itensPool);
             if (this.itensPool.length > 0) {
@@ -63552,15 +63649,20 @@ var GameOverCatsContainer = function (_UIList) {
 
             var points = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 66666;
 
+            this.gameOverCatList1.resetPosition();
+            this.gameOverCatList2.resetPosition();
+            console.log(catList);
             this.multValue = GAME_DATA.getActionStats(GAME_DATA.shopData[this.shopStaticData.id]).value;
             this.multiplierLabel.text = 'x' + _utils2.default.cleanString(this.multValue).toFixed(2);
             this.multiplierLabel.pivot.x = this.multiplierLabel.width / 2;
             this.currentMoney = 0;
             this.updateMoney(0, true);
             this.updateMoney(points, false, 0.75);
+            var realPoints = [];
             for (var i = 0; i < catList.length; i++) {
                 if (catList[i] > 0) {
                     this.addCatItem(i);
+                    realPoints.push(catList[i]);
                 }
             }
 
@@ -63583,12 +63685,12 @@ var GameOverCatsContainer = function (_UIList) {
                 var itemC = this.itensList[i];
                 delay = 0.1 * i + 0.1;
                 itemC.show(delay);
-                itemC.setValue(catList[i]);
+                itemC.setValue(realPoints[i]);
 
                 if (dynamicData.level > 0) {
                     catList[i] *= this.leveledShopData.value;
-                    catList[i] = Math.ceil(catList[i]);
-                    itemC.updateQuant(catList[i], false, delay + 1, 'x' + _utils2.default.cleanString(this.multValue).toFixed(2));
+                    catList[i] = Math.ceil(realPoints[i]);
+                    itemC.updateQuant(realPoints[i], false, delay + 1, 'x' + _utils2.default.cleanString(this.multValue).toFixed(2));
                 }
             }
             this.confirmButton.visible = false;
@@ -67605,14 +67707,14 @@ var CoinsExplosion = function (_PIXI$Container) {
                         coin.y += coin.velocity.y * delta;
                         coin.alpha -= 1 * delta * coin.alphaDecress;
                         if (coin.target) {
-                            coin.target.timer -= delta;
-                            if (coin.target.timer <= 0) {
+                            coin.timer -= delta;
+                            if (coin.timer <= 0) {
                                 var angle = Math.atan2(coin.target.y - coin.y, coin.target.x - coin.x);
                                 var targetX = Math.cos(angle) * 500;
                                 var targetY = Math.sin(angle) * 500;
 
-                                coin.velocity.x = this.lerp(coin.velocity.x, targetX, 0.1);
-                                coin.velocity.y = this.lerp(coin.velocity.y, targetY, 0.1);
+                                coin.velocity.x = this.lerp(coin.velocity.x, targetX, 0.05);
+                                coin.velocity.y = this.lerp(coin.velocity.y, targetY, 0.05);
                                 if (_utils2.default.distance(coin.x, coin.y, coin.target.x, coin.target.y) < coin.height) {
                                     coin.alpha = 0;
                                 }
@@ -67668,9 +67770,11 @@ var CoinsExplosion = function (_PIXI$Container) {
                 coin.scale.set(1);
                 coin.delay = customData.delay != undefined ? customData.delay : 0;
                 var scl = customData.scale || 0.03;
+                coin.timer = 0;
                 coin.target = customData.target;
-                if (coin.target && !coin.target.timer) {
-                    coin.target.timer = 0;
+                if (coin.target) {
+                    console.log(coin.target.timer);
+                    coin.timer = coin.target.timer;
                 }
                 coin.scale.set(_config2.default.height / (coin.height * coin.scale.y) * scl);
                 var force = {
@@ -72742,10 +72846,10 @@ var GameScreen = function (_Screen) {
             this.inGameEffects.addCoinParticles(coinPos, points, {
                 texture: 'cat_coin_particle',
                 alphaDecress: 0,
-                gravity: 500,
-                forceX: 400,
+                gravity: 800,
+                forceX: 600,
                 target: {
-                    timer: 1.5,
+                    timer: 1,
                     x: 20,
                     y: 20
                 },
@@ -73181,7 +73285,9 @@ var InGameEffects = function () {
         value: function removeSpeedUpModeItem() {
             this.game.filters = [];
             this.theGlitchIsBack = false;
-            this.forwindButton.visible = false;
+            if (this.forwindButton) {
+                this.forwindButton.visible = false;
+            }
         }
     }, {
         key: 'speedUpModeItem',
@@ -73198,10 +73304,10 @@ var InGameEffects = function () {
             }
             this.forwindButton.visible = true;
             this.forwindButton.alpha = 1;
-            this.glitch.slices = 15;
+            this.glitch.slices = 80;
             this.glitch.fillMode = 3;
             this.glitch.minSize = 1;
-            this.glitch.offset = 2;
+            this.glitch.offset = 3;
             this.glitch.sampleSize = 512;
             this.glitch.seed = Math.random();
             this.game.filters = [this.glitch];
@@ -78168,26 +78274,26 @@ var assets = [{
 	"id": "bigblur",
 	"url": "assets/image\\bigblur.png"
 }, {
-	"id": "glass",
-	"url": "assets/image\\glass.png"
-}, {
 	"id": "image",
 	"url": "assets/image\\image.png"
 }, {
-	"id": "lane_texture",
-	"url": "assets/image\\lane_texture.png"
+	"id": "glass",
+	"url": "assets/image\\glass.png"
 }, {
 	"id": "lane_texture - Copy",
 	"url": "assets/image\\lane_texture - Copy.png"
 }, {
+	"id": "lane_texture",
+	"url": "assets/image\\lane_texture.png"
+}, {
 	"id": "lettering",
 	"url": "assets/image\\lettering.png"
 }, {
-	"id": "logo_mask",
-	"url": "assets/image\\logo_mask.png"
-}, {
 	"id": "logo",
 	"url": "assets/image\\logo.png"
+}, {
+	"id": "logo_mask",
+	"url": "assets/image\\logo_mask.png"
 }, {
 	"id": "logo_mask_white",
 	"url": "assets/image\\logo_mask_white.png"
@@ -78195,20 +78301,20 @@ var assets = [{
 	"id": "pattern",
 	"url": "assets/image\\pattern.png"
 }, {
-	"id": "planet",
-	"url": "assets/image\\planet.png"
-}, {
 	"id": "planet1",
 	"url": "assets/image\\planet1.png"
+}, {
+	"id": "planet",
+	"url": "assets/image\\planet.png"
 }, {
 	"id": "planet2",
 	"url": "assets/image\\planet2.png"
 }, {
-	"id": "planet4",
-	"url": "assets/image\\planet4.png"
-}, {
 	"id": "planet3",
 	"url": "assets/image\\planet3.png"
+}, {
+	"id": "planet4",
+	"url": "assets/image\\planet4.png"
 }, {
 	"id": "vignette-tex",
 	"url": "assets/image\\vignette-tex.png"
@@ -78237,14 +78343,20 @@ var assets = [{
 	"id": "active_engine",
 	"url": "assets/image\\ui\\active_engine.png"
 }, {
-	"id": "auto_confirm",
-	"url": "assets/image\\ui\\auto_confirm.png"
-}, {
 	"id": "automate",
 	"url": "assets/image\\ui\\automate.png"
 }, {
+	"id": "bubble",
+	"url": "assets/image\\ui\\bubble.png"
+}, {
+	"id": "auto_confirm",
+	"url": "assets/image\\ui\\auto_confirm.png"
+}, {
 	"id": "back_button",
 	"url": "assets/image\\ui\\back_button.png"
+}, {
+	"id": "button_off",
+	"url": "assets/image\\ui\\button_off.png"
 }, {
 	"id": "button_on",
 	"url": "assets/image\\ui\\button_on.png"
@@ -78252,29 +78364,23 @@ var assets = [{
 	"id": "buy_grey",
 	"url": "assets/image\\ui\\buy_grey.png"
 }, {
-	"id": "button_off",
-	"url": "assets/image\\ui\\button_off.png"
-}, {
 	"id": "buy_icon",
 	"url": "assets/image\\ui\\buy_icon.png"
-}, {
-	"id": "bubble",
-	"url": "assets/image\\ui\\bubble.png"
 }, {
 	"id": "cat_coin",
 	"url": "assets/image\\ui\\cat_coin.png"
 }, {
-	"id": "cat_coin_particle",
-	"url": "assets/image\\ui\\cat_coin_particle.png"
-}, {
-	"id": "deactive_engine",
-	"url": "assets/image\\ui\\deactive_engine.png"
-}, {
 	"id": "cat_coin_02",
 	"url": "assets/image\\ui\\cat_coin_02.png"
 }, {
+	"id": "cat_coin_particle",
+	"url": "assets/image\\ui\\cat_coin_particle.png"
+}, {
 	"id": "coin_pig",
 	"url": "assets/image\\ui\\coin_pig.png"
+}, {
+	"id": "deactive_engine",
+	"url": "assets/image\\ui\\deactive_engine.png"
 }, {
 	"id": "discount",
 	"url": "assets/image\\ui\\discount.png"
@@ -78294,11 +78400,11 @@ var assets = [{
 	"id": "goodboy",
 	"url": "assets/image\\ui\\goodboy.png"
 }, {
-	"id": "goodboy_logo",
-	"url": "assets/image\\ui\\goodboy_logo.png"
-}, {
 	"id": "icon_back",
 	"url": "assets/image\\ui\\icon_back.png"
+}, {
+	"id": "goodboy_logo",
+	"url": "assets/image\\ui\\goodboy_logo.png"
 }, {
 	"id": "icon_border",
 	"url": "assets/image\\ui\\icon_border.png"
@@ -78306,11 +78412,11 @@ var assets = [{
 	"id": "icon_close",
 	"url": "assets/image\\ui\\icon_close.png"
 }, {
-	"id": "icon_confirm",
-	"url": "assets/image\\ui\\icon_confirm.png"
-}, {
 	"id": "icon_duration_blue",
 	"url": "assets/image\\ui\\icon_duration_blue.png"
+}, {
+	"id": "icon_confirm",
+	"url": "assets/image\\ui\\icon_confirm.png"
 }, {
 	"id": "icon_duration_green",
 	"url": "assets/image\\ui\\icon_duration_green.png"
@@ -78318,11 +78424,11 @@ var assets = [{
 	"id": "icon_duration_orange",
 	"url": "assets/image\\ui\\icon_duration_orange.png"
 }, {
-	"id": "icon_duration_pink",
-	"url": "assets/image\\ui\\icon_duration_pink.png"
-}, {
 	"id": "icon_increase",
 	"url": "assets/image\\ui\\icon_increase.png"
+}, {
+	"id": "icon_duration_pink",
+	"url": "assets/image\\ui\\icon_duration_pink.png"
 }, {
 	"id": "icon_lives",
 	"url": "assets/image\\ui\\icon_lives.png"
@@ -78372,9 +78478,6 @@ var assets = [{
 	"id": "play button_large_up",
 	"url": "assets/image\\ui\\play button_large_up.png"
 }, {
-	"id": "powerbar_bar",
-	"url": "assets/image\\ui\\powerbar_bar.png"
-}, {
 	"id": "powerbar_border",
 	"url": "assets/image\\ui\\powerbar_border.png"
 }, {
@@ -78383,6 +78486,9 @@ var assets = [{
 }, {
 	"id": "powerup_background_on",
 	"url": "assets/image\\ui\\powerup_background_on.png"
+}, {
+	"id": "powerbar_bar",
+	"url": "assets/image\\ui\\powerbar_bar.png"
 }, {
 	"id": "progressbar_bar",
 	"url": "assets/image\\ui\\progressbar_bar.png"
@@ -78393,11 +78499,11 @@ var assets = [{
 	"id": "rescue_cats",
 	"url": "assets/image\\ui\\rescue_cats.png"
 }, {
-	"id": "results_arrow",
-	"url": "assets/image\\ui\\results_arrow.png"
-}, {
 	"id": "results_lock",
 	"url": "assets/image\\ui\\results_lock.png"
+}, {
+	"id": "results_arrow",
+	"url": "assets/image\\ui\\results_arrow.png"
 }, {
 	"id": "results_locked_cat",
 	"url": "assets/image\\ui\\results_locked_cat.png"
@@ -78468,6 +78574,18 @@ var assets = [{
 	"id": "helmet",
 	"url": "assets/image\\cats\\helmet.png"
 }, {
+	"id": "cat_alien_arm",
+	"url": "assets/image\\cats\\alien\\cat_alien_arm.png"
+}, {
+	"id": "cat_alien_body",
+	"url": "assets/image\\cats\\alien\\cat_alien_body.png"
+}, {
+	"id": "cat_alien_head_01",
+	"url": "assets/image\\cats\\alien\\cat_alien_head_01.png"
+}, {
+	"id": "cat_alien_leg",
+	"url": "assets/image\\cats\\alien\\cat_alien_leg.png"
+}, {
 	"id": "cat_bowie_arm",
 	"url": "assets/image\\cats\\bowie\\cat_bowie_arm.png"
 }, {
@@ -78479,6 +78597,72 @@ var assets = [{
 }, {
 	"id": "cat_bowie_leg",
 	"url": "assets/image\\cats\\bowie\\cat_bowie_leg.png"
+}, {
+	"id": "cat_jeff_arm",
+	"url": "assets/image\\cats\\cloud\\cat_jeff_arm.png"
+}, {
+	"id": "cat_jeff_body",
+	"url": "assets/image\\cats\\cloud\\cat_jeff_body.png"
+}, {
+	"id": "cat_jeff_head_01",
+	"url": "assets/image\\cats\\cloud\\cat_jeff_head_01.png"
+}, {
+	"id": "cat_jeff_leg",
+	"url": "assets/image\\cats\\cloud\\cat_jeff_leg.png"
+}, {
+	"id": "cat_chef_arm",
+	"url": "assets/image\\cats\\chef\\cat_chef_arm.png"
+}, {
+	"id": "cat_chef_body",
+	"url": "assets/image\\cats\\chef\\cat_chef_body.png"
+}, {
+	"id": "cat_chef_head_01",
+	"url": "assets/image\\cats\\chef\\cat_chef_head_01.png"
+}, {
+	"id": "cat_chef_leg",
+	"url": "assets/image\\cats\\chef\\cat_chef_leg.png"
+}, {
+	"id": "cat_business_arm",
+	"url": "assets/image\\cats\\business\\cat_business_arm.png"
+}, {
+	"id": "cat_business_body",
+	"url": "assets/image\\cats\\business\\cat_business_body.png"
+}, {
+	"id": "cat_business_head_01",
+	"url": "assets/image\\cats\\business\\cat_business_head_01.png"
+}, {
+	"id": "cat_business_leg",
+	"url": "assets/image\\cats\\business\\cat_business_leg.png"
+}, {
+	"id": "cat_lucha_arm",
+	"url": "assets/image\\cats\\lucha\\cat_lucha_arm.png"
+}, {
+	"id": "cat_lucha_body",
+	"url": "assets/image\\cats\\lucha\\cat_lucha_body.png"
+}, {
+	"id": "cat_lucha_head_01",
+	"url": "assets/image\\cats\\lucha\\cat_lucha_head_01.png"
+}, {
+	"id": "cat_lucha_leg",
+	"url": "assets/image\\cats\\lucha\\cat_lucha_leg.png"
+}, {
+	"id": "cat_pink_arm",
+	"url": "assets/image\\cats\\pink_cat\\cat_pink_arm.png"
+}, {
+	"id": "cat_pink_head_01",
+	"url": "assets/image\\cats\\pink_cat\\cat_pink_head_01.png"
+}, {
+	"id": "cat_pink_body",
+	"url": "assets/image\\cats\\pink_cat\\cat_pink_body.png"
+}, {
+	"id": "cat_pink_head_02",
+	"url": "assets/image\\cats\\pink_cat\\cat_pink_head_02.png"
+}, {
+	"id": "cat_pink_head_03",
+	"url": "assets/image\\cats\\pink_cat\\cat_pink_head_03.png"
+}, {
+	"id": "cat_pink_leg",
+	"url": "assets/image\\cats\\pink_cat\\cat_pink_leg.png"
 }, {
 	"id": "cat_orange_arm",
 	"url": "assets/image\\cats\\orange_cat\\cat_orange_arm.png"
@@ -78498,30 +78682,6 @@ var assets = [{
 	"id": "cat_orange_leg",
 	"url": "assets/image\\cats\\orange_cat\\cat_orange_leg.png"
 }, {
-	"id": "cat_business_arm",
-	"url": "assets/image\\cats\\business\\cat_business_arm.png"
-}, {
-	"id": "cat_business_body",
-	"url": "assets/image\\cats\\business\\cat_business_body.png"
-}, {
-	"id": "cat_business_head_01",
-	"url": "assets/image\\cats\\business\\cat_business_head_01.png"
-}, {
-	"id": "cat_business_leg",
-	"url": "assets/image\\cats\\business\\cat_business_leg.png"
-}, {
-	"id": "cat_jeff_arm",
-	"url": "assets/image\\cats\\cloud\\cat_jeff_arm.png"
-}, {
-	"id": "cat_jeff_body",
-	"url": "assets/image\\cats\\cloud\\cat_jeff_body.png"
-}, {
-	"id": "cat_jeff_head_01",
-	"url": "assets/image\\cats\\cloud\\cat_jeff_head_01.png"
-}, {
-	"id": "cat_jeff_leg",
-	"url": "assets/image\\cats\\cloud\\cat_jeff_leg.png"
-}, {
 	"id": "cat_punk_arm",
 	"url": "assets/image\\cats\\punk_cat\\cat_punk_arm.png"
 }, {
@@ -78534,23 +78694,29 @@ var assets = [{
 	"id": "cat_punk_leg",
 	"url": "assets/image\\cats\\punk_cat\\cat_punk_leg.png"
 }, {
-	"id": "cat_pink_arm",
-	"url": "assets/image\\cats\\pink_cat\\cat_pink_arm.png"
+	"id": "cat_robot_arm",
+	"url": "assets/image\\cats\\robot\\cat_robot_arm.png"
 }, {
-	"id": "cat_pink_body",
-	"url": "assets/image\\cats\\pink_cat\\cat_pink_body.png"
+	"id": "cat_robot_body",
+	"url": "assets/image\\cats\\robot\\cat_robot_body.png"
 }, {
-	"id": "cat_pink_head_01",
-	"url": "assets/image\\cats\\pink_cat\\cat_pink_head_01.png"
+	"id": "cat_robot_head_01",
+	"url": "assets/image\\cats\\robot\\cat_robot_head_01.png"
 }, {
-	"id": "cat_pink_head_02",
-	"url": "assets/image\\cats\\pink_cat\\cat_pink_head_02.png"
+	"id": "cat_robot_leg",
+	"url": "assets/image\\cats\\robot\\cat_robot_leg.png"
 }, {
-	"id": "cat_pink_head_03",
-	"url": "assets/image\\cats\\pink_cat\\cat_pink_head_03.png"
+	"id": "cat_snake_arm",
+	"url": "assets/image\\cats\\snake\\cat_snake_arm.png"
 }, {
-	"id": "cat_pink_leg",
-	"url": "assets/image\\cats\\pink_cat\\cat_pink_leg.png"
+	"id": "cat_snake_body",
+	"url": "assets/image\\cats\\snake\\cat_snake_body.png"
+}, {
+	"id": "cat_snake_head_01",
+	"url": "assets/image\\cats\\snake\\cat_snake_head_01.png"
+}, {
+	"id": "cat_snake_leg",
+	"url": "assets/image\\cats\\snake\\cat_snake_leg.png"
 }, {
 	"id": "cat_turquoise_arm",
 	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_arm.png"
@@ -78570,18 +78736,6 @@ var assets = [{
 	"id": "cat_turquoise_leg",
 	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_leg.png"
 }, {
-	"id": "cat_ufo_arm",
-	"url": "assets/image\\cats\\ufo\\cat_ufo_arm.png"
-}, {
-	"id": "cat_ufo_body",
-	"url": "assets/image\\cats\\ufo\\cat_ufo_body.png"
-}, {
-	"id": "cat_ufo_head_01",
-	"url": "assets/image\\cats\\ufo\\cat_ufo_head_01.png"
-}, {
-	"id": "cat_ufo_leg",
-	"url": "assets/image\\cats\\ufo\\cat_ufo_leg.png"
-}, {
 	"id": "cat_super_arm",
 	"url": "assets/image\\cats\\super\\cat_super_arm.png"
 }, {
@@ -78593,6 +78747,18 @@ var assets = [{
 }, {
 	"id": "cat_super_leg",
 	"url": "assets/image\\cats\\super\\cat_super_leg.png"
+}, {
+	"id": "cat_ufo_arm",
+	"url": "assets/image\\cats\\ufo\\cat_ufo_arm.png"
+}, {
+	"id": "cat_ufo_body",
+	"url": "assets/image\\cats\\ufo\\cat_ufo_body.png"
+}, {
+	"id": "cat_ufo_head_01",
+	"url": "assets/image\\cats\\ufo\\cat_ufo_head_01.png"
+}, {
+	"id": "cat_ufo_leg",
+	"url": "assets/image\\cats\\ufo\\cat_ufo_leg.png"
 }, {
 	"id": "white_arm",
 	"url": "assets/image\\cats\\white_cat\\white_arm.png"

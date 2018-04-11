@@ -160,4 +160,25 @@ data.push(
     collectedMultiplier: 0,
 });
 
+data.push(
+{
+    catID: 15,
+    collected: 0,
+    active: false,
+    canBeActive: false,
+    isAuto: false,
+    pointsMultiplier: 110,
+    collectedMultiplier: 0,
+});
+
+data.push(
+{
+    catID: 16,
+    collected: 0,
+    active: false,
+    canBeActive: false,
+    isAuto: false,
+    pointsMultiplier: 130,
+    collectedMultiplier: 0,
+});
 export default data;

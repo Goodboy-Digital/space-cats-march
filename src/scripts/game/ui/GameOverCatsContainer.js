@@ -174,6 +174,7 @@ export default class GameOverCatsContainer extends UIList
     {
     	let staticCat = GAME_DATA.getStaticCatData(id);
 
+        console.log(staticCat, id);
         let item = null;
         // console.log('POOL', this.itensPool);
         if(this.itensPool.length > 0){
@@ -214,15 +215,20 @@ export default class GameOverCatsContainer extends UIList
     }
     show(catList, points = 66666)
     {
+        this.gameOverCatList1.resetPosition();
+        this.gameOverCatList2.resetPosition();
+        console.log(catList);
         this.multValue = GAME_DATA.getActionStats(GAME_DATA.shopData[this.shopStaticData.id]).value;
         this.multiplierLabel.text = 'x'+utils.cleanString(this.multValue).toFixed(2);
         this.multiplierLabel.pivot.x = this.multiplierLabel.width / 2;
         this.currentMoney = 0;
         this.updateMoney(0, true)
         this.updateMoney(points, false, 0.75)
+        let realPoints = [];
     	for (var i = 0; i < catList.length; i++) {
     		if(catList[i] > 0){
     			this.addCatItem(i);
+                realPoints.push(catList[i]);
     		}
     	}
 
@@ -248,13 +254,13 @@ export default class GameOverCatsContainer extends UIList
             let itemC = this.itensList[i]
             delay = 0.1 * i + 0.1
             itemC.show(delay);
-            itemC.setValue(catList[i])
+            itemC.setValue(realPoints[i])
 
             if (dynamicData.level > 0)
 	        {
 	            catList[i] *= this.leveledShopData.value;
-	            catList[i] = Math.ceil(catList[i]);
-            	itemC.updateQuant(catList[i], false, delay + 1, 'x'+utils.cleanString(this.multValue).toFixed(2))
+	            catList[i] = Math.ceil(realPoints[i]);
+            	itemC.updateQuant(realPoints[i], false, delay + 1, 'x'+utils.cleanString(this.multValue).toFixed(2))
 	        }
 
         }

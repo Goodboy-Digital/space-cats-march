@@ -81,8 +81,8 @@ data.push(
         {
             typeCurve: 'linearTween',
             zero: 1,
-            min: 1.5,
-            max: 3.5,
+            min: 1.2,
+            max: 3.2,
         },
         cooldown:
         {

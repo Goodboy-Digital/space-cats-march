@@ -47,8 +47,8 @@ export default class GameOverPopUp extends StandardPop
         this.catItemList.onAutoCollect.add(this.onAutoCollect.bind(this));
         this.catItemList.onActiveCat.add(this.onActiveCat.bind(this));
         this.catItemList.onInfoAutoCollect.add(this.onInfoAutoCollect.bind(this));
-        this.catListContainer.x = -this.catItemList.width / 2;
-        this.catListContainer.y = -this.catItemList.height / 2
+        this.catListContainer.x = -this.catItemList.width / 2 + this.catItemList.upButton.width / 2
+        this.catListContainer.y = -this.catItemList.height / 2 + this.catItemList.upButton.height / 2
         this.container.addChild(this.catListContainer);
 
 
@@ -62,21 +62,6 @@ export default class GameOverPopUp extends StandardPop
         this.playButton.on('mousedown', this.confirm.bind(this)).on('touchstart', this.confirm.bind(this));
         this.container.addChild(this.playButton)
         this.playButton.scale.set(0);
-
-
-        // this.resetButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        // this.resetButton.anchor.set(0.5)
-        //     // this.resetButton.scale.set(-0.5, 0.5)
-        // this.resetButtonScale = this.logoMask.height / this.resetButton.height * 0.15
-        // this.resetButton.scale.set(-this.resetButtonScale, this.resetButtonScale);
-        // this.resetButton.x = -config.width / 2 + this.resetButton.width;
-        // this.resetButton.y = -config.height / 2 + this.resetButton.height + config.height * 0.2;
-        // // this.resetButton.y = -300
-        // this.resetButton.interactive = true;
-        // this.resetButton.buttonMode = true;
-        // this.resetButton.on('mouseup', this.addMany.bind(this)).on('touchend', this.addMany.bind(this));
-        // // this.resetButton.on('mouseup', this.redirectToInit.bind(this)).on('touchend', this.redirectToInit.bind(this));
-        // this.container.addChild(this.resetButton)
 
 
         this.settingsButton = new UIButton('icon_settings', 0.75)

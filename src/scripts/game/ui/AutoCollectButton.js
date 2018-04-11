@@ -26,7 +26,7 @@ export default class AutoCollectButton extends PIXI.Container
         this.sprite = new PIXI.Sprite.from('engine_icon');
         this.container.addChild(this.sprite);
         this.sprite.anchor.set(0, 0.5)
-        this.defaultSpriteScale = this.h / this.sprite.height * 0.5;
+        this.defaultSpriteScale = this.h / this.sprite.height * 0.35;
         this.sprite.scale.set(this.defaultSpriteScale)
         this.sprite.x = 15;
         this.sprite.y = this.h / 2;
@@ -36,8 +36,8 @@ export default class AutoCollectButton extends PIXI.Container
         this.spriteTrophy = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
         this.container.addChild(this.spriteTrophy);
         this.spriteTrophy.anchor.set(1, 0.5)
-        this.spriteTrophy.scale.set(this.h / this.spriteTrophy.height * 0.35)
-        this.spriteTrophy.x = this.spriteTrophy.width / 2;
+        this.spriteTrophy.scale.set(this.h / this.spriteTrophy.height * 0.45)
+        this.spriteTrophy.x = this.spriteTrophy.width;
         this.spriteTrophy.y = this.h / 2;
 
         this.on('mouseup', this.onClick.bind(this)).on('touchend', this.onClick.bind(this));
@@ -45,7 +45,7 @@ export default class AutoCollectButton extends PIXI.Container
         this.priceLabel = new PIXI.Text('100k',
         {
             fontFamily: 'blogger_sansregular',
-            fontSize: '18px',
+            fontSize: '16px',
             fill: 0xe5519b,
             align: 'center',
             fontWeight: '800'

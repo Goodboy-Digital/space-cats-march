@@ -154,7 +154,9 @@ export default class InGameEffects
     removeSpeedUpModeItem(){
         this.game.filters = []
         this.theGlitchIsBack = false;
-        this.forwindButton.visible = false;
+        if(this.forwindButton){
+            this.forwindButton.visible = false;
+        }
     }
     speedUpModeItem(){
         if(!this.glitch){            
@@ -169,10 +171,10 @@ export default class InGameEffects
         }
         this.forwindButton.visible = true;
         this.forwindButton.alpha = 1;
-        this.glitch.slices = 15
+        this.glitch.slices = 80
         this.glitch.fillMode = 3
         this.glitch.minSize = 1
-        this.glitch.offset = 2
+        this.glitch.offset = 3
         this.glitch.sampleSize = 512
         this.glitch.seed = Math.random()
         this.game.filters = [this.glitch]

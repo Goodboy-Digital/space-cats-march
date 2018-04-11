@@ -42,6 +42,9 @@ export default class ListScroller extends PIXI.Container {
             .on('touchendoutside', this.endDrag.bind(this))
             .on('mouseupoutside', this.endDrag.bind(this));
     }
+    resetPosition(){
+        this.listContainer.y = 0;
+    }
     addItens(itens, fit = false)
     {
         for (var i = 0; i < itens.length; i++)

@@ -45,6 +45,12 @@ export default class UIButton extends PIXI.Container
         this.icon.position.set(this.back.width / 2, this.back.height / 2)
         this.iconPos = this.icon.y;
     }
+    customAnchor(x,y)
+    {
+        this.back.anchor.set(x,y)
+        this.icon.position.set(this.back.width / 2 - this.back.width * this.back.anchor.x, this.back.height / 2 - this.back.height * this.back.anchor.y)
+        this.iconPos = this.icon.y;
+    }
     changeTexture(tex)
     {
         this.icon.texture = PIXI.Texture.from(tex);
