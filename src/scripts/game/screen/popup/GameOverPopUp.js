@@ -47,8 +47,8 @@ export default class GameOverPopUp extends StandardPop
         this.catItemList.onAutoCollect.add(this.onAutoCollect.bind(this));
         this.catItemList.onActiveCat.add(this.onActiveCat.bind(this));
         this.catItemList.onInfoAutoCollect.add(this.onInfoAutoCollect.bind(this));
-        this.catListContainer.x = -this.catItemList.width / 2 + this.catItemList.upButton.width / 2
-        this.catListContainer.y = -this.catItemList.height / 2 + this.catItemList.upButton.height / 2
+        this.catListContainer.x = -this.catItemList.containerBackground.width /2 // 2 + this.catItemList.upButton.width / 2
+        this.catListContainer.y = -this.catItemList.containerBackground.height /2// 2 + this.catItemList.upButton.height * 2
         this.container.addChild(this.catListContainer);
 
 
@@ -159,6 +159,7 @@ export default class GameOverPopUp extends StandardPop
         this.addChild(this.gameOverCatsContainer)
         this.gameOverCatsContainer.hide();
         this.gameOverCatsContainer.onHide.add(this.onHideCatsGameOverList.bind(this));
+        this.gameOverCatsContainer.onCollectGift.add(this.onCollectGift.bind(this));
         // this.gameOverCatsContainer.show([5000,50,50,50,50,50,50,50,50,50,50,50]);
 
         // this.hud = new HUD();
@@ -166,6 +167,9 @@ export default class GameOverPopUp extends StandardPop
         // this.hud.x = -config.width / 2 - 300
     }
 
+    onCollectGift(){
+        this.screenManager.prizeContainer.show(1);
+    }
     openSettings(){
         this.screenManager.openSettings();
     }
@@ -559,7 +563,7 @@ export default class GameOverPopUp extends StandardPop
         this.spaceShipContainer.update(delta);
         this.trophyContainer.update(delta)
         this.chestContainer.update(delta)
-        this.screenManager.prizeContainer.update(delta)
+        // this.screenManager.prizeContainer.update(delta)
         this.catItemList.update(delta)
         this.gameOverCatsContainer.update(delta);
         // this.hud.update(delta)

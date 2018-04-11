@@ -4,8 +4,10 @@ import config from '../../config';
 import utils from '../../utils';
 import HUDItensContainer from '../ui/HUDItensContainer';
 import HUDActionsList from '../ui/HUDActionsList';
-export default class HUD extends PIXI.Container {
-    constructor(game) {
+export default class HUD extends PIXI.Container
+{
+    constructor(game)
+    {
         super();
         //console.log(game);
         this.game = game;
@@ -42,7 +44,8 @@ export default class HUD extends PIXI.Container {
 
 
 
-        this.pointsLabel = new PIXI.Text(utils.formatPointsLabel(0), {
+        this.pointsLabel = new PIXI.Text(utils.formatPointsLabel(0),
+        {
             fontFamily: 'blogger_sansregular',
             fontSize: '30px',
             fill: 0xFFFFFF,
@@ -52,7 +55,8 @@ export default class HUD extends PIXI.Container {
 
         this.addChild(this.pointsLabel);
 
-        this.lifesLabel = new PIXI.Text(9, {
+        this.lifesLabel = new PIXI.Text(9,
+        {
             fontFamily: 'blogger_sansregular',
             fontSize: '30px',
             fill: 0xFFFFFF,
@@ -117,7 +121,7 @@ export default class HUD extends PIXI.Container {
         this.lifesLabel.y = this.catHead.y - this.lifesLabel.height / 2
             // this.catHead.scale.set(0,2)
 
-            // new PIXI.Sprite.from(GAME_DATA.moneyData.softIcon);
+        // new PIXI.Sprite.from(GAME_DATA.moneyData.softIcon);
 
         this.pointsIcon = new PIXI.Sprite.from(GAME_DATA.moneyData.softIcon);
         this.addChild(this.pointsIcon);
@@ -151,14 +155,15 @@ export default class HUD extends PIXI.Container {
             // this.hudActionList.scale.set(this.forceQuiteScale)
 
 
-        this.hudActionList = new HUDActionsList({
+        this.hudActionList = new HUDActionsList(
+        {
             w: this.forceQuitButton.width,
             h: this.forceQuitButton.width * 3.5
         });
         this.addChild(this.hudActionList);
         this.hudActionList.onStartAction.add(this.startActionCallback.bind(this))
         this.hudActionList.onFinishAction.add(this.finishActionCallback.bind(this))
-        this.hudActionList.x = config.width - this.marginTop// - this.hudActionList.width //* 1.5
+        this.hudActionList.x = config.width - this.marginTop // - this.hudActionList.width //* 1.5
         this.hudActionList.y = this.h - this.forceQuitButton.height / 2
 
         this.onForceGameOver = new Signals();
@@ -170,75 +175,105 @@ export default class HUD extends PIXI.Container {
 
 
     }
-    updateActionList() {
+    disableAutoCollectAction()
+    {
+        this.hudActionList.disableAutoCollectAction();
+    }
+    enableAutoCollectAction()
+    {
+        this.hudActionList.enableAutoCollectAction();
+    }
+    updateActionList()
+    {
         console.log('UPDATE ACTIONSSS');
         this.hudActionList.updateActionList();
     }
-    killAllActions() {
+    killAllActions()
+    {
         this.hudActionList.killAllActions();
     }
-    finishActionCallback(action) {
+    finishActionCallback(action)
+    {
         this.onFinishAction.dispatch(action);
     }
-    startActionCallback(action) {
+    startActionCallback(action)
+    {
         this.onStartAction.dispatch(action);
     }
-    gameOver() {
-        if (this.quiting) {
+    gameOver()
+    {
+        if (this.quiting)
+        {
             return
         }
         this.quiting = true;
         this.forceQuitButton.scale.set(this.forceQuiteScale * 0.75);
-        TweenLite.to(this.forceQuitButton.scale, 0.5, {
+        TweenLite.to(this.forceQuitButton.scale, 0.5,
+        {
             x: this.forceQuiteScale,
             y: this.forceQuiteScale,
             ease: Elastic.easeOut,
-            onComplete: () => {
+            onComplete: () =>
+            {
                 this.onForceGameOver.dispatch();
             }
         })
-        
+
     }
-    updatePowerBar(value, type = 0, force) {
+    updatePowerBar(value, type = 0, force)
+    {
         TweenLite.killTweensOf(this.powerBarMask.scale)
-        TweenLite.to(this.powerBarMask.scale, force ? 0 : 0.5, {
+        TweenLite.to(this.powerBarMask.scale, force ? 0 : 0.5,
+        {
             x: value
         })
-        if (type == 0) {
+        if (type == 0)
+        {
             this.powerBarBar.tint = 0xFFFFFF;
-        } else if (type == 1) {
+        }
+        else if (type == 1)
+        {
             this.powerBarBar.tint = 0x00FFFF;
-        } else if (type == 2) {
+        }
+        else if (type == 2)
+        {
             this.powerBarBar.tint = 0xFF00FF;
         }
     }
-    hide(force) {
+    hide(force)
+    {
         this.hudActionList.hide(force);
-        TweenLite.to(this, force ? 0 : 0.5, {
+        TweenLite.to(this, force ? 0 : 0.5,
+        {
             y: -200
         })
     }
-    startGame() {
+    startGame()
+    {
         this.quiting = false;
         this.catHead.rotation = 0;
 
         this.forceQuitButton.x = -this.forceQuitButton.width
 
-        TweenLite.to(this.forceQuitButton, 0.35, {
+        TweenLite.to(this.forceQuitButton, 0.35,
+        {
             x: this.forceQuitButton.width / 2 + this.marginTop,
             delay: 0.5,
             ease: Back.easeOut
         })
 
-        TweenLite.to(this, 0.5, {
+        TweenLite.to(this, 0.5,
+        {
             y: 0,
             ease: Elastic.easeOut
         })
-        TweenLite.to(this.catHead.scale, 0.75, {
+        TweenLite.to(this.catHead.scale, 0.75,
+        {
             x: this.catHeadScale,
             y: this.catHeadScale,
             ease: Elastic.easeOut,
-            onComplete: () => {
+            onComplete: () =>
+            {
                 this.gameStart = true;
             }
         });
@@ -248,9 +283,11 @@ export default class HUD extends PIXI.Container {
         this.hudActionList.show();
 
     }
-    update(delta) {
+    update(delta)
+    {
         this.hudActionList.update(delta);
-        if (!this.gameStart) {
+        if (!this.gameStart)
+        {
             return;
         }
         return
@@ -259,7 +296,8 @@ export default class HUD extends PIXI.Container {
 
         this.catHead.scale.set(Math.cos(this.catRotationSin) * 0.05 + this.catHeadScale, Math.sin(this.catRotationSin) * 0.05 + this.catHeadScale)
     }
-    updateHUD(points, lifes) {
+    updateHUD(points, lifes)
+    {
         this.pointsLabel.text = utils.formatPointsLabel(points)
         this.lifesLabel.text = lifes
     }

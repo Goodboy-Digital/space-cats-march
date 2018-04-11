@@ -180,7 +180,9 @@ export default class GameScreen extends Screen
         }
 
         this.killAfterSpecial();
+        this.inGameEffects.removeDoublePoints();
         this.environment.removeSpecialBackground();
+        this.HUD.enableAutoCollectAction();
 
         TweenLite.to(this, 1,
         {
@@ -224,15 +226,18 @@ export default class GameScreen extends Screen
         }
         this[actionData.var] = actionData.default;
 
-        if(actionData.var == 'actionAutoCollect'){
+        if (actionData.var == 'actionAutoCollect')
+        {
             this.inGameEffects.removeAutocollectlModeItem();
+            this.environment.removeSpecialBackground();
         }
 
-         if(actionData.var == 'actionSpeed'){
+        if (actionData.var == 'actionSpeed')
+        {
             this.inGameEffects.removeSpeedUpModeItem();
         }
 
-        
+
 
         // this.HUD.updateActionList();
     }
@@ -251,11 +256,23 @@ export default class GameScreen extends Screen
         this.currentActions.push(actionData);
         this[actionData.var] = leveldActionData.value;
 
-        if(actionData.var == 'actionAutoCollect'){
+        if (actionData.var == 'actionAutoCollect')
+        {
             this.inGameEffects.addAutocollectlModeItem();
+            this.environment.specialBackground();
+            TweenLite.to(this, 0.5,
+            {
+                gameTimeScale: 0
+            });
+            TweenLite.to(this, 1,
+            {
+                delay: 1.5,
+                gameTimeScale: 1.5
+            });
         }
 
-         if(actionData.var == 'actionSpeed'){
+        if (actionData.var == 'actionSpeed')
+        {
             this.inGameEffects.speedUpModeItem();
         }
         // this.HUD.updateActionList();
@@ -285,6 +302,8 @@ export default class GameScreen extends Screen
             this.autoCollectTimer = this.autoCollectTimerMax;
             return
         }
+        this.inGameEffects.addDoublePoints();
+        this.HUD.disableAutoCollectAction();
         this.isSpecialMode = false;
         this.specialTimer = 0;
         this.specialAcc = 0;
@@ -336,6 +355,7 @@ export default class GameScreen extends Screen
             gameTimeScale: 1.5
         });
 
+        this.inGameEffects.addDoublePoints();
         this.inGameEffects.specialMode();
 
         this.environment.specialBackground();
@@ -352,6 +372,7 @@ export default class GameScreen extends Screen
             return
         }
 
+        this.inGameEffects.removeDoublePoints();
         this.killAfterSpecial();
         this.environment.removeSpecialBackground();
 
@@ -536,7 +557,7 @@ export default class GameScreen extends Screen
     }
     killAfterSpecial()
     {
-        for (var i = Math.floor(this.catList.length / 3); i >= 0; i--)
+        for (var i = Math.floor(this.catList.length * 0.5); i >= 0; i--)
         {
             this.removeFromLane(this.catList[i]);
             this.catList[i].destroy(true);
@@ -639,8 +660,8 @@ export default class GameScreen extends Screen
                     texture: 'cat_coin_particle',
                     alphaDecress: 0.5,
                     gravity: 500,
-                    forceX: 0,                    
-                    forceY: 0,                    
+                    forceX: 0,
+                    forceY: 0,
                     scale: 0.03
                 });
             }
@@ -700,7 +721,7 @@ export default class GameScreen extends Screen
         }
         this.addChild(this.currentItem);
 
-        let ids = [0, 1, 2, 3, 3, 3, 3, 3, 3, 3]
+        let ids = [0, 2, 3, 3, 3, 3, 3, 3, 3]
         this.currentItem.reset(
         {
             x: config.width * 0.125,
@@ -912,9 +933,14 @@ export default class GameScreen extends Screen
         }
 
         // forceY: Math.random() * 150 - 75,
-        this.inGameEffects.addCoinParticles(coinPos, points,
+        this.inGameEffects.addCoinParticles(coinPos,  Math.ceil(points / 2),
         {
-            texture: 'cat_coin_particle',
+            texture: 'results_newcat_star',
+            scale: 0.02
+        });
+        this.inGameEffects.addCoinParticles(coinPos, Math.ceil(points / 2),
+        {
+            texture: 'cat_coin_particle_ingame',
             alphaDecress: 0,
             gravity: 800,
             forceX: 600,
@@ -924,7 +950,7 @@ export default class GameScreen extends Screen
                 x: 20,
                 y: 20
             },
-            scale: 0.03
+            scale: 0.07
         });
         points *= cat.catData.pointsMultiplier;
         points += points * cat.catData.collectedMultiplier

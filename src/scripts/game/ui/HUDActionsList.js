@@ -20,11 +20,17 @@ export default class HUDActionsList extends UIList
         this.addChild(this.containerBackground)
         this.containerBackground.alpha = 0;
 
+        this.autoCollect = null;
         for (var i = 0; i < GAME_DATA.actionsData.length; i++)
         {
             let data = GAME_DATA.actionsData[i];
             let item = new HUDActionContainer(GAME_DATA.actionsData[data.id]);
             let tempContainer = new PIXI.Container();
+            let tempStatic = GAME_DATA[data.staticData][data.id];
+
+            if(tempStatic.type == 'auto_collect'){
+                this.autoCollect = item;
+            }
             tempContainer.addChild(item);
             this.addChild(tempContainer);
             tempContainer.align = 0;
@@ -59,6 +65,15 @@ export default class HUDActionsList extends UIList
     }
     updateData()
     {}
+
+    disableAutoCollectAction(){
+        this.autoCollect.ableToAct = false;
+        console.log('disableAutoCollectAction');
+    }
+enableAutoCollectAction(){
+this.autoCollect.ableToAct = true;
+}
+
     killAllActions()
     {
         for (var i = this.itensList.length - 1; i >= 0; i--)

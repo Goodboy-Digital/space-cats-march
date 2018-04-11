@@ -73,6 +73,7 @@ data.push(
     value: 5,
     icon: 'treasure_chest_03',
     shopDesc: 'actionSpeed',
+    videoDesc: 'watch a video to\nopen a Golden Chest',
     activeTime: 15,
     level: 1,
     levelMax: 1000,

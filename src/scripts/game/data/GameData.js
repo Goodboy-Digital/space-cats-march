@@ -59,7 +59,7 @@ export default class GameData
             tokens: 1,
         }
 
-        this.version = '0.0.0.14';
+        this.version = '0.0.0.17';
 
         this.resetCatData();
 

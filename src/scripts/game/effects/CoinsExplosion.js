@@ -122,7 +122,6 @@ export default class CoinsExplosion extends PIXI.Container
             coin.target = customData.target
             if (coin.target)
             {
-                console.log(coin.target.timer);
                 coin.timer = coin.target.timer;
             }
             coin.scale.set(config.height / (coin.height * coin.scale.y) * (scl))

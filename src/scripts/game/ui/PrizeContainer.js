@@ -4,6 +4,7 @@ import config from '../../config';
 import utils from '../../utils';
 import PrizeItemContainer from './PrizeItemContainer';
 import UIList from './uiElements/UIList';
+import UIButton from './uiElements/UIButton';
 export default class PrizeContainer extends UIList
 {
     constructor()
@@ -16,7 +17,7 @@ export default class PrizeContainer extends UIList
         this.prizeDark.alpha = 0.75;
         this.prizeDark.interactive = true;
         this.prizeDark.buttonMode = true;
-        this.prizeDark.on('mousedown', this.collect.bind(this)).on('touchstart', this.collect.bind(this));
+        // this.prizeDark.on('mousedown', this.collect.bind(this)).on('touchstart', this.collect.bind(this));
         this.addChild(this.prizeDark);
 
         this.starBackground = new PIXI.Sprite.from('results_newcat_rays_02');
@@ -24,8 +25,13 @@ export default class PrizeContainer extends UIList
         this.addChild(this.starBackground);
         this.starBackground.x = config.width / 2;
         this.starBackground.y = config.height / 2;
-        this.starBackgroundScale = config.width / this.starBackground.width * 0.75;
+        this.starBackgroundScale = config.width / this.starBackground.width * 0.95;
         this.starBackground.scale.set(this.starBackgroundScale)
+
+
+        
+
+
 
         this.backgroundContainer = new PIXI.Container();
         let tiled = new PIXI.extras.TilingSprite(PIXI.Texture.from('pattern'), 132, 200);
@@ -55,6 +61,27 @@ export default class PrizeContainer extends UIList
         this.backgroundContainer.addChild(this.logoMask)
         this.backgroundContainer.mask = this.logoMask
         this.addChild(this.backgroundContainer);
+
+        this.titlePrizes = new PIXI.Sprite.from('text_you_won_prizes');
+        this.titlePrizes.anchor.set(0.5,1);
+        this.titlePrizesScale = config.width / this.titlePrizes.width * 0.85
+        this.titlePrizes.scale.set(this.titlePrizesScale)
+        this.addChild(this.titlePrizes)
+        this.titlePrizes.x = config.width / 2;
+        this.titlePrizes.y = config.height / 2 - this.logoMask.height * 0.5;
+
+        this.playButton = new PIXI.Sprite.from('button_collect_prizes_off');//new UIButton('icon_confirm');
+        this.playButton.anchor.set(0.5)
+        this.playButtonScale = config.width / this.playButton.width * 0.5
+        this.playButton.scale.set(this.playButtonScale)
+        this.playButton.interactive = true;
+        this.playButton.buttonMode = true;
+        this.playButton.x = config.width / 2;
+        this.playButton.y = config.height / 2 + this.logoMask.height * 0.3;
+        this.playButton.on('mousedown', this.collect.bind(this)).on('touchstart', this.collect.bind(this));
+        this.addChild(this.playButton)
+
+
 
         this.prizesContainer = new PIXI.Container();
         this.addChild(this.prizesContainer);
@@ -100,6 +127,12 @@ export default class PrizeContainer extends UIList
             this.parent.setChildIndex(this, this.parent.children.length - 1)
         }
 
+        this.playButton.scale.set(0);
+        TweenLite.to(this.playButton.scale, 0.5, {delay:1, x:this.playButtonScale, y:this.playButtonScale, ease:Elastic.easeOut})
+
+        this.titlePrizes.scale.set(0);
+        TweenLite.to(this.titlePrizes.scale, 1, {delay:0.5, x:this.titlePrizesScale, y:this.titlePrizesScale, ease:Elastic.easeOut})
+
         this.h = this.logoMask.height * 0.3 * ((5 / numberOfPrizes))
 
         this.h = Math.min(this.h, this.logoMask.height * 0.4)
@@ -108,8 +141,9 @@ export default class PrizeContainer extends UIList
         this.elementsList = [];
         for (var i = 0; i < this.itensList1.length; i++)
         {
+            // this.itensList1[i].fitHeight = 0.75;
+            // this.itensList1[i].fitWidth = 0.6;
             this.elementsList.push(this.itensList1[i])
-            this.itensList1[i].forceHide();
         }
 
         for (var i = list.length; i < this.itensList1.length; i++)
@@ -122,7 +156,11 @@ export default class PrizeContainer extends UIList
                 }
             }
         }
-        this.updateHorizontalList();
+
+        for (var i = 0; i < this.itensList1.length; i++)
+        {
+            this.itensList1[i].forceHide();
+        }
 
         this.prizesContainer.x = config.width / 2 - this.w / 2;
         this.prizesContainer.y = config.height / 2 - this.h / 2;
@@ -145,9 +183,8 @@ export default class PrizeContainer extends UIList
             }
             itemC.show(0.15 * i + 0.1);
             itemC.setValue(utils.formatPointsLabel(list[i].quant / MAX_NUMBER))
-                // TweenLite.from(item.scale, 0.5, {x:0, y:0, delay:0.1 * i, ease:Back.easeOut});
-                // TweenLite.to(item, 0.5, {alpha:1});
         }
+        this.updateHorizontalList();
         GAME_DATA.applyPrizes(list);
         this.prizeDark.alpha = 0;
 

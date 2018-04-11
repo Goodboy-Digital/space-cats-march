@@ -65,14 +65,15 @@ export default class PrizeItemContainer extends PIXI.Container
     	this.itemSprite.visible = true;
     	this.itemCat.visible = false;
         this.itemSprite.texture = PIXI.Texture.from(texture);
-        this.itemScale = 1//this.topBg.width / (this.itemSprite.width / this.itemSprite.scale.x) * 0.75
+        this.itemScale = this.backTexture.height / this.itemSprite.height * 0.75//this.topBg.width / (this.itemSprite.width / this.itemSprite.scale.x) * 0.75
         this.itemSprite.scale.set(this.itemScale)
         // console.log(this.topBg.width, this.itemScale, texture, this.itemSprite.width , this.itemSprite.scale.x, this.itemSprite);
 
     }
     setValue(value = 999){
     	this.quantLabel.text = value;
-    	this.quantLabel.x = this.topBg.width / 2 - this.quantLabel.width / 2;
+        this.quantLabel.x = this.topBg.width / 2 - this.quantLabel.width / 2;
+    	// this.quantLabel.y = this.quantLabel.height / 3;
     }
     update(delta)
     {

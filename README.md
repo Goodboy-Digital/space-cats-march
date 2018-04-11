@@ -3,7 +3,7 @@
 description here of all the features comming soon:
 
 
- https://www.facebook.com/embed/instantgames/184590992339091/player?game_url=https://localhost:8080
+ https://www.facebook.com/embed/instantgames/165347754123022/player?game_url=https://localhost:8080
 
 
 

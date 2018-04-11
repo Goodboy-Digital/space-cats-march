@@ -21,11 +21,14 @@ export default class ShopItem extends UIList
         this.elementsList = [];
         this.rect = rect;
 
+
+
         this.itemIcon = new PIXI.Sprite.from('results_arrow');
         // this.itemIcon.scaleContent = true;
         this.itemIcon.listScl = 0.15;
         // this.itemIcon.fitHeight = 0.7;
         this.itemIcon.scaleContentMax = true;
+        this.itemIcon.fitWidth = 0.75;
         // this.itemIcon.scaleContent = false;
         this.elementsList.push(this.itemIcon);
         this.container.addChild(this.itemIcon);
@@ -95,8 +98,8 @@ export default class ShopItem extends UIList
         this.infoButton = new PIXI.Sprite.from('info');
         // this.itemIcon.scaleContent = true;
         this.infoButton.listScl = 0.1;
-        this.infoButton.align = 1;
-        this.infoButton.fitHeight = 0.45;
+        this.infoButton.align = 0.5;
+        this.infoButton.fitWidth = 0.75;
         // this.infoButton.scaleContentMax = true;
         this.elementsList.push(this.infoButton);
         this.container.addChild(this.infoButton);
@@ -138,13 +141,19 @@ export default class ShopItem extends UIList
         this.itemIcon.texture = PIXI.Texture.from(this.staticData.icon)
 
         this.levelLabel.text = 'Level ' + this.itemData.level
-
+        console.log(this.staticData.shopType);
         if (this.itemData.level <= 0)
         {
             this.attributesList.visible = false;
             this.levelContainer.visible = false;
         }
         else
+        {
+            this.attributesList.visible = true;
+            this.levelContainer.visible = true;
+        }
+
+        if (this.staticData.shopType == 'video')
         {
             this.attributesList.visible = true;
             this.levelContainer.visible = true;
@@ -203,6 +212,7 @@ export default class ShopItem extends UIList
         this.staticData = GAME_DATA[type][this.itemData.id]
         this.shopButton.setType(this.staticData.shopType)
 
+
         if (!this.attributesList)
         {
             this.attributesList = new UIList();
@@ -210,45 +220,92 @@ export default class ShopItem extends UIList
             this.attributesList.h = this.h
 
             this.descriptionContainer.addChild(this.attributesList);
-
-            let leveldValues = GAME_DATA.getActionStats(this.itemData);
-            for (let type in leveldValues)
+            if (this.staticData.shopType == 'video')
             {
-                // if (type != 'type' && type != 'cost')
-                // {
-                if (this.staticData.stats[type])
+
+                while (this.levelContainer.children.length)
                 {
-                    if (!this.staticData.stats[type].hideOnShop)
+                    this.levelContainer.removeChildAt(0)
+                }
+
+                if (!this.backGraphic)
+                {
+                    this.backGraphic = new PIXI.Graphics().beginFill(0xFF00FF).drawRect(-200, 0, this.w + 200, this.h)
+                    this.container.addChildAt(this.backGraphic, 0)
+                    this.backGraphic.alpha = 0.25;
+                }
+
+                // let attIcon = new PIXI.Sprite.from('results_newcat_star');
+                // attIcon.anchor.set(0.5)
+
+                // // this.attributesList.elementsList.push(attIcon);
+                // this.levelContainer.addChild(attIcon);
+
+                let attValue = new PIXI.Text(this.staticData.videoDesc.toUpperCase(),
+                {
+                    fontFamily: 'blogger_sansregular',
+                    fontSize: '16px',
+                    fill: 0xFFFFFF,
+                    align: 'center',
+                    fontWeight: '800'
+                });
+
+                let attContainer = new PIXI.Container();
+                attContainer.addChild(attValue);
+
+                attValue.scale.set(this.attributesList.h / attValue.height * 0.2)
+                    // attValue.x = attValue.width / 2;
+                attValue.y = attValue.height / 2 - attValue.height / 2;
+
+                attContainer.fitWidth = 0.95
+                attContainer.align = 0
+
+                this.attributesList.elementsList.push(attContainer);
+                this.attributesList.container.addChild(attContainer);
+                // this.attributesList[type] = attValue;
+            }
+            else
+            {
+                let leveldValues = GAME_DATA.getActionStats(this.itemData);
+                for (let type in leveldValues)
+                {
+
+                    if (this.staticData.stats[type])
                     {
-
-                        let attContainer = new PIXI.Container();
-
-                        let attIcon = new PIXI.Sprite.from(this.icons[type]);
-                        attIcon.scale.set(this.attributesList.w / attIcon.width * 0.1)
-                        let attValue = new PIXI.Text('000',
+                        if (!this.staticData.stats[type].hideOnShop)
                         {
-                            fontFamily: 'blogger_sansregular',
-                            fontSize: '18px',
-                            fill: 0xFFFFFF,
-                            align: 'right',
-                            fontWeight: '800'
-                        });
 
-                        attContainer.addChild(attIcon);
-                        attContainer.addChild(attValue);
+                            let attContainer = new PIXI.Container();
 
-                        attValue.scale.set(this.attributesList.h / attValue.height * 0.2)
-                        attValue.x = attIcon.x + attIcon.width + 5;
-                        attValue.y = attIcon.y + attIcon.height / 2 - attValue.height / 2;
+                            let attIcon = new PIXI.Sprite.from(this.icons[type]);
+                            attIcon.scale.set(this.attributesList.w / attIcon.width * 0.1)
+                            let attValue = new PIXI.Text('000',
+                            {
+                                fontFamily: 'blogger_sansregular',
+                                fontSize: '18px',
+                                fill: 0xFFFFFF,
+                                align: 'right',
+                                fontWeight: '800'
+                            });
 
-                        attContainer.align = 0
-                            // attContainer.fitHeight = 0
-                        this.attributesList.elementsList.push(attContainer);
-                        this.attributesList.container.addChild(attContainer);
-                        this.attributesList[type] = attValue;
+                            attContainer.addChild(attIcon);
+                            attContainer.addChild(attValue);
+
+                            attValue.scale.set(this.attributesList.h / attValue.height * 0.2)
+                            attValue.x = attIcon.x + attIcon.width + 5;
+                            attValue.y = attIcon.y + attIcon.height / 2 - attValue.height / 2;
+
+                            attContainer.align = 0
+                                // attContainer.fitHeight = 0
+                            this.attributesList.elementsList.push(attContainer);
+                            this.attributesList.container.addChild(attContainer);
+                            this.attributesList[type] = attValue;
+                        }
                     }
                 }
+
             }
+
             this.attributesList.updateHorizontalList();
 
             // console.log(this.h, this.attributesList.elementsList, this.descriptionContainer);

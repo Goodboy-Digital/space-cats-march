@@ -147,9 +147,9 @@ data.push(
         activeTime:
         {
             typeCurve: 'linearTween',
-            zero: 15,
-            min: 15,
-            max: 60,
+            zero: 10,
+            min: 10,
+            max: 45,
         },
 
 

@@ -11,7 +11,7 @@ export default class InGameEffects
 
 
         console.log(PixiFilters);
-        
+
     }
 
 
@@ -105,16 +105,20 @@ export default class InGameEffects
         specContainer.addChild(graphics);
         graphics.alpha = 0.5;
 
-        let tempLabel = new PIXI.Text('MEOWWWWW',
-        {
-            fontFamily: 'blogger_sansregular',
-            fontSize: '64px',
-            fill: 0x000000,
-            align: 'center',
-            fontWeight: '800'
-        });
-        tempLabel.pivot.x = tempLabel.width / 2;
-        tempLabel.pivot.y = tempLabel.height / 2;
+
+        let tempLabel = new PIXI.Sprite(PIXI.Texture.from('text_super_speed'))
+        // = new PIXI.Text('MEOWWWWW',
+        // {
+        //     fontFamily: 'blogger_sansregular',
+        //     fontSize: '64px',
+        //     fill: 0x000000,
+        //     align: 'center',
+        //     fontWeight: '800'
+        // });
+        // tempLabel.pivot.x = tempLabel.width / 2;
+        // tempLabel.pivot.y = tempLabel.height / 2;
+        tempLabel.scale.set(config.width / tempLabel.width * 0.45);
+        tempLabel.anchor.set(0.5);
         tempLabel.x = config.width / 2;
         tempLabel.y = specContainer.height / 2;
         specContainer.addChild(tempLabel);
@@ -136,48 +140,110 @@ export default class InGameEffects
             }
         })
     }
-    update(delta){
-        if(this.theGlitchIsBack){
+    update(delta)
+    {
+        if (this.theGlitchIsBack)
+        {
 
-            this.glitchAcc ++;
+            this.glitchAcc++;
 
-            if(this.glitchAcc % 5 == 0){
-                this.forwindButton.alpha = this.forwindButton.alpha ? 0 : 1
+            if (this.glitchAcc % 5 == 0)
+            {
+                this.fastForward.alpha = this.fastForward.alpha ? 0 : 1
             }
-            if(this.glitchAcc % 4 == 0){
-                this.glitch.slices = Math.ceil(Math.random() * 6) + 4//delta * 10;
+            if (this.glitchAcc % 1 == 0)
+            {
+                this.glitch.slices = Math.ceil(Math.random() * 6) + 20 //delta * 10;
+                this.noise.seed = Math.random();
+            }
+
+            this.noiseTexture.y += config.height * 0.4 * delta;
+
+            if (this.noiseTexture.y > config.height)
+            {
+                this.noiseTexture.y = -this.noiseTexture.height;
             }
 
             // this.game.filters = [this.glitch]
         }
+        if (this.doubleLabel && this.doubleLabel.visible)
+        {
+            this.doubleLabel.scale.x = this.doubleLabelScale + Math.cos(this.doubleLabelSin) * (this.doubleLabelScale * 0.05)
+            this.doubleLabel.scale.y = this.doubleLabelScale + Math.sin(this.doubleLabelSin) * (this.doubleLabelScale * 0.05)
+            this.doubleLabelSin += 1/60 * 25//10 * delta
+            this.doubleLabelSin %= Math.PI * 2;
+        }
     }
-    removeSpeedUpModeItem(){
+    addDoublePoints()
+    {
+        if (!this.doubleLabel)
+        {
+            this.doubleLabel = new PIXI.Sprite(PIXI.Texture.from('text_double_points'))
+            this.game.UIContainer.addChild(this.doubleLabel);
+            this.doubleLabelScale = config.width / this.doubleLabel.width * 0.35
+            this.doubleLabel.scale.set(this.doubleLabelScale)
+            this.doubleLabel.anchor.set(0.5, 0.5);
+            this.doubleLabel.x = config.width * 0.5;
+            this.doubleLabel.y = config.height * 0.065 + this.doubleLabel.height / 2;
+        }
+        this.doubleLabel.visible = true;
+        this.doubleLabelSin = 0;
+    }
+    removeDoublePoints()
+    {
+        if (this.doubleLabel)
+        {
+            this.doubleLabel.visible = false;
+        }
+    }
+    removeSpeedUpModeItem()
+    {
         this.game.filters = []
         this.theGlitchIsBack = false;
-        if(this.forwindButton){
-            this.forwindButton.visible = false;
+        if (this.fastForward)
+        {
+            this.fastForward.visible = false;
+        }
+        if (this.noiseTexture && this.noiseTexture.parent)
+        {
+            this.noiseTexture.parent.removeChild(this.noiseTexture);
         }
     }
-    speedUpModeItem(){
-        if(!this.glitch){            
+    speedUpModeItem()
+    {
+        if (!this.glitch)
+        {
             this.glitch = new PixiFilters.GlitchFilter();
-            this.forwindButton = new PIXI.Sprite(PIXI.Texture.from('icon_play')) 
-            this.game.UIContainer.addChild(this.forwindButton);
-            this.forwindButton.scale.set(config.width / this.forwindButton.width * 0.1)
-            this.forwindButton.anchor.set(0.5);
-            this.forwindButton.x = this.forwindButton.width;
-            this.forwindButton.y = config.height - this.forwindButton.height;
-            window.GLITCH = this.glitch;
+            this.fastForward = new PIXI.Sprite(PIXI.Texture.from('fast_forward_icon'))
+            this.game.UIContainer.addChild(this.fastForward);
+            this.fastForward.scale.set(config.width / this.fastForward.width * 0.2)
+            this.fastForward.anchor.set(0.5);
+            this.fastForward.x = this.fastForward.width * 0.75;
+            this.fastForward.y = config.height - this.fastForward.height * 0.75;
+
+            this.noise = new PIXI.filters.NoiseFilter();
+            this.noise.noise = 0.1;
+
+            this.rgpSplit = new PixiFilters.RGBSplitFilter();
+            this.rgpSplit.red = new PIXI.Point(1.5, 1.5);
+            this.rgpSplit.green = new PIXI.Point(-1.5, -1.5);
+            this.rgpSplit.blue = new PIXI.Point(1.5, -1.5);
+
+            this.noiseTexture = new PIXI.Sprite(PIXI.Texture.from('fast_forward_noise'))
+            this.noiseTexture.scale.set(config.width / this.noiseTexture.width);
         }
-        this.forwindButton.visible = true;
-        this.forwindButton.alpha = 1;
+        this.game.UIContainer.addChild(this.noiseTexture)
+        this.noiseTexture.y = Math.random() * config.height - this.noiseTexture.height
+
+        this.fastForward.visible = true;
+        this.fastForward.alpha = 1;
         this.glitch.slices = 80
         this.glitch.fillMode = 3
         this.glitch.minSize = 1
-        this.glitch.offset = 3
+        this.glitch.offset = 5
         this.glitch.sampleSize = 512
         this.glitch.seed = Math.random()
-        this.game.filters = [this.glitch]
+        this.game.filters = [this.rgpSplit, this.noise, this.glitch]
         this.theGlitchIsBack = true;
         this.glitchAcc = 0;
         // TweenLite.to(this.glitch, 30, {padding: 10000})
@@ -196,8 +262,13 @@ export default class InGameEffects
 
         this.itemAutocollectContainer.alpha = 1;
 
-        this.autoCollectSprite.scale.set(0)
-        TweenLite.to(this.autoCollectSprite.scale, 0.75, {x:1, y:1, ease:Elastic.easeOut})
+        this.autoCollectSprite.scale.set(config.width / this.autoCollectSprite.width * 0.5);
+        TweenLite.from(this.autoCollectSprite.scale, 0.75,
+        {
+            x: 0,
+            y: 0,
+            ease: Elastic.easeOut
+        })
         this.autoCollectSprite.anchor.set(0.5)
         this.autoCollectSprite.x = config.width / 2;
         this.autoCollectSprite.y = this.autocollectGraphic.height / 2;
@@ -232,18 +303,8 @@ export default class InGameEffects
         graphics.alpha = 0.5;
 
         let tempLabel = new PIXI.Sprite(PIXI.Texture.from('text_auto_rescue'))
-
-        // new PIXI.Text('AUTO COLLECT',
-        // {
-        //     fontFamily: 'blogger_sansregular',
-        //     fontSize: '48px',
-        //     fill: 0xFFFFFF,
-        //     align: 'center',
-        //     fontWeight: '800'
-        // });
-        // tempLabel.pivot.x = tempLabel.width / 2;
-        // tempLabel.pivot.y = tempLabel.height / 2;
         tempLabel.anchor.set(0.5);
+        tempLabel.scale.set(config.width / tempLabel.width * 0.5);
         tempLabel.x = config.width / 2;
         tempLabel.y = specContainer.height / 2;
         specContainer.addChild(tempLabel);

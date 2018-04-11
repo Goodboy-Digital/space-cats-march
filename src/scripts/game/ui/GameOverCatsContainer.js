@@ -12,6 +12,7 @@ export default class GameOverCatsContainer extends UIList
     {
         super();
         this.onHide = new Signals();
+        this.onCollectGift = new Signals();
 
 
         this.prizeDark = new PIXI.Graphics().beginFill(0).drawRect(0, 0, config.width, config.height) //new PIXI.Sprite(PIXI.Texture.from('UIpiece.png'));
@@ -53,7 +54,7 @@ export default class GameOverCatsContainer extends UIList
         this.prizeFrame = new PIXI.Sprite(PIXI.Texture.from('info_panel'))
         this.prizeFrame.scale.set(this.listRect.h / this.prizeFrame.height)
         this.addChild(this.prizeFrame);
-        
+
         this.prizesContainer = new PIXI.Container();
         this.addChild(this.prizesContainer);
         this.itensList = [];
@@ -87,7 +88,6 @@ export default class GameOverCatsContainer extends UIList
 
         this.currentList = this.gameOverCatList1;
 
-
         this.confirmButton = new UIButton('icon_back');
         this.confirmButtonScale = config.width / this.confirmButton.width * 0.15
         this.confirmButton.scale.set(this.confirmButtonScale)
@@ -99,8 +99,26 @@ export default class GameOverCatsContainer extends UIList
         this.confirmButton.x = config.width - this.confirmButton.width //* 1.25;
         this.confirmButton.y = config.height - this.confirmButton.height //* 1.25;
 
+        this.giftBox = new PIXI.Sprite(PIXI.Texture.from('results_newcat_rays_02'));//UIButton('icon_back');
+        let box = new PIXI.Sprite(PIXI.Texture.from('giftbox'));//UIButton('icon_back');
+        box.anchor.set(0.5);
+        box.scale.set(this.giftBox.width / box.width)
+        this.giftBox.addChild(box);
+        this.giftBox.anchor.set(0.5);
+        this.giftBoxScale = config.width / this.giftBox.width * 0.25
+        this.giftBox.scale.set(this.giftBoxScale)
+        
+        this.giftBox.interactive = true;
+        this.giftBox.buttonMode = true;
+        this.giftBox.on('mousedown', this.collectGift.bind(this)).on('touchstart', this.collectGift.bind(this));
+        this.addChild(this.giftBox)
+        this.giftBox.x = this.giftBox.width// * 1.25;
+        this.giftBox.y = this.confirmButton.y
+        this.giftBoxSin = 0;
 
-        this.multiplierContainer =  new PIXI.Sprite.from('powerup_background');
+
+
+        this.multiplierContainer = new PIXI.Sprite.from('powerup_background');
         this.multiplierContainer.anchor.set(0.5, 0.5);
         this.multiplierSprite = new PIXI.Sprite.from(this.shopStaticData.icon);
         this.multiplierSprite.anchor.set(0.5, 0.5);
@@ -118,7 +136,7 @@ export default class GameOverCatsContainer extends UIList
             align: 'center',
             fontWeight: '800'
         });
-        this.multiplierLabel.y = this.multiplierContainer.height / this.multiplierContainer.scale.y * 0.5//* 0.5
+        this.multiplierLabel.y = this.multiplierContainer.height / this.multiplierContainer.scale.y * 0.5 //* 0.5
         this.multiplierLabel.pivot.x = this.multiplierLabel.width / 2;
         this.multiplierContainer.addChild(this.multiplierLabel);
 
@@ -154,16 +172,35 @@ export default class GameOverCatsContainer extends UIList
     {
         if (this.visible)
         {
-            if(this.gameOverCatList1.dragging){
+            if (this.giftBox.visible && this.giftBox.ableToRotate)
+            {
+                this.giftBox.rotation = Math.sin(this.giftBoxSin) * 0.2 - 0.1
+                if (this.giftBox.ableToRotate)
+                {
+                    this.giftBox.scale.x = this.giftBoxScale + Math.cos(this.giftBoxSin) * 0.1
+                    this.giftBox.scale.y = this.giftBoxScale + Math.sin(this.giftBoxSin) * 0.1
+                    this.giftBoxSin += 0.1
+                    this.giftBoxSin %= Math.PI * 2;
+                }
+
+            }
+            if (this.gameOverCatList1.dragging)
+            {
                 this.currentList = this.gameOverCatList1;
             }
-            else if(this.gameOverCatList2.dragging){
-                this.currentList = this.gameOverCatList2;            
+            else if (this.gameOverCatList2.dragging)
+            {
+                this.currentList = this.gameOverCatList2;
             }
             this.gameOverCatList2.listContainer.y = this.currentList.listContainer.y;
             this.gameOverCatList1.listContainer.y = this.currentList.listContainer.y;
-        //     this.starBackground.rotation += 0.05
+            //     this.starBackground.rotation += 0.05
         }
+    }
+    collectGift()
+    {
+        this.onCollectGift.dispatch();
+        this.giftBox.visible = false;
     }
     collect()
     {
@@ -172,18 +209,21 @@ export default class GameOverCatsContainer extends UIList
     }
     addCatItem(id)
     {
-    	let staticCat = GAME_DATA.getStaticCatData(id);
+        let staticCat = GAME_DATA.getStaticCatData(id);
 
-        console.log(staticCat, id);
+        // console.log(staticCat, id);
         let item = null;
         // console.log('POOL', this.itensPool);
-        if(this.itensPool.length > 0){
-        	item = this.itensPool[0];
-        	this.itensPool.shift();
-        }else{
-        	item = new GameOverItemContainer(this.w / 3, this.listRect.h / this.pageItens);
+        if (this.itensPool.length > 0)
+        {
+            item = this.itensPool[0];
+            this.itensPool.shift();
         }
-        
+        else
+        {
+            item = new GameOverItemContainer(this.w / 3, this.listRect.h / this.pageItens);
+        }
+
         item.scaleContentMax = true;
         item.setCat(staticCat.catSrc);
         item.setValue();
@@ -217,29 +257,40 @@ export default class GameOverCatsContainer extends UIList
     {
         this.gameOverCatList1.resetPosition();
         this.gameOverCatList2.resetPosition();
-        console.log(catList);
+        this.giftBox.ableToRotate = false;
+        this.showGiftBox();
+        // console.log(catList);
         this.multValue = GAME_DATA.getActionStats(GAME_DATA.shopData[this.shopStaticData.id]).value;
-        this.multiplierLabel.text = 'x'+utils.cleanString(this.multValue).toFixed(2);
+        this.multiplierLabel.text = 'x' + utils.cleanString(this.multValue).toFixed(2);
         this.multiplierLabel.pivot.x = this.multiplierLabel.width / 2;
         this.currentMoney = 0;
         this.updateMoney(0, true)
         this.updateMoney(points, false, 0.75)
         let realPoints = [];
-    	for (var i = 0; i < catList.length; i++) {
-    		if(catList[i] > 0){
-    			this.addCatItem(i);
-                realPoints.push(catList[i]);
-    		}
-    	}
-
-    	this.gameOverCatList1.addItens(this.itensList1);
-        this.gameOverCatList2.addItens(this.itensList2);
-
         let dynamicData = GAME_DATA.shopData[this.shopStaticData.id]
         if (dynamicData.level > 0)
         {
             this.leveledShopData = GAME_DATA.getActionStats(dynamicData);
         }
+        for (var i = 0; i < catList.length; i++)
+        {
+            if (catList[i] > 0)
+            {
+                this.addCatItem(i);
+                realPoints.push(catList[i]);
+
+                if(this.leveledShopData){
+                    catList[i] *= this.leveledShopData.value;
+                    catList[i] = Math.ceil(catList[i]);                    
+                }
+            }
+
+
+        }
+
+        this.gameOverCatList1.addItens(this.itensList1);
+        this.gameOverCatList2.addItens(this.itensList2);
+
         let list = GAME_DATA.getChestPrize();
 
         for (var i = 0; i < this.itensList.length; i++)
@@ -257,17 +308,19 @@ export default class GameOverCatsContainer extends UIList
             itemC.setValue(realPoints[i])
 
             if (dynamicData.level > 0)
-	        {
-	            catList[i] *= this.leveledShopData.value;
-	            catList[i] = Math.ceil(realPoints[i]);
-            	itemC.updateQuant(realPoints[i], false, delay + 1, 'x'+utils.cleanString(this.multValue).toFixed(2))
-	        }
+            {
+                realPoints[i] *= this.leveledShopData.value;
+                // console.log(this.leveledShopData.value);
+                realPoints[i] = Math.ceil(realPoints[i]);
+                itemC.updateQuant(realPoints[i], false, delay + 1, 'x' + utils.cleanString(this.multValue).toFixed(2));
+            }
 
         }
         this.confirmButton.visible = false;
-        setTimeout(()=> {
+        setTimeout(() =>
+        {
             this.showButton();
-        }, delay * 1000 + 1000);
+        }, Math.min(delay, 0.5) * 1000 + 1000);
         this.prizeDark.alpha = 0;
 
 
@@ -279,10 +332,38 @@ export default class GameOverCatsContainer extends UIList
 
         return catList
     }
-    showButton(){
+    showGiftBox()
+    {
+        this.giftBoxSin = 0;
+        this.giftBox.rotation =  Math.sin(this.giftBoxSin) * 0.2 - 0.1;
+        this.giftBox.scale.set(0);
+        TweenLite.to(this.giftBox.scale, 0.75,
+        {
+            onStart: () =>
+            {
+                this.giftBox.visible = true;
+            },
+            onComplete: () =>
+            {
+                this.giftBox.ableToRotate = true;
+            },
+            delay: 0.5,
+            x: this.giftBoxScale + Math.cos(this.giftBoxSin) * 0.1,
+            y: this.giftBoxScale + Math.sin(this.giftBoxSin) * 0.1,
+            // rotation: Math.sin(this.giftBoxSin) * 0.2 - 0.1,
+            ease: Elastic.easeOut
+        })
+    }
+    showButton()
+    {
         this.confirmButton.visible = true;
         this.confirmButton.scale.set(0);
-        TweenLite.to(this.confirmButton.scale, 0.75, {x:this.confirmButtonScale, y:this.confirmButtonScale, ease:Elastic.easeOut})
+        TweenLite.to(this.confirmButton.scale, 0.75,
+        {
+            x: this.confirmButtonScale,
+            y: this.confirmButtonScale,
+            ease: Elastic.easeOut
+        })
     }
     updateMoney(money, force, delay = 0)
     {
@@ -315,7 +396,10 @@ export default class GameOverCatsContainer extends UIList
                 this.coinsContainer.x = config.width / 2 - this.coinsContainer.width / 2
                 let globalCoinPos = this.coinSprite.getGlobalPosition();
                 globalCoinPos.x += this.coinSprite.width / 2;
-                window.screenManager.addCoinsParticles(globalCoinPos, 1, {scale:0.05});
+                window.screenManager.addCoinsParticles(globalCoinPos, 1,
+                {
+                    scale: 0.05
+                });
             },
             onComplete: () =>
             {

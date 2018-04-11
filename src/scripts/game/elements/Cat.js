@@ -100,7 +100,8 @@ export default class Cat extends PIXI.Container
         }
         // console.log(delta);
         this.timer += delta;
-        if(!this.isFinished){
+        if (!this.isFinished)
+        {
             this.updateAnimation(delta);
         }
         this.udpateVelocity();
@@ -250,14 +251,18 @@ export default class Cat extends PIXI.Container
         this.animationSpeed = 99999;
         // this.rotation = 0;
         this.container.rotation = 0;
-        TweenLite.to(this.animation.scale, 0.1,
+
+        this.animation.scale.x = this.animationScaleStandard * 0.5
+        this.animation.scale.y = this.animationScaleStandard * 1.5
+
+        TweenLite.to(this.animation.scale, 0.2,
         {
-            x: this.animationScaleStandard * 0.8,
-            y: this.animationScaleStandard * 1.2,
+            x: this.animationScaleStandard,
+            y: this.animationScaleStandard,
             onComplete: () =>
             {
                 this.angularSpeed = (Math.random() * 0.1 - 0.05) * 20;
-                this.gravity = -10;
+                this.gravity = -80;
                 this.velocity.x = 0;
                 this.velocity.y = -Math.random() * 100 - 100;
                 this.virtualVelocity.y = this.velocity.y;

@@ -9,40 +9,40 @@ const images = [
     'cat_super_',
     'cat_business_',
 
+    'cat_surf_',
     'cat_bowie_',
-    'cat_ufo_',
     'cat_alien_',
     'cat_lucha_',
 
-    'cat_robot_',
     'cat_snake_',
     'cat_chef_',
 
-    'cat_chef_',
-    'cat_chef_',
+    // 'cat_chef_',
+    'cat_robot_',
+    'cat_ufo_',
 ]
 const names = [
     'pancakes',
     'puffy',
     'cake',
-    'julien',
+    'puddy\ntat',
 
     'cloud',
     'purry\nvicious',
     'clark\ncat',
-    'mr.\npuffington',
+    'the\nboss',
 
+    'mr.\npuffington',
     'catvid\nbowie',
-    'catzilla',
     'wigglebutt',
     'el\ngato',
-    
-    'C4TN1P',
-    'kurt',
-    'chef',
 
-    'chef',
-    'chef',
+    'fuzzinator',
+    'the\nchef',
+
+    // 'fuzzinator',
+    'C4TN1P',
+    'galacticat',
 ]
 const data = []
 
@@ -344,23 +344,23 @@ data.push(
     cost: 1500000000000000000
 })
 
-data.push(
-{
-    catID: 16,
-    collected: 0,
-    active: false,
-    canBeActive: false,
-    isAuto: false,
-    autoCollectPrice: 2000000,
-    amountToAutoCollect: 400,
-    pointsMultiplier: 200,
-    collectedMultiplier: 0,
-    maxCollectedMultiplier: 30,
-    limitCatsToMultiply: 1500,
-    catSrc:images[data.length],// 'cat_pink_',
-    catThumb: 'results_yellow_cat',
-    catName:names[data.length],
-    cost: 150000000000000000000
-})
+// data.push(
+// {
+//     catID: 16,
+//     collected: 0,
+//     active: false,
+//     canBeActive: false,
+//     isAuto: false,
+//     autoCollectPrice: 2000000,
+//     amountToAutoCollect: 400,
+//     pointsMultiplier: 200,
+//     collectedMultiplier: 0,
+//     maxCollectedMultiplier: 30,
+//     limitCatsToMultiply: 1500,
+//     catSrc:images[data.length],// 'cat_pink_',
+//     catThumb: 'results_yellow_cat',
+//     catName:names[data.length],
+//     cost: 150000000000000000000
+// })
 
 export default data;

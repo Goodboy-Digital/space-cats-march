@@ -21,6 +21,8 @@ export default class AskVideoPopUp extends StandardPop
 
         this.popUp.alpha = 0;
 
+
+
         this.backgroundContainer = new PIXI.Container();
         let tiled = new PIXI.extras.TilingSprite(PIXI.Texture.from('pattern'), 132, 200);
         tiled.width = config.width;
@@ -54,9 +56,55 @@ export default class AskVideoPopUp extends StandardPop
         this.container.addChild(this.backgroundContainer);
 
 
-        this.playButton = new UIButton('icon_confirm');
+        this.titlePrizes = new PIXI.Sprite.from('video_rewards_title');
+        this.titlePrizes.anchor.set(0.5,1);
+        this.titlePrizesScale = config.width / this.titlePrizes.width * 0.85
+        this.titlePrizes.scale.set(this.titlePrizesScale)
+        this.addChild(this.titlePrizes)
+        this.titlePrizes.x = config.width / 2;
+        this.titlePrizes.y = config.height / 2 - this.logoMask.height * 0.5;
+
+
+         this.videoAnimationContainer = new PIXI.Container();
+
+        this.videoShine = new PIXI.Sprite.from('video_rewards_shine');
+        this.videoShine.anchor.set(0.5);
+        this.videoAnimationContainer.addChild(this.videoShine);
+        this.videoShine.alpha = 0.5
+
+        this.videoLogo = new PIXI.Sprite.from('video_rewards_video');
+        this.videoLogo.anchor.set(0.8, 0.5);
+        this.videoAnimationContainer.addChild(this.videoLogo);
+
+
+        this.auto = new PIXI.Sprite.from('video_rewards_automate');
+        this.auto.anchor.set(0, 0.5);
+        this.auto.scale.set(0.75);
+        this.auto.x = this.auto.width
+        this.auto.y = -this.auto.height/2
+        this.videoAnimationContainer.addChild(this.auto);
+
+
+        this.double = new PIXI.Sprite.from('video_reward_double_coins');
+        this.double.anchor.set(0, 0.5);
+        this.double.scale.set(0.75);
+        this.videoAnimationContainer.addChild(this.double);
+        this.double.x = this.auto.width
+        this.double.y = this.double.height/2
+        
+
+
+        this.container.addChild(this.videoAnimationContainer);
+
+        this.videoAnimationContainer.scale.set(config.width / this.videoAnimationContainer.width * 0.55)
+        this.videoAnimationContainer.y = -this.videoAnimationContainer.height * 0.075
+
+
+        this.playButton = new UIButton('icon_play_video');
         // this.playButton.anchor.set(0.5)
-        this.playButton.scale.set(config.width / this.playButton.width * 0.15)
+        this.playButtonScale = config.width / this.playButton.width * 0.15;
+        this.playButton.scale.set(this.playButtonScale)
+        this.playButtonSin = 0;
         // this.playButtonScale = this.logoMask.height / this.playButton.height * 0.35
         // this.playButton.scale.set(this.playButtonScale);
         // this.playButton.y = config.height - this.container.y - this.playButton.height / 2 - 20
@@ -67,7 +115,7 @@ export default class AskVideoPopUp extends StandardPop
 
         this.cancelButton = new UIButton('icon_close');
         // this.cancelButton.anchor.set(0.5)
-        this.cancelButton.scale.set(config.width / this.cancelButton.width * 0.15)
+        this.cancelButton.scale.set(config.width / this.cancelButton.width * 0.085)
         // this.cancelButtonScale = this.logoMask.height / this.cancelButton.height * 0.35
         // this.cancelButton.scale.set(this.cancelButtonScale);
         // this.cancelButton.y = config.height - this.container.y - this.cancelButton.height / 2 - 20
@@ -77,26 +125,48 @@ export default class AskVideoPopUp extends StandardPop
         this.container.addChild(this.cancelButton)
 
 
-        this.container.addChild(videoLabel)
+       
+
+
+        // this.container.addChild(videoLabel)
         videoLabel.pivot.x = videoLabel.width / 2;
         videoLabel.pivot.y = videoLabel.height / 2;
 
         videoLabel.scale.set(config.height / videoLabel.height * 0.07)
 
         videoLabel.y = - this.h / 3 + 50
-        this.cancelButton.x =  -75
-        this.cancelButton.y =  50
-        this.playButton.x =  75
-        this.playButton.y =  50
+        this.cancelButton.x =  -this.cancelButton.width * 1.5
+        this.cancelButton.y =  this.cancelButton.height*2
+        this.playButton.x =  this.cancelButton.width * 1.5//this.playButton.width * 2.5
+        this.playButton.y =  this.cancelButton.y//this.playButton.height*2
+
+
+        this.prizeDark = new PIXI.Graphics().beginFill(0).drawRect(0, 0, config.width, config.height) //new PIXI.Sprite(PIXI.Texture.from('UIpiece.png'));
+        this.prizeDark.alpha = 0.35;
+        this.addChildAt(this.prizeDark,0);
 
     }
     update(delta){
+        if(this.visible){
+            this.playButtonSin += 10 * delta
+            this.playButtonSin %= Math.PI * 2;
+            this.playButton.rotation = Math.sin(this.playButtonSin) * 0.1
+            this.playButton.scale.set(this.playButtonScale + Math.cos(this.playButtonSin) * 0.01, this.playButtonScale + Math.sin(this.playButtonSin) * 0.01) 
 
+
+            this.videoShine.rotation += delta * 1.5
+            this.videoShine.rotation %= Math.PI * 2;      
+        }
     }
     show(param)
     {
         this.toRemove = false;
         this.onShow.dispatch(this);
+
+        this.playButtonSin = 0;
+
+        this.titlePrizes.scale.set(0);
+        TweenLite.to(this.titlePrizes.scale, 1, {delay:0.5, x:this.titlePrizesScale, y:this.titlePrizesScale, ease:Elastic.easeOut})
 
         this.container.scale.set(0, 2)
         TweenLite.to(this.container.scale, 1,
@@ -107,7 +177,7 @@ export default class AskVideoPopUp extends StandardPop
         })
     }
     afterHide(){
-
+        this.visible = false;
     }
     hide(dispatch = true, callback = null)
     {

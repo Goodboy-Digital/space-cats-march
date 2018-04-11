@@ -49,22 +49,25 @@ export default class CatItemList extends PIXI.Container
         this.container.interactive = true;
 
 
-        this.upButton = new UIButton('icon_close');
+        this.upButton = new UIButton('icon_up');
         this.upButton.customAnchor(0.75, 0.75);
         this.upButton.scale.set(this.rect.h / this.upButton.height * 0.15);
         this.upButton.align = 1 - 0.65;
         this.upButton.interactive = true;
         this.upButton.buttonMode = true;
+        this.upButton.x = this.rect.w / 2;
+        this.upButton.y = -this.upButton.height / 2
         this.upButton.on('mousedown', this.onUpList.bind(this)).on('touchstart', this.onUpList.bind(this));
         this.addChild(this.upButton);
 
-        this.downButton = new UIButton('icon_close');
+        this.downButton = new UIButton('icon_down');
         this.downButton.customAnchor(0.75,0.25);
         this.downButton.scale.set(this.rect.h / this.downButton.height * 0.15);
         this.downButton.align = 1 - 0.65;
         this.downButton.interactive = true;
         this.downButton.buttonMode = true;
-        this.downButton.y = this.rect.h;
+        this.downButton.x = this.rect.w / 2;
+        this.downButton.y = this.rect.h + this.downButton.height / 2;
         this.downButton.on('mousedown', this.onDownList.bind(this)).on('touchstart', this.onDownList.bind(this));
         this.addChild(this.downButton);
 

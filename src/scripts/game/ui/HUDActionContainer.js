@@ -126,8 +126,37 @@ export default class HUDActionContainer extends PIXI.Container {
             this.topButton.alpha = 0;
             this.ableToAct = false;
     }
+    shake(force = 0.25, steps = 5, time = 0.4)
+    {
+
+        let timelinePosition = new TimelineLite();
+        let positionForce = (force * -20);
+        let spliterForce = (force * 20);
+        let pos = [positionForce * 2, positionForce, positionForce * 2, positionForce, positionForce * 2, positionForce]
+        let speed = time / pos.length;
+
+        for (var i = pos.length; i >= 0; i--)
+        {
+            timelinePosition.append(TweenLite.to(this, speed,
+            {
+                rotation: i%2==0?0.1:-0.1,
+                // x: this.container.width / 2 + pos[i], //- positionForce / 2,
+                // y: 0, //Math.random() * positionForce - positionForce / 2,
+                ease: "easeNoneLinear"
+            }));
+        };
+
+        timelinePosition.append(TweenLite.to(this, speed,
+        {
+            rotation:0,
+            // x: this.container.width / 2,
+            // y: 0,
+            ease: "easeeaseNoneLinear"
+        }));
+    }
     onClick() {
         if (!this.ableToAct) {
+            this.shake();
             return;
         }
         this.coolDownLabel.alpha = 0;

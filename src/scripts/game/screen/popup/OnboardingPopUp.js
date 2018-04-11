@@ -9,14 +9,7 @@ export default class OnboardingPopUp extends StandardPop
     {
         super(label, screenManager);
 
-        	let videoLabel = new PIXI.Text('collect the cats and bla bla bla\nonboarding...',
-            {
-                fontFamily: 'blogger_sansregular',
-                fontSize: '24px',
-                fill: 0xFFFFFF,
-                align: 'center',
-                fontWeight: '800'
-            });
+        	
 
 
         this.popUp.alpha = 0;
@@ -48,50 +41,63 @@ export default class OnboardingPopUp extends StandardPop
         tiled.x = -config.width/2;
         tiled.y = -config.height/2;
 
+        this.onboardingImage = new PIXI.Sprite.from('onboarding_image');
+        this.onboardingImage.anchor.set(0.5);
+        this.onboardingStartScale = this.width / this.onboardingImage.width * 0.75;
+        this.onboardingImage.scale.set(this.onboardingStartScale)
+        this.onboardingImage.x = 0//config.width / 2
+        this.onboardingImage.y = -this.onboardingImage.height * 0.1//config.height / 2
+
         this.backgroundContainer.addChild(tiled)
         this.backgroundContainer.addChild(this.logoMask) 
         this.backgroundContainer.mask = this.logoMask
         this.container.addChild(this.backgroundContainer);
 
+        this.container.addChild(this.onboardingImage) 
 
         this.playButton = new UIButton('icon_confirm');
-        this.playButton.scale.set(config.width / this.playButton.width * 0.15)
+        this.playButton.scale.set(config.width / this.playButton.width * 0.085)
         this.playButton.interactive = true;
         this.playButton.buttonMode = true;
         this.playButton.on('mousedown', this.confirm.bind(this)).on('touchstart', this.confirm.bind(this));
         this.container.addChild(this.playButton)
-
-         this.cancelButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        this.cancelButton.anchor.set(0.5)
-        this.cancelButton.scale.set(0.15)
-        // this.cancelButtonScale = this.logoMask.height / this.cancelButton.height * 0.35
-        // this.cancelButton.scale.set(this.cancelButtonScale);
-        // this.cancelButton.y = config.height - this.container.y - this.cancelButton.height / 2 - 20
-        this.cancelButton.interactive = true;
-        this.cancelButton.buttonMode = true;
-        // this.cancelButton.on('mouseup', this.close.bind(this)).on('touchend', this.close.bind(this));
-        // this.container.addChild(this.cancelButton)
-
-
+        
+        let videoLabel = new PIXI.Text('Tap on the pink buttons when\nthe cats be there to collect them',
+            {
+                fontFamily: 'blogger_sansregular',
+                fontSize: '24px',
+                fill: 0xFFFFFF,
+                align: 'center',
+                fontWeight: '800'
+            });
         this.container.addChild(videoLabel)
-        videoLabel.pivot.x = videoLabel.width / 2;
-        videoLabel.pivot.y = videoLabel.height / 2;
-
-        videoLabel.scale.set(config.height / videoLabel.height * 0.07)
+        // videoLabel.pivot.x = -videoLabel.width;
+        // videoLabel.pivot.y = videoLabel.height / 2;
+        videoLabel.scale.set(config.width / videoLabel.width * 0.4)
 
         videoLabel.y = - this.h / 3 + 50
-        this.cancelButton.x =  -75
-        this.cancelButton.y =  50
-        this.playButton.x =  0//75
-        this.playButton.y =  50
+        this.playButton.x =  this.playButton.width * 2.5
+        this.playButton.y =  this.playButton.height*2
 
+        videoLabel.x = this.playButton.x - videoLabel.width - this.playButton.width * 0.65
+        videoLabel.y = this.playButton.y - this.playButton.height / 2 - videoLabel.height / 2 + this.playButton.height * 0.5
+
+
+        this.backGraphic = new PIXI.Graphics().beginFill(0xFF00FF).drawRect(-this.w, -this.playButton.height*0.1, this.w*2, this.playButton.height*1.2)
+        this.backgroundContainer.addChild(this.backGraphic)
+        this.backGraphic.y = this.playButton.y - this.playButton.height / 2
+        this.backGraphic.alpha = 0.25;
+
+
+        this.prizeDark = new PIXI.Graphics().beginFill(0).drawRect(0, 0, config.width, config.height) //new PIXI.Sprite(PIXI.Texture.from('UIpiece.png'));
+        this.prizeDark.alpha = 0.35;
+        this.addChildAt(this.prizeDark,0);
     }
     update(delta){
 
     }
     show(param)
     {
-        console.log('onasodnasdnasdnjasndkjas');
         this.toRemove = false;
         this.onShow.dispatch(this);
 

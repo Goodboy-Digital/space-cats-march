@@ -161,9 +161,6 @@ export default class SpaceCatsScreenManager extends ScreenManager
             fontWeight: '800'
         });
 
-
-
-
         this.videoContainer.addChild(videoLabel)
         videoLabel.pivot.x = videoLabel.width / 2;
         videoLabel.pivot.y = videoLabel.height / 2;
@@ -177,9 +174,9 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.addChild(this.videoContainer);
 
         this.videoContainer.visible = false;
-        this.showPopUp('gameover')
+        // this.showPopUp('gameover')
         // this.toGame();
-        // this.showPopUp('init')
+        this.showPopUp('init')
         // this.showPopUp('shop')
 
         this.infoContainer = new InfoContainer();
@@ -228,6 +225,9 @@ export default class SpaceCatsScreenManager extends ScreenManager
         {
             if (this.popUpList[i].label == label)
             {
+                if(this.coinsExplosion){
+                    this.coinsExplosion.killAll();
+                }
                 this.popUpList[i].show(param);
                 this.popUpContainer.addChild(this.popUpList[i]);
                 this.currentPopUp = this.popUpList[i];
@@ -243,6 +243,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         super.update(delta * this.timeScale);
 
         this.coinsExplosion.update(delta);
+        this.prizeContainer.update(delta);
 
         if (this.currentPopUp)
         {

@@ -101,7 +101,7 @@ export default class PointsContainer extends PIXI.Container
         this.coinsContainer.pivot.y = this.coinsContainer.height + 15;
         this.currentMoney = 0;
         this.currentPoints = 0;
-        this.coinsContainer.y = -this.coinSprite.height / 2
+        // this.coinsContainer.y = -this.coinSprite.height / 2
         this.coinsContainer.x = -this.coinsContainer.width / 2;
 
         this.addChild(this.pointsContainer);
