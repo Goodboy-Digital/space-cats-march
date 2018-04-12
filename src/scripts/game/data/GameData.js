@@ -67,7 +67,7 @@ export default class GameData
     }
     resetShop(){
         for (var i = this.actionsData.length - 1; i >= 0; i--) {
-            this.actionsData[i].level = 0;
+            this.actionsData[i].level = 1;
         }
         for (var i = this.shopData.length - 1; i >= 0; i--) {
             this.shopData[i].level = 0;

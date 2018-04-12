@@ -89,11 +89,22 @@ export default class InfoContainer extends UIList
     }
     show(pos, icon = null, desc = 'lalala',  align = {x:0.5, y: 0.5})
     {
+
+        SOUND_MANAGER.play('tutorial_swipe')
         this.infoList.elementsList = [];
         for (var i = 0; i < this.infoItens.length; i++) {
             this.infoList.elementsList.push(this.infoItens[i]);
         }
-        if(!icon){
+        if(this.containerThumb && this.containerThumb.parent){
+            this.containerThumb.parent.removeChild(this.containerThumb)
+        }
+        if(icon instanceof PIXI.Container){
+            this.containerThumb = icon
+            this.infoIcon.addChild(this.containerThumb);
+            this.infoIcon.visible = true;
+            this.infoIcon.texture = null;
+        }
+        else if(!icon){
             for (var j = this.infoList.elementsList.length - 1; j >= 0; j--)
             {
                 if (this.infoIcon == this.infoList.elementsList[j])

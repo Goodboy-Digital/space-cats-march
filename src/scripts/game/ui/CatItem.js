@@ -116,6 +116,7 @@ export default class CatItem extends UIList {
     }
     activeCat() {
         this.onActiveCat.dispatch(this.catData);
+        SOUND_MANAGER.play(getCatSound())
     }
     updateThumb(delta) {
         if (this.catData.active) {
@@ -160,6 +161,9 @@ export default class CatItem extends UIList {
             this.thumb.unlock();
             this.coinIcon.visible = false;
             this.thumb.updateCatTextures(this.staticData.catSrc); //.texture = PIXI.Texture.from(this.catData.catThumb);
+            // if(!this.staticData.stamp){
+            //     this.staticData.stamp = this.thumb.stamp();
+            // }
             this.catNameLabel.text = this.staticData.catName.toUpperCase();
             this.plusIcon.texture = PIXI.Texture.from('results_arrow');
             this.catNameLabel.style.fill = 0xFFFFFF;

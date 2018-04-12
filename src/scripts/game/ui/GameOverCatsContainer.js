@@ -385,6 +385,7 @@ export default class GameOverCatsContainer extends UIList
 
 
         this.currentMoney = money;
+        this.coinSound = 0;
         this.currentTween = TweenLite.to(moneyObj, 0.5,
         {
             delay: delay,
@@ -396,6 +397,12 @@ export default class GameOverCatsContainer extends UIList
                 this.coinsContainer.x = config.width / 2 - this.coinsContainer.width / 2
                 let globalCoinPos = this.coinSprite.getGlobalPosition();
                 globalCoinPos.x += this.coinSprite.width / 2;
+
+                this.coinSound ++;
+                if(this.coinSound % 2 == 0){
+                    SOUND_MANAGER.play(getCoinSound(), 0.5)
+                }
+
                 window.screenManager.addCoinsParticles(globalCoinPos, 1,
                 {
                     scale: 0.05

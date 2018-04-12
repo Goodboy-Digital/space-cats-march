@@ -33,6 +33,7 @@ export default class UIButton extends PIXI.Container
     {
         this.back.texture = PIXI.Texture.from('button_on');
         this.icon.y = this.iconPos + 10;
+        SOUND_MANAGER.play('button_click')
     }
     mouseUp()
     {

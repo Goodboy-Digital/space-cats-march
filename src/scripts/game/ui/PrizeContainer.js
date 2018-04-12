@@ -29,7 +29,7 @@ export default class PrizeContainer extends UIList
         this.starBackground.scale.set(this.starBackgroundScale)
 
 
-        
+
 
 
 
@@ -63,14 +63,14 @@ export default class PrizeContainer extends UIList
         this.addChild(this.backgroundContainer);
 
         this.titlePrizes = new PIXI.Sprite.from('text_you_won_prizes');
-        this.titlePrizes.anchor.set(0.5,1);
+        this.titlePrizes.anchor.set(0.5, 1);
         this.titlePrizesScale = config.width / this.titlePrizes.width * 0.85
         this.titlePrizes.scale.set(this.titlePrizesScale)
         this.addChild(this.titlePrizes)
         this.titlePrizes.x = config.width / 2;
         this.titlePrizes.y = config.height / 2 - this.logoMask.height * 0.5;
 
-        this.playButton = new PIXI.Sprite.from('button_collect_prizes_off');//new UIButton('icon_confirm');
+        this.playButton = new PIXI.Sprite.from('button_collect_prizes_off'); //new UIButton('icon_confirm');
         this.playButton.anchor.set(0.5)
         this.playButtonScale = config.width / this.playButton.width * 0.5
         this.playButton.scale.set(this.playButtonScale)
@@ -113,6 +113,7 @@ export default class PrizeContainer extends UIList
     }
     collect()
     {
+        SOUND_MANAGER.play('teleport');
         this.onPrizeCollected.dispatch();
         this.hide();
     }
@@ -127,11 +128,31 @@ export default class PrizeContainer extends UIList
             this.parent.setChildIndex(this, this.parent.children.length - 1)
         }
 
+        SOUND_MANAGER.play('score_loop');
+
         this.playButton.scale.set(0);
-        TweenLite.to(this.playButton.scale, 0.5, {delay:1, x:this.playButtonScale, y:this.playButtonScale, ease:Elastic.easeOut})
+        TweenLite.to(this.playButton.scale, 0.5,
+        {
+            delay: 1,
+            x: this.playButtonScale,
+            y: this.playButtonScale,
+            ease: Elastic.easeOut,
+            onStart:()=>{
+                SOUND_MANAGER.play('boing');
+            }
+        })
 
         this.titlePrizes.scale.set(0);
-        TweenLite.to(this.titlePrizes.scale, 1, {delay:0.5, x:this.titlePrizesScale, y:this.titlePrizesScale, ease:Elastic.easeOut})
+        TweenLite.to(this.titlePrizes.scale, 1,
+        {
+            delay: 0.5,
+            x: this.titlePrizesScale,
+            y: this.titlePrizesScale,
+            ease: Elastic.easeOut,
+            onStart:()=>{
+                SOUND_MANAGER.play('pickup');
+            }
+        })
 
         this.h = this.logoMask.height * 0.3 * ((5 / numberOfPrizes))
 
@@ -210,6 +231,5 @@ export default class PrizeContainer extends UIList
             alpha: 0.75
         });
         this.visible = true;
-        console.log('WHAT');
     }
 }

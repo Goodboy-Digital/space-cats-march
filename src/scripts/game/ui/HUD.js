@@ -206,6 +206,9 @@ export default class HUD extends PIXI.Container
         {
             return
         }
+
+        SOUND_MANAGER.play('button_click')
+
         this.quiting = true;
         this.forceQuitButton.scale.set(this.forceQuiteScale * 0.75);
         TweenLite.to(this.forceQuitButton.scale, 0.5,

@@ -123,6 +123,8 @@ export default class GameScreen extends Screen
 
         this.gameTimeScale = 1;
 
+        this.scaleSound();
+        // SOUND_MANAGER.setRateOnLoops(this.gameTimeScale * this.actionMultiplier);
         // window.addEventListener(
         //     "keydown", this.addSpecialMode.bind(this), false
         //     // "keydown", this.gameOver.bind(this), false
@@ -171,7 +173,14 @@ export default class GameScreen extends Screen
         this.screenManager.loadVideo(this.openOfferVideoCallback.bind(this));
         this.isPaused = true;
     }
+    scaleSound()
+    {
+        this.actionSpeed = this.actionSpeed || 1;
+        this.gameTimeScale = this.gameTimeScale || 1;
 
+        console.log(this.gameTimeScale , this.actionSpeed);
+        SOUND_MANAGER.setRateOnLoops(this.gameTimeScale * this.actionSpeed);
+    }
     removeAutoCollectMode()
     {
         if (!this.isAutoCollectMode)
@@ -186,7 +195,11 @@ export default class GameScreen extends Screen
 
         TweenLite.to(this, 1,
         {
-            gameTimeScale: 1
+            gameTimeScale: 1,
+            onUpdate: () =>
+            {
+                this.scaleSound();
+            }
         });
         this.isAutoCollectMode = false;
         this.isSpecialMode = false;
@@ -235,8 +248,10 @@ export default class GameScreen extends Screen
         if (actionData.var == 'actionSpeed')
         {
             this.inGameEffects.removeSpeedUpModeItem();
+            
         }
 
+            this.scaleSound();
 
 
         // this.HUD.updateActionList();
@@ -254,7 +269,6 @@ export default class GameScreen extends Screen
         let leveldActionData = GAME_DATA.getActionStats(actionData);
 
         this.currentActions.push(actionData);
-        this[actionData.var] = leveldActionData.value;
 
         if (actionData.var == 'actionAutoCollect')
         {
@@ -262,19 +276,45 @@ export default class GameScreen extends Screen
             this.environment.specialBackground();
             TweenLite.to(this, 0.5,
             {
-                gameTimeScale: 0
+                gameTimeScale: 0,
+                onUpdate: () =>
+                {
+                    this.scaleSound();
+                }
             });
             TweenLite.to(this, 1,
             {
                 delay: 1.5,
-                gameTimeScale: 1.5
+                gameTimeScale: 1.5,
+                onUpdate: () =>
+                {
+                    this.scaleSound();
+                }
+            });
+
+            TweenLite.to(this, 1,
+            {
+                delay: 1.5,
+                [actionData.var]: leveldActionData.value,
             });
         }
-
-        if (actionData.var == 'actionSpeed')
+        else if (actionData.var == 'actionSpeed')
         {
             this.inGameEffects.speedUpModeItem();
+            TweenLite.to(this, 0.5,
+            {
+                [actionData.var]: leveldActionData.value,
+                onUpdate: () =>
+                {
+                    this.scaleSound();
+                }
+            });
         }
+        else{
+            this[actionData.var] = leveldActionData.value;
+
+        }
+
         // this.HUD.updateActionList();
     }
     resetActionsVariables()
@@ -310,12 +350,20 @@ export default class GameScreen extends Screen
 
         TweenLite.to(this, 0.5,
         {
-            gameTimeScale: 0
+            gameTimeScale: 0,
+            onUpdate: () =>
+            {
+                this.scaleSound();
+            }
         });
         TweenLite.to(this, 1,
         {
             delay: 1.5,
-            gameTimeScale: 1.5
+            gameTimeScale: 1.5,
+            onUpdate: () =>
+            {
+                this.scaleSound();
+            }
         });
 
         this.inGameEffects.autocollectlMode();
@@ -347,12 +395,20 @@ export default class GameScreen extends Screen
 
         TweenLite.to(this, 0.5,
         {
-            gameTimeScale: 0
+            gameTimeScale: 0,
+            onUpdate: () =>
+            {
+                this.scaleSound();
+            }
         });
         TweenLite.to(this, 1,
         {
             delay: 1.5,
-            gameTimeScale: 1.5
+            gameTimeScale: 1.5,
+            onUpdate: () =>
+            {
+                this.scaleSound();
+            }
         });
 
         this.inGameEffects.addDoublePoints();
@@ -378,7 +434,11 @@ export default class GameScreen extends Screen
 
         TweenLite.to(this, 1,
         {
-            gameTimeScale: 1
+            gameTimeScale: 1,
+            onUpdate: () =>
+            {
+                this.scaleSound();
+            }
         });
         this.isSpecialMode = false;
 
@@ -435,6 +495,10 @@ export default class GameScreen extends Screen
     resetGame(startWithBonus = false)
     {
         GAME_DATA.startNewRound();
+
+        SOUND_MANAGER.stopAll();
+        SOUND_MANAGER.playLoopOnce('spacecat_game_music')
+
         this.start();
         this.resetActionsVariables();
         this.gameSpeed = 1;
@@ -490,6 +554,8 @@ export default class GameScreen extends Screen
                 cat.forceToWaypoint(i + 5)
             }
         }
+
+        this.scaleSound();
 
     }
     updateScales()
@@ -569,7 +635,7 @@ export default class GameScreen extends Screen
         for (var i = this.catList.length - 1; i >= 0; i--)
         {
             this.removeFromLane(this.catList[i]);
-            this.catList[i].destroy(true);
+            this.catList[i].destroy(true, i < 5);
         }
         // this.catList = [];
     }
@@ -663,7 +729,7 @@ export default class GameScreen extends Screen
                     forceX: 0,
                     forceY: 0,
                     scale: 0.03
-                });
+                }, false);
             }
 
             this.inGameEffects.update(delta);
@@ -770,6 +836,7 @@ export default class GameScreen extends Screen
 
         }
 
+        SOUND_MANAGER.play('pickup');
 
         this.HUD.updateHUD(this.currentPoints, this.currentDeadCats)
             // this.itemTimer = this.itemTimerMax;
@@ -933,7 +1000,7 @@ export default class GameScreen extends Screen
         }
 
         // forceY: Math.random() * 150 - 75,
-        this.inGameEffects.addCoinParticles(coinPos,  Math.ceil(points / 2),
+        this.inGameEffects.addCoinParticles(coinPos, Math.ceil(points / 2),
         {
             texture: 'results_newcat_star',
             scale: 0.02

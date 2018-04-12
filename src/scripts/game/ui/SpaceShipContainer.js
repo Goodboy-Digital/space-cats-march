@@ -175,9 +175,11 @@ export default class SpaceShipContainer extends PIXI.Container
     }
     onSpaceshipClick(){
         this.onConfirm.dispatch();
+        SOUND_MANAGER.play('rocket_launch_01')
     }
     closeSpaceship()
     {
+        SOUND_MANAGER.play('button_click')
         this.onCloseInfo.dispatch();
         TweenLite.to(this.spaceShipInfoContainer, 0.25,
         {
@@ -192,6 +194,8 @@ export default class SpaceShipContainer extends PIXI.Container
 
     }
     openSpaceshipInfoCallback(){
+
+
         this.spaceShipInfoLabel.text = 'x' + utils.formatPointsLabel(GAME_DATA.getNumberTrophyToSend() / MAX_NUMBER);
 
         this.spaceShipInfoContainer.alpha = 0;
@@ -208,7 +212,7 @@ export default class SpaceShipContainer extends PIXI.Container
         if(this.spaceInfoOpen){
             return
         }
-
+        SOUND_MANAGER.play('button_click')
         this.onOpenInfo.dispatch();
     }
     update(delta)

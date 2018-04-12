@@ -177,7 +177,7 @@ export default class AskVideoPopUp extends StandardPop
         })
     }
     afterHide(){
-        this.visible = false;
+        // this.visible = false;
     }
     hide(dispatch = true, callback = null)
     {

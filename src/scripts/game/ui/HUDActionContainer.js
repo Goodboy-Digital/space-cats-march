@@ -128,7 +128,7 @@ export default class HUDActionContainer extends PIXI.Container {
     }
     shake(force = 0.25, steps = 5, time = 0.4)
     {
-
+        SOUND_MANAGER.play('boing');
         let timelinePosition = new TimelineLite();
         let positionForce = (force * -20);
         let spliterForce = (force * 20);
@@ -159,6 +159,8 @@ export default class HUDActionContainer extends PIXI.Container {
             this.shake();
             return;
         }
+        SOUND_MANAGER.play('button_click')
+        SOUND_MANAGER.play('teleport')
         this.coolDownLabel.alpha = 0;
         this.topButton.alpha = 1;
         // this.backButton.texture = PIXI.Texture.from('game_button_base_borderless_green');

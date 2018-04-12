@@ -110,7 +110,7 @@ export default class OnboardingPopUp extends StandardPop
         })
     }
     afterHide(){
-
+        // this.visible = false;
     }
     hide(dispatch = true, callback = null)
     {

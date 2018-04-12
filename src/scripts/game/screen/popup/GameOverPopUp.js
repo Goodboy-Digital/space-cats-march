@@ -104,7 +104,7 @@ export default class GameOverPopUp extends StandardPop
         this.trophyContainer = new TrophyContainer();
         this.addChild(this.trophyContainer)
         this.trophyContainer.x = config.width * 0.17
-        this.trophyContainer.y = config.height * 0.6
+        this.trophyContainer.y = config.height * 0.7
 
         this.chestContainer = new ChestContainer();
         this.addChild(this.chestContainer)
@@ -125,7 +125,7 @@ export default class GameOverPopUp extends StandardPop
         this.spaceShipContainer = new SpaceShipContainer();
         this.addChild(this.spaceShipContainer)
         this.spaceShipContainer.x = config.width * 0.83
-        this.spaceShipContainer.y = config.height * 0.6
+        this.spaceShipContainer.y = config.height * 0.7
         this.spaceShipContainer.onOpenInfo.add(() =>
         {
             if(this.possibleToSendToEarth()){                
@@ -176,6 +176,14 @@ export default class GameOverPopUp extends StandardPop
     enableAutoCollect(data)
     {
         GAME_DATA.enableAutoCollect(data)
+
+        let staticData = GAME_DATA.getStaticCatData(data)
+
+        console.log(staticData, data);
+        let name = staticData.catName.replace('\n',' ');
+        this.screenManager.showInfo({x:config.width / 2, y:config.height / 2}, null, (name + ' now will be collected\nautomatically').toUpperCase(), {x:0, y:0.5})
+
+
         this.updateTrophyQuant();
         this.screenManager.closeVideo();
         this.catItemList.updateAllItens()
@@ -196,7 +204,8 @@ export default class GameOverPopUp extends StandardPop
     {
         // this.showScreenBlocker();
         //console.log('AUTO COLLECT');
-        this.screenManager.loadVideo(this.enableAutoCollect.bind(this, data.catID), data.catID);
+        this.enableAutoCollect(data.catID)
+        // this.screenManager.loadVideo(this.enableAutoCollect.bind(this, data.catID), data.catID);
     }
     resetAll()
     {

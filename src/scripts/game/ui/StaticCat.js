@@ -118,9 +118,15 @@ export default class StaticCat extends PIXI.Container
             this.animationContainer.tint = 0xE5519B
             // this.lockImage = this.animationContainer
         }
+
+        return this.animationContainer;
         // let colorMatrix = new PIXI.filters.ColorMatrixFilter();
         // colorMatrix.colorTone  (5,0,0xFFFFFF,0);
 
+    }
+    stamp(){
+        this.animationContainer.cacheAsBitmap = true;
+        return this.animationContainer;
     }
     happy()
     {

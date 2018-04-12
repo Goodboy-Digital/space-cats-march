@@ -29,7 +29,7 @@ data.push(
         value:
         {
             typeCurve: 'linearTween',
-            zero: 1,
+            zero: 1.5,
             min: 1.5,
             max: 10,
         },
@@ -80,8 +80,8 @@ data.push(
         value:
         {
             typeCurve: 'linearTween',
-            zero: 1,
-            min: 1.2,
+            zero: 1.6,
+            min: 1.6,
             max: 3.2,
         },
         cooldown:
@@ -94,8 +94,8 @@ data.push(
         activeTime:
         {
             typeCurve: 'linearTween',
-            zero: 15,
-            min: 15,
+            zero: 7.5,
+            min: 7.5,
             max: 60,
         },
 

@@ -75,6 +75,7 @@ export default class ShopButton extends PIXI.Container
         }
         else
         {
+            SOUND_MANAGER.play(getCoinSound(), 0.2)
             this.onClickItem.dispatch(this);
             this.timeoutHold = setTimeout(() =>
             {
@@ -148,7 +149,7 @@ export default class ShopButton extends PIXI.Container
 
     shake(force = 0.25, steps = 5, time = 0.4)
     {
-
+        SOUND_MANAGER.play('boing');
         let timelinePosition = new TimelineLite();
         let positionForce = (force * -20);
         let spliterForce = (force * 20);

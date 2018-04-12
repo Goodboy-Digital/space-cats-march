@@ -117,6 +117,7 @@ export default class InGameEffects
         // });
         // tempLabel.pivot.x = tempLabel.width / 2;
         // tempLabel.pivot.y = tempLabel.height / 2;
+        SOUND_MANAGER.play('game_gameover');
         tempLabel.scale.set(config.width / tempLabel.width * 0.45);
         tempLabel.anchor.set(0.5);
         tempLabel.x = config.width / 2;
@@ -355,9 +356,12 @@ export default class InGameEffects
         }));
     }
 
-    addCoinParticles(pos, quant = 1, custom = {})
+    addCoinParticles(pos, quant = 1, custom = {}, playSound = true)
     {
         window.screenManager.addCoinsParticles(pos, quant, custom);
+        if(playSound){
+            SOUND_MANAGER.play(getCoinSound(), 0.3);
+        }
     }
 
     popLabel(pos, label, delay = 0, dir = 1, scale = 1, randonRotation = true)

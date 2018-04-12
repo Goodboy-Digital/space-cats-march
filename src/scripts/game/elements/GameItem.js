@@ -46,6 +46,7 @@ export default class GameItem extends PIXI.Container {
         if (this.collecting) {
             return
         }
+        
         this.onCollect.dispatch(this);
         this.collected();
         this.velocity = {

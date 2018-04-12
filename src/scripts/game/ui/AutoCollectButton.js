@@ -75,6 +75,7 @@ export default class AutoCollectButton extends PIXI.Container
         else
         {
             // this.backButton.tint = 0xFFFFFF;
+            SOUND_MANAGER.play('pickup')
             this.enableAutoCollect.dispatch(this);
         }
         // this.enable()
@@ -132,6 +133,7 @@ export default class AutoCollectButton extends PIXI.Container
     shake(force = 0.25, steps = 5, time = 0.4)
     {
 
+        SOUND_MANAGER.play('boing');
         let timelinePosition = new TimelineLite();
         let positionForce = (force * -20);
         let spliterForce = (force * 20);

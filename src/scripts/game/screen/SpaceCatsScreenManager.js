@@ -94,12 +94,14 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.askVideoPopUp.onConfirm.add(() =>
         {
             // this.toStart()
+            this.prevPopUp = this.askVideoPopUp;
             this.loadVideo()
         });
 
         this.askVideoPopUp.onClose.add(() =>
         {
             // this.toStart()
+            this.prevPopUp = this.askVideoPopUp;
             this.toGame()
         });
 
@@ -108,6 +110,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         {
             this.coinsExplosion.killAll();
             this.toVideo()
+            this.prevPopUp = this.gameOverPopUp;
                 // this.toGame()
         });
 
@@ -121,6 +124,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.onboardingPopUp.onConfirm.add(() =>
         {
             this.toGame()
+            this.prevPopUp = this.onboardingPopUp;
                 // this.toGame()
         });
 
@@ -129,9 +133,6 @@ export default class SpaceCatsScreenManager extends ScreenManager
         {
             this.gameOverPopUp.updateCurrency();
             this.currentPopUp = this.gameOverPopUp;
-            //this.showPopUp('gameover')
-            // this.toGame()
-            // this.toGame()
         });
 
 
@@ -174,9 +175,9 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.addChild(this.videoContainer);
 
         this.videoContainer.visible = false;
-        // this.showPopUp('gameover')
+        this.showPopUp('gameover')
         // this.toGame();
-        this.showPopUp('init')
+        // this.showPopUp('init')
         // this.showPopUp('shop')
 
         this.infoContainer = new InfoContainer();
@@ -189,13 +190,6 @@ export default class SpaceCatsScreenManager extends ScreenManager
 
         this.coinsExplosion = new CoinsExplosion();
         this.addChild(this.coinsExplosion);
-        // this.askVideoContainer.hide();
-        // this.infoContainer.show({x:200, y:200})
-
-        // utils.formatPointsLabel2(1000/MAX_NUMBER)
-        // utils.formatPointsLabel2(1000000/MAX_NUMBER)
-        // utils.formatPointsLabel2(1000000000/MAX_NUMBER)
-
     }
     addCoinsParticles(pos, quant = 10, customData = {})
     {
@@ -216,10 +210,25 @@ export default class SpaceCatsScreenManager extends ScreenManager
     }
     showPopUp(label, param = null)
     {
-        if (this.currentPopUp && this.currentPopUp.label != label)
+        console.log(label);
+        switch (label){
+            case 'init':
+            SOUND_MANAGER.stopAll();
+                SOUND_MANAGER.playLoopOnce('dream2')
+            break;
+            case 'onboarding':
+            // SOUND_MANAGER.stopAll();
+                SOUND_MANAGER.playLoopOnce('dream2')
+            break;
+            case 'gameover':
+            SOUND_MANAGER.stopAll();
+                SOUND_MANAGER.playLoopOnce('dream2')
+            break;
+        }
+        if (this.currentPopUp)//} && this.currentPopUp.label != label)
         {
-            // this.currentPopUp.hide();
             this.prevPopUp = this.currentPopUp;
+            console.log(this.prevPopUp);
         }
         for (var i = 0; i < this.popUpList.length; i++)
         {
@@ -234,9 +243,14 @@ export default class SpaceCatsScreenManager extends ScreenManager
             }
         }
     }
+    forceChange(screenLabel, param){
+
+        super.forceChange(screenLabel, param);
+    }
     change(screenLabel, param)
     {
         super.change(screenLabel, param);
+
     }
     update(delta)
     {
@@ -249,8 +263,10 @@ export default class SpaceCatsScreenManager extends ScreenManager
         {
             this.currentPopUp.update(delta * this.timeScale)
         }
+        // console.log(this.prevPopUp);
         if (this.prevPopUp && this.prevPopUp.toRemove && this.prevPopUp.parent)
         {
+            console.log('remove this', this.prevPopUp);
             this.prevPopUp.parent.removeChild(this.prevPopUp);
             this.prevPopUp = null;
         }
