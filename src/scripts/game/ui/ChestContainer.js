@@ -100,10 +100,10 @@ export default class ChestContainer extends PIXI.Container
     	// this.quantchest.text = GAME_DATA.chestData.lastChestTime.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
     }
     onChestClick(){
-        // if(!this.isActive){
-        //     this.shake();
-        //     return;
-        // }
+        if(!this.isActive){
+            this.shake();
+            return;
+        }
         
     	this.onConfirm.dispatch();
 

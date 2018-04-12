@@ -213,6 +213,7 @@ export default class ShopPopUp extends StandardPop
             return;
         }
         this.shopList.updateItems();
+        
         this.updateMoney(GAME_DATA.moneyData.currentCoins, false)
         this.updateTrophy(GAME_DATA.trophyData.collected, false)
     }
@@ -225,6 +226,7 @@ export default class ShopPopUp extends StandardPop
         this.toRemove = false;
         this.onShow.dispatch(this);
         this.shopList.updateItems();
+        this.shopList.show();
 
         this.container.scale.set(0, 2)
         this.updateMoney(GAME_DATA.moneyData.currentCoins, true)
@@ -238,7 +240,7 @@ export default class ShopPopUp extends StandardPop
     }
     afterHide()
     {
-
+        this.shopList.hide();
     }
     hide(dispatch = true, callback = null)
     {

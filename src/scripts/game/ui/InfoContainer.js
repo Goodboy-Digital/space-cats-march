@@ -90,7 +90,7 @@ export default class InfoContainer extends UIList
     show(pos, icon = null, desc = 'lalala',  align = {x:0.5, y: 0.5})
     {
 
-        SOUND_MANAGER.play('tutorial_swipe')
+        SOUND_MANAGER.play('pickup_item2')
         this.infoList.elementsList = [];
         for (var i = 0; i < this.infoItens.length; i++) {
             this.infoList.elementsList.push(this.infoItens[i]);

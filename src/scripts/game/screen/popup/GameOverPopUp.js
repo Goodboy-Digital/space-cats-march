@@ -47,13 +47,13 @@ export default class GameOverPopUp extends StandardPop
         this.catItemList.onAutoCollect.add(this.onAutoCollect.bind(this));
         this.catItemList.onActiveCat.add(this.onActiveCat.bind(this));
         this.catItemList.onInfoAutoCollect.add(this.onInfoAutoCollect.bind(this));
-        this.catListContainer.x = -this.catItemList.containerBackground.width /2 // 2 + this.catItemList.upButton.width / 2
-        this.catListContainer.y = -this.catItemList.containerBackground.height /2// 2 + this.catItemList.upButton.height * 2
+        this.catListContainer.x = -this.catItemList.containerBackground.width / 2 // 2 + this.catItemList.upButton.width / 2
+        this.catListContainer.y = -this.catItemList.containerBackground.height / 2 // 2 + this.catItemList.upButton.height * 2
         this.container.addChild(this.catListContainer);
 
 
-        this.playButton = new UIButton('icon_play', 0.6)//new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        // this.playButton.anchor.set(0.5)
+        this.playButton = new UIButton('icon_play', 0.6) //new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
+            // this.playButton.anchor.set(0.5)
         this.playButtonScale = this.logoMask.height / this.playButton.height * 0.3
         this.playButton.scale.set(this.playButtonScale);
         this.playButton.y = config.height - this.container.y - this.playButton.height / 2 - 20
@@ -99,7 +99,7 @@ export default class GameOverPopUp extends StandardPop
         this.pointsContainer = new PointsContainer();
         this.addChild(this.pointsContainer)
         this.pointsContainer.x = config.width / 2
-        this.pointsContainer.y = this.logoMask.y + this.logoMask.height - this.pointsContainer.height * 0.25// - this.pointsContainer.height//config.height / 2 + this.pointsContainer.height * 0.75
+        this.pointsContainer.y = this.logoMask.y + this.logoMask.height - this.pointsContainer.height * 0.25 // - this.pointsContainer.height//config.height / 2 + this.pointsContainer.height * 0.75
 
         this.trophyContainer = new TrophyContainer();
         this.addChild(this.trophyContainer)
@@ -128,11 +128,22 @@ export default class GameOverPopUp extends StandardPop
         this.spaceShipContainer.y = config.height * 0.7
         this.spaceShipContainer.onOpenInfo.add(() =>
         {
-            if(this.possibleToSendToEarth()){                
+            if (this.possibleToSendToEarth())
+            {
                 this.spaceShipContainer.openSpaceshipInfoCallback();
                 this.showScreenBlocker();
-            }else{
-                this.screenManager.showInfo({x:config.width / 2, y:config.height / 2}, 'spaceship', 'You need to collect at least \n'+GAME_DATA.minimumAmountOfCatsToReset+' different cats to send them to \nEarth', {x:0, y:0.5})
+            }
+            else
+            {
+                this.screenManager.showInfo(
+                {
+                    x: config.width / 2,
+                    y: config.height / 2
+                }, 'spaceship', 'You need to collect at least \n' + GAME_DATA.minimumAmountOfCatsToReset + ' different cats to send them to \nEarth',
+                {
+                    x: 0,
+                    y: 0.5
+                })
             }
         })
         this.spaceShipContainer.onCloseInfo.add(() =>
@@ -145,7 +156,15 @@ export default class GameOverPopUp extends StandardPop
         })
         this.spaceShipContainer.onInfoSpaceship.add(() =>
         {
-            this.screenManager.showInfo({x:config.width / 2, y:config.height / 2}, 'spaceship', 'You gonna lose everything\nbut worth to get the trophies', {x:0, y:0.5})
+            this.screenManager.showInfo(
+            {
+                x: config.width / 2,
+                y: config.height / 2
+            }, 'spaceship', 'You gonna lose everything\nbut worth to get the trophies',
+            {
+                x: 0,
+                y: 0.5
+            })
         })
 
 
@@ -165,12 +184,40 @@ export default class GameOverPopUp extends StandardPop
         // this.hud = new HUD();
         // this.container.addChild(this.hud)
         // this.hud.x = -config.width / 2 - 300
+
+
+        // setTimeout(()=>{
+        //     TweenLite.to(this, 1,
+        // {
+        //     onComplete: () =>{
+
+        //         SOUND_MANAGER.play('pickup_star', 0.75)
+        //     },
+        //     onUpdate: () =>
+        //     {
+        //         SOUND_MANAGER.play('star_0' + Math.ceil(Math.random() * 3), 0.5)
+        //         let globalCoinPos = this.trophyContainer.getGlobalPosition();
+        //         globalCoinPos.x -= this.trophyContainer.width * 0.15
+        //         globalCoinPos.y -= this.trophyContainer.height * 0.15
+        //         window.screenManager.addCoinsParticles(globalCoinPos, 1,
+        //         {
+        //             texture: 'trophy',
+        //             alphaDecress: 0.5,
+        //             gravity: 500,
+        //             scale: 0.03,
+        //             angSpeed: Math.random() * 2 - 1
+        //         });
+        //     }
+        // })
+        // }, 1000);
     }
 
-    onCollectGift(){
+    onCollectGift()
+    {
         this.screenManager.prizeContainer.show(1);
     }
-    openSettings(){
+    openSettings()
+    {
         this.screenManager.openSettings();
     }
     enableAutoCollect(data)
@@ -180,16 +227,34 @@ export default class GameOverPopUp extends StandardPop
         let staticData = GAME_DATA.getStaticCatData(data)
 
         console.log(staticData, data);
-        let name = staticData.catName.replace('\n',' ');
-        this.screenManager.showInfo({x:config.width / 2, y:config.height / 2}, null, (name + ' now will be collected\nautomatically').toUpperCase(), {x:0, y:0.5})
+        let name = staticData.catName.replace('\n', ' ');
+        this.screenManager.showInfo(
+        {
+            x: config.width / 2,
+            y: config.height / 2
+        }, null, (name + ' now will be collected\nautomatically').toUpperCase(),
+        {
+            x: 0,
+            y: 0.5
+        })
 
+        SOUND_MANAGER.play('pickup_star');
 
         this.updateTrophyQuant();
         this.screenManager.closeVideo();
         this.catItemList.updateAllItens()
     }
-    onInfoAutoCollect(){
-        this.screenManager.showInfo({x:config.width / 2, y:config.height / 2}, 'automate', 'This cat will be collected\nautomatically', {x:0, y:0.5})
+    onInfoAutoCollect()
+    {
+        this.screenManager.showInfo(
+        {
+            x: config.width / 2,
+            y: config.height / 2
+        }, 'automate', 'This cat will be collected\nautomatically',
+        {
+            x: 0,
+            y: 0.5
+        })
     }
     onActiveCat(data)
     {
@@ -205,7 +270,7 @@ export default class GameOverPopUp extends StandardPop
         // this.showScreenBlocker();
         //console.log('AUTO COLLECT');
         this.enableAutoCollect(data.catID)
-        // this.screenManager.loadVideo(this.enableAutoCollect.bind(this, data.catID), data.catID);
+            // this.screenManager.loadVideo(this.enableAutoCollect.bind(this, data.catID), data.catID);
     }
     resetAll()
     {
@@ -274,6 +339,31 @@ export default class GameOverPopUp extends StandardPop
         GAME_DATA.sendCatsToEarth();
         this.updateCatsQuant();
         this.updateTrophyQuant();
+
+        TweenLite.to(this, 1,
+        {
+            onComplete: () =>{
+
+                SOUND_MANAGER.play('pickup_star', 0.75)
+            },
+            onUpdate: () =>
+            {
+                SOUND_MANAGER.play('star_0' + Math.ceil(Math.random() * 3), 0.5)
+                let globalCoinPos = this.trophyContainer.getGlobalPosition();
+                globalCoinPos.x -= this.trophyContainer.width * 0.15
+                globalCoinPos.y -= this.trophyContainer.height * 0.15
+                window.screenManager.addCoinsParticles(globalCoinPos, 1,
+                {
+                    texture: 'trophy',
+                    alphaDecress: 0.5,
+                    gravity: 500,
+                    scale: 0.03,
+                    angSpeed: Math.random() * 2 - 1
+                });
+            }
+        })
+
+
         this.pointsContainer.erasePoints(0.1);
         this.pointsContainer.updateMoney(GAME_DATA.moneyData.currentCoins)
 
@@ -411,15 +501,18 @@ export default class GameOverPopUp extends StandardPop
 
         this.trophyContainer.updateData(data);
     }
-    possibleToSendToEarth(){
+    possibleToSendToEarth()
+    {
         let activeCats = 0;
-        for (var i = 0; i < GAME_DATA.catsData.length; i++) {
-            if(GAME_DATA.catsData[i].active){
-                activeCats ++;
+        for (var i = 0; i < GAME_DATA.catsData.length; i++)
+        {
+            if (GAME_DATA.catsData[i].active)
+            {
+                activeCats++;
             }
         }
         if (activeCats >= GAME_DATA.minimumAmountOfCatsToReset)
-        {            
+        {
             return true
         }
         else
@@ -427,11 +520,14 @@ export default class GameOverPopUp extends StandardPop
             return false
         }
     }
-    updateCatsAllowed(){
+    updateCatsAllowed()
+    {
         let activeCats = 0;
-        for (var i = 0; i < GAME_DATA.catsData.length; i++) {
-            if(GAME_DATA.catsData[i].active){
-                activeCats ++;
+        for (var i = 0; i < GAME_DATA.catsData.length; i++)
+        {
+            if (GAME_DATA.catsData[i].active)
+            {
+                activeCats++;
             }
         }
         if (activeCats < 0)
@@ -451,7 +547,8 @@ export default class GameOverPopUp extends StandardPop
         this.pointsContainer.erasePoints(0.25)
         this.updateCatsQuant()
     }
-    onHideSettings(){
+    onHideSettings()
+    {
         this.updateCurrency();
         this.updateCatsQuant();
     }
@@ -572,7 +669,7 @@ export default class GameOverPopUp extends StandardPop
         this.spaceShipContainer.update(delta);
         this.trophyContainer.update(delta)
         this.chestContainer.update(delta)
-        // this.screenManager.prizeContainer.update(delta)
+            // this.screenManager.prizeContainer.update(delta)
         this.catItemList.update(delta)
         this.gameOverCatsContainer.update(delta);
         // this.hud.update(delta)

@@ -113,6 +113,12 @@ export default class PointsContainer extends PIXI.Container
             }
             // let globalCoinPos = this.coinSprite.getGlobalPosition();
             // globalCoinPos.x += this.coinSprite.width / 2
+
+            console.log(this.currentPoints, 'points');
+        if(!this.currentPoints || this.currentPoints == 0){
+            return
+        }
+
         TweenLite.to(moneyObj, 1,
         {
             delay: delay,
@@ -123,13 +129,15 @@ export default class PointsContainer extends PIXI.Container
                 this.currentPointsLabel.pivot.x = this.currentPointsLabel.width / 2;
                 this.currentPointsLabel.text = utils.formatPointsLabel(moneyObj.current / MAX_NUMBER);
 
-                // let globalCoinPos = this.coinSprite.getGlobalPosition();
-                // globalCoinPos.x += this.coinSprite.width / 2
+                SOUND_MANAGER.play('pop')
+                    // let globalCoinPos = this.coinSprite.getGlobalPosition();
+                    // globalCoinPos.x += this.coinSprite.width / 2
 
                 // window.screenManager.addCoinsParticles(globalCoinPos, 3);
             },
             onComplete: () =>
             {
+                SOUND_MANAGER.play('star_01')
                 this.currentPointsLabel.pivot.x = this.currentPointsLabel.width / 2;
                 this.currentPointsLabel.text = '0'
             }
@@ -146,13 +154,15 @@ export default class PointsContainer extends PIXI.Container
             return;
         }
 
-        if(this.currentMoney == money){
+        if (this.currentMoney == money)
+        {
             return
         }
 
         let tempFormated = utils.formatPointsLabel(money / MAX_NUMBER);
 
-        if(tempFormated == this.moneyLabel.text){
+        if (tempFormated == this.moneyLabel.text)
+        {
             return
         }
 
@@ -177,8 +187,9 @@ export default class PointsContainer extends PIXI.Container
                 this.moneyLabel.text = utils.formatPointsLabel(moneyObj.current / MAX_NUMBER);
                 this.coinsContainer.x = -this.coinsContainer.width / 2;
 
-                this.coinSound ++;
-                if(this.coinSound % 2 == 0){
+                this.coinSound++;
+                if (this.coinSound % 2 == 0)
+                {
                     SOUND_MANAGER.play(getCoinSound(), 0.1)
                 }
             },

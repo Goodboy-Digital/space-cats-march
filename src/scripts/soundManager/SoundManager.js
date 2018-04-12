@@ -62,7 +62,7 @@ export default class SoundManager extends AbstractSoundManager
     }
     playLoop(id, volume = 1)
     {
-        this.audioList[id].loop = true;
+        this.audioList[id].loop(true);
         this.audioList[id].volume(volume);
         let hid = this.audioList[id].play();
         this.playingList.push({sound:this.audioList[id], hID: hid});
@@ -73,7 +73,7 @@ export default class SoundManager extends AbstractSoundManager
     }
     play(id, volume = 1)
     {
-        this.audioList[id].loop = false;
+        this.audioList[id].loop(false);
         this.audioList[id].volume(volume);
         let hid = this.audioList[id].play();
         this.playingList.push({sound:this.audioList[id], hID: hid});

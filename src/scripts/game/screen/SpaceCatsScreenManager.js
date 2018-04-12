@@ -111,7 +111,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
             this.coinsExplosion.killAll();
             this.toVideo()
             this.prevPopUp = this.gameOverPopUp;
-                // this.toGame()
+            // this.toGame()
         });
 
         this.gameOverPopUp.onShopRedirect.add(() =>
@@ -125,7 +125,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         {
             this.toGame()
             this.prevPopUp = this.onboardingPopUp;
-                // this.toGame()
+            // this.toGame()
         });
 
         this.shopPopUp = new ShopPopUp('shop', this);
@@ -175,10 +175,10 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.addChild(this.videoContainer);
 
         this.videoContainer.visible = false;
-        this.showPopUp('gameover')
-        // this.toGame();
-        // this.showPopUp('init')
-        // this.showPopUp('shop')
+        // this.showPopUp('gameover')
+            // this.toGame();
+            this.showPopUp('init')
+            // this.showPopUp('shop')
 
         this.infoContainer = new InfoContainer();
         this.addChild(this.infoContainer)
@@ -211,21 +211,22 @@ export default class SpaceCatsScreenManager extends ScreenManager
     showPopUp(label, param = null)
     {
         console.log(label);
-        switch (label){
+        switch (label)
+        {
             case 'init':
-            SOUND_MANAGER.stopAll();
-                SOUND_MANAGER.playLoopOnce('dream2')
-            break;
+                SOUND_MANAGER.stopAll();
+                SOUND_MANAGER.playLoopOnce('spacecat_menu_music')
+                break;
             case 'onboarding':
-            // SOUND_MANAGER.stopAll();
-                SOUND_MANAGER.playLoopOnce('dream2')
-            break;
+                // SOUND_MANAGER.stopAll();
+                SOUND_MANAGER.playLoopOnce('spacecat_menu_music')
+                break;
             case 'gameover':
-            SOUND_MANAGER.stopAll();
-                SOUND_MANAGER.playLoopOnce('dream2')
-            break;
+                SOUND_MANAGER.stopAll();
+                SOUND_MANAGER.playLoopOnce('spacecat_menu_music')
+                break;
         }
-        if (this.currentPopUp)//} && this.currentPopUp.label != label)
+        if (this.currentPopUp) //} && this.currentPopUp.label != label)
         {
             this.prevPopUp = this.currentPopUp;
             console.log(this.prevPopUp);
@@ -234,7 +235,8 @@ export default class SpaceCatsScreenManager extends ScreenManager
         {
             if (this.popUpList[i].label == label)
             {
-                if(this.coinsExplosion){
+                if (this.coinsExplosion)
+                {
                     this.coinsExplosion.killAll();
                 }
                 this.popUpList[i].show(param);
@@ -243,7 +245,8 @@ export default class SpaceCatsScreenManager extends ScreenManager
             }
         }
     }
-    forceChange(screenLabel, param){
+    forceChange(screenLabel, param)
+    {
 
         super.forceChange(screenLabel, param);
     }
@@ -305,6 +308,8 @@ export default class SpaceCatsScreenManager extends ScreenManager
         if (this.currentScreen.label == 'GameScreen')
         {
             this.currentScreen.resetGame(true);
+            SOUND_MANAGER.play('pickup_star')
+            SOUND_MANAGER.play('pickup_item2')
         }
     }
     toGame()
@@ -313,6 +318,8 @@ export default class SpaceCatsScreenManager extends ScreenManager
         {
             this.currentScreen.resetGame();
             this.coinsExplosion.killAll();
+            SOUND_MANAGER.play('teleport')
+            SOUND_MANAGER.play('pickup_item2')
         }
     }
     toLoad()

@@ -11,7 +11,7 @@ export default class ShopList extends ListScroller
         h: 500
     }, itensPerPage = 4)
     {
-        super(rect, itensPerPage);
+        super(rect, itensPerPage, false);
         this.onItemShop = new Signals();
         this.onShowInfo = new Signals();
         this.onVideoItemShop = new Signals();
@@ -41,7 +41,8 @@ export default class ShopList extends ListScroller
         }
         this.lastItemClicked = this.itens[0]
     }
-    onShowInfoCallback(itemData, button){
+    onShowInfoCallback(itemData, button)
+    {
         this.onShowInfo.dispatch(itemData, button);
     }
     onShopItemCallback(itemData, realCost, button)
@@ -55,6 +56,21 @@ export default class ShopList extends ListScroller
         GAME_DATA.buyUpgrade(itemData, realCost);
         this.onItemShop.dispatch(itemData, button);
         this.updateItems();
+    }
+    hide()
+    {
+        console.log('HIDDDDDDEEEEE');
+        for (var i = 0; i < this.itens.length; i++)
+        {
+            this.itens[i].hide()
+        }
+    }
+    show()
+    {
+        for (var i = 0; i < this.itens.length; i++)
+        {
+            this.itens[i].show()
+        }
     }
     updateItems()
     {

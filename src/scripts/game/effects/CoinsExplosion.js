@@ -42,6 +42,7 @@ export default class CoinsExplosion extends PIXI.Container
                 {
                     coin.x += coin.velocity.x * delta;
                     coin.y += coin.velocity.y * delta;
+                    coin.rotation += coin.angSpeed * delta;
                     coin.alpha -= 1 * delta * coin.alphaDecress;
                     if (coin.target)
                     {
@@ -114,6 +115,8 @@ export default class CoinsExplosion extends PIXI.Container
             coin.alphaDecress = (customData.alphaDecress != undefined ? customData.alphaDecress : 1)
             coin.x = position.x;
             coin.y = position.y;
+            coin.angSpeed = customData.angSpeed || 0
+            coin.rotation = 0;
             coin.anchor.set(0.5)
             coin.scale.set(1)
             coin.delay = (customData.delay != undefined ? customData.delay : 0)

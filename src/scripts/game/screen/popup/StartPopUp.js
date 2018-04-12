@@ -55,62 +55,50 @@ export default class StartPopUp extends StandardPop
         this.playButton.y = config.height - this.container.y - this.playButton.height / 2 - this.playButton.height / 3
         this.playButton.interactive = true;
         this.playButton.buttonMode = true;
-        this.playButton.on('mouseup', this.confirm.bind(this)).on('touchend', this.confirm.bind(this));
+        this.playButton.on('mousedown', this.confirm.bind(this)).on('touchstart', this.confirm.bind(this));
         this.container.addChild(this.playButton)
         this.playButton.scale.set(0);
 
 
+         this.settingsButton = new UIButton('info', 0.85)
+        this.settingsButtonScale = this.logoMask.height / this.settingsButton.height * 0.15
+        this.settingsButton.scale.set(this.settingsButtonScale, this.settingsButtonScale);
+        // console.log(this.settingsButton.width);
+        this.settingsButton.x = config.width / 2 - this.settingsButton.width;
+        this.settingsButton.y = -config.height / 2 + this.settingsButton.height// + config.height * 0.2;
+        // this.settingsButton.y = -300
+        this.settingsButton.interactive = true;
+        this.settingsButton.buttonMode = true;
+        this.settingsButton.on('mousedown', this.openInfo.bind(this)).on('touchstart', this.openInfo.bind(this));
+        this.container.addChild(this.settingsButton)
 
-        this.resetButton = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        this.resetButton.anchor.set(0.5)
-        this.resetButtonScale = this.logoMask.height / this.resetButton.height * 0.1
-        this.resetButton.scale.set(this.resetButtonScale);
-        this.resetButton.x = -config.width / 2 + this.resetButton.width;
-        this.resetButton.y = -config.height / 2 + this.resetButton.height;
-        // this.resetButton.y = -300
-        this.resetButton.alpha = 0;
-        this.resetButton.interactive = true;
-        this.resetButton.buttonMode = true;
-        this.resetButton.on('mouseup', this.reset.bind(this)).on('touchend', this.reset.bind(this));
-        this.container.addChild(this.resetButton)
 
-        this.toCats = new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        this.toCats.anchor.set(0.5)
-        this.toCatsScale = this.logoMask.height / this.toCats.height * 0.25
-        this.toCats.scale.set(this.toCatsScale);
-        this.toCats.x = config.width / 2 - this.toCats.width;
-        this.toCats.y = -config.height / 2 + this.toCats.height;
-        // this.toCats.y = -300
-        this.toCats.interactive = true;
-        this.toCats.buttonMode = true;
-        this.toCats.on('mouseup', this.addManyCats.bind(this)).on('touchend', this.addManyCats.bind(this));
+
+        let settingsLabel = new PIXI.Text(GAME_DATA.version,
+        {
+            fontFamily: 'blogger_sansregular',
+            fontSize: '48px',
+            fill: 0xFFFFFF,
+            align: 'center',
+            fontWeight: '800'
+        });
+        settingsLabel.scale.set(config.width / settingsLabel.width * 0.1)
+        this.container.addChild(settingsLabel)
+        settingsLabel.x = config.width /2 - settingsLabel.width * 1.5
+        settingsLabel.y = config.height /2 - settingsLabel.height * 1.5
+
         // this.container.addChild(this.toCats)
     }
 
-    addManyCats(){
-        GAME_DATA.addCats([100,100,100,100])
-        GAME_DATA.updateCatsAllowed(999999);
-    }
-    redirectCats(){
-        this.onCatsRedirect.dispatch()
-    }
-    showCats()
-    {
+    openInfo(){
+        this.screenManager.showInfo({x:config.width / 2, y:config.height / 2}, 'goodboy_logo_square', 'Made with love <3\nmeow!', {x:0, y:0.5})
 
-        this.hide(false, this.redirectCats.bind(this));
-        // this.onCatsRedirect.dispatch()
+         SOUND_MANAGER.play('pickup_star');
+         SOUND_MANAGER.play(getCatSound());
     }
-    reset()
-    {
-        STORAGE.reset();
-        location.reload();
-        // STORAGE.storeObject('game-data', GAME_DATA.getObjectData());
-        // GAME_DATA.loadData(sotrageData);
-    }
+
     hide(dispatch, callback)
     {
-        // TweenLite.to(this.glass.scale, 1, {x:3,y:3});
-        // TweenLite.to(this.glass, 0.5, {delay:0.5, alpha:0});
         TweenLite.to(this.logoMask.scale, 1,
         {
             x: 3,

@@ -175,7 +175,7 @@ export default class SpaceShipContainer extends PIXI.Container
     }
     onSpaceshipClick(){
         this.onConfirm.dispatch();
-        SOUND_MANAGER.play('rocket_launch_01')
+        SOUND_MANAGER.play('rocket_launch_01', 0.25)
     }
     closeSpaceship()
     {

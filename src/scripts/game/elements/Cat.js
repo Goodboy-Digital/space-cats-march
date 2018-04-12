@@ -244,8 +244,8 @@ export default class Cat extends PIXI.Container
             // this.sprite.tint = 0x00FFFF
         }
 
-        SOUND_MANAGER.play(getCatSound())
-        SOUND_MANAGER.play('teleport')
+        SOUND_MANAGER.play(getCatSound(), 0.75)
+        SOUND_MANAGER.play('teleport', 0.7)
         this.noScalable = true;
         this.animation.scale.set(this.animationScaleStandard * 1.5, this.animationScaleStandard * 0.5);
         this.animation.happy();
@@ -305,7 +305,7 @@ export default class Cat extends PIXI.Container
         this.angularSpeed = (Math.random() * 0.1 - 0.05) * 60;
         this.animation.sad();
         if(dispatchSound){
-            SOUND_MANAGER.play(getCatSound(), 0.5)
+            SOUND_MANAGER.play(getCatSound(), 0.25)
         }
         this.animation.scale.set(this.animationScaleStandard * 1.2, this.animationScaleStandard * 0.8);
         TweenLite.to(this.animation.scale, 0.5,

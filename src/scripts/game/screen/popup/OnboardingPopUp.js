@@ -135,6 +135,7 @@ export default class OnboardingPopUp extends StandardPop
     }
     confirm()
     {
+        SOUND_MANAGER.play('button_click');
         this.onConfirm.dispatch(this);
         this.hide();
     }

@@ -97,9 +97,15 @@ export default class CatItem extends UIList {
         this.activeButtonContainer.addChild(this.catNameLabel);
         this.activeButtonContainer.addChild(this.coinIcon);
 
+        this.warningIcon = new PIXI.Sprite.from('info'); 
+        this.warningIcon.anchor.set(0.5)
+        this.warningIcon.scale.set(this.backButton.height / this.warningIcon.height * 0.5)
+        this.warningIcon.x = this.backButton.width
+        this.backButton.addChild(this.warningIcon)
 
         this.elementsList.push(this.activeButtonContainer);
         this.container.addChild(this.activeButtonContainer)
+
 
 
         this.autocollect = new AutoCollectButton(this.staticData)
@@ -117,6 +123,7 @@ export default class CatItem extends UIList {
     activeCat() {
         this.onActiveCat.dispatch(this.catData);
         SOUND_MANAGER.play(getCatSound())
+        SOUND_MANAGER.play('pickup_star');
     }
     updateThumb(delta) {
         if (this.catData.active) {
@@ -134,6 +141,8 @@ export default class CatItem extends UIList {
         this.totalLabel.text = quant == 0 ? '' : quant
         this.bonusLabel.text = utils.cleanString(this.catData.collectedMultiplier.toFixed(1)) + '%';
         this.backButton.tint = 0xFFFFFF;
+        this.backButton.texture = PIXI.Texture.from('back_button')
+        this.backButton.alpha = 1;
 
         if (this.staticData.cost <= GAME_DATA.moneyData.currentCoins && !this.catData.active) {
         // if (this.catData.canBeActive && !this.catData.active) {
@@ -147,12 +156,14 @@ export default class CatItem extends UIList {
 
             this.backButton.alpha = 1;
             this.backButton.tint = 0x6250e5
+            // this.backButton.tint = 0x55d662
             this.catNameLabel.style.fill = 0xFFFFFF;
             this.bonusLabel.visible = false;
-            this.plusIcon.visible = false;
+            this.plusIcon.visible = true;
             this.backButton.interactive = true;
             this.backButton.buttonMode = true;
             // this.backButton.on('mouseup', this.activeCat.bind(this)).off('touchend', this.activeCat.bind(this));
+            this.warningIcon.alpha = 1;
             // this.backButton.on('mouseup', this.activeCat.bind(this)).on('touchend', this.activeCat.bind(this));
 
         } else if (this.catData.active) {
@@ -161,6 +172,7 @@ export default class CatItem extends UIList {
             this.thumb.unlock();
             this.coinIcon.visible = false;
             this.thumb.updateCatTextures(this.staticData.catSrc); //.texture = PIXI.Texture.from(this.catData.catThumb);
+
             // if(!this.staticData.stamp){
             //     this.staticData.stamp = this.thumb.stamp();
             // }
@@ -201,15 +213,19 @@ export default class CatItem extends UIList {
             this.thumb.updateCatTextures(this.staticData.catSrc);
             this.thumb.lock();
             this.totalLabel.text = ''
+            // this.backButton.texture = PIXI.Texture.from('score_plinth')
             this.catNameLabel.text = ('unlock at\n' + utils.formatPointsLabel(this.staticData.cost / MAX_NUMBER)).toUpperCase();
             this.plusIcon.texture = PIXI.Texture.from('results_lock');
+            this.warningIcon.alpha = 0;
             this.autocollect.visible = false;
             this.bonusLabel.visible = false;
-            this.plusIcon.visible = false;
+            this.plusIcon.visible = true;
             this.backButton.alpha = 1;
+            this.catNameLabel.style.fill = 0xFFFFFF;
             this.catNameLabel.style.fill = 0xe5519b;
             this.backButton.interactive = false;
             this.backButton.buttonMode = false;
+            // this.backButton.alpha = 0;
         }
 
 

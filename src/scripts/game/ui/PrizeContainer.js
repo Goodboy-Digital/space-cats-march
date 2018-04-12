@@ -113,7 +113,8 @@ export default class PrizeContainer extends UIList
     }
     collect()
     {
-        SOUND_MANAGER.play('teleport');
+        SOUND_MANAGER.play('button_click');
+
         this.onPrizeCollected.dispatch();
         this.hide();
     }
@@ -128,7 +129,7 @@ export default class PrizeContainer extends UIList
             this.parent.setChildIndex(this, this.parent.children.length - 1)
         }
 
-        SOUND_MANAGER.play('score_loop');
+        SOUND_MANAGER.play('pickup_star');
 
         this.playButton.scale.set(0);
         TweenLite.to(this.playButton.scale, 0.5,
@@ -138,7 +139,7 @@ export default class PrizeContainer extends UIList
             y: this.playButtonScale,
             ease: Elastic.easeOut,
             onStart:()=>{
-                SOUND_MANAGER.play('boing');
+                // SOUND_MANAGER.play('boing');
             }
         })
 
@@ -150,7 +151,7 @@ export default class PrizeContainer extends UIList
             y: this.titlePrizesScale,
             ease: Elastic.easeOut,
             onStart:()=>{
-                SOUND_MANAGER.play('pickup');
+                SOUND_MANAGER.play('pickup_present');
             }
         })
 

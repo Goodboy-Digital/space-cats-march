@@ -178,7 +178,6 @@ export default class GameScreen extends Screen
         this.actionSpeed = this.actionSpeed || 1;
         this.gameTimeScale = this.gameTimeScale || 1;
 
-        console.log(this.gameTimeScale , this.actionSpeed);
         SOUND_MANAGER.setRateOnLoops(this.gameTimeScale * this.actionSpeed);
     }
     removeAutoCollectMode()
@@ -219,7 +218,8 @@ export default class GameScreen extends Screen
 
         for (var i = this.currentActions.length - 1; i >= 0; i--)
         {
-            this[this.currentActions[i].var] = this.currentActions[i].default;
+            this.killAction(this.currentActions[i])
+            // this[this.currentActions[i].var] = this.currentActions[i].default;
         }
         this.currentActions = [];
 
@@ -251,7 +251,7 @@ export default class GameScreen extends Screen
             
         }
 
-            this.scaleSound();
+        this.scaleSound();
 
 
         // this.HUD.updateActionList();
@@ -787,7 +787,8 @@ export default class GameScreen extends Screen
         }
         this.addChild(this.currentItem);
 
-        let ids = [0, 2, 3, 3, 3, 3, 3, 3, 3]
+        // let ids = [0, 2, 3, 3, 3, 3, 3, 3, 3]
+        let ids = [0, 2]
         this.currentItem.reset(
         {
             x: config.width * 0.125,
@@ -828,7 +829,7 @@ export default class GameScreen extends Screen
                 {
                     x: item.x,
                     y: item.y - 20
-                }, 10);
+                }, 15);
                 break;
             case 3:
                 this.offerPrize();
@@ -836,7 +837,7 @@ export default class GameScreen extends Screen
 
         }
 
-        SOUND_MANAGER.play('pickup');
+        SOUND_MANAGER.play('pickup_star');
 
         this.HUD.updateHUD(this.currentPoints, this.currentDeadCats)
             // this.itemTimer = this.itemTimerMax;

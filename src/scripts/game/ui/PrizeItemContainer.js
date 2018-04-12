@@ -65,7 +65,10 @@ export default class PrizeItemContainer extends PIXI.Container
     	this.itemSprite.visible = true;
     	this.itemCat.visible = false;
         this.itemSprite.texture = PIXI.Texture.from(texture);
+        this.itemSprite.scale.set(1)
         this.itemScale = this.backTexture.height / this.itemSprite.height * 0.75//this.topBg.width / (this.itemSprite.width / this.itemSprite.scale.x) * 0.75
+        
+        console.log(this.itemScale, this.backTexture.height, this.itemSprite.height);
         this.itemSprite.scale.set(this.itemScale)
         // console.log(this.topBg.width, this.itemScale, texture, this.itemSprite.width , this.itemSprite.scale.x, this.itemSprite);
 
@@ -94,7 +97,10 @@ export default class PrizeItemContainer extends PIXI.Container
             delay: delay + 0.1,
             x: this.itemScale,
             y: this.itemScale,
-            ease: Back.easeOut
+            ease: Back.easeOut,
+            onStart:()=>{
+                SOUND_MANAGER.play('star_0'+Math.ceil(Math.random() * 3));
+            }
         });
         TweenLite.to(this, 0.5,
         {

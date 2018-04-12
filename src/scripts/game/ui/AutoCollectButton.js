@@ -15,6 +15,12 @@ export default class AutoCollectButton extends PIXI.Container
         this.backButton = new PIXI.Sprite.from('back_button');
         this.container.addChild(this.backButton);
 
+        this.warningIcon = new PIXI.Sprite.from('info'); 
+        this.warningIcon.anchor.set(0.5)
+        this.warningIcon.scale.set(this.backButton.height / this.warningIcon.height * 0.5)
+        this.warningIcon.x = this.backButton.width
+        this.backButton.addChild(this.warningIcon)
+
         this.w = this.backButton.width;
         this.h = this.backButton.height;
         // this.background.alpha = 0
@@ -76,6 +82,7 @@ export default class AutoCollectButton extends PIXI.Container
         {
             // this.backButton.tint = 0xFFFFFF;
             SOUND_MANAGER.play('pickup')
+            
             this.enableAutoCollect.dispatch(this);
         }
         // this.enable()
@@ -97,6 +104,7 @@ export default class AutoCollectButton extends PIXI.Container
         this.backButton.tint = 0xFFFFFF;
         this.priceLabel.style.fill = 0xe5519b;
         this.backButton.alpha = 1;
+        this.warningIcon.alpha = 0;
     }
     reset()
     {
@@ -114,6 +122,7 @@ export default class AutoCollectButton extends PIXI.Container
         this.priceLabel.style.fill = 0xFFFFFF;
         this.backButton.tint = 0x6250e5;
         this.backButton.alpha = 1;
+        this.warningIcon.alpha = 1;
     }
     enable()
     {
@@ -128,6 +137,7 @@ export default class AutoCollectButton extends PIXI.Container
         this.backButton.tint = 0x6250e5;
         this.backButton.alpha = 0;
         this.priceLabel.style.fill = 0xe5519b;
+        this.warningIcon.alpha = 1;
     }
 
     shake(force = 0.25, steps = 5, time = 0.4)

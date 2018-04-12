@@ -108,6 +108,7 @@ export default class ShopItem extends UIList
         this.infoButton.on('mousedown', this.onInfoCallback.bind(this)).on('touchstart', this.onInfoCallback.bind(this));
 
         // this.itemIcon.scaleContent = false;
+        this.currentColor = 0;
 
     }
     onInfoCallback()
@@ -141,7 +142,7 @@ export default class ShopItem extends UIList
         this.itemIcon.texture = PIXI.Texture.from(this.staticData.icon)
 
         this.levelLabel.text = 'Level ' + this.itemData.level
-        console.log(this.staticData.shopType);
+
         if (this.itemData.level <= 0)
         {
             this.attributesList.visible = false;
@@ -157,6 +158,7 @@ export default class ShopItem extends UIList
         {
             this.attributesList.visible = true;
             this.levelContainer.visible = true;
+            this.isVideo = true;
         }
         if (this.attributesList)
         {
@@ -190,6 +192,35 @@ export default class ShopItem extends UIList
             // this.descriptionLabel.x = this.attributesList.x + this.attributesList.width / 2
 
     }
+    changeBgColor()
+    {
+        this.currentColor++;
+        this.currentColor %= COLORS.length - 1;
+        let time = 0.5;
+        this.currentColorTween = utils.addColorTween(this.backGraphic, this.backGraphic.tint, COLORS[this.currentColor], time).tween;
+        this.specialTimeout = setTimeout(() =>
+        {
+            this.changeBgColor();
+        }, time * 1000);
+    }
+
+    hide()
+    {
+        if (this.isVideo)
+        {
+            TweenLite.killTweensOf(this.currentColorTween);
+            clearTimeout(this.specialTimeout);
+            this.backGraphic.tint = 0xFF00FF;
+        }
+    }
+    show()
+    {
+        if (this.isVideo)
+        {
+            this.changeBgColor()
+        }
+    }
+
     updateData()
     {
         this.itemData = GAME_DATA.getUpdatedItem(this.itemData.dataType, this.itemData.id)
@@ -230,9 +261,9 @@ export default class ShopItem extends UIList
 
                 if (!this.backGraphic)
                 {
-                    this.backGraphic = new PIXI.Graphics().beginFill(0xFF00FF).drawRect(-200, 0, this.w + 200, this.h)
+                    this.backGraphic = new PIXI.Graphics().beginFill(0xFF00FF).drawRect(-200, 0, this.w + 400, this.h)
                     this.container.addChildAt(this.backGraphic, 0)
-                    this.backGraphic.alpha = 0.25;
+                    this.backGraphic.alpha = 0.5;
                 }
 
                 // let attIcon = new PIXI.Sprite.from('results_newcat_star');
