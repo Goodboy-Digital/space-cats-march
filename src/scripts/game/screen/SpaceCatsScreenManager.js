@@ -149,7 +149,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.currentPopUp = null;
         this.prevPopUp = null;
 
-        
+
 
         this.videoContainer = new PIXI.Container();
         let vdBg = new PIXI.Graphics().beginFill(0xFFFFFF).drawRect(0, 0, config.width, config.height);
@@ -178,7 +178,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
 
         this.videoContainer.visible = false;
         // this.showPopUp('gameover')
-            // this.toGame();
+        // this.toGame();
         this.showPopUp('init')
             // this.showPopUp('shop')
 
@@ -189,6 +189,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.askVideoContainer = new AskVideoContainer();
         this.addChild(this.askVideoContainer)
         this.askVideoContainer.hide();
+        // this.askVideoContainer.show();
 
 
 
@@ -232,7 +233,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
                 SOUND_MANAGER.playLoopOnce('spacecat_menu_music')
                 break;
             case 'gameover':
-            console.log('stopALLL');
+                console.log('stopALLL');
                 SOUND_MANAGER.stopAll();
                 SOUND_MANAGER.playLoopOnce('spacecat_menu_music')
                 break;
@@ -273,6 +274,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.coinsExplosion.update(delta);
         this.prizeContainer.update(delta);
         this.videoLoader.update(delta);
+        this.askVideoContainer.update(delta);
 
         if (this.currentPopUp)
         {
@@ -287,14 +289,15 @@ export default class SpaceCatsScreenManager extends ScreenManager
         }
     }
 
-    hideVideoLoader(){
+    hideVideoLoader()
+    {
         this.videoLoader.hide();
     }
     closeVideo()
     {
         this.videoContainer.visible = false;
     }
-    loadVideo(callback, callbackParams)
+    loadVideo(callback, callbackParams, type = '')
     {
 
         this.videoLoader.show();
@@ -309,6 +312,17 @@ export default class SpaceCatsScreenManager extends ScreenManager
         {
             this.afterVideoCallback = this.toGameWithBonus.bind(this);
         }
+
+        // console.log(this);
+        FBInstant.logEvent(
+            'reaward_video',
+            1,
+            {
+                type: type,
+            },
+        );
+
+
         FbManager.showAdd(this.afterVideoCallback, callbackParams)
 
 
@@ -323,7 +337,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.showPopUp('video')
     }
     toGameWithBonus()
-    {          
+    {
         this.videoContainer.visible = false;
         if (this.currentScreen.label == 'GameScreen')
         {

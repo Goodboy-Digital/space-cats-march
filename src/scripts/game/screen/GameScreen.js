@@ -159,18 +159,32 @@ export default class GameScreen extends Screen
     }
     openOfferVideoCallback()
     {
+        FBInstant.logEvent(
+            'in_game_chest',
+            1,
+            {
+                type: 'accept',
+            },
+        );
         this.screenManager.closeVideo();
         this.screenManager.prizeContainer.show(3);
     }
     offerPrize()
     {
+        FBInstant.logEvent(
+            'in_game_chest',
+            1,
+            {
+                type: 'offer',
+            },
+        );
         this.screenManager.showAskVideo();
         this.isPaused = true;
         // this.onConfirmOffer();
     }
     onConfirmOffer()
     {
-        this.screenManager.loadVideo(this.openOfferVideoCallback.bind(this));
+        this.screenManager.loadVideo(this.openOfferVideoCallback.bind(this), null, 'in_game_chest');
         this.isPaused = true;
     }
     scaleSound()
@@ -269,6 +283,14 @@ export default class GameScreen extends Screen
         let leveldActionData = GAME_DATA.getActionStats(actionData);
 
         this.currentActions.push(actionData);
+
+        FBInstant.logEvent(
+            'gameplay_action',
+            1,
+            {
+                type: actionData.type,
+            },
+        );
 
         if (actionData.var == 'actionAutoCollect')
         {
@@ -542,7 +564,8 @@ export default class GameScreen extends Screen
         {
             this.gameTimeScale = 0;
             this.isPaused = true;
-            setTimeout(()=>{
+            setTimeout(() =>
+            {
                 this.addAutoCollectMode();
                 this.isPaused = false;
             }, 750);
@@ -564,6 +587,14 @@ export default class GameScreen extends Screen
         }
 
         TweenLite.killTweensOf(this)
+
+        FBInstant.logEvent(
+            'gameplay',
+            1,
+            {
+                type: 'reset',
+            },
+        );
 
         // console.log(this.gameSpeed, this.actionSpeed, 'START SPEED');
         this.scaleSound();
@@ -728,8 +759,8 @@ export default class GameScreen extends Screen
             {
                 this.itemTimer -= delta;
             }
-            if(this.currentGiftBox)
-                {
+            if (this.currentGiftBox)
+            {
                 if (this.currentGiftBox.kill && this.currentGiftBox.parent)
                 {
                     this.currentGiftBox.parent.removeChild(this.currentGiftBox)
@@ -830,7 +861,7 @@ export default class GameScreen extends Screen
             x: -config.width * 0.125,
             y: (Math.random() * config.height / 4) + config.height / 2
         }, 4);
-        
+
 
     }
 
@@ -848,7 +879,7 @@ export default class GameScreen extends Screen
         this.addChild(this.currentItem);
 
         let ids = [0, 2, 3, 3, 3, 3, 3, 3, 3]
-        // let ids = [0, 2]
+            // let ids = [0, 2]
         this.currentItem.reset(
         {
             x: config.width * 0.125,
@@ -869,6 +900,14 @@ export default class GameScreen extends Screen
                     x: item.x,
                     y: item.y - 30
                 }, '+' + utils.formatPointsLabel(tempTrophy / MAX_NUMBER), 0, 3, 1);
+                FBInstant.logEvent(
+                    'in_game_collectables',
+                    1,
+                    {
+                        type: 'trophy',
+                    },
+                );
+
                 break;
             case 1:
                 this.addAutoCollectMode();
@@ -890,11 +929,32 @@ export default class GameScreen extends Screen
                     x: item.x,
                     y: item.y - 20
                 }, 15);
+                FBInstant.logEvent(
+                    'in_game_collectables',
+                    1,
+                    {
+                        type: 'coins',
+                    },
+                );
                 break;
             case 3:
+                FBInstant.logEvent(
+                    'in_game_collectables',
+                    1,
+                    {
+                        type: 'chest',
+                    },
+                );
                 this.offerPrize();
                 break;
             case 4:
+                FBInstant.logEvent(
+                    'in_game_collectables',
+                    1,
+                    {
+                        type: 'gift',
+                    },
+                );
                 this.screenManager.prizeContainer.show(1);
                 this.isPaused = true
                 break;

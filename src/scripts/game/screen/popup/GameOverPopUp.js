@@ -341,7 +341,7 @@ export default class GameOverPopUp extends StandardPop
     onConfirmSpaceship()
     {
         this.closeSpaceship();
-        this.screenManager.loadVideo(this.spaceshipVideoCallback.bind(this));
+        this.screenManager.loadVideo(this.spaceshipVideoCallback.bind(this), null, 'spaceship');
     }
 
     hidePrizeContainer()

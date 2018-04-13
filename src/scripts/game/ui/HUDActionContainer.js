@@ -56,6 +56,10 @@ export default class HUDActionContainer extends PIXI.Container {
         this.timer = 0;
         this.cooldown = 0;
     }
+    hideTimer(){
+        this.cooldown = 0;
+        this.coolDownLabel.text = '';
+    }
     setTexture(texture) {
         
         this.sprite.texture = new PIXI.Texture.from(texture);

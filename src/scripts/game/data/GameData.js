@@ -59,7 +59,7 @@ export default class GameData
             tokens: 1,
         }
 
-        this.version = '0.1.0.1';
+        this.version = '0.1.0.2';
 
         this.mute = false;
 
@@ -67,11 +67,14 @@ export default class GameData
 
         this.minimumAmountOfCatsToReset = 3;
     }
-    resetShop(){
-        for (var i = this.actionsData.length - 1; i >= 0; i--) {
+    resetShop()
+    {
+        for (var i = this.actionsData.length - 1; i >= 0; i--)
+        {
             this.actionsData[i].level = 1;
         }
-        for (var i = this.shopData.length - 1; i >= 0; i--) {
+        for (var i = this.shopData.length - 1; i >= 0; i--)
+        {
             this.shopData[i].level = 0;
         }
         // this.SAVE();
@@ -135,6 +138,21 @@ export default class GameData
         }
         this.updateCatsAllowed(0);
         this[data.dataType][data.id].level++;
+
+        if (this[data.dataType][data.id].level %= 50)
+        {
+
+            FBInstant.logEvent(
+                'item_upgrade',
+                1,
+                {
+                    type: this[data.staticData].type,
+                    level: this[data.dataType][data.id].level
+                },
+            );
+
+
+        }
         this.SAVE();
     }
     getActionStats(data, isStatic = false)
@@ -160,7 +178,7 @@ export default class GameData
         {
             let tempData = stats[type];
             easeCost = tempData.zero;
-            
+
             levelPercent = level / shopData.levelMax
 
             if (levelPercent > 0)
@@ -170,7 +188,7 @@ export default class GameData
                 {
                     // easeCost = tempData.min - easeCost;
                     easeCost = tempData.min - utils[tempData.typeCurve](levelPercent, tempData.max, tempData.min, 1) + tempData.max
-                        
+
                 }
                 else
                 {
@@ -206,9 +224,9 @@ export default class GameData
         }
         let level = data.level;
 
-        
-        
-        
+
+
+
         // console.log(data, shopData);
         let costData = shopData.stats.cost;
         let levelPercent = level / shopData.levelMax
@@ -393,10 +411,22 @@ export default class GameData
     }
     sendCatsToEarth()
     {
+        FBInstant.logEvent(
+            'reset_cats',
+            1,
+            {
+                trophys: this.trophyData.collected,
+                coins: this.moneyData.currentCoins,
+                total_cats: this.countActiveCats()
+            },
+        );
         this.updateTrophy(this.getNumberTrophyToSend());
         this.resetCatData();
         this.moneyData.currentCoins = 0;
         this.resetShop();
+
+
+
         this.SAVE();
     }
     getCoinAmount()
@@ -431,12 +461,31 @@ export default class GameData
         this.moneyData.currentCoins += points;
         this.SAVE();
     }
+    countActiveCats()
+    {
+        let cats = 0
+        for (var i = 0; i < this.catsData.length; i++)
+        {
+            if (this.catsData[i].active)
+            {
+                cats++
+            }
+        }
+        return cats;
+    }
     updateCatsAllowed(points)
     {
         this.addCoins(points);
         if (points > this.maxPoints)
         {
             this.maxPoints = points;
+            FBInstant.logEvent(
+                'max_points',
+                1,
+                {
+                    points: this.maxPoints,
+                },
+            );
         }
         this.totalCatsAllowed = 1;
         let temp = [true]
@@ -472,12 +521,14 @@ export default class GameData
     }
     startNewRound()
     {
+        this.allowedList = [];
         this.totalCatsAllowed = 0;
         for (var i = 0; i < this.catsData.length; i++)
         {
             if (this.catsData[i].active)
             {
                 this.totalCatsAllowed++
+                    this.allowedList.push(this.catsData[i].catID)
             }
         }
         this.sessionData.tokens = this.gameTokens.quant;
@@ -487,6 +538,15 @@ export default class GameData
     {
         let data = this.catsData[id];
         let staticData = this.getStaticCatData(data.catID);
+
+        FBInstant.logEvent(
+            'auto_collect',
+            1,
+            {
+                catID: data.catID,
+                catName: staticData.catName,
+            },
+        );
         // console.log(data);
         if (this.trophyData.collected < staticData.autoCollectPrice)
         {
@@ -514,7 +574,7 @@ export default class GameData
     }
     getAllowedCatsData()
     {
-        return this.catsData[Math.floor(Math.random() * this.totalCatsAllowed)]
+        return this.catsData[this.allowedList[Math.floor(Math.random() * this.allowedList.length)]]
     }
     SAVE()
     {

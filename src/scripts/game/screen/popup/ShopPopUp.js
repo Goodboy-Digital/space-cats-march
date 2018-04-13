@@ -126,7 +126,7 @@ export default class ShopPopUp extends StandardPop
         {
             let staticData = GAME_DATA[item.staticData][item.id];
             console.log(item);
-            this.screenManager.loadVideo(this.openVideoCallback.bind(this, staticData));
+            this.screenManager.loadVideo(this.openVideoCallback.bind(this, staticData), null, 'open_gold_chest');
         })
 
         this.shopList.onShowInfo.add((item, button) =>
@@ -231,11 +231,11 @@ export default class ShopPopUp extends StandardPop
         this.container.scale.set(0, 2)
         this.updateMoney(GAME_DATA.moneyData.currentCoins, true)
         this.updateTrophy(GAME_DATA.trophyData.collected, true)
-        TweenLite.to(this.container.scale, 1,
+        TweenLite.to(this.container.scale, 0.25,
         {
             x: 1,
             y: 1,
-            ease: Elastic.easeOut
+            ease: Back.easeOut
         })
     }
     afterHide()

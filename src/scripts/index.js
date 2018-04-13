@@ -28,7 +28,7 @@ window.PAWN = {
     width: 50,
     height: 50
 }
-// window.console.log = function() {}
+window.console.log = function() {}
 window.console.warn = function() {}
 window.console.groupCollapsed = function(teste)
     {

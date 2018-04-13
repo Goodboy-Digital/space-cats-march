@@ -99,20 +99,20 @@ export default class GameOverCatsContainer extends UIList
         this.confirmButton.x = config.width - this.confirmButton.width //* 1.25;
         this.confirmButton.y = config.height - this.confirmButton.height //* 1.25;
 
-        this.giftBox = new PIXI.Sprite(PIXI.Texture.from('results_newcat_rays_02'));//UIButton('icon_back');
-        this.box = new PIXI.Sprite(PIXI.Texture.from('giftbox'));//UIButton('icon_back');
+        this.giftBox = new PIXI.Sprite(PIXI.Texture.from('results_newcat_rays_02')); //UIButton('icon_back');
+        this.box = new PIXI.Sprite(PIXI.Texture.from('giftbox')); //UIButton('icon_back');
         this.box.anchor.set(0.5);
         this.box.scale.set(this.giftBox.width / this.box.width)
         this.giftBox.addChild(this.box);
         this.giftBox.anchor.set(0.5);
         this.giftBoxScale = config.width / this.giftBox.width * 0.25
         this.giftBox.scale.set(this.giftBoxScale)
-        
+
         this.giftBox.interactive = true;
         this.giftBox.buttonMode = true;
         this.giftBox.on('mousedown', this.collectGift.bind(this)).on('touchstart', this.collectGift.bind(this));
         this.addChild(this.giftBox)
-        this.giftBox.x = this.giftBox.width// * 1.25;
+        this.giftBox.x = this.giftBox.width // * 1.25;
         this.giftBox.y = this.confirmButton.y
         this.giftBoxSin = 0;
         this.boxSin = 0;
@@ -173,10 +173,10 @@ export default class GameOverCatsContainer extends UIList
     {
         if (this.visible)
         {
-            if (this.giftBox.visible)// && this.giftBox.ableToRotate)
+            if (this.giftBox.visible) // && this.giftBox.ableToRotate)
             {
-                this.giftBox.rotation = Math.sin(this.giftBoxSin) * 0.2// - 0.1
-                this.box.rotation = Math.cos(this.giftBoxSin) * 0.2// - 0.1
+                this.giftBox.rotation = Math.sin(this.giftBoxSin) * 0.2 // - 0.1
+                this.box.rotation = Math.cos(this.giftBoxSin) * 0.2 // - 0.1
                 if (this.giftBox.ableToRotate)
                 {
                     this.giftBox.scale.x = this.giftBoxScale + Math.cos(this.giftBoxSin) * 0.2
@@ -202,6 +202,11 @@ export default class GameOverCatsContainer extends UIList
     }
     collectGift()
     {
+        FBInstant.logEvent(
+            'collect_game_over_gift',
+            1,
+            {},
+        );
         this.onCollectGift.dispatch();
         SOUND_MANAGER.play('open_chest_01')
         this.giftBox.visible = false;
@@ -283,9 +288,10 @@ export default class GameOverCatsContainer extends UIList
                 this.addCatItem(i);
                 realPoints.push(catList[i]);
 
-                if(this.leveledShopData){
+                if (this.leveledShopData)
+                {
                     catList[i] *= this.leveledShopData.value;
-                    catList[i] = Math.ceil(catList[i]);                    
+                    catList[i] = Math.ceil(catList[i]);
                 }
             }
 
@@ -339,7 +345,7 @@ export default class GameOverCatsContainer extends UIList
     showGiftBox()
     {
         this.giftBoxSin = 0;
-        this.giftBox.rotation =  Math.sin(this.giftBoxSin) * 0.2 - 0.1;
+        this.giftBox.rotation = Math.sin(this.giftBoxSin) * 0.2 - 0.1;
         this.giftBox.scale.set(0);
         TweenLite.to(this.giftBox.scale, 0.75,
         {
@@ -402,8 +408,9 @@ export default class GameOverCatsContainer extends UIList
                 let globalCoinPos = this.coinSprite.getGlobalPosition();
                 globalCoinPos.x += this.coinSprite.width / 2;
 
-                this.coinSound ++;
-                if(this.coinSound % 2 == 0){
+                this.coinSound++;
+                if (this.coinSound % 2 == 0)
+                {
                     SOUND_MANAGER.play(getCoinSound(), 0.5)
                 }
 

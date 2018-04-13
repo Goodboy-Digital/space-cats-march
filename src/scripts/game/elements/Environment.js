@@ -152,7 +152,7 @@ export default class Environment extends PIXI.Container
             let toClose = true;
             let acc = 5;
 
-            tempStar.scale.set(config.height * 0.01 / tempStar.height * tempStar.alpha)
+            tempStar.scale.set(config.height * 0.008 / tempStar.height * tempStar.alpha)
 
             while (toClose || acc > 0)
             {
@@ -162,7 +162,7 @@ export default class Environment extends PIXI.Container
                 tempStar.x = Math.cos(angle) * radius + config.width / 2;
                 tempStar.y = Math.sin(angle) * radius + config.height / 2;
                 tempStar.velocity = {
-                    y: config.height * 0.005 * tempStar.alpha,
+                    y: config.height * 0.01 * tempStar.alpha,
                     x: 0
                 }
                 toClose = false;

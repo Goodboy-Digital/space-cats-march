@@ -5,7 +5,7 @@ data.push(
     shopType: 'soft',
     type: 'double_points',
     var: 'actionMultiplier',
-    shopDesc: 'actionSpeed',
+    shopDesc: 'Multiply points on\neach cat collected',
     default: 1,
     value: 2,    
     icon: 'coin_pig',
@@ -43,8 +43,8 @@ data.push(
         activeTime:
         {
             typeCurve: 'linearTween',
-            zero: 15,
-            min: 15,
+            zero: 10,
+            min: 10,
             max: 60,
         },
 
@@ -56,7 +56,7 @@ data.push(
     shopType: 'soft',
     type: 'double_speed',
     var: 'actionSpeed',
-    shopDesc: 'actionSpeed',
+    shopDesc: 'Speed Up',
     default: 1,
     value: 2,    
     icon: 'rollerskate',
@@ -108,7 +108,7 @@ data.push(
     shopType: 'soft',
     type: 'auto_collect',
     var: 'actionAutoCollect',
-    shopDesc: 'actionSpeed',
+    shopDesc: 'Temporary\nautocollect',
     default: false,
     value: true,    
     icon: 'automate',

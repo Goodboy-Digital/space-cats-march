@@ -39,7 +39,7 @@ data.push(
     var: '',
     default: 1,    
     icon: 'discount',
-    shopDesc: 'actionSpeed',
+    shopDesc: 'Reduce all the prices on shop',
     activeTime: 15,
     level: 1,
     levelMax: 50,

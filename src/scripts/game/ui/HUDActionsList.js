@@ -111,6 +111,11 @@ this.autoCollect.ableToAct = true;
     {
         this.visible = true;
         this.updateVerticalList();
+        for (var i = 0; i < this.itensList.length; i++){
+
+            this.itensList[i].hideTimer();
+        }
+        
         for (var i = 0; i < this.elementsList.length; i++)
         {
             TweenLite.from(this.elementsList[i], 0.3,

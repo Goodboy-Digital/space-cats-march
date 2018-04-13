@@ -336,7 +336,11 @@ export default class CatItemList extends PIXI.Container
             targY += this.itemHeight / 2;
             target = Math.ceil(targY / this.itemHeight) * this.itemHeight
         }
+        // console.log(target, this.catListContainer.y, 'TARGETTT');
         this.upButton.visible = true;
+        if(this.catListContainer.y >= 0){
+            this.upButton.visible = false;            
+        }
         this.downButton.visible = true;
         if (target > 0)
         {

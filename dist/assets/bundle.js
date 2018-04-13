@@ -36719,8 +36719,9 @@ window.CLASSES = {};
 window.PAWN = {
     width: 50,
     height: 50
-    // window.console.log = function() {}
-};window.console.warn = function () {};
+};
+window.console.log = function () {};
+window.console.warn = function () {};
 window.console.groupCollapsed = function (teste) {
     return teste;
 }; //('hided warnings')
@@ -58619,7 +58620,7 @@ var GameData = function () {
             tokens: 1
         };
 
-        this.version = '0.1.0.1';
+        this.version = '0.1.0.2';
 
         this.mute = false;
 
@@ -58691,6 +58692,14 @@ var GameData = function () {
             }
             this.updateCatsAllowed(0);
             this[data.dataType][data.id].level++;
+
+            if (this[data.dataType][data.id].level %= 50) {
+
+                FBInstant.logEvent('item_upgrade', 1, {
+                    type: this[data.staticData].type,
+                    level: this[data.dataType][data.id].level
+                });
+            }
             this.SAVE();
         }
     }, {
@@ -58920,10 +58929,16 @@ var GameData = function () {
     }, {
         key: 'sendCatsToEarth',
         value: function sendCatsToEarth() {
+            FBInstant.logEvent('reset_cats', 1, {
+                trophys: this.trophyData.collected,
+                coins: this.moneyData.currentCoins,
+                total_cats: this.countActiveCats()
+            });
             this.updateTrophy(this.getNumberTrophyToSend());
             this.resetCatData();
             this.moneyData.currentCoins = 0;
             this.resetShop();
+
             this.SAVE();
         }
     }, {
@@ -58961,11 +58976,25 @@ var GameData = function () {
             this.SAVE();
         }
     }, {
+        key: 'countActiveCats',
+        value: function countActiveCats() {
+            var cats = 0;
+            for (var i = 0; i < this.catsData.length; i++) {
+                if (this.catsData[i].active) {
+                    cats++;
+                }
+            }
+            return cats;
+        }
+    }, {
         key: 'updateCatsAllowed',
         value: function updateCatsAllowed(points) {
             this.addCoins(points);
             if (points > this.maxPoints) {
                 this.maxPoints = points;
+                FBInstant.logEvent('max_points', 1, {
+                    points: this.maxPoints
+                });
             }
             this.totalCatsAllowed = 1;
             var temp = [true];
@@ -59000,10 +59029,12 @@ var GameData = function () {
     }, {
         key: 'startNewRound',
         value: function startNewRound() {
+            this.allowedList = [];
             this.totalCatsAllowed = 0;
             for (var i = 0; i < this.catsData.length; i++) {
                 if (this.catsData[i].active) {
                     this.totalCatsAllowed++;
+                    this.allowedList.push(this.catsData[i].catID);
                 }
             }
             this.sessionData.tokens = this.gameTokens.quant;
@@ -59014,6 +59045,11 @@ var GameData = function () {
         value: function enableAutoCollect(id) {
             var data = this.catsData[id];
             var staticData = this.getStaticCatData(data.catID);
+
+            FBInstant.logEvent('auto_collect', 1, {
+                catID: data.catID,
+                catName: staticData.catName
+            });
             // console.log(data);
             if (this.trophyData.collected < staticData.autoCollectPrice) {
                 console.log('something wrong');
@@ -59040,7 +59076,7 @@ var GameData = function () {
     }, {
         key: 'getAllowedCatsData',
         value: function getAllowedCatsData() {
-            return this.catsData[Math.floor(Math.random() * this.totalCatsAllowed)];
+            return this.catsData[this.allowedList[Math.floor(Math.random() * this.allowedList.length)]];
         }
     }, {
         key: 'SAVE',
@@ -59676,7 +59712,7 @@ data.push({
     var: '',
     default: 1,
     icon: 'discount',
-    shopDesc: 'actionSpeed',
+    shopDesc: 'Reduce all the prices on shop',
     activeTime: 15,
     level: 1,
     levelMax: 50,
@@ -59742,7 +59778,7 @@ data.push({
     shopType: 'soft',
     type: 'double_points',
     var: 'actionMultiplier',
-    shopDesc: 'actionSpeed',
+    shopDesc: 'Multiply points on\neach cat collected',
     default: 1,
     value: 2,
     icon: 'coin_pig',
@@ -59775,8 +59811,8 @@ data.push({
         },
         activeTime: {
             typeCurve: 'linearTween',
-            zero: 15,
-            min: 15,
+            zero: 10,
+            min: 10,
             max: 60
         }
 
@@ -59787,7 +59823,7 @@ data.push({
     shopType: 'soft',
     type: 'double_speed',
     var: 'actionSpeed',
-    shopDesc: 'actionSpeed',
+    shopDesc: 'Speed Up',
     default: 1,
     value: 2,
     icon: 'rollerskate',
@@ -59832,7 +59868,7 @@ data.push({
     shopType: 'soft',
     type: 'auto_collect',
     var: 'actionAutoCollect',
-    shopDesc: 'actionSpeed',
+    shopDesc: 'Temporary\nautocollect',
     default: false,
     value: true,
     icon: 'automate',
@@ -60889,6 +60925,8 @@ var SpaceCatsScreenManager = function (_ScreenManager) {
         _this.askVideoContainer = new _AskVideoContainer2.default();
         _this.addChild(_this.askVideoContainer);
         _this.askVideoContainer.hide();
+        // this.askVideoContainer.show();
+
 
         _this.coinsExplosion = new _CoinsExplosion2.default();
         _this.addChild(_this.coinsExplosion);
@@ -60980,6 +61018,7 @@ var SpaceCatsScreenManager = function (_ScreenManager) {
             this.coinsExplosion.update(delta);
             this.prizeContainer.update(delta);
             this.videoLoader.update(delta);
+            this.askVideoContainer.update(delta);
 
             if (this.currentPopUp) {
                 this.currentPopUp.update(delta * this.timeScale);
@@ -61004,6 +61043,8 @@ var SpaceCatsScreenManager = function (_ScreenManager) {
     }, {
         key: 'loadVideo',
         value: function loadVideo(callback, callbackParams) {
+            var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+
 
             this.videoLoader.show();
 
@@ -61014,6 +61055,12 @@ var SpaceCatsScreenManager = function (_ScreenManager) {
             } else {
                 this.afterVideoCallback = this.toGameWithBonus.bind(this);
             }
+
+            // console.log(this);
+            FBInstant.logEvent('reaward_video', 1, {
+                type: type
+            });
+
             _FbManager2.default.showAdd(this.afterVideoCallback, callbackParams);
 
             return;
@@ -61975,7 +62022,7 @@ var GameOverPopUp = function (_StandardPop) {
         key: 'onConfirmSpaceship',
         value: function onConfirmSpaceship() {
             this.closeSpaceship();
-            this.screenManager.loadVideo(this.spaceshipVideoCallback.bind(this));
+            this.screenManager.loadVideo(this.spaceshipVideoCallback.bind(this), null, 'spaceship');
         }
     }, {
         key: 'hidePrizeContainer',
@@ -62629,7 +62676,11 @@ var CatItemList = function (_PIXI$Container) {
                 targY += this.itemHeight / 2;
                 target = Math.ceil(targY / this.itemHeight) * this.itemHeight;
             }
+            // console.log(target, this.catListContainer.y, 'TARGETTT');
             this.upButton.visible = true;
+            if (this.catListContainer.y >= 0) {
+                this.upButton.visible = false;
+            }
             this.downButton.visible = true;
             if (target > 0) {
                 TweenLite.to(this.catListContainer, 0.75, {
@@ -63566,6 +63617,10 @@ var ChestContainer = function (_PIXI$Container) {
                 return;
             }
 
+            FBInstant.logEvent('free_chest', 1, {
+                type: 'open'
+            });
+
             this.onConfirm.dispatch();
 
             GAME_DATA.chestData.lastChestTime = new Date();
@@ -63881,6 +63936,7 @@ var GameOverCatsContainer = function (_UIList) {
     }, {
         key: 'collectGift',
         value: function collectGift() {
+            FBInstant.logEvent('collect_game_over_gift', 1, {});
             this.onCollectGift.dispatch();
             SOUND_MANAGER.play('open_chest_01');
             this.giftBox.visible = false;
@@ -64896,6 +64952,11 @@ var HUDActionsList = function (_UIList) {
         value: function show() {
             this.visible = true;
             this.updateVerticalList();
+            for (var i = 0; i < this.itensList.length; i++) {
+
+                this.itensList[i].hideTimer();
+            }
+
             for (var i = 0; i < this.elementsList.length; i++) {
                 TweenLite.from(this.elementsList[i], 0.3, {
                     delay: 0.1 * i + 0.2,
@@ -65035,6 +65096,12 @@ var HUDActionContainer = function (_PIXI$Container) {
     }
 
     (0, _createClass3.default)(HUDActionContainer, [{
+        key: 'hideTimer',
+        value: function hideTimer() {
+            this.cooldown = 0;
+            this.coolDownLabel.text = '';
+        }
+    }, {
         key: 'setTexture',
         value: function setTexture(texture) {
 
@@ -65633,7 +65700,7 @@ var ShopPopUp = function (_StandardPop) {
         _this.shopList.onVideoItemShop.add(function (item) {
             var staticData = GAME_DATA[item.staticData][item.id];
             console.log(item);
-            _this.screenManager.loadVideo(_this.openVideoCallback.bind(_this, staticData));
+            _this.screenManager.loadVideo(_this.openVideoCallback.bind(_this, staticData), null, 'open_gold_chest');
         });
 
         _this.shopList.onShowInfo.add(function (item, button) {
@@ -65737,10 +65804,10 @@ var ShopPopUp = function (_StandardPop) {
             this.container.scale.set(0, 2);
             this.updateMoney(GAME_DATA.moneyData.currentCoins, true);
             this.updateTrophy(GAME_DATA.trophyData.collected, true);
-            TweenLite.to(this.container.scale, 1, {
+            TweenLite.to(this.container.scale, 0.25, {
                 x: 1,
                 y: 1,
-                ease: Elastic.easeOut
+                ease: Back.easeOut
             });
         }
     }, {
@@ -67689,7 +67756,7 @@ module.exports = exports['default'];
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+        value: true
 });
 
 var _getPrototypeOf = __webpack_require__(3);
@@ -67741,123 +67808,155 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var AskVideoContainer = function (_UIList) {
-    (0, _inherits3.default)(AskVideoContainer, _UIList);
+        (0, _inherits3.default)(AskVideoContainer, _UIList);
 
-    function AskVideoContainer() {
-        (0, _classCallCheck3.default)(this, AskVideoContainer);
+        function AskVideoContainer() {
+                (0, _classCallCheck3.default)(this, AskVideoContainer);
 
-        var _this = (0, _possibleConstructorReturn3.default)(this, (AskVideoContainer.__proto__ || (0, _getPrototypeOf2.default)(AskVideoContainer)).call(this));
+                var _this = (0, _possibleConstructorReturn3.default)(this, (AskVideoContainer.__proto__ || (0, _getPrototypeOf2.default)(AskVideoContainer)).call(this));
 
-        _this.onHide = new _signals2.default();
-        _this.onConfirm = new _signals2.default();
-        _this.onCancel = new _signals2.default();
+                _this.onHide = new _signals2.default();
+                _this.onConfirm = new _signals2.default();
+                _this.onCancel = new _signals2.default();
 
-        _this.prizeDark = new PIXI.Graphics().beginFill(0).drawRect(0, 0, _config2.default.width, _config2.default.height); //new PIXI.Sprite(PIXI.Texture.from('UIpiece.png'));
-        _this.prizeDark.alpha = 0.75;
-        _this.prizeDark.interactive = true;
-        // this.prizeDark.buttonMode = true;
-        // this.prizeDark.on('mousedown', this.hideCallback.bind(this)).on('touchstart', this.hideCallback.bind(this));
-        _this.addChild(_this.prizeDark);
+                _this.prizeDark = new PIXI.Graphics().beginFill(0).drawRect(0, 0, _config2.default.width, _config2.default.height); //new PIXI.Sprite(PIXI.Texture.from('UIpiece.png'));
+                _this.prizeDark.alpha = 0.75;
+                _this.prizeDark.interactive = true;
+                // this.prizeDark.buttonMode = true;
+                // this.prizeDark.on('mousedown', this.hideCallback.bind(this)).on('touchstart', this.hideCallback.bind(this));
+                _this.addChild(_this.prizeDark);
 
-        _this.infoContainer = new PIXI.Container();
-        var shipInfoSprite = new PIXI.Sprite.from('info_panel');
-        _this.infoContainer.addChild(shipInfoSprite);
+                _this.infoContainer = new PIXI.Container();
+                var shipInfoSprite = new PIXI.Sprite.from('info_panel');
+                _this.infoContainer.addChild(shipInfoSprite);
 
-        _this.addChild(_this.infoContainer);
-        _this.infoScale = _config2.default.height / _this.infoContainer.height * 0.5;
-        _this.infoContainer.scale.set(_this.infoScale);
-        _this.infoContainer.pivot.x = shipInfoSprite.width / 2;
-        _this.infoContainer.pivot.y = shipInfoSprite.height / 2;
+                _this.addChild(_this.infoContainer);
+                _this.infoScale = _config2.default.height / _this.infoContainer.height * 0.5;
+                _this.infoContainer.scale.set(_this.infoScale);
+                _this.infoContainer.pivot.x = shipInfoSprite.width / 2;
+                _this.infoContainer.pivot.y = shipInfoSprite.height / 2;
 
-        _this.infoContainer.x = _config2.default.width / 2;
-        _this.infoContainer.y = _config2.default.height / 2;
+                _this.infoContainer.x = _config2.default.width / 2;
+                _this.infoContainer.y = _config2.default.height / 2;
 
-        _this.confirmButton = new _UIButton2.default('icon_confirm'); //PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
-        // this.confirmButton.anchor.set(0.5)
-        _this.confirmButton.scale.set(shipInfoSprite.height / _this.confirmButton.height * 0.15);
-        _this.confirmButton.interactive = true;
-        _this.confirmButton.buttonMode = true;
-        _this.confirmButton.x = shipInfoSprite.width - _this.confirmButton.width;
-        _this.confirmButton.y = shipInfoSprite.height - _this.confirmButton.height;
-        _this.confirmButton.on('mouseup', _this.confirm.bind(_this)).on('touchend', _this.confirm.bind(_this));
-        _this.infoContainer.addChild(_this.confirmButton);
+                _this.titlePrizes = new PIXI.Sprite.from('video_rewards_title');
+                _this.titlePrizes.anchor.set(0.5, 1);
+                _this.titlePrizesScale = _config2.default.width / _this.titlePrizes.width * 0.85;
+                _this.titlePrizes.scale.set(_this.titlePrizesScale);
+                _this.addChild(_this.titlePrizes);
+                _this.titlePrizes.x = _config2.default.width / 2;
+                _this.titlePrizes.y = _config2.default.height / 2 - _this.infoContainer.height * 0.5;
 
-        _this.chest = new PIXI.Sprite(PIXI.Texture.from('open_silver_chest'));
-        _this.chest.anchor.set(0.5);
-        _this.chest.scale.set(shipInfoSprite.width / _this.chest.width * 0.75);
+                _this.chest = new PIXI.Sprite(PIXI.Texture.from('open_silver_chest'));
+                _this.chest.anchor.set(0.5);
+                _this.chestScale = shipInfoSprite.width / _this.chest.width * 0.75;
+                _this.chest.scale.set(_this.chestScale);
 
-        _this.infoContainer.addChild(_this.chest);
-        _this.chest.x = shipInfoSprite.width / 2;
-        _this.chest.y = shipInfoSprite.height / 2;
+                _this.infoContainer.addChild(_this.chest);
+                _this.chest.x = shipInfoSprite.width / 2;
+                _this.chest.y = shipInfoSprite.height / 2.5;
 
-        _this.cancelButton = new _UIButton2.default('icon_close');
-        // this.cancelButton.anchor.set(0.5)
-        _this.cancelButton.scale.set(shipInfoSprite.height / _this.cancelButton.height * 0.15);
-        _this.cancelButton.interactive = true;
-        _this.cancelButton.buttonMode = true;
-        _this.cancelButton.x = _this.cancelButton.width;
-        _this.cancelButton.y = shipInfoSprite.height - _this.cancelButton.height;
-        _this.cancelButton.on('mouseup', _this.cancel.bind(_this)).on('touchend', _this.cancel.bind(_this));
-        _this.infoContainer.addChild(_this.cancelButton);
+                _this.confirmButton = new _UIButton2.default('icon_play_video'); //PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
+                // this.confirmButton.anchor.set(0.5)
+                _this.playButtonScale = shipInfoSprite.height / _this.confirmButton.height * 0.25;
+                _this.confirmButton.scale.set(_this.playButtonScale);
+                _this.confirmButton.interactive = true;
+                _this.confirmButton.buttonMode = true;
+                _this.confirmButton.x = shipInfoSprite.width - _this.confirmButton.width / 2 - shipInfoSprite.width * 0.05;
+                _this.confirmButton.y = shipInfoSprite.height - _this.confirmButton.height / 2 - shipInfoSprite.width * 0.05;
+                _this.confirmButton.on('mouseup', _this.confirm.bind(_this)).on('touchend', _this.confirm.bind(_this));
+                _this.infoContainer.addChild(_this.confirmButton);
 
-        _this.descriptionLabel = new PIXI.Text('do you want to watch a video\n bla bla bla bla bla', {
-            fontFamily: 'blogger_sansregular',
-            fontSize: '24px',
-            fill: 0xFFFFFF,
-            align: 'center',
-            fontWeight: '800'
-        });
-        _this.descriptionLabel.x = shipInfoSprite.width / 2 - _this.descriptionLabel.width / 2;
-        _this.descriptionLabel.y = 30;
-        _this.infoContainer.addChild(_this.descriptionLabel);
+                _this.playButtonSin = 0;
 
-        return _this;
-    }
+                _this.cancelButton = new _UIButton2.default('icon_close');
+                // this.cancelButton.anchor.set(0.5)
+                _this.cancelButton.scale.set(shipInfoSprite.height / _this.cancelButton.height * 0.15);
+                _this.cancelButton.interactive = true;
+                _this.cancelButton.buttonMode = true;
+                _this.cancelButton.x = _this.cancelButton.width / 2 + shipInfoSprite.width * 0.05;
+                _this.cancelButton.y = shipInfoSprite.height - _this.cancelButton.height / 2 - shipInfoSprite.width * 0.05;
+                _this.cancelButton.on('mouseup', _this.cancel.bind(_this)).on('touchend', _this.cancel.bind(_this));
+                _this.infoContainer.addChild(_this.cancelButton);
 
-    (0, _createClass3.default)(AskVideoContainer, [{
-        key: 'confirm',
-        value: function confirm() {
-            this.onConfirm.dispatch();
-            this.hideCallback();
+                // this.descriptionLabel = new PIXI.Text('Watch a video\n and open a scret chest',
+                // {
+                //     fontFamily: 'blogger_sansregular',
+                //     fontSize: '24px',
+                //     fill: 0xFFFFFF,
+                //     align: 'center',
+                //     fontWeight: '800'
+                // });
+                // this.descriptionLabel.x = shipInfoSprite.width / 2 - this.descriptionLabel.width / 2;
+                // this.descriptionLabel.y = 30
+                // this.infoContainer.addChild(this.descriptionLabel)
+
+                return _this;
         }
-    }, {
-        key: 'cancel',
-        value: function cancel() {
-            this.onCancel.dispatch();
-            this.hideCallback();
-        }
-    }, {
-        key: 'update',
-        value: function update(delta) {
-            if (this.visible) {
-                this.starBackground.rotation += 0.05;
-            }
-        }
-    }, {
-        key: 'hideCallback',
-        value: function hideCallback() {
-            this.onHide.dispatch();
-            this.hide();
-        }
-    }, {
-        key: 'hide',
-        value: function hide() {
-            this.visible = false;
-        }
-    }, {
-        key: 'show',
-        value: function show() {
-            this.infoContainer.scale.set(0);
 
-            TweenLite.to(this.infoContainer.scale, 0.5, { x: this.infoScale, y: this.infoScale, ease: Back.easeOut });
+        (0, _createClass3.default)(AskVideoContainer, [{
+                key: 'confirm',
+                value: function confirm() {
+                        this.onConfirm.dispatch();
+                        this.hideCallback();
+                }
+        }, {
+                key: 'cancel',
+                value: function cancel() {
+                        this.onCancel.dispatch();
+                        this.hideCallback();
+                }
+        }, {
+                key: 'update',
+                value: function update(delta) {
+                        if (this.visible) {
+                                this.playButtonSin += 10 * delta;
+                                this.playButtonSin %= Math.PI * 2;
+                                this.confirmButton.rotation = Math.sin(this.playButtonSin) * 0.1;
+                                this.confirmButton.scale.set(this.playButtonScale + Math.cos(this.playButtonSin) * 0.01, this.playButtonScale + Math.sin(this.playButtonSin) * 0.01);
 
-            TweenLite.to(this.prizeDark, 0.5, {
-                alpha: 0.75
-            });
-            this.visible = true;
-        }
-    }]);
-    return AskVideoContainer;
+                                this.chest.scale.set(this.chestScale + Math.cos(this.playButtonSin) * 0.01, this.chestScale + Math.sin(this.playButtonSin) * 0.01);
+
+                                // this.videoShine.rotation += delta * 1.5
+                                // this.videoShine.rotation %= Math.PI * 2;
+                        }
+                }
+        }, {
+                key: 'hideCallback',
+                value: function hideCallback() {
+                        this.onHide.dispatch();
+                        this.hide();
+                }
+        }, {
+                key: 'hide',
+                value: function hide() {
+                        this.visible = false;
+                }
+        }, {
+                key: 'show',
+                value: function show() {
+                        this.infoContainer.scale.set(0);
+
+                        TweenLite.to(this.infoContainer.scale, 0.5, { x: this.infoScale, y: this.infoScale, ease: Back.easeOut });
+
+                        this.titlePrizes.scale.set(0);
+                        TweenLite.to(this.titlePrizes.scale, 1, {
+                                delay: 0.5,
+                                onStart: function onStart() {
+                                        SOUND_MANAGER.play('pickup_star');
+                                },
+                                x: this.titlePrizesScale,
+                                y: this.titlePrizesScale,
+                                ease: Elastic.easeOut
+                        });
+
+                        TweenLite.to(this.prizeDark, 0.5, {
+                                alpha: 0.75
+                        });
+                        this.visible = true;
+                }
+        }]);
+        return AskVideoContainer;
 }(_UIList3.default);
 
 exports.default = AskVideoContainer;
@@ -72954,12 +73053,18 @@ var GameScreen = function (_Screen) {
     }, {
         key: 'openOfferVideoCallback',
         value: function openOfferVideoCallback() {
+            FBInstant.logEvent('in_game_chest', 1, {
+                type: 'accept'
+            });
             this.screenManager.closeVideo();
             this.screenManager.prizeContainer.show(3);
         }
     }, {
         key: 'offerPrize',
         value: function offerPrize() {
+            FBInstant.logEvent('in_game_chest', 1, {
+                type: 'offer'
+            });
             this.screenManager.showAskVideo();
             this.isPaused = true;
             // this.onConfirmOffer();
@@ -72967,7 +73072,7 @@ var GameScreen = function (_Screen) {
     }, {
         key: 'onConfirmOffer',
         value: function onConfirmOffer() {
-            this.screenManager.loadVideo(this.openOfferVideoCallback.bind(this));
+            this.screenManager.loadVideo(this.openOfferVideoCallback.bind(this), null, 'in_game_chest');
             this.isPaused = true;
         }
     }, {
@@ -73061,6 +73166,10 @@ var GameScreen = function (_Screen) {
             var leveldActionData = GAME_DATA.getActionStats(actionData);
 
             this.currentActions.push(actionData);
+
+            FBInstant.logEvent('gameplay_action', 1, {
+                type: actionData.type
+            });
 
             if (actionData.var == 'actionAutoCollect') {
                 this.inGameEffects.addAutocollectlModeItem();
@@ -73328,6 +73437,10 @@ var GameScreen = function (_Screen) {
 
             _gsap2.default.killTweensOf(this);
 
+            FBInstant.logEvent('gameplay', 1, {
+                type: 'reset'
+            });
+
             // console.log(this.gameSpeed, this.actionSpeed, 'START SPEED');
             this.scaleSound();
         }
@@ -73580,6 +73693,10 @@ var GameScreen = function (_Screen) {
                         x: item.x,
                         y: item.y - 30
                     }, '+' + _utils2.default.formatPointsLabel(tempTrophy / MAX_NUMBER), 0, 3, 1);
+                    FBInstant.logEvent('in_game_collectables', 1, {
+                        type: 'trophy'
+                    });
+
                     break;
                 case 1:
                     this.addAutoCollectMode();
@@ -73598,11 +73715,20 @@ var GameScreen = function (_Screen) {
                         x: item.x,
                         y: item.y - 20
                     }, 15);
+                    FBInstant.logEvent('in_game_collectables', 1, {
+                        type: 'coins'
+                    });
                     break;
                 case 3:
+                    FBInstant.logEvent('in_game_collectables', 1, {
+                        type: 'chest'
+                    });
                     this.offerPrize();
                     break;
                 case 4:
+                    FBInstant.logEvent('in_game_collectables', 1, {
+                        type: 'gift'
+                    });
                     this.screenManager.prizeContainer.show(1);
                     this.isPaused = true;
                     break;
@@ -74930,7 +75056,7 @@ var Environment = function (_PIXI$Container) {
                 var toClose = true;
                 var acc = 5;
 
-                tempStar.scale.set(_config2.default.height * 0.01 / tempStar.height * tempStar.alpha);
+                tempStar.scale.set(_config2.default.height * 0.008 / tempStar.height * tempStar.alpha);
 
                 while (toClose || acc > 0) {
                     acc--;
@@ -74939,7 +75065,7 @@ var Environment = function (_PIXI$Container) {
                     tempStar.x = Math.cos(angle) * radius + _config2.default.width / 2;
                     tempStar.y = Math.sin(angle) * radius + _config2.default.height / 2;
                     tempStar.velocity = {
-                        y: _config2.default.height * 0.005 * tempStar.alpha,
+                        y: _config2.default.height * 0.01 * tempStar.alpha,
                         x: 0
                     };
                     toClose = false;
