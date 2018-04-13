@@ -196,7 +196,7 @@ export default class Environment extends PIXI.Container
     }
     specialBackground()
     {
-        if(!this.gameStarted){
+        if(!this.game.gameStarted){
             this.currentColorTween = utils.addColorTween(this.backgroundGraphics, this.backgroundGraphics.tint, 0x04001e, time).tween;
             return;
         }

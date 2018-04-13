@@ -637,6 +637,7 @@ export default class GameScreen extends Screen
         }, 1000);
         this.resetActionsVariables();
         this.scaleSound();
+       
     }
     killAfterSpecial()
     {
@@ -1053,7 +1054,7 @@ export default class GameScreen extends Screen
             this.specialAcc += labelData.special;
         }
 
-        this.specialAcc += 0.5
+        // this.specialAcc += 0.5
         // if (this.isSpecialMode)
         // {
         //     points *= 2;

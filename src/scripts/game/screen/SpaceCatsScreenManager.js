@@ -222,6 +222,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
                 SOUND_MANAGER.playLoopOnce('spacecat_menu_music')
                 break;
             case 'gameover':
+            console.log('stopALLL');
                 SOUND_MANAGER.stopAll();
                 SOUND_MANAGER.playLoopOnce('spacecat_menu_music')
                 break;

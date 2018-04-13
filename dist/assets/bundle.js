@@ -58622,7 +58622,7 @@ var GameData = function () {
             tokens: 1
         };
 
-        this.version = '0.0.0.17';
+        this.version = '0.0.0.18';
 
         this.mute = false;
 
@@ -60934,6 +60934,7 @@ var SpaceCatsScreenManager = function (_ScreenManager) {
                     SOUND_MANAGER.playLoopOnce('spacecat_menu_music');
                     break;
                 case 'gameover':
+                    console.log('stopALLL');
                     SOUND_MANAGER.stopAll();
                     SOUND_MANAGER.playLoopOnce('spacecat_menu_music');
                     break;
@@ -73587,7 +73588,7 @@ var GameScreen = function (_Screen) {
                 this.specialAcc += labelData.special;
             }
 
-            this.specialAcc += 0.5;
+            // this.specialAcc += 0.5
             // if (this.isSpecialMode)
             // {
             //     points *= 2;
@@ -74808,7 +74809,7 @@ var Environment = function (_PIXI$Container) {
         value: function specialBackground() {
             var _this2 = this;
 
-            if (!this.gameStarted) {
+            if (!this.game.gameStarted) {
                 this.currentColorTween = _utils2.default.addColorTween(this.backgroundGraphics, this.backgroundGraphics.tint, 0x04001e, time).tween;
                 return;
             }
