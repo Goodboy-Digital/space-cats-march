@@ -15,7 +15,7 @@ import FbManager from './fb/FbManager'
 
 window.STORAGE = new LocalStorage();
 
-window.GAME_ID = 177491639568484
+window.GAME_ID = 572860816402905
     // window.TOKEN = 'EAAYsfZAxiFmMBAGRGBwsQbhqBRq04GhaWGc4KOC2YRFEDzf8yA0cW0h8CxlZAkx6mnUK3bIJI9FDYkUASGTgAycujNZBqRZCI2AzpmiQfpFgpW61PNhqNfZCdIgkEl93de3LXyn00ZAtAPShcEVAjf9wZAhZCSMKE8R809ND4LcQ7gZDZD'
 
 window.CATS_POOL = [];
@@ -103,18 +103,18 @@ function startLoader()
         .load(configGame);
 
     // console.log('try to connect');
-    // FbManager.connect().then(() =>
-    //     {
-    //         FbManager.trackLoader(PIXI.loader);
+    FbManager.connect().then(() =>
+        {
+            FbManager.trackLoader(PIXI.loader);
 
-    //     })
-    //     .catch(e =>
-    //     {
+        })
+        .catch(e =>
+        {
 
-    //         console.log('CONNECT111?');
-    //         console.log(e);
+            console.log('CONNECT111?');
+            console.log(e);
 
-    //     })
+        })
 }
 
 
