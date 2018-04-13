@@ -22,15 +22,34 @@ export default class SoundManager extends AbstractSoundManager
     }
     load(list)
     {
+        // alert(list)
         for (var i = list.length - 1; i >= 0; i--)
         {
+            let url = list[i].url.substr(0, list[i].url.length - 4)
+
+            if (window.iOS)
+            {
+                url += '.mp3'
+            }
+            else
+            {
+                url += '.ogg'
+            }
+
+            // if(i == 0){
+            //     alert(url)
+            // }
+
             let sound = new Howl(
             {
-                src: [list[i].url],
+                src: [url],
+                // src: [url+'.ogg', url+'.mp3'],
+                // src: [list[i].url],
                 autoplay: false,
                 loop: false,
                 volume: 1,
-                onend: (e)=>{
+                onend: (e) =>
+                {
                     this.removeFromPlayListSoundId(e)
                 }
             });
@@ -38,7 +57,8 @@ export default class SoundManager extends AbstractSoundManager
         }
 
     }
-    setRateOnLoops(rate){
+    setRateOnLoops(rate)
+    {
         console.log(rate);
         rate = Math.max(0.5, rate)
         rate = Math.min(4, rate)
@@ -46,8 +66,9 @@ export default class SoundManager extends AbstractSoundManager
         {
             if (this.isPlaying(audio_id))
             {
-                if(this.audioList[audio_id].loop){
-                    this.audioList[audio_id].rate(rate)//rate;
+                if (this.audioList[audio_id].loop)
+                {
+                    this.audioList[audio_id].rate(rate) //rate;
                 }
             }
         }
@@ -65,9 +86,14 @@ export default class SoundManager extends AbstractSoundManager
         this.audioList[id].loop(true);
         this.audioList[id].volume(volume);
         let hid = this.audioList[id].play();
-        this.playingList.push({sound:this.audioList[id], hID: hid});
+        this.playingList.push(
+        {
+            sound: this.audioList[id],
+            hID: hid
+        });
     }
-    playOnce(id, volume = 1){
+    playOnce(id, volume = 1)
+    {
         this.audioList[id].stop();
         this.play(id, volume);
     }
@@ -76,7 +102,11 @@ export default class SoundManager extends AbstractSoundManager
         this.audioList[id].loop(false);
         this.audioList[id].volume(volume);
         let hid = this.audioList[id].play();
-        this.playingList.push({sound:this.audioList[id], hID: hid});
+        this.playingList.push(
+        {
+            sound: this.audioList[id],
+            hID: hid
+        });
     }
     stop(id)
     {
@@ -88,7 +118,11 @@ export default class SoundManager extends AbstractSoundManager
         this.audioList[id].stop();
         this.removeFromPlayList(id);
         let hid = this.audioList[id].play();
-        this.playingList.push({sound:this.audioList[id], hID: hid});
+        this.playingList.push(
+        {
+            sound: this.audioList[id],
+            hID: hid
+        });
         this.audioList[id].fade(this.audioList[id].volume, volume, time);
     }
     fadeOutAll(time = 1000)
@@ -125,7 +159,7 @@ export default class SoundManager extends AbstractSoundManager
             this.playingList.splice(i, 1);
         }
     }
-     removeFromPlayListSoundId(hID)
+    removeFromPlayListSoundId(hID)
     {
         for (var i = this.playingList.length - 1; i >= 0; i--)
         {
@@ -163,12 +197,15 @@ export default class SoundManager extends AbstractSoundManager
     {
         Howler.volume(0);
         this.isMute = true;
+
+        console.log(this.isMute, ' mute');
     }
 
     unmute()
     {
         Howler.volume(0.5);
         this.isMute = false;
+        console.log(this.isMute, 'un mute');
     }
 
     toggleMute()

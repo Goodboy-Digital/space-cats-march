@@ -179,37 +179,7 @@ export default class GameOverPopUp extends StandardPop
         this.gameOverCatsContainer.hide();
         this.gameOverCatsContainer.onHide.add(this.onHideCatsGameOverList.bind(this));
         this.gameOverCatsContainer.onCollectGift.add(this.onCollectGift.bind(this));
-        // this.gameOverCatsContainer.show([5000,50,50,50,50,50,50,50,50,50,50,50]);
 
-        // this.hud = new HUD();
-        // this.container.addChild(this.hud)
-        // this.hud.x = -config.width / 2 - 300
-
-
-        // setTimeout(()=>{
-        //     TweenLite.to(this, 1,
-        // {
-        //     onComplete: () =>{
-
-        //         SOUND_MANAGER.play('pickup_star', 0.75)
-        //     },
-        //     onUpdate: () =>
-        //     {
-        //         SOUND_MANAGER.play('star_0' + Math.ceil(Math.random() * 3), 0.5)
-        //         let globalCoinPos = this.trophyContainer.getGlobalPosition();
-        //         globalCoinPos.x -= this.trophyContainer.width * 0.15
-        //         globalCoinPos.y -= this.trophyContainer.height * 0.15
-        //         window.screenManager.addCoinsParticles(globalCoinPos, 1,
-        //         {
-        //             texture: 'trophy',
-        //             alphaDecress: 0.5,
-        //             gravity: 500,
-        //             scale: 0.03,
-        //             angSpeed: Math.random() * 2 - 1
-        //         });
-        //     }
-        // })
-        // }, 1000);
     }
 
     onCollectGift()

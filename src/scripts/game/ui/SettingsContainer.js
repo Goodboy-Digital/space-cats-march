@@ -207,7 +207,7 @@ export default class SettingsContainer extends ListScroller
         this.idList.w = this.rect.w;
 
 
-        let idlabel = new PIXI.Text('id: 34das3as3554af354sdas3',
+        let idlabel = new PIXI.Text('id: '+GAME_ID,
         {
             fontFamily: 'blogger_sansregular',
             fontSize: '48px',
@@ -216,7 +216,7 @@ export default class SettingsContainer extends ListScroller
             fontWeight: '800'
         });
 
-        idlabel.fitHeight = 0.15;
+        idlabel.fitHeight = 0.25;
         idlabel.scaleContentMax = true;
         this.idList.addChild(idlabel)
         this.idList.elementsList.push(idlabel);
@@ -235,6 +235,9 @@ export default class SettingsContainer extends ListScroller
             // this.marginTop = this.rect.h * 0.3
         this.addItens(this.settingsItens)
 
+        if(GAME_DATA.mute){
+            SOUND_MANAGER.mute();
+        }
         this.updateSoundButton();
         // this.muteList.debug()
         // this.eraseList.debug()
@@ -262,7 +265,10 @@ export default class SettingsContainer extends ListScroller
     toggleSound()
     {
         SOUND_MANAGER.toggleMute();
+        GAME_DATA.mute = SOUND_MANAGER.isMute;
         this.updateSoundButton();
+
+        GAME_DATA.SAVE();
     }
     eraseData()
     {

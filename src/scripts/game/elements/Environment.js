@@ -109,13 +109,6 @@ export default class Environment extends PIXI.Container
 
         this.addChild(this.baseGradient);
 
-
-
-
-
-
-
-
         this.game = game;
 
         this.currentColor = 0;
@@ -149,7 +142,7 @@ export default class Environment extends PIXI.Container
     }
     addStars()
     {
-        let totalStars = 120;
+        let totalStars = 80;
         this.stars = [];
         for (var i = 0; i < totalStars; i++)
         {
@@ -159,7 +152,7 @@ export default class Environment extends PIXI.Container
             let toClose = true;
             let acc = 5;
 
-            tempStar.scale.set(5 / tempStar.height * tempStar.alpha)
+            tempStar.scale.set(config.height * 0.01 / tempStar.height * tempStar.alpha)
 
             while (toClose || acc > 0)
             {
@@ -169,7 +162,7 @@ export default class Environment extends PIXI.Container
                 tempStar.x = Math.cos(angle) * radius + config.width / 2;
                 tempStar.y = Math.sin(angle) * radius + config.height / 2;
                 tempStar.velocity = {
-                    y: config.height * 0.01 * tempStar.alpha,
+                    y: config.height * 0.005 * tempStar.alpha,
                     x: 0
                 }
                 toClose = false;
@@ -203,7 +196,10 @@ export default class Environment extends PIXI.Container
     }
     specialBackground()
     {
-
+        if(!this.gameStarted){
+            this.currentColorTween = utils.addColorTween(this.backgroundGraphics, this.backgroundGraphics.tint, 0x04001e, time).tween;
+            return;
+        }
         TweenLite.killTweensOf(this.currentColorTween);
         clearTimeout(this.specialTimeout);
 

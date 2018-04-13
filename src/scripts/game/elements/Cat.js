@@ -258,7 +258,7 @@ export default class Cat extends PIXI.Container
         this.animation.scale.x = this.animationScaleStandard * 0.5
         this.animation.scale.y = this.animationScaleStandard * 1.5
 
-        TweenLite.to(this.animation.scale, 0.2,
+        TweenLite.to(this.animation.scale, 0.05,
         {
             x: this.animationScaleStandard,
             y: this.animationScaleStandard,

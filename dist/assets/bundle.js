@@ -35230,6 +35230,16 @@ var HUD = function (_PIXI$Container) {
         _this.onStartAction = new _signals2.default();
         _this.onFinishAction = new _signals2.default();
 
+        _this.powerBarGift = new PIXI.Sprite.from('giftbox2');
+
+        _this.powerBarGift.anchor.set(0.5);
+        _this.powerBarGiftScale = _this.powerBarBackground.height / _this.powerBarGift.height * 1.8;
+
+        _this.powerBarGift.scale.set(_this.powerBarGiftScale);
+        _this.powerBarGift.x = _this.powerBarContainer.x + _this.powerBarContainer.width / 2;
+        _this.powerBarGift.y = _this.powerBarContainer.y + _this.powerBarContainer.height / 2;
+        _this.addChild(_this.powerBarGift);
+        _this.powerBarGiftSin = 0;
         _this.hide(true);
 
         return _this;
@@ -35276,6 +35286,8 @@ var HUD = function (_PIXI$Container) {
             }
 
             SOUND_MANAGER.play('button_click');
+
+            this.powerBarGiftSin = 0;
 
             this.quiting = true;
             this.forceQuitButton.scale.set(this.forceQuiteScale * 0.75);
@@ -35352,6 +35364,13 @@ var HUD = function (_PIXI$Container) {
             this.hudActionList.update(delta);
             if (!this.gameStart) {
                 return;
+            }
+            if (this.powerBarGift) {
+                this.powerBarGiftSin += delta * 10;
+
+                this.powerBarGift.rotation = Math.sin(this.powerBarGiftSin) * 0.1;
+
+                this.powerBarGift.scale.set(Math.cos(this.powerBarGiftSin) * 0.02 + this.powerBarGiftScale, Math.sin(this.powerBarGiftSin) * 0.02 + this.powerBarGiftScale);
             }
             return;
             this.catRotationSin += delta * 10;
@@ -36686,7 +36705,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 window.STORAGE = new _LocalStorage2.default();
 
-window.GAME_ID = 165347754123022;
+window.GAME_ID = 177491639568484;
 // window.TOKEN = 'EAAYsfZAxiFmMBAGRGBwsQbhqBRq04GhaWGc4KOC2YRFEDzf8yA0cW0h8CxlZAkx6mnUK3bIJI9FDYkUASGTgAycujNZBqRZCI2AzpmiQfpFgpW61PNhqNfZCdIgkEl93de3LXyn00ZAtAPShcEVAjf9wZAhZCSMKE8R809ND4LcQ7gZDZD'
 
 window.CATS_POOL = [];
@@ -36723,6 +36742,8 @@ window.getCoinSound = function () {
 
 window.MAX_NUMBER = 1000000;
 
+window.iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+
 startLoader();
 
 // window.getPossibleCat = function(id = -1){
@@ -36736,22 +36757,37 @@ startLoader();
 
 
 function startLoader() {
+
     for (var i = 0; i < _manifestImage2.default.length; i++) {
         PIXI.loader.add(_manifestImage2.default[i].id, _manifestImage2.default[i].url);
     }
     for (var i = 0; i < _manifestAudio2.default.length; i++) {
-        PIXI.loader.add(_manifestAudio2.default[i].id, _manifestAudio2.default[i].url);
+
+        var url = _manifestAudio2.default[i].url.substr(0, _manifestAudio2.default[i].url.length - 4);
+
+        if (iOS) {
+            url += '.mp3';
+        } else {
+            url += '.ogg';
+        }
+
+        PIXI.loader.add(_manifestAudio2.default[i].id, url);
     }
     PIXI.loader.add('./assets/fonts/stylesheet.css').load(configGame);
 
-    console.log('try to connect');
-    _FbManager2.default.connect().then(function () {
-        _FbManager2.default.trackLoader(PIXI.loader);
-    }).catch(function (e) {
+    // console.log('try to connect');
+    // FbManager.connect().then(() =>
+    //     {
+    //         FbManager.trackLoader(PIXI.loader);
 
-        console.log('CONNECT111?');
-        console.log(e);
-    });
+    //     })
+    //     .catch(e =>
+    //     {
+
+    //         console.log('CONNECT111?');
+    //         console.log(e);
+
+    //     })
 }
 
 function configGame(evt) {
@@ -36787,6 +36823,9 @@ function myFocusFunction() {
     TweenLite.to(screenManager, 0.5, {
         timeScale: 1
     });
+    if (GAME_DATA.mute) {
+        return;
+    }
     SOUND_MANAGER.unmute();
 }
 
@@ -36795,6 +36834,7 @@ function myBlurFunction() {
     TweenLite.to(screenManager, 0.5, {
         timeScale: 0
     });
+
     SOUND_MANAGER.mute();
 }
 
@@ -58584,6 +58624,8 @@ var GameData = function () {
 
         this.version = '0.0.0.17';
 
+        this.mute = false;
+
         this.resetCatData();
 
         this.minimumAmountOfCatsToReset = 3;
@@ -58832,6 +58874,7 @@ var GameData = function () {
             this.moneyData = data.money;
             this.actionsData = data.actionsData;
             this.shopData = data.shopData;
+            this.mute = data.mute;
             for (var name in data) {
                 var n = name.indexOf("cat");
                 if (n >= 0) {
@@ -58854,7 +58897,8 @@ var GameData = function () {
                 money: this.moneyData,
                 version: this.version,
                 shopData: this.shopData,
-                actionsData: this.actionsData
+                actionsData: this.actionsData,
+                mute: this.mute
             };
             for (var i = 0; i < this.catsData.length; i++) {
                 obj['cat' + this.catsData[i].catID] = this.catsData[i];
@@ -61376,13 +61420,6 @@ var StartPopUp = function (_StandardPop) {
         _this.logo.scale.set(_this.width / _this.logo.width * 0.65);
         _this.container.addChild(_this.logo);
 
-        _this.glass = new PIXI.Sprite.from('glass');
-        _this.glass.anchor.set(0.5);
-        _this.glass.x = _config2.default.width / 2;
-        _this.glass.y = _config2.default.height / 2;
-        _this.glass.scale.set(_this.logoStartScale);
-        // this.screenManager.screensContainer.addChild(this.glass)
-
         // this.container.addChild(this.playButton)
 
         _this.playButton = new _UIButton2.default('icon_play', 0.6); //new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
@@ -61396,16 +61433,28 @@ var StartPopUp = function (_StandardPop) {
         _this.container.addChild(_this.playButton);
         _this.playButton.scale.set(0);
 
-        _this.settingsButton = new _UIButton2.default('info', 0.85);
+        _this.infoButton = new _UIButton2.default('info', 0.85);
+        _this.infoButtonScale = _this.logoMask.height / _this.infoButton.height * 0.15;
+        _this.infoButton.scale.set(_this.infoButtonScale, _this.infoButtonScale);
+        // console.log(this.infoButton.width);
+        _this.infoButton.x = _config2.default.width / 2 - _this.infoButton.width;
+        _this.infoButton.y = -_config2.default.height / 2 + _this.infoButton.height; // + config.height * 0.2;
+        // this.infoButton.y = -300
+        _this.infoButton.interactive = true;
+        _this.infoButton.buttonMode = true;
+        _this.infoButton.on('mousedown', _this.openInfo.bind(_this)).on('touchstart', _this.openInfo.bind(_this));
+        _this.container.addChild(_this.infoButton);
+
+        _this.settingsButton = new _UIButton2.default('icon_settings', 0.75);
         _this.settingsButtonScale = _this.logoMask.height / _this.settingsButton.height * 0.15;
         _this.settingsButton.scale.set(_this.settingsButtonScale, _this.settingsButtonScale);
         // console.log(this.settingsButton.width);
-        _this.settingsButton.x = _config2.default.width / 2 - _this.settingsButton.width;
-        _this.settingsButton.y = -_config2.default.height / 2 + _this.settingsButton.height; // + config.height * 0.2;
+        _this.settingsButton.x = -_config2.default.width / 2 + _this.settingsButton.width;
+        _this.settingsButton.y = -_config2.default.height / 2 + _this.settingsButton.height;
         // this.settingsButton.y = -300
         _this.settingsButton.interactive = true;
         _this.settingsButton.buttonMode = true;
-        _this.settingsButton.on('mousedown', _this.openInfo.bind(_this)).on('touchstart', _this.openInfo.bind(_this));
+        _this.settingsButton.on('mouseup', _this.openSettings.bind(_this)).on('touchend', _this.openSettings.bind(_this));
         _this.container.addChild(_this.settingsButton);
 
         var settingsLabel = new PIXI.Text(GAME_DATA.version, {
@@ -61425,9 +61474,14 @@ var StartPopUp = function (_StandardPop) {
     }
 
     (0, _createClass3.default)(StartPopUp, [{
+        key: 'openSettings',
+        value: function openSettings() {
+            this.screenManager.openSettings();
+        }
+    }, {
         key: 'openInfo',
         value: function openInfo() {
-            this.screenManager.showInfo({ x: _config2.default.width / 2, y: _config2.default.height / 2 }, 'goodboy_logo_square', 'Made with love <3\nmeow!', { x: 0, y: 0.5 });
+            this.screenManager.showInfo({ x: _config2.default.width / 2, y: _config2.default.height / 2 }, 'goodboy_heart', 'Made with fun and love\n by Goodboy Digital team\nmeow!', { x: 0, y: 0.5 });
 
             SOUND_MANAGER.play('pickup_star');
             SOUND_MANAGER.play(getCatSound());
@@ -61735,37 +61789,7 @@ var GameOverPopUp = function (_StandardPop) {
         _this.gameOverCatsContainer.hide();
         _this.gameOverCatsContainer.onHide.add(_this.onHideCatsGameOverList.bind(_this));
         _this.gameOverCatsContainer.onCollectGift.add(_this.onCollectGift.bind(_this));
-        // this.gameOverCatsContainer.show([5000,50,50,50,50,50,50,50,50,50,50,50]);
 
-        // this.hud = new HUD();
-        // this.container.addChild(this.hud)
-        // this.hud.x = -config.width / 2 - 300
-
-
-        // setTimeout(()=>{
-        //     TweenLite.to(this, 1,
-        // {
-        //     onComplete: () =>{
-
-        //         SOUND_MANAGER.play('pickup_star', 0.75)
-        //     },
-        //     onUpdate: () =>
-        //     {
-        //         SOUND_MANAGER.play('star_0' + Math.ceil(Math.random() * 3), 0.5)
-        //         let globalCoinPos = this.trophyContainer.getGlobalPosition();
-        //         globalCoinPos.x -= this.trophyContainer.width * 0.15
-        //         globalCoinPos.y -= this.trophyContainer.height * 0.15
-        //         window.screenManager.addCoinsParticles(globalCoinPos, 1,
-        //         {
-        //             texture: 'trophy',
-        //             alphaDecress: 0.5,
-        //             gravity: 500,
-        //             scale: 0.03,
-        //             angSpeed: Math.random() * 2 - 1
-        //         });
-        //     }
-        // })
-        // }, 1000);
         return _this;
     }
 
@@ -63746,10 +63770,10 @@ var GameOverCatsContainer = function (_UIList) {
         _this.confirmButton.y = _config2.default.height - _this.confirmButton.height; //* 1.25;
 
         _this.giftBox = new PIXI.Sprite(PIXI.Texture.from('results_newcat_rays_02')); //UIButton('icon_back');
-        var box = new PIXI.Sprite(PIXI.Texture.from('giftbox')); //UIButton('icon_back');
-        box.anchor.set(0.5);
-        box.scale.set(_this.giftBox.width / box.width);
-        _this.giftBox.addChild(box);
+        _this.box = new PIXI.Sprite(PIXI.Texture.from('giftbox')); //UIButton('icon_back');
+        _this.box.anchor.set(0.5);
+        _this.box.scale.set(_this.giftBox.width / _this.box.width);
+        _this.giftBox.addChild(_this.box);
         _this.giftBox.anchor.set(0.5);
         _this.giftBoxScale = _config2.default.width / _this.giftBox.width * 0.25;
         _this.giftBox.scale.set(_this.giftBoxScale);
@@ -63761,6 +63785,7 @@ var GameOverCatsContainer = function (_UIList) {
         _this.giftBox.x = _this.giftBox.width; // * 1.25;
         _this.giftBox.y = _this.confirmButton.y;
         _this.giftBoxSin = 0;
+        _this.boxSin = 0;
 
         _this.multiplierContainer = new PIXI.Sprite.from('powerup_background');
         _this.multiplierContainer.anchor.set(0.5, 0.5);
@@ -63815,15 +63840,17 @@ var GameOverCatsContainer = function (_UIList) {
         key: 'update',
         value: function update(delta) {
             if (this.visible) {
-                if (this.giftBox.visible && this.giftBox.ableToRotate) {
-                    this.giftBox.rotation = Math.sin(this.giftBoxSin) * 0.2 - 0.1;
-                    if (this.giftBox.ableToRotate) {
-                        this.giftBox.scale.x = this.giftBoxScale + Math.cos(this.giftBoxSin) * 0.1;
-                        this.giftBox.scale.y = this.giftBoxScale + Math.sin(this.giftBoxSin) * 0.1;
-                        this.giftBoxSin += 0.1;
-                        this.giftBoxSin %= Math.PI * 2;
+                if (this.giftBox.visible) // && this.giftBox.ableToRotate)
+                    {
+                        this.giftBox.rotation = Math.sin(this.giftBoxSin) * 0.2; // - 0.1
+                        this.box.rotation = Math.cos(this.giftBoxSin) * 0.2; // - 0.1
+                        if (this.giftBox.ableToRotate) {
+                            this.giftBox.scale.x = this.giftBoxScale + Math.cos(this.giftBoxSin) * 0.2;
+                            this.giftBox.scale.y = this.giftBoxScale + Math.sin(this.giftBoxSin) * 0.2;
+                            this.giftBoxSin += 0.15;
+                            this.giftBoxSin %= Math.PI * 2;
+                        }
                     }
-                }
                 if (this.gameOverCatList1.dragging) {
                     this.currentList = this.gameOverCatList1;
                 } else if (this.gameOverCatList2.dragging) {
@@ -63838,6 +63865,7 @@ var GameOverCatsContainer = function (_UIList) {
         key: 'collectGift',
         value: function collectGift() {
             this.onCollectGift.dispatch();
+            SOUND_MANAGER.play('open_chest_01');
             this.giftBox.visible = false;
         }
     }, {
@@ -68070,7 +68098,7 @@ var SettingsContainer = function (_ListScroller) {
                 _this.idList.h = _this.itemHeight;
                 _this.idList.w = _this.rect.w;
 
-                var idlabel = new PIXI.Text('id: 34das3as3554af354sdas3', {
+                var idlabel = new PIXI.Text('id: ' + GAME_ID, {
                         fontFamily: 'blogger_sansregular',
                         fontSize: '48px',
                         fill: 0xFFFFFF,
@@ -68078,7 +68106,7 @@ var SettingsContainer = function (_ListScroller) {
                         fontWeight: '800'
                 });
 
-                idlabel.fitHeight = 0.15;
+                idlabel.fitHeight = 0.25;
                 idlabel.scaleContentMax = true;
                 _this.idList.addChild(idlabel);
                 _this.idList.elementsList.push(idlabel);
@@ -68095,6 +68123,9 @@ var SettingsContainer = function (_ListScroller) {
                 // this.marginTop = this.rect.h * 0.3
                 _this.addItens(_this.settingsItens);
 
+                if (GAME_DATA.mute) {
+                        SOUND_MANAGER.mute();
+                }
                 _this.updateSoundButton();
                 // this.muteList.debug()
                 // this.eraseList.debug()
@@ -68125,7 +68156,10 @@ var SettingsContainer = function (_ListScroller) {
                 key: 'toggleSound',
                 value: function toggleSound() {
                         SOUND_MANAGER.toggleMute();
+                        GAME_DATA.mute = SOUND_MANAGER.isMute;
                         this.updateSoundButton();
+
+                        GAME_DATA.SAVE();
                 }
         }, {
                 key: 'eraseData',
@@ -72876,30 +72910,32 @@ var GameScreen = function (_Screen) {
             if (actionData.var == 'actionAutoCollect') {
                 this.inGameEffects.addAutocollectlModeItem();
                 this.environment.specialBackground();
-                _gsap2.default.to(this, 0.5, {
+                _gsap2.default.to(this, 0.25, {
                     gameTimeScale: 0,
                     onUpdate: function onUpdate() {
                         _this3.scaleSound();
                     }
                 });
                 _gsap2.default.to(this, 1, {
-                    delay: 1.5,
-                    gameTimeScale: 1.5,
+                    delay: 0.5,
+                    gameTimeScale: 1,
                     onUpdate: function onUpdate() {
                         _this3.scaleSound();
                     }
                 });
 
-                _gsap2.default.to(this, 1, (0, _defineProperty3.default)({
-                    delay: 1.5
-                }, actionData.var, leveldActionData.value));
+                this[actionData.var] = leveldActionData.value;
+                // TweenLite.to(this, 1,
+                // {
+                //     delay: 0,
+                // });
             } else if (actionData.var == 'actionSpeed') {
-                var _TweenLite$to2;
+                var _TweenLite$to;
 
                 this.inGameEffects.speedUpModeItem();
-                _gsap2.default.to(this, 0.5, (_TweenLite$to2 = {}, (0, _defineProperty3.default)(_TweenLite$to2, actionData.var, leveldActionData.value), (0, _defineProperty3.default)(_TweenLite$to2, 'onUpdate', function onUpdate() {
+                _gsap2.default.to(this, 0.5, (_TweenLite$to = {}, (0, _defineProperty3.default)(_TweenLite$to, actionData.var, leveldActionData.value), (0, _defineProperty3.default)(_TweenLite$to, 'onUpdate', function onUpdate() {
                     _this3.scaleSound();
-                }), _TweenLite$to2));
+                }), _TweenLite$to));
             } else {
                 this[actionData.var] = leveldActionData.value;
             }
@@ -73082,6 +73118,7 @@ var GameScreen = function (_Screen) {
             this.start();
             this.resetActionsVariables();
             this.gameSpeed = 1;
+            this.gameTimeScale = 1;
             this.timeToNext = 1;
             this.timerSin = 0;
             this.currentPoints = 0;
@@ -73126,6 +73163,9 @@ var GameScreen = function (_Screen) {
                 }
             }
 
+            _gsap2.default.killTweensOf(this);
+
+            // console.log(this.gameSpeed, this.actionSpeed, 'START SPEED');
             this.scaleSound();
         }
     }, {
@@ -73163,12 +73203,20 @@ var GameScreen = function (_Screen) {
                     this.currentItem.parent.removeChild(this.currentItem);
                 }
             }
+            if (this.currentGiftBox) {
+                this.currentGiftBox.kill = true;
+                if (this.currentGiftBox.parent) {
+                    this.currentGiftBox.parent.removeChild(this.currentGiftBox);
+                }
+            }
             this.removeAutoCollectMode();
             this.removeSpecialMode();
             // this.removeSpecialBackground();
             this.gameStarted = false;
             this.killAllActions();
             this.killAll();
+            _gsap2.default.killTweensOf(this);
+
             this.HUD.hide();
             for (var i = 0; i < this.catPawns.length; i++) {
                 _gsap2.default.to(this.catPawns[i], 0.5, {
@@ -73184,6 +73232,8 @@ var GameScreen = function (_Screen) {
                     points: _this8.currentPoints
                 });
             }, 1000);
+            this.resetActionsVariables();
+            this.scaleSound();
         }
     }, {
         key: 'killAfterSpecial',
@@ -73217,6 +73267,8 @@ var GameScreen = function (_Screen) {
             delta *= this.gameTimeScale;
             if (this.actionSpeed) {
                 delta *= this.actionSpeed;
+
+                // console.log(this.actionSpeed, this.gameTimeScale);
             }
             this.gameTimer += delta;
             if (this.gameStarted) {
@@ -73252,7 +73304,13 @@ var GameScreen = function (_Screen) {
                 } else {
                     this.itemTimer -= delta;
                 }
-
+                if (this.currentGiftBox) {
+                    if (this.currentGiftBox.kill && this.currentGiftBox.parent) {
+                        this.currentGiftBox.parent.removeChild(this.currentGiftBox);
+                    } else if (!this.currentGiftBox.kill) {
+                        this.currentGiftBox.update(delta);
+                    }
+                }
                 if (this.currentItem) {
                     if (this.currentItem.kill && this.currentItem.parent) {
                         this.currentItem.parent.removeChild(this.currentItem);
@@ -73306,21 +73364,42 @@ var GameScreen = function (_Screen) {
             this.HUD.update(delta);
         }
     }, {
+        key: 'addGiftBox',
+        value: function addGiftBox() {
+            var _this9 = this;
+
+            if (!this.currentGiftBox) {
+                this.currentGiftBox = new _GameItem2.default();
+                this.currentGiftBox.onCollect.add(function (item) {
+                    _this9.collectItem(item);
+                });
+            }
+            this.addChild(this.currentGiftBox);
+
+            // console.log('addGIFT');
+            // let ids = [0, 2, 3, 3, 3, 3, 3, 3, 3]
+            // let ids = [0, 2]
+            this.currentGiftBox.reset({
+                x: -_config2.default.width * 0.125,
+                y: Math.random() * _config2.default.height / 4 + _config2.default.height / 2
+            }, 4);
+        }
+    }, {
         key: 'addItem',
         value: function addItem() {
-            var _this9 = this;
+            var _this10 = this;
 
             this.itemTimer = this.itemTimerMax + Math.random() * this.itemTimerMax * 0.5;
             if (!this.currentItem) {
                 this.currentItem = new _GameItem2.default();
                 this.currentItem.onCollect.add(function (item) {
-                    _this9.collectItem(item);
+                    _this10.collectItem(item);
                 });
             }
             this.addChild(this.currentItem);
 
-            // let ids = [0, 2, 3, 3, 3, 3, 3, 3, 3]
-            var ids = [0, 2];
+            var ids = [0, 2, 3, 3, 3, 3, 3, 3, 3];
+            // let ids = [0, 2]
             this.currentItem.reset({
                 x: _config2.default.width * 0.125,
                 y: _config2.default.height + PAWN.height
@@ -73359,6 +73438,10 @@ var GameScreen = function (_Screen) {
                     break;
                 case 3:
                     this.offerPrize();
+                    break;
+                case 4:
+                    this.screenManager.prizeContainer.show(1);
+                    this.isPaused = true;
                     break;
 
             }
@@ -73405,7 +73488,7 @@ var GameScreen = function (_Screen) {
     }, {
         key: 'missCat',
         value: function missCat(cat) {
-
+            console.log(this.actionAutoCollect);
             if (cat.catData.isAuto || this.isAutoCollectMode || this.actionAutoCollect) {
                 //cat.finishTimer = -999
                 cat.auto = true;
@@ -73428,15 +73511,16 @@ var GameScreen = function (_Screen) {
                 this.gameSpeed = 1.1;
             }
 
-            if (!this.isSpecialMode) {
-                this.specialAcc *= 0.5;
-                this.updateSpecialBar();
-                this.inGameEffects.popLabel(labelPos, 'MISS', 0, -1, 0.7);
-                this.currentDeadCats--;
-                if (this.currentDeadCats <= 0) {
-                    this.gameOver();
-                }
+            // if (!this.isSpecialMode)
+            // {
+            //     this.specialAcc *= 0.5;
+            //     this.updateSpecialBar();
+            this.inGameEffects.popLabel(labelPos, 'MISS', 0, -1, 0.7);
+            this.currentDeadCats--;
+            if (this.currentDeadCats <= 0) {
+                this.gameOver();
             }
+            // }
 
             if (cat.parent) {
                 cat.parent.removeChild(cat);
@@ -73502,9 +73586,12 @@ var GameScreen = function (_Screen) {
 
                 this.specialAcc += labelData.special;
             }
-            if (this.isSpecialMode) {
-                points *= 2;
-            }
+
+            this.specialAcc += 0.5;
+            // if (this.isSpecialMode)
+            // {
+            //     points *= 2;
+            // }
 
             // forceY: Math.random() * 150 - 75,
             this.inGameEffects.addCoinParticles(coinPos, Math.ceil(points / 2), {
@@ -73541,7 +73628,10 @@ var GameScreen = function (_Screen) {
                     this.updateSpecialBar();
 
                     if (this.specialAcc >= 1) {
-                        this.addSpecialMode();
+                        this.specialAcc = 0;
+                        this.updateSpecialBar();
+                        this.addGiftBox();
+                        // this.addSpecialMode();
                     }
                 }
             }
@@ -74053,6 +74143,9 @@ var InGameEffects = function () {
                 this.noiseTexture = new PIXI.Sprite(PIXI.Texture.from('fast_forward_noise'));
                 this.noiseTexture.scale.set(_config2.default.width / this.noiseTexture.width);
             }
+
+            SOUND_MANAGER.play('fastforward');
+
             this.game.UIContainer.addChild(this.noiseTexture);
             this.noiseTexture.y = Math.random() * _config2.default.height - this.noiseTexture.height;
 
@@ -74665,7 +74758,7 @@ var Environment = function (_PIXI$Container) {
     }, {
         key: 'addStars',
         value: function addStars() {
-            var totalStars = 120;
+            var totalStars = 80;
             this.stars = [];
             for (var i = 0; i < totalStars; i++) {
                 var dist = Math.random() * 2 + 1;
@@ -74674,7 +74767,7 @@ var Environment = function (_PIXI$Container) {
                 var toClose = true;
                 var acc = 5;
 
-                tempStar.scale.set(5 / tempStar.height * tempStar.alpha);
+                tempStar.scale.set(_config2.default.height * 0.01 / tempStar.height * tempStar.alpha);
 
                 while (toClose || acc > 0) {
                     acc--;
@@ -74683,7 +74776,7 @@ var Environment = function (_PIXI$Container) {
                     tempStar.x = Math.cos(angle) * radius + _config2.default.width / 2;
                     tempStar.y = Math.sin(angle) * radius + _config2.default.height / 2;
                     tempStar.velocity = {
-                        y: _config2.default.height * 0.01 * tempStar.alpha,
+                        y: _config2.default.height * 0.005 * tempStar.alpha,
                         x: 0
                     };
                     toClose = false;
@@ -74715,6 +74808,10 @@ var Environment = function (_PIXI$Container) {
         value: function specialBackground() {
             var _this2 = this;
 
+            if (!this.gameStarted) {
+                this.currentColorTween = _utils2.default.addColorTween(this.backgroundGraphics, this.backgroundGraphics.tint, 0x04001e, time).tween;
+                return;
+            }
             TweenLite.killTweensOf(this.currentColorTween);
             clearTimeout(this.specialTimeout);
 
@@ -75516,7 +75613,7 @@ var Cat = function (_PIXI$Container) {
             this.animation.scale.x = this.animationScaleStandard * 0.5;
             this.animation.scale.y = this.animationScaleStandard * 1.5;
 
-            TweenLite.to(this.animation.scale, 0.2, {
+            TweenLite.to(this.animation.scale, 0.05, {
                 x: this.animationScaleStandard,
                 y: this.animationScaleStandard,
                 onComplete: function onComplete() {
@@ -75736,7 +75833,7 @@ var GameItem = function (_PIXI$Container) {
         _this.animationSpeed = 0.01;
         _this.animationTimer = 0;
 
-        _this.sprite = new PIXI.Sprite.from('pickup_bubble');
+        _this.sprite = new PIXI.Sprite.from('results_newcat_rays_01');
         _this.sprite.anchor.set(0.5, 0.5);
 
         _this.container = new PIXI.Container();
@@ -75747,7 +75844,7 @@ var GameItem = function (_PIXI$Container) {
         // this.sprite.alpha = 0;
         _this.noScalable = false;
 
-        _this.pickupsSprites = [GAME_DATA.trophyData.icon, 'automate', GAME_DATA.moneyData.softIcon, 'treasure_chest_01'];
+        _this.pickupsSprites = [GAME_DATA.trophyData.icon, 'automate', GAME_DATA.moneyData.softIcon, 'treasure_chest_01', 'giftbox2'];
         _this.spriteItem = new PIXI.Sprite.from(GAME_DATA.trophyData.icon);
         _this.spriteItem.anchor.set(0.5, 0.5);
 
@@ -75792,13 +75889,21 @@ var GameItem = function (_PIXI$Container) {
             this.startPos = pos;
             this.x = pos.x;
             this.y = pos.y;
+            this.sprite.scale.set(1);
+
+            if (this.itemType == 4) {
+                this.standardScale = this.w / this.sprite.width * 1.5;
+                this.container.scale.set(this.standardScale);
+            } else {
+                this.standardScale = this.w / this.sprite.width;
+                this.container.scale.set(this.standardScale);
+            }
             this.velocity = {
                 x: _config2.default.width * 0.1,
                 y: -_config2.default.height * 0.25
             };
             this.kill = false;
             this.collecting = false;
-            this.sprite.scale.set(1);
             if (this.spriteItem.width > this.spriteItem.height) {
                 this.spriteItem.scale.set(this.sprite.width / (this.spriteItem.width / this.spriteItem.scale.x) * 0.65);
             } else {
@@ -75806,6 +75911,7 @@ var GameItem = function (_PIXI$Container) {
             }
             this.container.alpha = 1;
             this.tempX = 0;
+            this.sprite.rotation = 0;
         }
     }, {
         key: 'collected',
@@ -75818,10 +75924,11 @@ var GameItem = function (_PIXI$Container) {
                 ease: Elastic.easeOut
             });
 
-            this.spriteItem.scale.set(0.5);
+            var tempScale = this.spriteItem.scale;
+            // this.spriteItem.scale.set(tempScale.x * 0.5);
             TweenLite.to(this.spriteItem.scale, 0.75, {
-                x: 1.2,
-                y: 1.2,
+                x: tempScale.x * 1.5,
+                y: tempScale.y * 1.5,
                 ease: Elastic.easeOut
             });
 
@@ -75836,14 +75943,21 @@ var GameItem = function (_PIXI$Container) {
             if (this.collecting) {
                 return;
             }
-            this.y += this.velocity.y * delta;
-            this.tempX += this.velocity.x * delta;
-            this.x = this.startPos.x + Math.sin(this.sin) * this.dist + this.tempX;
+            this.sprite.rotation += delta * Math.PI;
+            //gambiarra aqui
+            if (this.itemType != 4) {
+                this.y += this.velocity.y * delta;
+                this.tempX += this.velocity.x * delta;
+                this.x = this.startPos.x + Math.sin(this.sin) * this.dist + this.tempX;
+            } else {
+                this.y += Math.sin(this.sin) * this.height * delta * 0.5;
+                this.x += this.velocity.x * delta;
+            }
             // console.log(this.x);
             this.rotation = Math.sin(this.sin) * 0.2;
             this.spriteItem.rotation = -this.rotation - Math.cos(this.sin) * 0.2;
             this.sin += 0.1;
-            if (this.y < -PAWN.height) {
+            if (this.y < -PAWN.height || this.y > _config2.default.height * 1.05) {
                 this.kill = true;
             }
         }
@@ -75933,9 +76047,24 @@ var SoundManager = function (_AbstractSoundManager) {
         value: function load(list) {
             var _this2 = this;
 
+            // alert(list)
             for (var i = list.length - 1; i >= 0; i--) {
+                var url = list[i].url.substr(0, list[i].url.length - 4);
+
+                if (window.iOS) {
+                    url += '.mp3';
+                } else {
+                    url += '.ogg';
+                }
+
+                // if(i == 0){
+                //     alert(url)
+                // }
+
                 var sound = new _howler.Howl({
-                    src: [list[i].url],
+                    src: [url],
+                    // src: [url+'.ogg', url+'.mp3'],
+                    // src: [list[i].url],
                     autoplay: false,
                     loop: false,
                     volume: 1,
@@ -75978,7 +76107,10 @@ var SoundManager = function (_AbstractSoundManager) {
             this.audioList[id].loop(true);
             this.audioList[id].volume(volume);
             var hid = this.audioList[id].play();
-            this.playingList.push({ sound: this.audioList[id], hID: hid });
+            this.playingList.push({
+                sound: this.audioList[id],
+                hID: hid
+            });
         }
     }, {
         key: 'playOnce',
@@ -75996,7 +76128,10 @@ var SoundManager = function (_AbstractSoundManager) {
             this.audioList[id].loop(false);
             this.audioList[id].volume(volume);
             var hid = this.audioList[id].play();
-            this.playingList.push({ sound: this.audioList[id], hID: hid });
+            this.playingList.push({
+                sound: this.audioList[id],
+                hID: hid
+            });
         }
     }, {
         key: 'stop',
@@ -76013,7 +76148,10 @@ var SoundManager = function (_AbstractSoundManager) {
             this.audioList[id].stop();
             this.removeFromPlayList(id);
             var hid = this.audioList[id].play();
-            this.playingList.push({ sound: this.audioList[id], hID: hid });
+            this.playingList.push({
+                sound: this.audioList[id],
+                hID: hid
+            });
             this.audioList[id].fade(this.audioList[id].volume, volume, time);
         }
     }, {
@@ -76088,12 +76226,15 @@ var SoundManager = function (_AbstractSoundManager) {
         value: function mute() {
             _howler.Howler.volume(0);
             this.isMute = true;
+
+            console.log(this.isMute, ' mute');
         }
     }, {
         key: 'unmute',
         value: function unmute() {
             _howler.Howler.volume(0.5);
             this.isMute = false;
+            console.log(this.isMute, 'un mute');
         }
     }, {
         key: 'toggleMute',
@@ -79168,23 +79309,17 @@ var assets = [{
 	"id": "image",
 	"url": "assets/image\\image.png"
 }, {
-	"id": "glass",
-	"url": "assets/image\\glass.png"
-}, {
 	"id": "lane_texture - Copy",
 	"url": "assets/image\\lane_texture - Copy.png"
-}, {
-	"id": "lane_texture",
-	"url": "assets/image\\lane_texture.png"
 }, {
 	"id": "lettering",
 	"url": "assets/image\\lettering.png"
 }, {
-	"id": "logo",
-	"url": "assets/image\\logo.png"
-}, {
 	"id": "logo_mask",
 	"url": "assets/image\\logo_mask.png"
+}, {
+	"id": "lane_texture",
+	"url": "assets/image\\lane_texture.png"
 }, {
 	"id": "logo_mask_white",
 	"url": "assets/image\\logo_mask_white.png"
@@ -79194,18 +79329,6 @@ var assets = [{
 }, {
 	"id": "planet",
 	"url": "assets/image\\planet.png"
-}, {
-	"id": "planet1",
-	"url": "assets/image\\planet1.png"
-}, {
-	"id": "planet2",
-	"url": "assets/image\\planet2.png"
-}, {
-	"id": "planet3",
-	"url": "assets/image\\planet3.png"
-}, {
-	"id": "planet4",
-	"url": "assets/image\\planet4.png"
 }, {
 	"id": "vignette-tex",
 	"url": "assets/image\\vignette-tex.png"
@@ -79222,15 +79345,6 @@ var assets = [{
 	"id": "pickup_bubble",
 	"url": "assets/image\\pickups\\pickup_bubble.png"
 }, {
-	"id": "pickup_fish",
-	"url": "assets/image\\pickups\\pickup_fish.png"
-}, {
-	"id": "pickup_mouse",
-	"url": "assets/image\\pickups\\pickup_mouse.png"
-}, {
-	"id": "pickup_octopus",
-	"url": "assets/image\\pickups\\pickup_octopus.png"
-}, {
 	"id": "active_engine",
 	"url": "assets/image\\ui\\active_engine.png"
 }, {
@@ -79240,32 +79354,32 @@ var assets = [{
 	"id": "auto_confirm",
 	"url": "assets/image\\ui\\auto_confirm.png"
 }, {
-	"id": "bubble",
-	"url": "assets/image\\ui\\bubble.png"
-}, {
 	"id": "back_button",
 	"url": "assets/image\\ui\\back_button.png"
 }, {
-	"id": "button_collect_prizes_off",
-	"url": "assets/image\\ui\\button_collect_prizes_off.png"
+	"id": "bubble",
+	"url": "assets/image\\ui\\bubble.png"
 }, {
 	"id": "button_collect_prizes_on",
 	"url": "assets/image\\ui\\button_collect_prizes_on.png"
 }, {
+	"id": "button_collect_prizes_off",
+	"url": "assets/image\\ui\\button_collect_prizes_off.png"
+}, {
 	"id": "button_off",
 	"url": "assets/image\\ui\\button_off.png"
-}, {
-	"id": "buy_grey",
-	"url": "assets/image\\ui\\buy_grey.png"
 }, {
 	"id": "button_on",
 	"url": "assets/image\\ui\\button_on.png"
 }, {
-	"id": "buy_icon",
-	"url": "assets/image\\ui\\buy_icon.png"
+	"id": "buy_grey",
+	"url": "assets/image\\ui\\buy_grey.png"
 }, {
 	"id": "cat_coin",
 	"url": "assets/image\\ui\\cat_coin.png"
+}, {
+	"id": "buy_icon",
+	"url": "assets/image\\ui\\buy_icon.png"
 }, {
 	"id": "cat_coin_02",
 	"url": "assets/image\\ui\\cat_coin_02.png"
@@ -79306,8 +79420,14 @@ var assets = [{
 	"id": "giftbox",
 	"url": "assets/image\\ui\\giftbox.png"
 }, {
+	"id": "giftbox2",
+	"url": "assets/image\\ui\\giftbox2.png"
+}, {
 	"id": "goodboy",
 	"url": "assets/image\\ui\\goodboy.png"
+}, {
+	"id": "goodboy_heart",
+	"url": "assets/image\\ui\\goodboy_heart.png"
 }, {
 	"id": "goodboy_logo",
 	"url": "assets/image\\ui\\goodboy_logo.png"
@@ -79555,6 +79675,18 @@ var assets = [{
 	"id": "cat_chef_leg",
 	"url": "assets/image\\cats\\chef\\cat_chef_leg.png"
 }, {
+	"id": "cat_business_arm",
+	"url": "assets/image\\cats\\business\\cat_business_arm.png"
+}, {
+	"id": "cat_business_body",
+	"url": "assets/image\\cats\\business\\cat_business_body.png"
+}, {
+	"id": "cat_business_head_01",
+	"url": "assets/image\\cats\\business\\cat_business_head_01.png"
+}, {
+	"id": "cat_business_leg",
+	"url": "assets/image\\cats\\business\\cat_business_leg.png"
+}, {
 	"id": "cat_jeff_arm",
 	"url": "assets/image\\cats\\cloud\\cat_jeff_arm.png"
 }, {
@@ -79573,26 +79705,17 @@ var assets = [{
 	"id": "cat_lucha_body",
 	"url": "assets/image\\cats\\lucha\\cat_lucha_body.png"
 }, {
-	"id": "cat_lucha_leg",
-	"url": "assets/image\\cats\\lucha\\cat_lucha_leg.png"
-}, {
 	"id": "cat_lucha_head_01",
 	"url": "assets/image\\cats\\lucha\\cat_lucha_head_01.png"
 }, {
-	"id": "cat_business_arm",
-	"url": "assets/image\\cats\\business\\cat_business_arm.png"
-}, {
-	"id": "cat_business_body",
-	"url": "assets/image\\cats\\business\\cat_business_body.png"
-}, {
-	"id": "cat_business_leg",
-	"url": "assets/image\\cats\\business\\cat_business_leg.png"
-}, {
-	"id": "cat_business_head_01",
-	"url": "assets/image\\cats\\business\\cat_business_head_01.png"
+	"id": "cat_lucha_leg",
+	"url": "assets/image\\cats\\lucha\\cat_lucha_leg.png"
 }, {
 	"id": "cat_orange_arm",
 	"url": "assets/image\\cats\\orange_cat\\cat_orange_arm.png"
+}, {
+	"id": "cat_orange_body",
+	"url": "assets/image\\cats\\orange_cat\\cat_orange_body.png"
 }, {
 	"id": "cat_orange_head_01",
 	"url": "assets/image\\cats\\orange_cat\\cat_orange_head_01.png"
@@ -79600,32 +79723,17 @@ var assets = [{
 	"id": "cat_orange_head_02",
 	"url": "assets/image\\cats\\orange_cat\\cat_orange_head_02.png"
 }, {
-	"id": "cat_orange_body",
-	"url": "assets/image\\cats\\orange_cat\\cat_orange_body.png"
-}, {
 	"id": "cat_orange_head_03",
 	"url": "assets/image\\cats\\orange_cat\\cat_orange_head_03.png"
 }, {
 	"id": "cat_orange_leg",
 	"url": "assets/image\\cats\\orange_cat\\cat_orange_leg.png"
 }, {
-	"id": "cat_robot_arm",
-	"url": "assets/image\\cats\\robot\\cat_robot_arm.png"
-}, {
-	"id": "cat_robot_body",
-	"url": "assets/image\\cats\\robot\\cat_robot_body.png"
-}, {
-	"id": "cat_robot_head_01",
-	"url": "assets/image\\cats\\robot\\cat_robot_head_01.png"
-}, {
-	"id": "cat_robot_leg",
-	"url": "assets/image\\cats\\robot\\cat_robot_leg.png"
+	"id": "cat_pink_arm",
+	"url": "assets/image\\cats\\pink_cat\\cat_pink_arm.png"
 }, {
 	"id": "cat_pink_body",
 	"url": "assets/image\\cats\\pink_cat\\cat_pink_body.png"
-}, {
-	"id": "cat_pink_arm",
-	"url": "assets/image\\cats\\pink_cat\\cat_pink_arm.png"
 }, {
 	"id": "cat_pink_head_01",
 	"url": "assets/image\\cats\\pink_cat\\cat_pink_head_01.png"
@@ -79639,14 +79747,26 @@ var assets = [{
 	"id": "cat_pink_leg",
 	"url": "assets/image\\cats\\pink_cat\\cat_pink_leg.png"
 }, {
+	"id": "cat_robot_arm",
+	"url": "assets/image\\cats\\robot\\cat_robot_arm.png"
+}, {
+	"id": "cat_robot_body",
+	"url": "assets/image\\cats\\robot\\cat_robot_body.png"
+}, {
+	"id": "cat_robot_head_01",
+	"url": "assets/image\\cats\\robot\\cat_robot_head_01.png"
+}, {
+	"id": "cat_robot_leg",
+	"url": "assets/image\\cats\\robot\\cat_robot_leg.png"
+}, {
 	"id": "cat_punk_arm",
 	"url": "assets/image\\cats\\punk_cat\\cat_punk_arm.png"
 }, {
-	"id": "cat_punk_head_01",
-	"url": "assets/image\\cats\\punk_cat\\cat_punk_head_01.png"
-}, {
 	"id": "cat_punk_body",
 	"url": "assets/image\\cats\\punk_cat\\cat_punk_body.png"
+}, {
+	"id": "cat_punk_head_01",
+	"url": "assets/image\\cats\\punk_cat\\cat_punk_head_01.png"
 }, {
 	"id": "cat_punk_leg",
 	"url": "assets/image\\cats\\punk_cat\\cat_punk_leg.png"
@@ -79663,20 +79783,11 @@ var assets = [{
 	"id": "cat_snake_leg",
 	"url": "assets/image\\cats\\snake\\cat_snake_leg.png"
 }, {
-	"id": "cat_surf_arm",
-	"url": "assets/image\\cats\\surf\\cat_surf_arm.png"
-}, {
-	"id": "cat_surf_head_01",
-	"url": "assets/image\\cats\\surf\\cat_surf_head_01.png"
-}, {
-	"id": "cat_surf_leg",
-	"url": "assets/image\\cats\\surf\\cat_surf_leg.png"
-}, {
-	"id": "cat_surf_body",
-	"url": "assets/image\\cats\\surf\\cat_surf_body.png"
-}, {
 	"id": "cat_super_arm",
 	"url": "assets/image\\cats\\super\\cat_super_arm.png"
+}, {
+	"id": "cat_super_body",
+	"url": "assets/image\\cats\\super\\cat_super_body.png"
 }, {
 	"id": "cat_super_head_01",
 	"url": "assets/image\\cats\\super\\cat_super_head_01.png"
@@ -79684,14 +79795,20 @@ var assets = [{
 	"id": "cat_super_leg",
 	"url": "assets/image\\cats\\super\\cat_super_leg.png"
 }, {
-	"id": "cat_super_body",
-	"url": "assets/image\\cats\\super\\cat_super_body.png"
+	"id": "cat_surf_arm",
+	"url": "assets/image\\cats\\surf\\cat_surf_arm.png"
+}, {
+	"id": "cat_surf_body",
+	"url": "assets/image\\cats\\surf\\cat_surf_body.png"
+}, {
+	"id": "cat_surf_head_01",
+	"url": "assets/image\\cats\\surf\\cat_surf_head_01.png"
+}, {
+	"id": "cat_surf_leg",
+	"url": "assets/image\\cats\\surf\\cat_surf_leg.png"
 }, {
 	"id": "cat_ufo_arm",
 	"url": "assets/image\\cats\\ufo\\cat_ufo_arm.png"
-}, {
-	"id": "cat_ufo_leg",
-	"url": "assets/image\\cats\\ufo\\cat_ufo_leg.png"
 }, {
 	"id": "cat_ufo_body",
 	"url": "assets/image\\cats\\ufo\\cat_ufo_body.png"
@@ -79699,14 +79816,53 @@ var assets = [{
 	"id": "cat_ufo_head_01",
 	"url": "assets/image\\cats\\ufo\\cat_ufo_head_01.png"
 }, {
-	"id": "white_head_01",
-	"url": "assets/image\\cats\\white_cat\\white_head_01.png"
+	"id": "cat_ufo_leg",
+	"url": "assets/image\\cats\\ufo\\cat_ufo_leg.png"
+}, {
+	"id": "cat_turquoise_arm",
+	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_arm.png"
+}, {
+	"id": "cat_turquoise_body",
+	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_body.png"
+}, {
+	"id": "cat_turquoise_head_01",
+	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_head_01.png"
+}, {
+	"id": "cat_turquoise_head_02",
+	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_head_02.png"
+}, {
+	"id": "cat_turquoise_head_03",
+	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_head_03.png"
+}, {
+	"id": "cat_turquoise_leg",
+	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_leg.png"
+}, {
+	"id": "cat_yellow_arm",
+	"url": "assets/image\\cats\\yellow_cat\\cat_yellow_arm.png"
+}, {
+	"id": "cat_yellow_body",
+	"url": "assets/image\\cats\\yellow_cat\\cat_yellow_body.png"
+}, {
+	"id": "cat_yellow_head_01",
+	"url": "assets/image\\cats\\yellow_cat\\cat_yellow_head_01.png"
+}, {
+	"id": "cat_yellow_head_02",
+	"url": "assets/image\\cats\\yellow_cat\\cat_yellow_head_02.png"
+}, {
+	"id": "cat_yellow_head_03",
+	"url": "assets/image\\cats\\yellow_cat\\cat_yellow_head_03.png"
+}, {
+	"id": "cat_yellow_leg",
+	"url": "assets/image\\cats\\yellow_cat\\cat_yellow_leg.png"
 }, {
 	"id": "white_arm",
 	"url": "assets/image\\cats\\white_cat\\white_arm.png"
 }, {
 	"id": "white_body",
 	"url": "assets/image\\cats\\white_cat\\white_body.png"
+}, {
+	"id": "white_head_01",
+	"url": "assets/image\\cats\\white_cat\\white_head_01.png"
 }, {
 	"id": "white_head_02",
 	"url": "assets/image\\cats\\white_cat\\white_head_02.png"
@@ -79716,42 +79872,6 @@ var assets = [{
 }, {
 	"id": "white_leg",
 	"url": "assets/image\\cats\\white_cat\\white_leg.png"
-}, {
-	"id": "cat_yellow_body",
-	"url": "assets/image\\cats\\yellow_cat\\cat_yellow_body.png"
-}, {
-	"id": "cat_yellow_arm",
-	"url": "assets/image\\cats\\yellow_cat\\cat_yellow_arm.png"
-}, {
-	"id": "cat_yellow_head_01",
-	"url": "assets/image\\cats\\yellow_cat\\cat_yellow_head_01.png"
-}, {
-	"id": "cat_yellow_head_02",
-	"url": "assets/image\\cats\\yellow_cat\\cat_yellow_head_02.png"
-}, {
-	"id": "cat_yellow_leg",
-	"url": "assets/image\\cats\\yellow_cat\\cat_yellow_leg.png"
-}, {
-	"id": "cat_yellow_head_03",
-	"url": "assets/image\\cats\\yellow_cat\\cat_yellow_head_03.png"
-}, {
-	"id": "cat_turquoise_head_01",
-	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_head_01.png"
-}, {
-	"id": "cat_turquoise_body",
-	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_body.png"
-}, {
-	"id": "cat_turquoise_arm",
-	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_arm.png"
-}, {
-	"id": "cat_turquoise_head_02",
-	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_head_02.png"
-}, {
-	"id": "cat_turquoise_leg",
-	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_leg.png"
-}, {
-	"id": "cat_turquoise_head_03",
-	"url": "assets/image\\cats\\turquoise_cat\\cat_turquoise_head_03.png"
 }];
 
 exports.default = assets;
@@ -79769,106 +79889,112 @@ Object.defineProperty(exports, "__esModule", {
 });
 var assets = [{
 	"id": "boing",
-	"url": "assets/audio/boing.ogg"
-}, {
-	"id": "cat_02",
-	"url": "assets/audio/cat_02.ogg"
+	"url": "assets/audio/boing.mp3"
 }, {
 	"id": "button_click",
-	"url": "assets/audio/button_click.ogg"
+	"url": "assets/audio/button_click.mp3"
+}, {
+	"id": "cat_02",
+	"url": "assets/audio/cat_02.mp3"
 }, {
 	"id": "cat_01",
-	"url": "assets/audio/cat_01.ogg"
+	"url": "assets/audio/cat_01.mp3"
 }, {
 	"id": "cat_03",
-	"url": "assets/audio/cat_03.ogg"
+	"url": "assets/audio/cat_03.mp3"
 }, {
 	"id": "cat_04",
-	"url": "assets/audio/cat_04.ogg"
-}, {
-	"id": "cat_06",
-	"url": "assets/audio/cat_06.ogg"
+	"url": "assets/audio/cat_04.mp3"
 }, {
 	"id": "cat_05",
-	"url": "assets/audio/cat_05.ogg"
+	"url": "assets/audio/cat_05.mp3"
 }, {
 	"id": "cat_07",
-	"url": "assets/audio/cat_07.ogg"
+	"url": "assets/audio/cat_07.mp3"
+}, {
+	"id": "cat_06",
+	"url": "assets/audio/cat_06.mp3"
 }, {
 	"id": "cat_08",
-	"url": "assets/audio/cat_08.ogg"
+	"url": "assets/audio/cat_08.mp3"
 }, {
 	"id": "cat_09",
-	"url": "assets/audio/cat_09.ogg"
+	"url": "assets/audio/cat_09.mp3"
 }, {
 	"id": "cat_10",
-	"url": "assets/audio/cat_10.ogg"
+	"url": "assets/audio/cat_10.mp3"
+}, {
+	"id": "cat_fall_02",
+	"url": "assets/audio/cat_fall_02.mp3"
+}, {
+	"id": "cat_fall_01",
+	"url": "assets/audio/cat_fall_01.mp3"
+}, {
+	"id": "cat_fall_03",
+	"url": "assets/audio/cat_fall_03.mp3"
 }, {
 	"id": "coins_01",
-	"url": "assets/audio/coins_01.ogg"
+	"url": "assets/audio/coins_01.mp3"
 }, {
 	"id": "coins_02",
-	"url": "assets/audio/coins_02.ogg"
+	"url": "assets/audio/coins_02.mp3"
 }, {
 	"id": "coins_03",
-	"url": "assets/audio/coins_03.ogg"
+	"url": "assets/audio/coins_03.mp3"
 }, {
 	"id": "coins_04",
-	"url": "assets/audio/coins_04.ogg"
+	"url": "assets/audio/coins_04.mp3"
 }, {
-	"id": "dream1",
-	"url": "assets/audio/dream1.ogg"
-}, {
-	"id": "dream2",
-	"url": "assets/audio/dream2.ogg"
+	"id": "fastforward",
+	"url": "assets/audio/fastforward.mp3"
 }, {
 	"id": "getstar",
-	"url": "assets/audio/getstar.ogg"
+	"url": "assets/audio/getstar.mp3"
 }, {
-	"id": "grind",
-	"url": "assets/audio/grind.wav"
+	"id": "open_chest_01",
+	"url": "assets/audio/open_chest_01.mp3"
 }, {
 	"id": "pickup",
-	"url": "assets/audio/pickup.ogg"
+	"url": "assets/audio/pickup.mp3"
 }, {
 	"id": "pickup_item2",
-	"url": "assets/audio/pickup_item2.ogg"
+	"url": "assets/audio/pickup_item2.mp3"
 }, {
 	"id": "pickup_present",
-	"url": "assets/audio/pickup_present.ogg"
+	"url": "assets/audio/pickup_present.mp3"
 }, {
 	"id": "pickup_star",
-	"url": "assets/audio/pickup_star.ogg"
+	"url": "assets/audio/pickup_star.mp3"
 }, {
 	"id": "pogo_boing",
-	"url": "assets/audio/pogo_boing.ogg"
+	"url": "assets/audio/pogo_boing.mp3"
 }, {
 	"id": "pop",
-	"url": "assets/audio/pop.ogg"
+	"url": "assets/audio/pop.mp3"
 }, {
 	"id": "rocket_launch_01",
-	"url": "assets/audio/rocket_launch_01.ogg"
+	"url": "assets/audio/rocket_launch_01.mp3"
 }, {
 	"id": "score_loop",
-	"url": "assets/audio/score_loop.ogg"
+	"url": "assets/audio/score_loop.mp3"
 }, {
 	"id": "spacecat_game_music",
-	"url": "assets/audio/spacecat_game_music.ogg"
+	"url": "assets/audio/spacecat_game_music.mp3"
 }, {
 	"id": "spacecat_menu_music",
-	"url": "assets/audio/spacecat_menu_music.ogg"
+	"url": "assets/audio/spacecat_menu_music.mp3"
 }, {
 	"id": "star_01",
-	"url": "assets/audio/star_01.ogg"
+	"url": "assets/audio/star_01.mp3"
 }, {
 	"id": "star_02",
-	"url": "assets/audio/star_02.ogg"
+	"url": "assets/audio/star_02.mp3"
 }, {
 	"id": "star_03",
-	"url": "assets/audio/star_03.ogg"
+	"url": "assets/audio/star_03.mp3"
 }, {
 	"id": "teleport",
-	"url": "assets/audio/teleport.ogg"
+	"url": "assets/audio/teleport.mp3"
 }];
 
 exports.default = assets;

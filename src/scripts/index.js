@@ -15,7 +15,7 @@ import FbManager from './fb/FbManager'
 
 window.STORAGE = new LocalStorage();
 
-window.GAME_ID = 165347754123022
+window.GAME_ID = 177491639568484
     // window.TOKEN = 'EAAYsfZAxiFmMBAGRGBwsQbhqBRq04GhaWGc4KOC2YRFEDzf8yA0cW0h8CxlZAkx6mnUK3bIJI9FDYkUASGTgAycujNZBqRZCI2AzpmiQfpFgpW61PNhqNfZCdIgkEl93de3LXyn00ZAtAPShcEVAjf9wZAhZCSMKE8R809ND4LcQ7gZDZD'
 
 window.CATS_POOL = [];
@@ -60,6 +60,9 @@ window.getCoinSound = function()
 
 window.MAX_NUMBER = 1000000;
 
+window.iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+
+
 startLoader();
 
 // window.getPossibleCat = function(id = -1){
@@ -74,32 +77,46 @@ startLoader();
 
 function startLoader()
 {
+
     for (var i = 0; i < imageManifest.length; i++)
     {
         PIXI.loader.add(imageManifest[i].id, imageManifest[i].url)
     }
     for (var i = 0; i < audioManifest.length; i++)
     {
-        PIXI.loader.add(audioManifest[i].id, audioManifest[i].url)
+
+        let url = audioManifest[i].url.substr(0, audioManifest[i].url.length - 4);
+
+        if (iOS)
+        {
+            url += '.mp3'
+        }
+        else
+        {
+            url += '.ogg'
+        }
+
+        PIXI.loader.add(audioManifest[i].id, url)
     }
     PIXI.loader
         .add('./assets/fonts/stylesheet.css')
         .load(configGame);
 
-    console.log('try to connect');
-    FbManager.connect().then(() =>
-        {
-            FbManager.trackLoader(PIXI.loader);
+    // console.log('try to connect');
+    // FbManager.connect().then(() =>
+    //     {
+    //         FbManager.trackLoader(PIXI.loader);
 
-        })
-        .catch(e =>
-        {
+    //     })
+    //     .catch(e =>
+    //     {
 
-            console.log('CONNECT111?');
-            console.log(e);
+    //         console.log('CONNECT111?');
+    //         console.log(e);
 
-        })
+    //     })
 }
+
 
 function configGame(evt)
 {
@@ -143,6 +160,10 @@ function myFocusFunction()
     {
         timeScale: 1
     })
+    if (GAME_DATA.mute)
+    {
+        return
+    }
     SOUND_MANAGER.unmute();
 }
 
@@ -153,5 +174,6 @@ function myBlurFunction()
     {
         timeScale: 0
     })
+
     SOUND_MANAGER.mute();
 }

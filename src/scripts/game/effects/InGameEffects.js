@@ -233,6 +233,9 @@ export default class InGameEffects
             this.noiseTexture = new PIXI.Sprite(PIXI.Texture.from('fast_forward_noise'))
             this.noiseTexture.scale.set(config.width / this.noiseTexture.width);
         }
+
+        SOUND_MANAGER.play('fastforward')
+        
         this.game.UIContainer.addChild(this.noiseTexture)
         this.noiseTexture.y = Math.random() * config.height - this.noiseTexture.height
 

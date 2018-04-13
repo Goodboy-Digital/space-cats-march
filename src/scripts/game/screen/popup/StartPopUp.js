@@ -39,13 +39,6 @@ export default class StartPopUp extends StandardPop
         this.container.addChild(this.logo);
 
 
-        this.glass = new PIXI.Sprite.from('glass');
-        this.glass.anchor.set(0.5);
-        this.glass.x = config.width / 2
-        this.glass.y = config.height / 2
-        this.glass.scale.set(this.logoStartScale)
-            // this.screenManager.screensContainer.addChild(this.glass)
-
         // this.container.addChild(this.playButton)
 
         this.playButton = new UIButton('icon_play', 0.6)//new PIXI.Sprite(PIXI.Texture.from('play button_large_up'));
@@ -60,16 +53,29 @@ export default class StartPopUp extends StandardPop
         this.playButton.scale.set(0);
 
 
-         this.settingsButton = new UIButton('info', 0.85)
+        this.infoButton = new UIButton('info', 0.85)
+        this.infoButtonScale = this.logoMask.height / this.infoButton.height * 0.15
+        this.infoButton.scale.set(this.infoButtonScale, this.infoButtonScale);
+        // console.log(this.infoButton.width);
+        this.infoButton.x = config.width / 2 - this.infoButton.width;
+        this.infoButton.y = -config.height / 2 + this.infoButton.height// + config.height * 0.2;
+        // this.infoButton.y = -300
+        this.infoButton.interactive = true;
+        this.infoButton.buttonMode = true;
+        this.infoButton.on('mousedown', this.openInfo.bind(this)).on('touchstart', this.openInfo.bind(this));
+        this.container.addChild(this.infoButton)
+
+
+        this.settingsButton = new UIButton('icon_settings', 0.75)
         this.settingsButtonScale = this.logoMask.height / this.settingsButton.height * 0.15
         this.settingsButton.scale.set(this.settingsButtonScale, this.settingsButtonScale);
         // console.log(this.settingsButton.width);
-        this.settingsButton.x = config.width / 2 - this.settingsButton.width;
-        this.settingsButton.y = -config.height / 2 + this.settingsButton.height// + config.height * 0.2;
+        this.settingsButton.x = - config.width / 2 + this.settingsButton.width;
+        this.settingsButton.y = -config.height / 2 + this.settingsButton.height;
         // this.settingsButton.y = -300
         this.settingsButton.interactive = true;
         this.settingsButton.buttonMode = true;
-        this.settingsButton.on('mousedown', this.openInfo.bind(this)).on('touchstart', this.openInfo.bind(this));
+        this.settingsButton.on('mouseup', this.openSettings.bind(this)).on('touchend', this.openSettings.bind(this));
         this.container.addChild(this.settingsButton)
 
 
@@ -90,8 +96,11 @@ export default class StartPopUp extends StandardPop
         // this.container.addChild(this.toCats)
     }
 
+    openSettings(){
+        this.screenManager.openSettings();
+    }
     openInfo(){
-        this.screenManager.showInfo({x:config.width / 2, y:config.height / 2}, 'goodboy_logo_square', 'Made with love <3\nmeow!', {x:0, y:0.5})
+        this.screenManager.showInfo({x:config.width / 2, y:config.height / 2}, 'goodboy_heart', 'Made with fun and love\n by Goodboy Digital team\nmeow!', {x:0, y:0.5})
 
          SOUND_MANAGER.play('pickup_star');
          SOUND_MANAGER.play(getCatSound());

@@ -61,6 +61,8 @@ export default class GameData
 
         this.version = '0.0.0.17';
 
+        this.mute = false;
+
         this.resetCatData();
 
         this.minimumAmountOfCatsToReset = 3;
@@ -340,6 +342,7 @@ export default class GameData
         this.moneyData = data.money;
         this.actionsData = data.actionsData;
         this.shopData = data.shopData;
+        this.mute = data.mute;
         for (var name in data)
         {
             let n = name.indexOf("cat");
@@ -365,6 +368,7 @@ export default class GameData
             version: this.version,
             shopData: this.shopData,
             actionsData: this.actionsData,
+            mute: this.mute,
         }
         for (var i = 0; i < this.catsData.length; i++)
         {

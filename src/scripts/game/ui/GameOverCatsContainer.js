@@ -100,10 +100,10 @@ export default class GameOverCatsContainer extends UIList
         this.confirmButton.y = config.height - this.confirmButton.height //* 1.25;
 
         this.giftBox = new PIXI.Sprite(PIXI.Texture.from('results_newcat_rays_02'));//UIButton('icon_back');
-        let box = new PIXI.Sprite(PIXI.Texture.from('giftbox'));//UIButton('icon_back');
-        box.anchor.set(0.5);
-        box.scale.set(this.giftBox.width / box.width)
-        this.giftBox.addChild(box);
+        this.box = new PIXI.Sprite(PIXI.Texture.from('giftbox'));//UIButton('icon_back');
+        this.box.anchor.set(0.5);
+        this.box.scale.set(this.giftBox.width / this.box.width)
+        this.giftBox.addChild(this.box);
         this.giftBox.anchor.set(0.5);
         this.giftBoxScale = config.width / this.giftBox.width * 0.25
         this.giftBox.scale.set(this.giftBoxScale)
@@ -115,6 +115,7 @@ export default class GameOverCatsContainer extends UIList
         this.giftBox.x = this.giftBox.width// * 1.25;
         this.giftBox.y = this.confirmButton.y
         this.giftBoxSin = 0;
+        this.boxSin = 0;
 
 
 
@@ -172,15 +173,17 @@ export default class GameOverCatsContainer extends UIList
     {
         if (this.visible)
         {
-            if (this.giftBox.visible && this.giftBox.ableToRotate)
+            if (this.giftBox.visible)// && this.giftBox.ableToRotate)
             {
-                this.giftBox.rotation = Math.sin(this.giftBoxSin) * 0.2 - 0.1
+                this.giftBox.rotation = Math.sin(this.giftBoxSin) * 0.2// - 0.1
+                this.box.rotation = Math.cos(this.giftBoxSin) * 0.2// - 0.1
                 if (this.giftBox.ableToRotate)
                 {
-                    this.giftBox.scale.x = this.giftBoxScale + Math.cos(this.giftBoxSin) * 0.1
-                    this.giftBox.scale.y = this.giftBoxScale + Math.sin(this.giftBoxSin) * 0.1
-                    this.giftBoxSin += 0.1
+                    this.giftBox.scale.x = this.giftBoxScale + Math.cos(this.giftBoxSin) * 0.2
+                    this.giftBox.scale.y = this.giftBoxScale + Math.sin(this.giftBoxSin) * 0.2
+                    this.giftBoxSin += 0.15
                     this.giftBoxSin %= Math.PI * 2;
+
                 }
 
             }
@@ -200,6 +203,7 @@ export default class GameOverCatsContainer extends UIList
     collectGift()
     {
         this.onCollectGift.dispatch();
+        SOUND_MANAGER.play('open_chest_01')
         this.giftBox.visible = false;
     }
     collect()

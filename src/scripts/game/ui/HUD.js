@@ -170,11 +170,20 @@ export default class HUD extends PIXI.Container
         this.onStartAction = new Signals();
         this.onFinishAction = new Signals();
 
+        this.powerBarGift = new PIXI.Sprite.from('giftbox2');
 
+        this.powerBarGift.anchor.set(0.5);
+        this.powerBarGiftScale = this.powerBarBackground.height / this.powerBarGift.height * 1.8;
+        
+        this.powerBarGift.scale.set(this.powerBarGiftScale);
+        this.powerBarGift.x = this.powerBarContainer.x + this.powerBarContainer.width / 2
+        this.powerBarGift.y = this.powerBarContainer.y + this.powerBarContainer.height / 2
+        this.addChild(this.powerBarGift);
+        this.powerBarGiftSin = 0;
         this.hide(true);
 
-
     }
+
     disableAutoCollectAction()
     {
         this.hudActionList.disableAutoCollectAction();
@@ -208,6 +217,8 @@ export default class HUD extends PIXI.Container
         }
 
         SOUND_MANAGER.play('button_click')
+
+        this.powerBarGiftSin = 0;
 
         this.quiting = true;
         this.forceQuitButton.scale.set(this.forceQuiteScale * 0.75);
@@ -292,6 +303,13 @@ export default class HUD extends PIXI.Container
         if (!this.gameStart)
         {
             return;
+        }
+        if(this.powerBarGift){
+            this.powerBarGiftSin += delta * 10;
+
+            this.powerBarGift.rotation = Math.sin(this.powerBarGiftSin) * 0.1
+
+            this.powerBarGift.scale.set(Math.cos(this.powerBarGiftSin) * 0.02 + this.powerBarGiftScale, Math.sin(this.powerBarGiftSin) * 0.02 + this.powerBarGiftScale)
         }
         return
         this.catRotationSin += delta * 10;
