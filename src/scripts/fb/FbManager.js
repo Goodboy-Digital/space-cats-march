@@ -85,7 +85,7 @@ class FbManager
 		if(!this.live) return;
 		var ad = null;
 		FBInstant.getRewardedVideoAsync(
-		  '104011246993364_147921192602369',
+		  '572860816402905_572873263068327',
 		).then((rewardedVideo)=> {
 		  ad = rewardedVideo;
 			this.appendDebug(rewardedVideo);
@@ -102,6 +102,7 @@ class FbManager
 
 			if(cb) {
 				cb(params, true)
+				screenManager.hideVideoLoader();
 			}
 		}, (err)=> {
 			console.log('Error', err);
@@ -111,6 +112,7 @@ class FbManager
 			// console.log(cb);
 			if(cb) {
 				cb(params, false)
+				screenManager.hideVideoLoader();
 			}
 		});
 	}

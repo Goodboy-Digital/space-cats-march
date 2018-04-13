@@ -15,7 +15,7 @@ export default class AutoCollectButton extends PIXI.Container
         this.backButton = new PIXI.Sprite.from('back_button');
         this.container.addChild(this.backButton);
 
-        this.warningIcon = new PIXI.Sprite.from('info'); 
+        this.warningIcon = new PIXI.Sprite.from('new_item'); 
         this.warningIcon.anchor.set(0.5)
         this.warningIcon.scale.set(this.backButton.height / this.warningIcon.height * 0.5)
         this.warningIcon.x = this.backButton.width

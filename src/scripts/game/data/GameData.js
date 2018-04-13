@@ -59,7 +59,7 @@ export default class GameData
             tokens: 1,
         }
 
-        this.version = '0.0.0.18';
+        this.version = '0.1.0.1';
 
         this.mute = false;
 

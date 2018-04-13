@@ -11,6 +11,7 @@ import PrizeContainer from '../ui/PrizeContainer';
 import InfoContainer from '../ui/InfoContainer';
 import AskVideoContainer from '../ui/AskVideoContainer';
 import SettingsContainer from '../ui/SettingsContainer';
+import VideoLoader from '../ui/VideoLoader';
 import CoinsExplosion from '../effects/CoinsExplosion';
 import FbManager from '../../fb/FbManager'
 export default class SpaceCatsScreenManager extends ScreenManager
@@ -148,6 +149,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.currentPopUp = null;
         this.prevPopUp = null;
 
+        
 
         this.videoContainer = new PIXI.Container();
         let vdBg = new PIXI.Graphics().beginFill(0xFFFFFF).drawRect(0, 0, config.width, config.height);
@@ -177,7 +179,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.videoContainer.visible = false;
         // this.showPopUp('gameover')
             // this.toGame();
-            this.showPopUp('init')
+        this.showPopUp('init')
             // this.showPopUp('shop')
 
         this.infoContainer = new InfoContainer();
@@ -188,8 +190,16 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.addChild(this.askVideoContainer)
         this.askVideoContainer.hide();
 
+
+
         this.coinsExplosion = new CoinsExplosion();
         this.addChild(this.coinsExplosion);
+
+
+        this.videoLoader = new VideoLoader();
+        // this.prizeContainer.onPrizeCollected.add(this.hidePrizeContainer.bind(this));
+        this.addChild(this.videoLoader)
+        this.videoLoader.hide();
     }
     addCoinsParticles(pos, quant = 10, customData = {})
     {
@@ -262,6 +272,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
 
         this.coinsExplosion.update(delta);
         this.prizeContainer.update(delta);
+        this.videoLoader.update(delta);
 
         if (this.currentPopUp)
         {
@@ -276,6 +287,9 @@ export default class SpaceCatsScreenManager extends ScreenManager
         }
     }
 
+    hideVideoLoader(){
+        this.videoLoader.hide();
+    }
     closeVideo()
     {
         this.videoContainer.visible = false;
@@ -283,6 +297,9 @@ export default class SpaceCatsScreenManager extends ScreenManager
     loadVideo(callback, callbackParams)
     {
 
+        this.videoLoader.show();
+
+        // return
         this.videoContainer.off('mousedown', this.afterVideoCallback, callbackParams).off('touchstart', this.afterVideoCallback, callbackParams);
         if (callback)
         {
@@ -293,6 +310,8 @@ export default class SpaceCatsScreenManager extends ScreenManager
             this.afterVideoCallback = this.toGameWithBonus.bind(this);
         }
         FbManager.showAdd(this.afterVideoCallback, callbackParams)
+
+
         return
 
         this.videoContainer.on('mousedown', this.afterVideoCallback, callbackParams).on('touchstart', this.afterVideoCallback, callbackParams);
@@ -304,7 +323,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.showPopUp('video')
     }
     toGameWithBonus()
-    {
+    {          
         this.videoContainer.visible = false;
         if (this.currentScreen.label == 'GameScreen')
         {

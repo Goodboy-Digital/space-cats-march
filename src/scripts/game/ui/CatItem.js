@@ -97,7 +97,7 @@ export default class CatItem extends UIList {
         this.activeButtonContainer.addChild(this.catNameLabel);
         this.activeButtonContainer.addChild(this.coinIcon);
 
-        this.warningIcon = new PIXI.Sprite.from('info'); 
+        this.warningIcon = new PIXI.Sprite.from('new_item'); 
         this.warningIcon.anchor.set(0.5)
         this.warningIcon.scale.set(this.backButton.height / this.warningIcon.height * 0.5)
         this.warningIcon.x = this.backButton.width

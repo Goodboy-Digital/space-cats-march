@@ -540,13 +540,19 @@ export default class GameScreen extends Screen
 
         if (startWithBonus)
         {
-            this.addAutoCollectMode();
+            this.gameTimeScale = 0;
+            this.isPaused = true;
+            setTimeout(()=>{
+                this.addAutoCollectMode();
+                this.isPaused = false;
+            }, 750);
 
             for (var i = 0; i < 12; i++)
             {
                 let cat = this.addCat();
                 cat.forceToWaypoint(i)
             }
+            this.updateScales();
         }
         else
         {
@@ -637,7 +643,7 @@ export default class GameScreen extends Screen
         }, 1000);
         this.resetActionsVariables();
         this.scaleSound();
-       
+
     }
     killAfterSpecial()
     {

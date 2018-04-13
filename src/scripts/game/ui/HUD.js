@@ -173,7 +173,7 @@ export default class HUD extends PIXI.Container
         this.powerBarGift = new PIXI.Sprite.from('giftbox2');
 
         this.powerBarGift.anchor.set(0.5);
-        this.powerBarGiftScale = this.powerBarBackground.height / this.powerBarGift.height * 1.8;
+        this.powerBarGiftScale = this.powerBarBackground.height / this.powerBarGift.height * 1.2;
         
         this.powerBarGift.scale.set(this.powerBarGiftScale);
         this.powerBarGift.x = this.powerBarContainer.x + this.powerBarContainer.width / 2
