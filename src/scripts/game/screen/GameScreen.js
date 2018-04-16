@@ -167,7 +167,11 @@ export default class GameScreen extends Screen
             },
         );
         this.screenManager.closeVideo();
-        this.screenManager.prizeContainer.show(3);
+        this.doublePoints = 3;
+
+        this.addSpecialMode();
+        this.isPaused = false;
+        // this.screenManager.prizeContainer.show(3);
     }
     offerPrize()
     {
@@ -178,6 +182,7 @@ export default class GameScreen extends Screen
                 type: 'offer',
             },
         );
+
         this.screenManager.showAskVideo();
         this.isPaused = true;
         // this.onConfirmOffer();
@@ -217,11 +222,13 @@ export default class GameScreen extends Screen
         this.isAutoCollectMode = false;
         this.isSpecialMode = false;
 
+        // this.doublePoints = 0;
+
         this.specialTimer = 0;
         this.specialAcc = 0;
 
         this.autoCollectTimer = 0;
-        this.specialAcc = 0;
+        // this.specialAcc = 0;
 
         this.updateSpecialBar();
     }
@@ -369,7 +376,9 @@ export default class GameScreen extends Screen
         this.HUD.disableAutoCollectAction();
         this.isSpecialMode = false;
         this.specialTimer = 0;
-        this.specialAcc = 0;
+        // this.specialAcc = 0;
+
+        // this.doublePoints = 2;
 
         TweenLite.to(this, 0.5,
         {
@@ -400,14 +409,7 @@ export default class GameScreen extends Screen
         {
             this.specialAcc = 0;
         }
-        if (this.isSpecialMode)
-        {
-            this.HUD.updatePowerBar(this.specialTimer / this.specialTimerMax, 1, force);
-        }
-        else
-        {
-            this.HUD.updatePowerBar(this.specialAcc, 0, force);
-        }
+        this.HUD.updatePowerBar(this.specialAcc, 0, force);
     }
     addSpecialMode()
     {
@@ -416,31 +418,10 @@ export default class GameScreen extends Screen
             return
         }
 
-        TweenLite.to(this, 0.5,
-        {
-            gameTimeScale: 0,
-            onUpdate: () =>
-            {
-                this.scaleSound();
-            }
-        });
-        TweenLite.to(this, 1,
-        {
-            delay: 1.5,
-            gameTimeScale: 1.5,
-            onUpdate: () =>
-            {
-                this.scaleSound();
-            }
-        });
-
         this.inGameEffects.addDoublePoints();
-        this.inGameEffects.specialMode();
-
+        // this.inGameEffects.specialMode();
         this.environment.specialBackground();
-
         this.isSpecialMode = true;
-
         this.specialTimer = this.specialTimerMax;
 
     }
@@ -452,22 +433,20 @@ export default class GameScreen extends Screen
         }
 
         this.inGameEffects.removeDoublePoints();
-        this.killAfterSpecial();
+        // this.killAfterSpecial();
         this.environment.removeSpecialBackground();
 
-        TweenLite.to(this, 1,
-        {
-            gameTimeScale: 1,
-            onUpdate: () =>
-            {
-                this.scaleSound();
-            }
-        });
+        // TweenLite.to(this, 1,
+        // {
+        //     gameTimeScale: 1,
+        //     onUpdate: () =>
+        //     {
+        //         this.scaleSound();
+        //     }
+        // });
         this.isSpecialMode = false;
-
-
         this.specialTimer = 0;
-        this.specialAcc = 0;
+        // this.specialAcc = 0;
 
 
     }
@@ -540,6 +519,9 @@ export default class GameScreen extends Screen
         this.autoCollectTimer = 0;
         this.autoCollectTimerMax = 20;
 
+        // this.doublePoints = 0;
+        // this.doublePointsTimer = 0;
+
         this.itemTimerMax = 18;
         this.itemTimer = this.itemTimerMax;
 
@@ -562,11 +544,13 @@ export default class GameScreen extends Screen
 
         if (startWithBonus)
         {
+            this.doublePoints = 2;
             this.gameTimeScale = 0;
             this.isPaused = true;
             setTimeout(() =>
             {
                 this.addAutoCollectMode();
+                this.addSpecialMode();
                 this.isPaused = false;
             }, 750);
 
@@ -725,7 +709,8 @@ export default class GameScreen extends Screen
 
             this.timeToNext = this.timeToNextStandard + Math.sin(this.timerSin) * 0.1
 
-            // //console.log(this.timeToNext);
+            console.log(this.specialAcc)
+                // //console.log(this.timeToNext);
             if (this.isAutoCollectMode)
             {
                 if (this.autoCollectTimer <= 0)
@@ -878,6 +863,7 @@ export default class GameScreen extends Screen
         }
         this.addChild(this.currentItem);
 
+        // let ids = [3, 3, 3, 3, 3]
         let ids = [0, 2, 3, 3, 3, 3, 3, 3, 3]
             // let ids = [0, 2]
         this.currentItem.reset(
@@ -1037,17 +1023,12 @@ export default class GameScreen extends Screen
             this.gameSpeed = 1.1;
         }
 
-        // if (!this.isSpecialMode)
-        // {
-        //     this.specialAcc *= 0.5;
-        //     this.updateSpecialBar();
         this.inGameEffects.popLabel(labelPos, 'MISS', 0, -1, 0.7);
         this.currentDeadCats--;
         if (this.currentDeadCats <= 0)
         {
             this.gameOver();
         }
-        // }
 
         if (cat.parent)
         {
@@ -1068,10 +1049,7 @@ export default class GameScreen extends Screen
             y: cat.y - cat.height
         }
         let points = 0;
-        // if (labelPos.x > config.width * 0.85)
-        // {
-        //     labelPos.x -= config.width * 0.15
-        // }
+
         let labelData = {
             text: '',
             scagmle: 1,
@@ -1082,7 +1060,7 @@ export default class GameScreen extends Screen
         {
             points = 10;
             this.gameSpeed -= 0.05
-            labelData.special += 0.065;
+            labelData.special += 0.005;
             labelData.text = 'PURRFECT\n+'
             labelData.scale = 1
             this.inGameEffects.addBean(cat,
@@ -1096,7 +1074,7 @@ export default class GameScreen extends Screen
         {
             points = 5;
             this.gameSpeed -= 0.025
-            labelData.special += 0.05;
+            labelData.special += 0.0025;
             labelData.text = 'GREAT\n+'
             labelData.scale = 0.9
             this.inGameEffects.addBean(cat,
@@ -1109,22 +1087,12 @@ export default class GameScreen extends Screen
         {
             points = 1;
             this.gameSpeed -= 0.01
-            labelData.special += 0.025;
+            labelData.special += 0.0015;
             labelData.text = 'GOOD\n+'
             labelData.scale = 0.75
         }
-        //console.log(auto, labelData.special);
-        if (!auto)
-        {
-
-            this.specialAcc += labelData.special;
-        }
-
-        // this.specialAcc += 0.5
-        // if (this.isSpecialMode)
-        // {
-        //     points *= 2;
-        // }
+        this.specialAcc += labelData.special;
+        console.log(this.specialAcc);
 
         // forceY: Math.random() * 150 - 75,
         this.inGameEffects.addCoinParticles(coinPos, Math.ceil(points / 2),
@@ -1150,6 +1118,11 @@ export default class GameScreen extends Screen
         points += points * cat.catData.collectedMultiplier
         points += points * GAME_DATA.trophyData.collectedMultiplier;
         points += points * this.actionMultiplier;
+        if (this.isSpecialMode)
+        {
+            points *= this.doublePoints;
+
+        }
         points /= MAX_NUMBER;
 
         this.currentPoints += points;
@@ -1159,20 +1132,15 @@ export default class GameScreen extends Screen
         labelData.text = '+' + utils.formatPointsLabel(points);
         // labelData.text += utils.formatPointsLabel(points);
         this.inGameEffects.popLabel(labelPos, labelData.text, 0, 3, labelData.scale);
-        if (!this.isAutoCollectMode)
-        {
-            if (!this.isSpecialMode)
-            {
-                this.updateSpecialBar();
 
-                if (this.specialAcc >= 1)
-                {
-                    this.specialAcc = 0;
-                    this.updateSpecialBar();
-                    this.addGiftBox();
-                    // this.addSpecialMode();
-                }
-            }
+        this.updateSpecialBar();
+
+        if (this.specialAcc >= 1)
+        {
+            this.specialAcc = 0;
+            this.updateSpecialBar();
+            this.addGiftBox();
+            // this.addSpecialMode();
         }
         if (this.gameSpeed < 0.75)
         {

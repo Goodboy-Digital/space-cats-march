@@ -36,7 +36,7 @@ export default class InfoContainer extends UIList
         this.infoList.addChild(this.infoIcon);
 
         this.addChild(this.infoContainer)
-        this.infoScale = config.width / this.infoContainer.width * 0.65
+        this.infoScale = config.width / this.infoContainer.width * 0.75
         this.infoContainer.scale.set(this.infoScale)
         this.realSize = {
             w:this.infoContainer.width / this.infoScale,

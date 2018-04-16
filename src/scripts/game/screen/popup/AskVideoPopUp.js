@@ -77,32 +77,33 @@ export default class AskVideoPopUp extends StandardPop
         this.videoAnimationContainer.addChild(this.videoLogo);
 
 
-        this.auto = new PIXI.Sprite.from('video_rewards_automate');
+        this.auto = new PIXI.Sprite.from('text_catnip_frenzy');
         this.auto.anchor.set(0, 0.5);
-        this.auto.scale.set(0.75);
-        this.auto.x = this.auto.width
+        this.auto.scale.set(config.height / this.auto.height * 0.22);
+        this.auto.x = this.auto.width * 0.1
         this.auto.y = -this.auto.height / 2
+        this.auto.rotation = -0.1
         this.videoAnimationContainer.addChild(this.auto);
 
 
-        this.double = new PIXI.Sprite.from('video_reward_double_coins');
+        this.double = new PIXI.Sprite.from('text_double_points');
         this.double.anchor.set(0, 0.5);
-        this.double.scale.set(0.75);
+        this.double.scale.set(config.height / this.double.height * 0.22);
         this.videoAnimationContainer.addChild(this.double);
-        this.double.x = this.auto.width
+        this.double.x = this.auto.width * 0.1
         this.double.y = this.double.height / 2
-
+        this.double.rotation = 0.1
 
 
         this.container.addChild(this.videoAnimationContainer);
 
         this.videoAnimationContainer.scale.set(config.width / this.videoAnimationContainer.width * 0.55)
-        this.videoAnimationContainer.y = -this.videoAnimationContainer.height * 0.075
+        this.videoAnimationContainer.y = -this.videoAnimationContainer.height * 0.015
 
 
         this.playButton = new UIButton('icon_play_video');
         // this.playButton.anchor.set(0.5)
-        this.playButtonScale = config.width / this.playButton.width * 0.15;
+        this.playButtonScale = config.width / this.playButton.width * 0.20;
         this.playButton.scale.set(this.playButtonScale)
         this.playButtonSin = 0;
         // this.playButtonScale = this.logoMask.height / this.playButton.height * 0.35
@@ -135,10 +136,10 @@ export default class AskVideoPopUp extends StandardPop
         videoLabel.scale.set(config.height / videoLabel.height * 0.07)
 
         videoLabel.y = -this.h / 3 + 50
-        this.cancelButton.x = -this.cancelButton.width * 1.5
-        this.cancelButton.y = this.cancelButton.height * 2
-        this.playButton.x = this.cancelButton.width * 1.5 //this.playButton.width * 2.5
-        this.playButton.y = this.cancelButton.y //this.playButton.height*2
+        this.cancelButton.x = config.width / 2 - this.cancelButton.width * 2.5
+        this.cancelButton.y = - this.cancelButton.height * 2.5
+        // this.playButton.x = this.cancelButton.width * 1.5 //this.playButton.width * 2.5
+        this.playButton.y = this.playButton.height * 1.2//this.playButton.height*2
 
 
         this.prizeDark = new PIXI.Graphics().beginFill(0).drawRect(0, 0, config.width, config.height) //new PIXI.Sprite(PIXI.Texture.from('UIpiece.png'));

@@ -60,6 +60,10 @@ export default class GameData
         }
 
         this.version = '0.1.0.2';
+        this.catsVersion = '1.0.0';
+        this.actionsVersion = '1.0.0';
+        this.shopVersion = '1.0.0';
+        this.forceReset = '1.0.0';
 
         this.mute = false;
 
@@ -349,7 +353,7 @@ export default class GameData
     }
     loadData(data)
     {
-        if (!data.chestData || !data.version || data.version != this.version)
+        if (!data.chestData || !data.forceReset || data.forceReset != this.forceReset && this.forceReset != '1.0.0')
         {
             STORAGE.reset();
             location.reload();
@@ -361,13 +365,16 @@ export default class GameData
         this.actionsData = data.actionsData;
         this.shopData = data.shopData;
         this.mute = data.mute;
+        this.catsVersion = data.catsVersion;
+        this.actionsVersion = data.actionsVersion;
+        this.shopVersion = data.shopVersion;
+        this.forceReset = data.forceReset;
+        this.version = data.version;
         for (var name in data)
         {
             let n = name.indexOf("cat");
             if (n >= 0)
             {
-                // console.log(parseInt(name.substring(3)));
-                // console.log(data[name]);
                 let id = parseInt(name.substring(3))
                 this.catsData[id] = data[name];
             }
@@ -387,6 +394,10 @@ export default class GameData
             shopData: this.shopData,
             actionsData: this.actionsData,
             mute: this.mute,
+            catsVersion: this.catsVersion,
+            actionsVersion: this.actionsVersion,
+            shopVersion: this.shopVersion,
+            forceReset: this.forceReset,
         }
         for (var i = 0; i < this.catsData.length; i++)
         {

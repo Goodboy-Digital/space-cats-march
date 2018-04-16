@@ -180,7 +180,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         // this.showPopUp('gameover')
         // this.toGame();
         this.showPopUp('init')
-            // this.showPopUp('shop')
+            // this.showPopUp('video')
 
         this.infoContainer = new InfoContainer();
         this.addChild(this.infoContainer)
@@ -191,7 +191,7 @@ export default class SpaceCatsScreenManager extends ScreenManager
         this.askVideoContainer.hide();
         // this.askVideoContainer.show();
 
-
+        
 
         this.coinsExplosion = new CoinsExplosion();
         this.addChild(this.coinsExplosion);
