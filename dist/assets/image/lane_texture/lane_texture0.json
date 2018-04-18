@@ -1,0 +1,20 @@
+{"frames": {
+
+"lane_texture.png":
+{
+	"frame": {"x":1,"y":1,"w":256,"h":256},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":256},
+	"sourceSize": {"w":256,"h":256}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "lane_texture0.png",
+	"format": "RGBA8888",
+	"size": {"w":258,"h":258},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:904766e90f6c8ed0886c50d9a4bccf6b:78e1b83f6acd139fcee48c1c33623aeb:732ebbf874defd0ecfb00dd5f07ef4c0$"
+}
+}

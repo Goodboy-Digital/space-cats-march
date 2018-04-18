@@ -11,6 +11,7 @@ import SoundManager from './soundManager/SoundManager'
 import SoundManagerCordova from './soundManager/SoundManagerCordova'
 import imageManifest from './manifests/manifest-image'
 import audioManifest from './manifests/manifest-audio'
+import spritesheetManifest from './manifests/manifest'
 import FbManager from './fb/FbManager'
 
 window.STORAGE = new LocalStorage();
@@ -25,10 +26,10 @@ window.COINS_POOL = [];
 window.CLASSES = {}
 
 window.PAWN = {
-    width: 50,
-    height: 50
-}
-window.console.log = function() {}
+        width: 50,
+        height: 50
+    }
+    window.console.log = function() {}
 window.console.warn = function() {}
 window.console.groupCollapsed = function(teste)
     {
@@ -64,28 +65,54 @@ window.MAX_NUMBER = 1000000;
 window.iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
 
-startLoader();
 
-// window.getPossibleCat = function(id = -1){
-//     if(id <= 0){
-//         id = Math.floor(CAT_LIST.length * Math.random());
-//     }
-//     return CAT_LIST[id];
-// }
+console.log(spritesheetManifest['default'][0]);
+//startLoader();
+const jsons = [];
+loadManifests();
 
-// window.FbManager = new FbManager();
+function loadManifests()
+{
+    for (var i = spritesheetManifest['default'].length - 1; i >= 0; i--)
+    {
+        let dest = 'assets/' + spritesheetManifest['default'][i]
 
+        jsons.push(dest);
+        PIXI.loader.add(dest)
+    }
+    PIXI.loader.load(afterLoadManifests);
+}
 
+function afterLoadManifests(evt)
+{
+
+    for (var key in PIXI.utils.TextureCache)
+    {
+        var copyKey = key;
+        copyKey = copyKey.substr(0, copyKey.length - 4)
+        copyKey = copyKey.split('/')
+        copyKey = copyKey[copyKey.length - 1]
+        var temp = PIXI.utils.TextureCache[key];
+        delete PIXI.utils.TextureCache[key];
+        PIXI.utils.TextureCache[copyKey] = temp;
+    }
+
+    startLoader();
+
+}
 function startLoader()
 {
 
-    for (var i = 0; i < imageManifest.length; i++)
-    {
-        PIXI.loader.add(imageManifest[i].id, imageManifest[i].url)
-    }
+    // for (var i = 0; i < imageManifest.length; i++)
+    // {
+    //     PIXI.loader.add(imageManifest[i].id, imageManifest[i].url)
+    // }
     for (var i = 0; i < audioManifest.length; i++)
     {
+        // mystring.replace(/,/g , "newchar");
 
+        // console.log();
+        audioManifest[i].url = audioManifest[i].url.replace(/\\/, "/")
         let url = audioManifest[i].url.substr(0, audioManifest[i].url.length - 4);
 
         if (iOS)

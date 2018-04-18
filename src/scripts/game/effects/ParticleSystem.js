@@ -23,7 +23,7 @@ export default class ParticleSystem extends PIXI.Container{
 	}
 	getParticle(src = null){
 		let source = src?src:'coin/coin_0000'+Math.ceil(Math.random() * 8)+'.png';
-		let sprite = PIXI.Sprite.fromImage(source);
+		let sprite = PIXI.Sprite.from(source);
 		sprite.anchor.set(0.5)
 		return sprite;
 	}

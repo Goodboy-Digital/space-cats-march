@@ -419,6 +419,17 @@ export default class GameScreen extends Screen
         }
 
         this.inGameEffects.addDoublePoints();
+        // this.killAfterSpecial();
+        this.gameTimeScale = 0;
+        TweenLite.to(this, 1,
+        {
+            delay:0.75,
+            gameTimeScale: 1,
+            onUpdate: () =>
+            {
+                this.scaleSound();
+            }
+        });
         // this.inGameEffects.specialMode();
         this.environment.specialBackground();
         this.isSpecialMode = true;
@@ -709,7 +720,7 @@ export default class GameScreen extends Screen
 
             this.timeToNext = this.timeToNextStandard + Math.sin(this.timerSin) * 0.1
 
-            console.log(this.specialAcc)
+            // console.log(this.specialAcc)
                 // //console.log(this.timeToNext);
             if (this.isAutoCollectMode)
             {

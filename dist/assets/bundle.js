@@ -784,7 +784,7 @@ exports.default = {
         return canvas;
     },
     getSprite: function getSprite(frame) {
-        var texture = PIXI.Texture.fromFrame(frame);
+        var texture = PIXI.Texture.from(frame);
         return new PIXI.Sprite(texture);
     },
     shuffle: function shuffle(a) {
@@ -36699,6 +36699,10 @@ var _manifestAudio = __webpack_require__(440);
 
 var _manifestAudio2 = _interopRequireDefault(_manifestAudio);
 
+var _manifest = __webpack_require__(441);
+
+var _manifest2 = _interopRequireDefault(_manifest);
+
 var _FbManager = __webpack_require__(169);
 
 var _FbManager2 = _interopRequireDefault(_FbManager);
@@ -36719,9 +36723,8 @@ window.CLASSES = {};
 window.PAWN = {
     width: 50,
     height: 50
-};
-window.console.log = function () {};
-window.console.warn = function () {};
+    // window.console.log = function() {}
+};window.console.warn = function () {};
 window.console.groupCollapsed = function (teste) {
     return teste;
 }; //('hided warnings')
@@ -36747,25 +36750,46 @@ window.MAX_NUMBER = 1000000;
 
 window.iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
-startLoader();
+console.log(_manifest2.default['default'][0]);
+//startLoader();
+var jsons = [];
+loadManifests();
 
-// window.getPossibleCat = function(id = -1){
-//     if(id <= 0){
-//         id = Math.floor(CAT_LIST.length * Math.random());
-//     }
-//     return CAT_LIST[id];
-// }
+function loadManifests() {
+    for (var i = _manifest2.default['default'].length - 1; i >= 0; i--) {
+        var dest = 'assets/' + _manifest2.default['default'][i];
 
-// window.FbManager = new FbManager();
+        jsons.push(dest);
+        PIXI.loader.add(dest);
+    }
+    PIXI.loader.load(afterLoadManifests);
+}
 
+function afterLoadManifests(evt) {
 
+    for (var key in PIXI.utils.TextureCache) {
+        var copyKey = key;
+        copyKey = copyKey.substr(0, copyKey.length - 4);
+        copyKey = copyKey.split('/');
+        copyKey = copyKey[copyKey.length - 1];
+        var temp = PIXI.utils.TextureCache[key];
+        delete PIXI.utils.TextureCache[key];
+        PIXI.utils.TextureCache[copyKey] = temp;
+    }
+
+    startLoader();
+}
 function startLoader() {
 
-    for (var i = 0; i < _manifestImage2.default.length; i++) {
-        PIXI.loader.add(_manifestImage2.default[i].id, _manifestImage2.default[i].url);
-    }
+    // for (var i = 0; i < imageManifest.length; i++)
+    // {
+    //     PIXI.loader.add(imageManifest[i].id, imageManifest[i].url)
+    // }
     for (var i = 0; i < _manifestAudio2.default.length; i++) {
+        // mystring.replace(/,/g , "newchar");
 
+        // console.log();
+        _manifestAudio2.default[i].url = _manifestAudio2.default[i].url.replace(/\\/, "/");
         var url = _manifestAudio2.default[i].url.substr(0, _manifestAudio2.default[i].url.length - 4);
 
         if (iOS) {
@@ -73337,11 +73361,22 @@ var GameScreen = function (_Screen) {
     }, {
         key: 'addSpecialMode',
         value: function addSpecialMode() {
+            var _this5 = this;
+
             if (this.isSpecialMode) {
                 return;
             }
 
             this.inGameEffects.addDoublePoints();
+            // this.killAfterSpecial();
+            this.gameTimeScale = 0;
+            _gsap2.default.to(this, 1, {
+                delay: 0.75,
+                gameTimeScale: 1,
+                onUpdate: function onUpdate() {
+                    _this5.scaleSound();
+                }
+            });
             // this.inGameEffects.specialMode();
             this.environment.specialBackground();
             this.isSpecialMode = true;
@@ -73374,7 +73409,7 @@ var GameScreen = function (_Screen) {
     }, {
         key: 'addCat',
         value: function addCat() {
-            var _this5 = this;
+            var _this6 = this;
 
             var lane = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
 
@@ -73403,7 +73438,7 @@ var GameScreen = function (_Screen) {
             cat.setWaypoints(this.environment.lanesWaypoints[lane]);
             cat.onDie.add(function (cat, forced) {
                 if (!forced) {
-                    _this5.missCat(cat);
+                    _this6.missCat(cat);
                 }
             });
             this.catList.push(cat);
@@ -73416,7 +73451,7 @@ var GameScreen = function (_Screen) {
     }, {
         key: 'resetGame',
         value: function resetGame() {
-            var _this6 = this;
+            var _this7 = this;
 
             var startWithBonus = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
@@ -73467,9 +73502,9 @@ var GameScreen = function (_Screen) {
                 this.gameTimeScale = 0;
                 this.isPaused = true;
                 setTimeout(function () {
-                    _this6.addAutoCollectMode();
-                    _this6.addSpecialMode();
-                    _this6.isPaused = false;
+                    _this7.addAutoCollectMode();
+                    _this7.addSpecialMode();
+                    _this7.isPaused = false;
                 }, 750);
 
                 for (var i = 0; i < 12; i++) {
@@ -73519,7 +73554,7 @@ var GameScreen = function (_Screen) {
     }, {
         key: 'gameOver',
         value: function gameOver() {
-            var _this7 = this;
+            var _this8 = this;
 
             this.environment.hideLines();
             if (this.currentItem) {
@@ -73552,9 +73587,9 @@ var GameScreen = function (_Screen) {
             this.screenManager.coinsExplosion.killAll();
             // GAME_DATA.addCats(this.catLanesList);
             setTimeout(function () {
-                _this7.screenManager.showPopUp('gameover', {
-                    catsList: _this7.catLanesList,
-                    points: _this7.currentPoints
+                _this8.screenManager.showPopUp('gameover', {
+                    catsList: _this8.catLanesList,
+                    points: _this8.currentPoints
                 });
             }, 1000);
             this.resetActionsVariables();
@@ -73607,7 +73642,7 @@ var GameScreen = function (_Screen) {
 
                 this.timeToNext = this.timeToNextStandard + Math.sin(this.timerSin) * 0.1;
 
-                console.log(this.specialAcc);
+                // console.log(this.specialAcc)
                 // //console.log(this.timeToNext);
                 if (this.isAutoCollectMode) {
                     if (this.autoCollectTimer <= 0) {
@@ -73692,12 +73727,12 @@ var GameScreen = function (_Screen) {
     }, {
         key: 'addGiftBox',
         value: function addGiftBox() {
-            var _this8 = this;
+            var _this9 = this;
 
             if (!this.currentGiftBox) {
                 this.currentGiftBox = new _GameItem2.default();
                 this.currentGiftBox.onCollect.add(function (item) {
-                    _this8.collectItem(item);
+                    _this9.collectItem(item);
                 });
             }
             this.addChild(this.currentGiftBox);
@@ -73713,13 +73748,13 @@ var GameScreen = function (_Screen) {
     }, {
         key: 'addItem',
         value: function addItem() {
-            var _this9 = this;
+            var _this10 = this;
 
             this.itemTimer = this.itemTimerMax + Math.random() * this.itemTimerMax * 0.5;
             if (!this.currentItem) {
                 this.currentItem = new _GameItem2.default();
                 this.currentItem.onCollect.add(function (item) {
-                    _this9.collectItem(item);
+                    _this10.collectItem(item);
                 });
             }
             this.addChild(this.currentItem);
@@ -80221,116 +80256,122 @@ Object.defineProperty(exports, "__esModule", {
 });
 var assets = [{
 	"id": "boing",
-	"url": "assets/audio/boing.mp3"
+	"url": "assets/audio\\boing.mp3"
 }, {
 	"id": "button_click",
-	"url": "assets/audio/button_click.mp3"
+	"url": "assets/audio\\button_click.mp3"
 }, {
 	"id": "cat_02",
-	"url": "assets/audio/cat_02.mp3"
+	"url": "assets/audio\\cat_02.mp3"
 }, {
 	"id": "cat_01",
-	"url": "assets/audio/cat_01.mp3"
+	"url": "assets/audio\\cat_01.mp3"
 }, {
 	"id": "cat_03",
-	"url": "assets/audio/cat_03.mp3"
+	"url": "assets/audio\\cat_03.mp3"
 }, {
 	"id": "cat_04",
-	"url": "assets/audio/cat_04.mp3"
+	"url": "assets/audio\\cat_04.mp3"
 }, {
 	"id": "cat_05",
-	"url": "assets/audio/cat_05.mp3"
-}, {
-	"id": "cat_07",
-	"url": "assets/audio/cat_07.mp3"
+	"url": "assets/audio\\cat_05.mp3"
 }, {
 	"id": "cat_06",
-	"url": "assets/audio/cat_06.mp3"
+	"url": "assets/audio\\cat_06.mp3"
+}, {
+	"id": "cat_07",
+	"url": "assets/audio\\cat_07.mp3"
 }, {
 	"id": "cat_08",
-	"url": "assets/audio/cat_08.mp3"
+	"url": "assets/audio\\cat_08.mp3"
 }, {
 	"id": "cat_09",
-	"url": "assets/audio/cat_09.mp3"
+	"url": "assets/audio\\cat_09.mp3"
 }, {
 	"id": "cat_10",
-	"url": "assets/audio/cat_10.mp3"
-}, {
-	"id": "cat_fall_02",
-	"url": "assets/audio/cat_fall_02.mp3"
+	"url": "assets/audio\\cat_10.mp3"
 }, {
 	"id": "cat_fall_01",
-	"url": "assets/audio/cat_fall_01.mp3"
+	"url": "assets/audio\\cat_fall_01.mp3"
+}, {
+	"id": "cat_fall_02",
+	"url": "assets/audio\\cat_fall_02.mp3"
 }, {
 	"id": "cat_fall_03",
-	"url": "assets/audio/cat_fall_03.mp3"
+	"url": "assets/audio\\cat_fall_03.mp3"
 }, {
 	"id": "coins_01",
-	"url": "assets/audio/coins_01.mp3"
+	"url": "assets/audio\\coins_01.mp3"
 }, {
 	"id": "coins_02",
-	"url": "assets/audio/coins_02.mp3"
+	"url": "assets/audio\\coins_02.mp3"
 }, {
 	"id": "coins_03",
-	"url": "assets/audio/coins_03.mp3"
+	"url": "assets/audio\\coins_03.mp3"
 }, {
 	"id": "coins_04",
-	"url": "assets/audio/coins_04.mp3"
+	"url": "assets/audio\\coins_04.mp3"
 }, {
 	"id": "fastforward",
-	"url": "assets/audio/fastforward.mp3"
+	"url": "assets/audio\\fastforward.mp3"
 }, {
 	"id": "getstar",
-	"url": "assets/audio/getstar.mp3"
+	"url": "assets/audio\\getstar.mp3"
 }, {
 	"id": "open_chest_01",
-	"url": "assets/audio/open_chest_01.mp3"
+	"url": "assets/audio\\open_chest_01.mp3"
 }, {
 	"id": "pickup",
-	"url": "assets/audio/pickup.mp3"
+	"url": "assets/audio\\pickup.mp3"
 }, {
 	"id": "pickup_item2",
-	"url": "assets/audio/pickup_item2.mp3"
+	"url": "assets/audio\\pickup_item2.mp3"
 }, {
 	"id": "pickup_present",
-	"url": "assets/audio/pickup_present.mp3"
+	"url": "assets/audio\\pickup_present.mp3"
 }, {
 	"id": "pickup_star",
-	"url": "assets/audio/pickup_star.mp3"
+	"url": "assets/audio\\pickup_star.mp3"
 }, {
 	"id": "pogo_boing",
-	"url": "assets/audio/pogo_boing.mp3"
+	"url": "assets/audio\\pogo_boing.mp3"
 }, {
 	"id": "pop",
-	"url": "assets/audio/pop.mp3"
+	"url": "assets/audio\\pop.mp3"
 }, {
 	"id": "rocket_launch_01",
-	"url": "assets/audio/rocket_launch_01.mp3"
+	"url": "assets/audio\\rocket_launch_01.mp3"
 }, {
 	"id": "score_loop",
-	"url": "assets/audio/score_loop.mp3"
+	"url": "assets/audio\\score_loop.mp3"
 }, {
 	"id": "spacecat_game_music",
-	"url": "assets/audio/spacecat_game_music.mp3"
+	"url": "assets/audio\\spacecat_game_music.mp3"
 }, {
 	"id": "spacecat_menu_music",
-	"url": "assets/audio/spacecat_menu_music.mp3"
+	"url": "assets/audio\\spacecat_menu_music.mp3"
 }, {
 	"id": "star_01",
-	"url": "assets/audio/star_01.mp3"
+	"url": "assets/audio\\star_01.mp3"
 }, {
 	"id": "star_02",
-	"url": "assets/audio/star_02.mp3"
+	"url": "assets/audio\\star_02.mp3"
 }, {
 	"id": "star_03",
-	"url": "assets/audio/star_03.mp3"
+	"url": "assets/audio\\star_03.mp3"
 }, {
 	"id": "teleport",
-	"url": "assets/audio/teleport.mp3"
+	"url": "assets/audio\\teleport.mp3"
 }];
 
 exports.default = assets;
 module.exports = exports["default"];
+
+/***/ }),
+/* 441 */
+/***/ (function(module, exports) {
+
+module.exports = {"default":["image/lane_texture/lane_texture0.json","image/pattern/pattern0.json","image/cats/cats0.json","image/ui/ui0.json","image/ui/ui1.json","image/ui/ui2.json"]}
 
 /***/ })
 /******/ ]);

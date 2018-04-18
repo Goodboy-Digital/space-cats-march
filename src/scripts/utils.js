@@ -520,7 +520,7 @@ export default
 
     getSprite(frame)
     {
-        let texture = PIXI.Texture.fromFrame(frame);
+        let texture = PIXI.Texture.from(frame);
         return new PIXI.Sprite(texture);
     },
 

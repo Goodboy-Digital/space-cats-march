@@ -10,12 +10,14 @@
     "audio:watch": "node ./tools/audio-watch.js",
     "model": "node ./tools/model.js",
     "model:watch": "node ./tools/model-watch.js",
+    "tiny": "node ./tools/tiny.js",
     "json": "node ./tools/json.js",
     "json:watch": "node ./tools/json-watch.js",
     "start": "npm run image && npm run model && npm run audio && webpack-dev-server --progress --colors --no-info --client-log-level error",
     "serve": "webpack-dev-server --progress --colors",
     "dev:fb": "npm run assets & npm run assets:watch & npm run js:watch",
-    "build": "webpack --progress --colors "
+    "build": "npm run assets && npm run tiny && webpack",
+    "assets": "npm run image & npm run json & npm run audio"
   },
   "author": "Jojo | Jordan Machado",
   "license": "CC-BY-NC-ND-4.0",
@@ -55,9 +57,11 @@
     "ffmpeg": "0.0.4",
     "gsap": "^1.20.3",
     "howler": "^2.0.9",
+    "imagemagick": "^0.1.3",
     "npm": "^5.7.1",
     "pixi-filters": "^2.5.1",
     "pixi.js": "^4.7.0",
-    "signals": "^1.0.0"
+    "signals": "^1.0.0",
+    "tinify": "^1.5.0"
   }
 }
