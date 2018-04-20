@@ -12,7 +12,7 @@ const texturepack = function(mFolderPath, mId, mDestPath, mCb) {
 	const name = outpath + '/' + tpsId + '{v}';
 	console.log('texturepack'.rainbow);
 	// const variant = ['1:'];//, `${lowResScale}:_mip::2048:2048`];
-	const variant = [`${lowResScale}:_mip::2048:2048`];
+	const variant = [`${lowResScale}:1::2048:2048`];
 	const opts = [
 	    '--data', name + '{n}.json',
 	    '--format', 'pixijs',

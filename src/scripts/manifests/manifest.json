@@ -1,10 +1,9 @@
 {
     "default": [
-        "image/pattern/pattern0.json",
-        "image/lane_texture/lane_texture0.json",
-        "image/cats/cats0.json",
-        "image/ui/ui0.json",
-        "image/ui/ui1.json",
-        "image/ui/ui2.json"
+        "image/pattern/pattern10.json",
+        "image/lane_texture/lane_texture10.json",
+        "image/cats/cats10.json",
+        "image/ui/ui10.json",
+        "image/ui/ui11.json"
     ]
 }
