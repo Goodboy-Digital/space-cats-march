@@ -59,7 +59,7 @@ export default class GameData
             tokens: 1,
         }
 
-        this.version = '0.1.0.2';
+        this.version = '1.0.0.0';
         this.catsVersion = '1.0.0';
         this.actionsVersion = '1.0.0';
         this.shopVersion = '1.0.0';
@@ -369,7 +369,7 @@ export default class GameData
         this.actionsVersion = data.actionsVersion;
         this.shopVersion = data.shopVersion;
         this.forceReset = data.forceReset;
-        this.version = data.version;
+        // this.version = data.version;
         for (var name in data)
         {
             let n = name.indexOf("cat");

@@ -17,7 +17,7 @@ export default class InGameEffects
 
     addBombAreaBean(cat)
     {
-
+        return
         let angle = Math.PI / 4 //Math.atan2(cat.y - last.y, bomb.x - last.x) + Math.PI / 2;
 
         let graphicContainer = new PIXI.Container();
@@ -369,6 +369,7 @@ export default class InGameEffects
 
     popLabel(pos, label, delay = 0, dir = 1, scale = 1, randonRotation = true)
     {
+        // return
         let tempLabel = null;
         if (LABEL_POOL.length)
         {

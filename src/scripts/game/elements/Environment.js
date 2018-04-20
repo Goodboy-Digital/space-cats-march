@@ -121,7 +121,7 @@ export default class Environment extends PIXI.Container
         {
             TweenLite.to(this.trails[i].mesh, 1,
             {
-                alpha: 0.75
+                alpha: 0.5
             })
             utils.addColorTween(this.trails[i].mesh, this.trails[i].mesh.tint, COLORS[i], 1);
         }

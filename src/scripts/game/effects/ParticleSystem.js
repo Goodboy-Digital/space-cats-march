@@ -29,7 +29,7 @@ export default class ParticleSystem extends PIXI.Container{
 	}
 	
 	createParticles(pos = {x:0, y:0}, quant = 4, src = null){
-		// return
+		return
 
 		this.hasParticles = true;
 		this.particleUpdater = 0;

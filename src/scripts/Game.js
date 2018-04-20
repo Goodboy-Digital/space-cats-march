@@ -2,12 +2,12 @@ import * as PIXI from 'pixi.js';
 
 export default class Game {
     constructor(config, screenManager) {
-        const Renderer = (config.webgl) ? PIXI.autoDetectRenderer : PIXI.CanvasRenderer;
         //config.width = window.screen.width;
         this.screenManager = screenManager;
-        // 	width: 414,
+        //  width: 414,
         // height: 736,
 
+        const Renderer = (config.webgl) ? PIXI.autoDetectRenderer : PIXI.CanvasRenderer;
         let ratio = config.width / config.height;
         if (ratio > 0.7) {
             config.width = config.height * 0.7
@@ -20,8 +20,8 @@ export default class Game {
         window.renderer = new PIXI.Application({
         	width:config.width,
         	height:config.height,
-        	resolution:1.5,
-        	// antialias:true
+        	resolution:Math.min(window.devicePixelRatio, 1.5),
+        	antialias:false
         	// config.width || 800, config.height || 600, config.rendererOptions
         });//new Renderer(config.width || 800, config.height || 600, config.rendererOptions);
         document.body.appendChild(window.renderer.view);

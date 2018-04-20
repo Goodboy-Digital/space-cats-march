@@ -4,16 +4,16 @@ const assets = [
 	"url":"assets/audio\\boing.mp3"
 	},
 	{
+	"id":"cat_01",
+	"url":"assets/audio\\cat_01.mp3"
+	},
+	{
 	"id":"button_click",
 	"url":"assets/audio\\button_click.mp3"
 	},
 	{
 	"id":"cat_02",
 	"url":"assets/audio\\cat_02.mp3"
-	},
-	{
-	"id":"cat_01",
-	"url":"assets/audio\\cat_01.mp3"
 	},
 	{
 	"id":"cat_03",
@@ -28,12 +28,12 @@ const assets = [
 	"url":"assets/audio\\cat_05.mp3"
 	},
 	{
-	"id":"cat_06",
-	"url":"assets/audio\\cat_06.mp3"
-	},
-	{
 	"id":"cat_07",
 	"url":"assets/audio\\cat_07.mp3"
+	},
+	{
+	"id":"cat_06",
+	"url":"assets/audio\\cat_06.mp3"
 	},
 	{
 	"id":"cat_08",
@@ -48,12 +48,12 @@ const assets = [
 	"url":"assets/audio\\cat_10.mp3"
 	},
 	{
-	"id":"cat_fall_01",
-	"url":"assets/audio\\cat_fall_01.mp3"
-	},
-	{
 	"id":"cat_fall_02",
 	"url":"assets/audio\\cat_fall_02.mp3"
+	},
+	{
+	"id":"cat_fall_01",
+	"url":"assets/audio\\cat_fall_01.mp3"
 	},
 	{
 	"id":"cat_fall_03",

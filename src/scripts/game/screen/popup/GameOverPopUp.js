@@ -139,7 +139,7 @@ export default class GameOverPopUp extends StandardPop
                 {
                     x: config.width / 2,
                     y: config.height / 2
-                }, 'spaceship', 'You need to collect at least \n' + GAME_DATA.minimumAmountOfCatsToReset + ' different cats to send them to \nEarth',
+                }, 'spaceship', 'ou need to unlock at least \n' + GAME_DATA.minimumAmountOfCatsToReset + ' types of cat before you can\nsend them back to Earth',
                 {
                     x: 0,
                     y: 0.5
@@ -160,7 +160,7 @@ export default class GameOverPopUp extends StandardPop
             {
                 x: config.width / 2,
                 y: config.height / 2
-            }, 'spaceship', 'You gonna lose everything\nbut worth to get the trophies',
+            }, 'spaceship', 'Send saved cats back to earth!\nSending cats to earth resets all progress\nin exchange for lots of lovely trophies!',
             {
                 x: 0,
                 y: 0.5

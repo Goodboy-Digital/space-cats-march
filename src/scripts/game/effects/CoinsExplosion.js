@@ -91,7 +91,7 @@ export default class CoinsExplosion extends PIXI.Container
     }
     show(position, tot = 10, customData = {})
     {
-
+        
         this.totParticles = tot;
         for (var i = 0; i < this.totParticles; i++)
         {

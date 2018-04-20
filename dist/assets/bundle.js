@@ -36723,8 +36723,9 @@ window.CLASSES = {};
 window.PAWN = {
     width: 50,
     height: 50
-    // window.console.log = function() {}
-};window.console.warn = function () {};
+};
+window.console.log = function () {};
+window.console.warn = function () {};
 window.console.groupCollapsed = function (teste) {
     return teste;
 }; //('hided warnings')
@@ -58644,7 +58645,7 @@ var GameData = function () {
             tokens: 1
         };
 
-        this.version = '0.1.0.2';
+        this.version = '1.0.0.0';
         this.catsVersion = '1.0.0';
         this.actionsVersion = '1.0.0';
         this.shopVersion = '1.0.0';
@@ -58913,7 +58914,7 @@ var GameData = function () {
             this.actionsVersion = data.actionsVersion;
             this.shopVersion = data.shopVersion;
             this.forceReset = data.forceReset;
-            this.version = data.version;
+            // this.version = data.version;
             for (var name in data) {
                 var n = name.indexOf("cat");
                 if (n >= 0) {
@@ -59719,7 +59720,7 @@ data.push({
     var: '',
     default: 1,
     icon: 'morecats',
-    shopDesc: 'Multiply all your cats\nafter collect them',
+    shopDesc: 'Multiplies the value of all of\nyour cats at the end of your game',
     activeTime: 15,
     level: 1,
     levelMax: 500,
@@ -59747,7 +59748,7 @@ data.push({
     var: '',
     default: 1,
     icon: 'discount',
-    shopDesc: 'Reduce all the prices on shop',
+    shopDesc: 'Reduces the price of\nall items in the shop',
     activeTime: 15,
     level: 1,
     levelMax: 50,
@@ -59776,7 +59777,7 @@ data.push({
     default: false,
     value: 5,
     icon: 'treasure_chest_03',
-    shopDesc: 'actionSpeed',
+    shopDesc: 'Watch a video to open the\ngolden chest and win prizes',
     videoDesc: 'watch a video to\nopen a Golden Chest',
     activeTime: 15,
     level: 1,
@@ -59813,7 +59814,7 @@ data.push({
     shopType: 'soft',
     type: 'double_points',
     var: 'actionMultiplier',
-    shopDesc: 'Multiply points on\neach cat collected',
+    shopDesc: 'Multiplies coins earned\nfor rescuing cats for a\nshort period of time',
     default: 1,
     value: 2,
     icon: 'coin_pig',
@@ -59858,7 +59859,7 @@ data.push({
     shopType: 'soft',
     type: 'double_speed',
     var: 'actionSpeed',
-    shopDesc: 'Speed Up',
+    shopDesc: 'Increases the speed of\nthe game for a short\nperiod of time',
     default: 1,
     value: 2,
     icon: 'rollerskate',
@@ -59903,7 +59904,7 @@ data.push({
     shopType: 'soft',
     type: 'auto_collect',
     var: 'actionAutoCollect',
-    shopDesc: 'Temporary\nautocollect',
+    shopDesc: 'Cats are collected\nautomatically for a short\nperiod of time',
     default: false,
     value: true,
     icon: 'automate',
@@ -61855,7 +61856,7 @@ var GameOverPopUp = function (_StandardPop) {
                 _this.screenManager.showInfo({
                     x: _config2.default.width / 2,
                     y: _config2.default.height / 2
-                }, 'spaceship', 'You need to collect at least \n' + GAME_DATA.minimumAmountOfCatsToReset + ' different cats to send them to \nEarth', {
+                }, 'spaceship', 'ou need to unlock at least \n' + GAME_DATA.minimumAmountOfCatsToReset + ' types of cat before you can\nsend them back to Earth', {
                     x: 0,
                     y: 0.5
                 });
@@ -61871,7 +61872,7 @@ var GameOverPopUp = function (_StandardPop) {
             _this.screenManager.showInfo({
                 x: _config2.default.width / 2,
                 y: _config2.default.height / 2
-            }, 'spaceship', 'You gonna lose everything\nbut worth to get the trophies', {
+            }, 'spaceship', 'Send saved cats back to earth!\nSending cats to earth resets all progress\nin exchange for lots of lovely trophies!', {
                 x: 0,
                 y: 0.5
             });
@@ -65459,7 +65460,7 @@ var OnboardingPopUp = function (_StandardPop) {
                 _this.playButton.on('mousedown', _this.confirm.bind(_this)).on('touchstart', _this.confirm.bind(_this));
                 _this.container.addChild(_this.playButton);
 
-                var videoLabel = new PIXI.Text('Tap on the pink buttons when\nthe cats be there to collect them', {
+                var videoLabel = new PIXI.Text('Press the pink buttons at the\nright time to save the cats!', {
                         fontFamily: 'blogger_sansregular',
                         fontSize: '24px',
                         fill: 0xFFFFFF,
@@ -80258,14 +80259,14 @@ var assets = [{
 	"id": "boing",
 	"url": "assets/audio\\boing.mp3"
 }, {
+	"id": "cat_01",
+	"url": "assets/audio\\cat_01.mp3"
+}, {
 	"id": "button_click",
 	"url": "assets/audio\\button_click.mp3"
 }, {
 	"id": "cat_02",
 	"url": "assets/audio\\cat_02.mp3"
-}, {
-	"id": "cat_01",
-	"url": "assets/audio\\cat_01.mp3"
 }, {
 	"id": "cat_03",
 	"url": "assets/audio\\cat_03.mp3"
@@ -80276,11 +80277,11 @@ var assets = [{
 	"id": "cat_05",
 	"url": "assets/audio\\cat_05.mp3"
 }, {
-	"id": "cat_06",
-	"url": "assets/audio\\cat_06.mp3"
-}, {
 	"id": "cat_07",
 	"url": "assets/audio\\cat_07.mp3"
+}, {
+	"id": "cat_06",
+	"url": "assets/audio\\cat_06.mp3"
 }, {
 	"id": "cat_08",
 	"url": "assets/audio\\cat_08.mp3"
@@ -80291,11 +80292,11 @@ var assets = [{
 	"id": "cat_10",
 	"url": "assets/audio\\cat_10.mp3"
 }, {
-	"id": "cat_fall_01",
-	"url": "assets/audio\\cat_fall_01.mp3"
-}, {
 	"id": "cat_fall_02",
 	"url": "assets/audio\\cat_fall_02.mp3"
+}, {
+	"id": "cat_fall_01",
+	"url": "assets/audio\\cat_fall_01.mp3"
 }, {
 	"id": "cat_fall_03",
 	"url": "assets/audio\\cat_fall_03.mp3"

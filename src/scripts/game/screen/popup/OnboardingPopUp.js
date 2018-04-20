@@ -62,7 +62,7 @@ export default class OnboardingPopUp extends StandardPop
         this.playButton.on('mousedown', this.confirm.bind(this)).on('touchstart', this.confirm.bind(this));
         this.container.addChild(this.playButton)
         
-        let videoLabel = new PIXI.Text('Tap on the pink buttons when\nthe cats be there to collect them',
+        let videoLabel = new PIXI.Text('Press the pink buttons at the\nright time to save the cats!',
             {
                 fontFamily: 'blogger_sansregular',
                 fontSize: '24px',

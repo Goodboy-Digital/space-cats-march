@@ -3,7 +3,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const execFile = require('child_process').execFile;
 const colors = require('../utils/colors');
-const lowResScale = 0.5;
+const lowResScale = 0.75;
 
 const texturepack = function(mFolderPath, mId, mDestPath, mCb) {
 	const tpsId = mId;
@@ -11,8 +11,8 @@ const texturepack = function(mFolderPath, mId, mDestPath, mCb) {
 	const outpath = mDestPath;
 	const name = outpath + '/' + tpsId + '{v}';
 	console.log('texturepack'.rainbow);
-	const variant = ['1:', `${lowResScale}:_mip::2048:2048`];
-	// const variant = ['1:', `${lowResScale}:_mip::2048:2048`];
+	// const variant = ['1:'];//, `${lowResScale}:_mip::2048:2048`];
+	const variant = [`${lowResScale}:_mip::2048:2048`];
 	const opts = [
 	    '--data', name + '{n}.json',
 	    '--format', 'pixijs',
