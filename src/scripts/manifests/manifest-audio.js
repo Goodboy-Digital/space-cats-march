@@ -4,12 +4,12 @@ const assets = [
 	"url":"assets/audio\\boing.mp3"
 	},
 	{
-	"id":"cat_01",
-	"url":"assets/audio\\cat_01.mp3"
-	},
-	{
 	"id":"button_click",
 	"url":"assets/audio\\button_click.mp3"
+	},
+	{
+	"id":"cat_01",
+	"url":"assets/audio\\cat_01.mp3"
 	},
 	{
 	"id":"cat_02",
@@ -28,12 +28,12 @@ const assets = [
 	"url":"assets/audio\\cat_05.mp3"
 	},
 	{
-	"id":"cat_07",
-	"url":"assets/audio\\cat_07.mp3"
-	},
-	{
 	"id":"cat_06",
 	"url":"assets/audio\\cat_06.mp3"
+	},
+	{
+	"id":"cat_07",
+	"url":"assets/audio\\cat_07.mp3"
 	},
 	{
 	"id":"cat_08",
@@ -44,16 +44,16 @@ const assets = [
 	"url":"assets/audio\\cat_09.mp3"
 	},
 	{
-	"id":"cat_10",
-	"url":"assets/audio\\cat_10.mp3"
-	},
-	{
 	"id":"cat_fall_02",
 	"url":"assets/audio\\cat_fall_02.mp3"
 	},
 	{
 	"id":"cat_fall_01",
 	"url":"assets/audio\\cat_fall_01.mp3"
+	},
+	{
+	"id":"cat_10",
+	"url":"assets/audio\\cat_10.mp3"
 	},
 	{
 	"id":"cat_fall_03",
@@ -84,44 +84,40 @@ const assets = [
 	"url":"assets/audio\\getstar.mp3"
 	},
 	{
-	"id":"open_chest_01",
-	"url":"assets/audio\\open_chest_01.mp3"
+	"id":"pickup_item2",
+	"url":"assets/audio\\pickup_item2.mp3"
 	},
 	{
 	"id":"pickup",
 	"url":"assets/audio\\pickup.mp3"
 	},
 	{
-	"id":"pickup_item2",
-	"url":"assets/audio\\pickup_item2.mp3"
+	"id":"open_chest_01",
+	"url":"assets/audio\\open_chest_01.mp3"
 	},
 	{
 	"id":"pickup_present",
 	"url":"assets/audio\\pickup_present.mp3"
 	},
 	{
-	"id":"pickup_star",
-	"url":"assets/audio\\pickup_star.mp3"
-	},
-	{
 	"id":"pogo_boing",
 	"url":"assets/audio\\pogo_boing.mp3"
 	},
 	{
-	"id":"pop",
-	"url":"assets/audio\\pop.mp3"
+	"id":"pickup_star",
+	"url":"assets/audio\\pickup_star.mp3"
 	},
 	{
 	"id":"rocket_launch_01",
 	"url":"assets/audio\\rocket_launch_01.mp3"
 	},
 	{
-	"id":"score_loop",
-	"url":"assets/audio\\score_loop.mp3"
+	"id":"pop",
+	"url":"assets/audio\\pop.mp3"
 	},
 	{
-	"id":"spacecat_game_music",
-	"url":"assets/audio\\spacecat_game_music.mp3"
+	"id":"score_loop",
+	"url":"assets/audio\\score_loop.mp3"
 	},
 	{
 	"id":"spacecat_menu_music",
@@ -130,6 +126,10 @@ const assets = [
 	{
 	"id":"star_01",
 	"url":"assets/audio\\star_01.mp3"
+	},
+	{
+	"id":"spacecat_game_music",
+	"url":"assets/audio\\spacecat_game_music.mp3"
 	},
 	{
 	"id":"star_02",

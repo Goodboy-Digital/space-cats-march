@@ -58445,12 +58445,12 @@ var Game = function () {
     function Game(config, screenManager) {
         (0, _classCallCheck3.default)(this, Game);
 
-        var Renderer = config.webgl ? PIXI.autoDetectRenderer : PIXI.CanvasRenderer;
         //config.width = window.screen.width;
         this.screenManager = screenManager;
-        // 	width: 414,
+        //  width: 414,
         // height: 736,
 
+        var Renderer = config.webgl ? PIXI.autoDetectRenderer : PIXI.CanvasRenderer;
         var ratio = config.width / config.height;
         if (ratio > 0.7) {
             config.width = config.height * 0.7;
@@ -58463,8 +58463,8 @@ var Game = function () {
         window.renderer = new PIXI.Application({
             width: config.width,
             height: config.height,
-            resolution: 1.5
-            // antialias:true
+            resolution: Math.min(window.devicePixelRatio, 1.5),
+            antialias: false
             // config.width || 800, config.height || 600, config.rendererOptions
         }); //new Renderer(config.width || 800, config.height || 600, config.rendererOptions);
         document.body.appendChild(window.renderer.view);
@@ -74304,7 +74304,7 @@ var InGameEffects = function () {
     (0, _createClass3.default)(InGameEffects, [{
         key: 'addBombAreaBean',
         value: function addBombAreaBean(cat) {
-
+            return;
             var angle = Math.PI / 4; //Math.atan2(cat.y - last.y, bomb.x - last.x) + Math.PI / 2;
 
             var graphicContainer = new PIXI.Container();
@@ -74643,6 +74643,7 @@ var InGameEffects = function () {
             var scale = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 1;
             var randonRotation = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : true;
 
+            // return
             var tempLabel = null;
             if (LABEL_POOL.length) {
                 tempLabel = LABEL_POOL[0];
@@ -75099,7 +75100,7 @@ var Environment = function (_PIXI$Container) {
         value: function showLines() {
             for (var i = 0; i < this.trails.length; i++) {
                 TweenLite.to(this.trails[i].mesh, 1, {
-                    alpha: 0.75
+                    alpha: 0.5
                 });
                 _utils2.default.addColorTween(this.trails[i].mesh, this.trails[i].mesh.tint, COLORS[i], 1);
             }
@@ -80259,11 +80260,11 @@ var assets = [{
 	"id": "boing",
 	"url": "assets/audio\\boing.mp3"
 }, {
-	"id": "cat_01",
-	"url": "assets/audio\\cat_01.mp3"
-}, {
 	"id": "button_click",
 	"url": "assets/audio\\button_click.mp3"
+}, {
+	"id": "cat_01",
+	"url": "assets/audio\\cat_01.mp3"
 }, {
 	"id": "cat_02",
 	"url": "assets/audio\\cat_02.mp3"
@@ -80277,11 +80278,11 @@ var assets = [{
 	"id": "cat_05",
 	"url": "assets/audio\\cat_05.mp3"
 }, {
-	"id": "cat_07",
-	"url": "assets/audio\\cat_07.mp3"
-}, {
 	"id": "cat_06",
 	"url": "assets/audio\\cat_06.mp3"
+}, {
+	"id": "cat_07",
+	"url": "assets/audio\\cat_07.mp3"
 }, {
 	"id": "cat_08",
 	"url": "assets/audio\\cat_08.mp3"
@@ -80289,14 +80290,14 @@ var assets = [{
 	"id": "cat_09",
 	"url": "assets/audio\\cat_09.mp3"
 }, {
-	"id": "cat_10",
-	"url": "assets/audio\\cat_10.mp3"
-}, {
 	"id": "cat_fall_02",
 	"url": "assets/audio\\cat_fall_02.mp3"
 }, {
 	"id": "cat_fall_01",
 	"url": "assets/audio\\cat_fall_01.mp3"
+}, {
+	"id": "cat_10",
+	"url": "assets/audio\\cat_10.mp3"
 }, {
 	"id": "cat_fall_03",
 	"url": "assets/audio\\cat_fall_03.mp3"
@@ -80319,41 +80320,41 @@ var assets = [{
 	"id": "getstar",
 	"url": "assets/audio\\getstar.mp3"
 }, {
-	"id": "open_chest_01",
-	"url": "assets/audio\\open_chest_01.mp3"
+	"id": "pickup_item2",
+	"url": "assets/audio\\pickup_item2.mp3"
 }, {
 	"id": "pickup",
 	"url": "assets/audio\\pickup.mp3"
 }, {
-	"id": "pickup_item2",
-	"url": "assets/audio\\pickup_item2.mp3"
+	"id": "open_chest_01",
+	"url": "assets/audio\\open_chest_01.mp3"
 }, {
 	"id": "pickup_present",
 	"url": "assets/audio\\pickup_present.mp3"
 }, {
-	"id": "pickup_star",
-	"url": "assets/audio\\pickup_star.mp3"
-}, {
 	"id": "pogo_boing",
 	"url": "assets/audio\\pogo_boing.mp3"
 }, {
-	"id": "pop",
-	"url": "assets/audio\\pop.mp3"
+	"id": "pickup_star",
+	"url": "assets/audio\\pickup_star.mp3"
 }, {
 	"id": "rocket_launch_01",
 	"url": "assets/audio\\rocket_launch_01.mp3"
 }, {
+	"id": "pop",
+	"url": "assets/audio\\pop.mp3"
+}, {
 	"id": "score_loop",
 	"url": "assets/audio\\score_loop.mp3"
-}, {
-	"id": "spacecat_game_music",
-	"url": "assets/audio\\spacecat_game_music.mp3"
 }, {
 	"id": "spacecat_menu_music",
 	"url": "assets/audio\\spacecat_menu_music.mp3"
 }, {
 	"id": "star_01",
 	"url": "assets/audio\\star_01.mp3"
+}, {
+	"id": "spacecat_game_music",
+	"url": "assets/audio\\spacecat_game_music.mp3"
 }, {
 	"id": "star_02",
 	"url": "assets/audio\\star_02.mp3"
@@ -80372,7 +80373,7 @@ module.exports = exports["default"];
 /* 441 */
 /***/ (function(module, exports) {
 
-module.exports = {"default":["image/lane_texture/lane_texture0.json","image/pattern/pattern0.json","image/cats/cats0.json","image/ui/ui0.json","image/ui/ui1.json","image/ui/ui2.json"]}
+module.exports = {"default":["image/pattern/pattern10.json","image/lane_texture/lane_texture10.json","image/cats/cats10.json","image/ui/ui10.json","image/ui/ui11.json"]}
 
 /***/ })
 /******/ ]);
